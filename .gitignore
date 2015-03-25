@@ -2,27 +2,28 @@
 *.slo
 *.lo
 *.o
-*.obj
-
-# Precompiled Headers
-*.gch
-*.pch
 
 # Compiled Dynamic libraries
 *.so
 *.dylib
-*.dll
-
-# Fortran module files
-*.mod
 
 # Compiled Static libraries
 *.lai
 *.la
 *.a
-*.lib
 
-# Executables
-*.exe
-*.out
-*.app
+# Source archive
+*.tar.xz
+*.tar.gz
+*.sig
+
+# Build directory
+build/
+tmp/
+usr/
+
+# translations
+*.qm
+
+# temporary bckps
+*~
