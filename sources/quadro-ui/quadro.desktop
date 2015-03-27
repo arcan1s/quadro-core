@@ -1,0 +1,10 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Name=Quadro
+Comment=Plugin based Qt application launcher
+Exec=quadro
+Icon=quadro.png
+Terminal=false
+Encoding=UTF-8
+Type=Application
+Categories=System

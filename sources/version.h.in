@@ -1,0 +1,41 @@
+#ifndef VERSION_H
+#define VERSION_H
+
+// information
+#define NAME "Quadro"
+#define VERSION "@PROJECT_VERSION@"
+#define AUTHOR "@PROJECT_AUTHOR@"
+#define TRANSLATORS ""
+#define EMAIL "@PROJECT_CONTACT@"
+#define LICENSE "@PROJECT_LICENSE@"
+#define TRDPARTY_LICENSE "tasks,BSD,https://github.com/mhogomchungu/tasks"
+#define DOCS_PATH "@CMAKE_INSTALL_PREFIX@/share/doc/quadro/"
+
+// links
+#define HOMEPAGE "http://arcanis.name/projects/quadro/"
+#define REPOSITORY "https://github.com/arcan1s/quadro-core"
+#define BUGTRACKER "https://github.com/arcan1s/quadro-core/issues"
+#define TRANSLATION "https://github.com/arcan1s/quadro-core/issues/1"
+#define AUR_PACKAGES "https://aur.archlinux.org/pkgbase/quadro-core/"
+
+// build information
+#define BUILD_DATE "@CURRENT_DATE@"
+#define DATE "2014-@CURRENT_YEAR@"
+
+// cmake properties
+#define CMAKE_BUILD_TYPE "@CMAKE_BUILD_TYPE@"
+#define CMAKE_INSTALL_PREFIX "@CMAKE_INSTALL_PREFIX@"
+// additional components
+#define PROJECT_BUILD_DOCS "@BUILD_DOCS@"
+#define PROJECT_BUILD_TEST "@BUILD_TEST@"
+// project properties
+#define PROJECT_USE_QT5 "@USE_QT5@"
+
+// dbus configuration
+#define DBUS_SERVICE "org.quadro.core"
+#define DBUS_PLUGIN_SERVICE "org.quadro.plugin"
+#define DBUS_INTERFACE "org.quadro.core"
+#define DBUS_PLUGIN_INTERFACE "org.quadro.plugin"
+#define DBUS_OBJECT_PATH "/quadro"
+
+#endif /* VERSION_H */
