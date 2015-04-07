@@ -29,6 +29,8 @@
 #include <QObject>
 
 
+class ApplicationItem;
+
 /**
  * @brief The LauncherCore class provides launcher backend
  */
@@ -46,6 +48,16 @@ public:
      * @brief LauncherCore class destructor
      */
     ~LauncherCore();
+    /**
+     * @brief return applications which has desktop files
+     * @return list of generated ApplicationItem
+     */
+    QMap<QString, ApplicationItem> getApplicationsFromDesktops();
+    /**
+     * @brief return applications which is placed to $PATH
+     * @return list of generated ApplicationItem
+     */
+    QMap<QString, ApplicationItem> getApplicationsFromPaths();
 
 public slots:
     /**

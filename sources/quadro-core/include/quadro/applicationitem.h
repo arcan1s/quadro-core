@@ -45,7 +45,7 @@ class ApplicationItem : public QObject
 public:
     /**
      * @brief ApplicationItem class constructor
-     * @param exePath        path to executable file
+     * @param exePath        full path to executable file
      * @param name           application name. If name is not given it will be
      *                       assigned from exePath
      * @param debugCmd       show debug messages
@@ -69,8 +69,8 @@ public:
      */
     QString comment();
     /**
-     * @brief returns application executable
-     * @return executable full path
+     * @brief returns full application executable path
+     * @return full executable path
      */
     QString executable();
     /**
@@ -88,28 +88,40 @@ public:
      * @brief sets application categories
      * @param _categories    application categories
      */
-    void setCategories(QStringList _categories = QStringList());
+    void setCategories(const QStringList _categories = QStringList());
     /**
      * @brief sets application comment
      * @param _comment       application comment
      */
-    void setComment(QString _comment = QString());
+    void setComment(const QString _comment = QString());
     /**
      * @brief sets application icon
      * @param _icon          application icon
      */
-    void setIcon(QIcon _icon = QIcon());
+    void setIcon(const QIcon _icon = QIcon());
     /**
      * @brief sets application icon from string
      * @param _iconName      name of icon
      */
-    void setIconByName(QString _iconName = QString());
+    void setIconByName(const QString _iconName = QString());
     /**
      * @brief sets application name
      * @remark if _name is empty it will be assigned from executable
      * @param _name          application name
      */
-    void setName(QString _name = QString());
+    void setName(const QString _name = QString());
+    // desktop methods
+    /**
+     * @brief reads application information from desktop file
+     * @param _desktopPath   full path to desktop file
+     * @return ApplicationItem structure
+     */
+    static ApplicationItem fromDesktop(const QString _desktopPath);
+    /**
+     * @brief write settings to desktop file
+     * @return full path to created file or empty string
+     */
+    QString saveDesktop();
 
 private:
     // main

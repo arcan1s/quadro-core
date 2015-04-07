@@ -24,6 +24,11 @@
 
 
 #include <QDebug>
+#include <QDir>
+#include <QFileInfo>
+#include <QLocale>
+#include <QSettings>
+#include <QStandardPaths>
 
 #include <quadro/quadro.h>
 #include <pdebug/pdebug.h>
@@ -110,7 +115,7 @@ QString ApplicationItem::name()
 /**
  * @fn setCategories
  */
-void ApplicationItem::setCategories(QStringList _categories)
+void ApplicationItem::setCategories(const QStringList _categories)
 {
     if (debug) qDebug() << PDEBUG;
     if (debug) qDebug() << PDEBUG << ":" << "Categories" << _categories;
@@ -122,7 +127,7 @@ void ApplicationItem::setCategories(QStringList _categories)
 /**
  * @fn setComment
  */
-void ApplicationItem::setComment(QString _comment)
+void ApplicationItem::setComment(const QString _comment)
 {
     if (debug) qDebug() << PDEBUG;
     if (debug) qDebug() << PDEBUG << ":" << "Comment" << _comment;
@@ -134,7 +139,7 @@ void ApplicationItem::setComment(QString _comment)
 /**
  * @fn setIcon
  */
-void ApplicationItem::setIcon(QIcon _icon)
+void ApplicationItem::setIcon(const QIcon _icon)
 {
     if (debug) qDebug() << PDEBUG;
 
@@ -145,7 +150,7 @@ void ApplicationItem::setIcon(QIcon _icon)
 /**
  * @fn setIconByName
  */
-void ApplicationItem::setIconByName(QString _iconName)
+void ApplicationItem::setIconByName(const QString _iconName)
 {
     if (debug) qDebug() << PDEBUG;
     if (debug) qDebug() << PDEBUG << ":" << "Icon name" << _iconName;
@@ -157,10 +162,71 @@ void ApplicationItem::setIconByName(QString _iconName)
 /**
  * @fn setName
  */
-void ApplicationItem::setName(QString _name)
+void ApplicationItem::setName(const QString _name)
 {
     if (debug) qDebug() << PDEBUG;
     if (debug) qDebug() << PDEBUG << ":" << "Name" << _name;
 
-    m_name = _name.isEmpty() ? executable() : _name;
+    m_name = _name.isEmpty() ? QFileInfo(executable()).fileName() : _name;
+}
+
+
+/**
+ * @fn fromDesktop
+ */
+ApplicationItem ApplicationItem::fromDesktop(const QString _desktopPath)
+{
+    if (debug) qDebug() << PDEBUG;
+    if (debug) qDebug() << PDEBUG << ":" << "Desktop path" << _desktopPath;
+
+    QSettings settings(_desktopPath, QSettings::IniFormat);
+
+    settings.beginGroup(QString("[Desktop Entry]"));
+    QString name = settings.value(QString("Name")).toString();
+    QString executable = settings.value(QString("Exec")).toString();
+    QString iconPath = settings.value(QString("Icon")).toString();
+    QString categories = settings.value(QString("Categories")).toString();
+    // comments field
+    QString locale = QLocale::system().name();
+    QString localeCommentKey = QString("Comment[%1]").arg(locale.split(QChar('_'))[0]);
+    QString comment = settings.contains(localeCommentKey) ?
+                        settings.value(localeCommentKey).toString() :
+                        settings.value(QString("Comment")).toString();
+    settings.endGroup();
+
+    ApplicationItem item = ApplicationItem::ApplicationItem(executable, name, debug);
+    item.setComment(comment);
+    item.setIconByName(iconPath);
+    item.setCategories(categories.split(QChar(';'), QString::SkipEmptyParts));
+
+    return item;
+}
+
+
+/**
+ * @fn saveDesktop
+ */
+QString ApplicationItem::saveDesktop()
+{
+    if (debug) qDebug() << PDEBUG;
+
+    QString fileName = QStandardPaths::writableLocation(QStandardPaths::ApplicationsLocation);
+    fileName += QDir::separator();
+    fileName += name();
+    QSettings settings(fileName, QSettings::IniFormat);
+    if (debug) qDebug() << PDEBUG << ":" << "Configuration file" << settings.fileName();
+
+    settings.beginGroup(QString("Desktop Entry"));
+    settings.setValue(QString("Encoding"), QString("UTF-8"));
+    settings.setValue(QString("Name"), name());
+    settings.setValue(QString("Comment"), comment());
+    settings.setValue(QString("Exec"), executable());
+    settings.setValue(QString("Icon"), icon().name());
+    settings.setValue(QString("Categories"), categories().join(QChar(';')));
+    settings.endGroup();
+
+    settings.sync();
+
+    QString result = settings.status() == QSettings::NoError ? fileName : QString();
+    return result;
 }

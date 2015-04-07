@@ -24,6 +24,9 @@
 
 
 #include <QDebug>
+#include <QDir>
+#include <QProcessEnvironment>
+#include <QStandardPaths>
 
 #include <quadro/quadro.h>
 #include <pdebug/pdebug.h>
@@ -48,6 +51,58 @@ LauncherCore::LauncherCore(const bool debugCmd)
 LauncherCore::~LauncherCore()
 {
     if (debug) qDebug() << PDEBUG;
+}
+
+
+/**
+ * @fn getApplicationsFromDesktops
+ */
+QMap<QString, ApplicationItem> LauncherCore::getApplicationsFromDesktops()
+{
+    if (debug) qDebug() << PDEBUG;
+
+    QStringList desktopPaths = QStandardPaths::standardLocations(QStandardPaths::ApplicationsLocation);
+    if (debug) qDebug() << PDEBUG << ":" << "Paths" << desktopPaths;
+    QMap<QString, ApplicationItem> items;
+
+    for (int i=desktopPaths.count()-1; i>=0; i--) {
+        QStringList entries = QDir(desktopPaths[i]).entryList(QDir::Files);
+        for (int j=0; j<entries.count(); j++) {
+            QString desktop = QFileInfo(QDir(desktopPaths[i]), entries[j]).filePath();
+            if (debug) qDebug() << PDEBUG << ":" << "Desktop" << desktop;
+            ApplicationItem item = ApplicationItem::fromDesktop(desktop);
+            items[item.name()] = item;
+        }
+    }
+
+    return items;
+}
+
+
+/**
+ * @fn getApplicationsFromDesktops
+ */
+QMap<QString, ApplicationItem> LauncherCore::getApplicationsFromPaths()
+{
+    if (debug) qDebug() << PDEBUG;
+
+    QProcessEnvironment environment = QProcessEnvironment::systemEnvironment();
+    QString pathVariable = environment.value(QString("PATH"));
+    QStringList paths = pathVariable.split(QChar(':'));
+    if (debug) qDebug() << PDEBUG << ":" << "Paths" << paths;
+    QMap<QString, ApplicationItem> items;
+
+    for (int i=0; i<paths.count(); i++) {
+        QStringList entries = QDir(paths[i]).entryList(QDir::Files);
+        for (int j=0; j<entries.count(); j++) {
+            QString executable = QFileInfo(QDir(paths[i]), entries[j]).filePath();
+            if (debug) qDebug() << PDEBUG << ":" << "Executable" << executable;
+            ApplicationItem item = ApplicationItem(executable);
+            items[item.name()] = item;
+        }
+    }
+
+    return items;
 }
 
 
