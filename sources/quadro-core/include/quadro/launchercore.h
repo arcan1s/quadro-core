@@ -26,6 +26,7 @@
 #ifndef LAUNCHERCORE_H
 #define LAUNCHERCORE_H
 
+#include <QMap>
 #include <QObject>
 #include <QStringList>
 
@@ -50,28 +51,47 @@ public:
      */
     ~LauncherCore();
     /**
-     * @brief return applications which has desktop files
-     * @return list of generated ApplicationItem
+     * @brief find applications
+     * @return map of applications
      */
-    QMap<QString, ApplicationItem *> getApplicationsFromDesktops();
+    QMap<QString, ApplicationItem *> applications();
     /**
-     * @brief return applications which is placed to $PATH
-     * @return list of generated ApplicationItem
+     * @brief find applications by category
+     * @param _category
+     * @return map of applications by category
      */
-    QMap<QString, ApplicationItem *> getApplicationsFromPaths();
+    QMap<QString, ApplicationItem *> applicationsByCategory(const QString _category);
+    /**
+     * @brief available application categories
+     * @return list of available categories
+     */
+    QStringList availableCategories();
 
 public slots:
     /**
      * @brief init application using given paths
-     * @param paths          shell $PATH variable
      */
-    void initApplications(const QStringList paths = QStringList());
+    void initApplications();
 
 private:
     /**
      * @brief show debug messages. Default is false
      */
     bool debug = false;
+    /**
+     * @brief list of applications
+     */
+    QMap<QString, ApplicationItem *> m_applications;
+    /**
+     * @brief return applications which has desktop files
+     * @return map of generated ApplicationItem
+     */
+    QMap<QString, ApplicationItem *> getApplicationsFromDesktops();
+    /**
+     * @brief return applications which is placed to $PATH
+     * @return map of generated ApplicationItem
+     */
+    QMap<QString, ApplicationItem *> getApplicationsFromPaths();
 };
 
 

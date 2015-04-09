@@ -41,7 +41,6 @@
 LauncherCore::LauncherCore(const bool debugCmd)
     : debug(debugCmd)
 {
-
 }
 
 
@@ -51,6 +50,95 @@ LauncherCore::LauncherCore(const bool debugCmd)
 LauncherCore::~LauncherCore()
 {
     if (debug) qDebug() << PDEBUG;
+
+    m_applications.clear();
+}
+
+
+/**
+ * @fn applications
+ */
+QMap<QString, ApplicationItem *> LauncherCore::applications()
+{
+    if (debug) qDebug() << PDEBUG;
+
+    return m_applications;
+}
+
+
+/**
+ * @fn applicationsByCategory
+ */
+QMap<QString, ApplicationItem *> LauncherCore::applicationsByCategory(const QString _category)
+{
+    if (debug) qDebug() << PDEBUG;
+    if (debug) qDebug() << PDEBUG << ":" << "Category" << _category;
+
+    QMap<QString, ApplicationItem *> apps;
+    if (!availableCategories().contains(_category)) {
+        if (debug) qDebug() << PDEBUG << ":" << "Incorrect category" << _category;
+        return apps;
+    }
+
+    for (int i=0; i<m_applications.keys().count(); i++) {
+        QString key = m_applications.keys()[i];
+        QStringList categories = m_applications[key]->categories();
+        if (!categories.contains(_category)) continue;
+        apps[key] = m_applications[key];
+    }
+
+    return apps;
+}
+
+
+/**
+ * @fn availableCategories
+ */
+QStringList LauncherCore::availableCategories()
+{
+    if (debug) qDebug() << PDEBUG;
+    // refer to http://standards.freedesktop.org/menu-spec/latest/apa.html
+
+    QStringList categories;
+    categories.append(QString("AudioVideo"));
+    categories.append(QString("Audio"));
+    categories.append(QString("Video"));
+    categories.append(QString("Development"));
+    categories.append(QString("Education"));
+    categories.append(QString("Game"));
+    categories.append(QString("Graphics"));
+    categories.append(QString("Network"));
+    categories.append(QString("Office"));
+    categories.append(QString("Science"));
+    categories.append(QString("Settings"));
+    categories.append(QString("System"));
+    categories.append(QString("Utility"));
+
+    if (debug) qDebug() << PDEBUG << ":" << "Found categories" << categories;
+    return categories;
+}
+
+
+/**
+ * @fn initApplications
+ */
+void LauncherCore::initApplications()
+{
+    if (debug) qDebug() << PDEBUG;
+
+    // start cleanup
+    m_applications.clear();
+
+    QMap<QString, ApplicationItem *> paths = getApplicationsFromPaths();
+    QMap<QString, ApplicationItem *> desktops = getApplicationsFromDesktops();
+    for (int i=0; i<desktops.keys().count(); i++)
+        m_applications[desktops.keys()[i]] = desktops[desktops.keys()[i]];
+    for (int i=0; i<desktops.keys().count(); i++)
+        m_applications[desktops.keys()[i]] = desktops[desktops.keys()[i]];
+
+    // cleanup
+    paths.clear();
+    desktops.clear();
 }
 
 
@@ -103,14 +191,4 @@ QMap<QString, ApplicationItem *> LauncherCore::getApplicationsFromPaths()
     }
 
     return items;
-}
-
-
-/**
- * @fn initApplications
- */
-void LauncherCore::initApplications(const QStringList paths)
-{
-    if (debug) qDebug() << PDEBUG;
-    if (debug) qDebug() << PDEBUG << ":" << "Paths" << paths;
 }

@@ -59,64 +59,71 @@ public:
     ~ApplicationItem();
     // get methods
     /**
-     * @brief returns application categories
+     * @brief application categories
      * @return list of categories
      */
     QStringList categories();
     /**
-     * @brief returns application comment
+     * @brief application comment
      * @return comment in system locale or English
      */
     QString comment();
     /**
-     * @brief returns full application executable path
+     * @brief full application executable path
      * @return full executable path
      */
     QString executable();
     /**
-     * @brief returns application icon
+     * @brief application icon
      * @return icon
      */
     QIcon icon();
     /**
-     * @brief returns application name
+     * @brief application name
      * @return name
      */
     QString name();
     // set methods
     /**
-     * @brief sets application categories
+     * @brief set application categories
      * @param _categories    application categories
      */
     void setCategories(const QStringList _categories = QStringList());
     /**
-     * @brief sets application comment
+     * @brief set application comment
      * @param _comment       application comment
      */
     void setComment(const QString _comment = QString());
     /**
-     * @brief sets application icon
+     * @brief set application icon
      * @param _icon          application icon
      */
     void setIcon(const QIcon _icon = QIcon());
     /**
-     * @brief sets application icon from string
+     * @brief set application icon from string
      * @param _iconName      name of icon
      */
     void setIconByName(const QString _iconName = QString());
     /**
-     * @brief sets application name
+     * @brief set application name
      * @remark if _name is empty it will be assigned from executable
      * @param _name          application name
      */
     void setName(const QString _name = QString());
     // desktop methods
     /**
-     * @brief reads application information from desktop file
+     * @brief read application information from desktop file
      * @param _desktopPath   full path to desktop file
      * @return ApplicationItem structure
      */
     static ApplicationItem *fromDesktop(const QString _desktopPath);
+
+public slots:
+    /**
+     * @brief launch the application
+     * @return status of the running application
+     */
+    bool launch();
     /**
      * @brief write settings to desktop file
      * @return full path to created file or empty string
@@ -145,7 +152,7 @@ private:
     /**
      * @brief application icon
      */
-    QIcon m_icon = QIcon();
+    QIcon m_icon = QIcon::fromTheme(QString("system-run"));
     /**
      * @brief application name
      */

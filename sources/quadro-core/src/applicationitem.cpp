@@ -27,6 +27,7 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QLocale>
+#include <QProcess>
 #include <QSettings>
 #include <QStandardPaths>
 
@@ -197,6 +198,17 @@ ApplicationItem *ApplicationItem::fromDesktop(const QString _desktopPath)
     item->setCategories(categories.split(QChar(';'), QString::SkipEmptyParts));
 
     return item;
+}
+
+
+/**
+ * @fn launch
+ */
+bool ApplicationItem::launch()
+{
+    if (debug) qDebug() << PDEBUG;
+
+    return QProcess::startDetached(executable());
 }
 
 
