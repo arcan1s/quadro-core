@@ -116,7 +116,7 @@ public:
      * @param _desktopPath   full path to desktop file
      * @return ApplicationItem structure
      */
-    static ApplicationItem fromDesktop(const QString _desktopPath);
+    static ApplicationItem *fromDesktop(const QString _desktopPath);
     /**
      * @brief write settings to desktop file
      * @return full path to created file or empty string
@@ -150,7 +150,7 @@ private:
      * @brief application name
      */
     QString m_name = QString();
-}
+};
 
 
 #endif /* APPLICATIONITEM_H */

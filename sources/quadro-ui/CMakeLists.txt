@@ -15,7 +15,6 @@ set (TARGETS "")
 set (HEADERS "")
 
 add_subdirectory (${SUBPROJECT_SOURCE_DIR})
-add_subdirectory (${SUBPROJECT_DOCS_DIR})
 # build man
 file (GLOB SUBPROJECT_MAN_IN *.1)
 file (RELATIVE_PATH SUBPROJECT_MAN ${CMAKE_SOURCE_DIR} ${SUBPROJECT_MAN_IN})

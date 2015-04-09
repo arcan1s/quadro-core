@@ -27,6 +27,7 @@
 #define LAUNCHERCORE_H
 
 #include <QObject>
+#include <QStringList>
 
 
 class ApplicationItem;
@@ -52,12 +53,12 @@ public:
      * @brief return applications which has desktop files
      * @return list of generated ApplicationItem
      */
-    QMap<QString, ApplicationItem> getApplicationsFromDesktops();
+    QMap<QString, ApplicationItem *> getApplicationsFromDesktops();
     /**
      * @brief return applications which is placed to $PATH
      * @return list of generated ApplicationItem
      */
-    QMap<QString, ApplicationItem> getApplicationsFromPaths();
+    QMap<QString, ApplicationItem *> getApplicationsFromPaths();
 
 public slots:
     /**
@@ -71,7 +72,7 @@ private:
      * @brief show debug messages. Default is false
      */
     bool debug = false;
-}
+};
 
 
 #endif /* LAUNCHERCORE_H */

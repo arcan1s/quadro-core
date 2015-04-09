@@ -174,11 +174,8 @@ void ApplicationItem::setName(const QString _name)
 /**
  * @fn fromDesktop
  */
-ApplicationItem ApplicationItem::fromDesktop(const QString _desktopPath)
+ApplicationItem *ApplicationItem::fromDesktop(const QString _desktopPath)
 {
-    if (debug) qDebug() << PDEBUG;
-    if (debug) qDebug() << PDEBUG << ":" << "Desktop path" << _desktopPath;
-
     QSettings settings(_desktopPath, QSettings::IniFormat);
 
     settings.beginGroup(QString("[Desktop Entry]"));
@@ -194,10 +191,10 @@ ApplicationItem ApplicationItem::fromDesktop(const QString _desktopPath)
                         settings.value(QString("Comment")).toString();
     settings.endGroup();
 
-    ApplicationItem item = ApplicationItem::ApplicationItem(executable, name, debug);
-    item.setComment(comment);
-    item.setIconByName(iconPath);
-    item.setCategories(categories.split(QChar(';'), QString::SkipEmptyParts));
+    ApplicationItem *item = new ApplicationItem(executable, name);
+    item->setComment(comment);
+    item->setIconByName(iconPath);
+    item->setCategories(categories.split(QChar(';'), QString::SkipEmptyParts));
 
     return item;
 }
