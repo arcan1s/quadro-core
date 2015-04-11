@@ -27,6 +27,7 @@
 #define QUADRO_H
 
 #include "applicationitem.h"
+#include "favoritescore.h"
 #include "launchercore.h"
 
 #endif /* QUADRO_H */

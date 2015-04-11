@@ -168,7 +168,7 @@ QMap<QString, ApplicationItem *> LauncherCore::getApplicationsFromDesktops()
 
 
 /**
- * @fn getApplicationsFromDesktops
+ * @fn getApplicationsFromPaths
  */
 QMap<QString, ApplicationItem *> LauncherCore::getApplicationsFromPaths()
 {

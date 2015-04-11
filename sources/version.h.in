@@ -38,4 +38,8 @@
 #define DBUS_PLUGIN_INTERFACE "org.quadro.plugin"
 #define DBUS_OBJECT_PATH "/quadro"
 
+// path configuration
+#define HOME_PATH ".quadro"
+#define FAVORITES_PATH "favorites"
+
 #endif /* VERSION_H */

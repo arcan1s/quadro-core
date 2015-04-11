@@ -126,9 +126,10 @@ public slots:
     bool launch();
     /**
      * @brief write settings to desktop file
+     * @param _desktopPath   full path to desktop file
      * @return full path to created file or empty string
      */
-    QString saveDesktop();
+    QString saveDesktop(const QString _desktopPath);
 
 private:
     // main

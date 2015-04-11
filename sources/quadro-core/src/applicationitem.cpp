@@ -29,7 +29,6 @@
 #include <QLocale>
 #include <QProcess>
 #include <QSettings>
-#include <QStandardPaths>
 
 #include <quadro/quadro.h>
 #include <pdebug/pdebug.h>
@@ -46,6 +45,7 @@ ApplicationItem::ApplicationItem(const QString exePath, const QString name,
     : debug(debugCmd),
       m_executable(exePath)
 {
+    setName(name);
 }
 
 
@@ -215,13 +215,12 @@ bool ApplicationItem::launch()
 /**
  * @fn saveDesktop
  */
-QString ApplicationItem::saveDesktop()
+QString ApplicationItem::saveDesktop(const QString _desktopPath)
 {
     if (debug) qDebug() << PDEBUG;
+    if (debug) qDebug() << PDEBUG << ":" << "Desktop path" << _desktopPath;
 
-    QString fileName = QStandardPaths::writableLocation(QStandardPaths::ApplicationsLocation);
-    fileName += QDir::separator();
-    fileName += name();
+    QString fileName = QString("%1/%2.desktop").arg(_desktopPath).arg(name());
     QSettings settings(fileName, QSettings::IniFormat);
     if (debug) qDebug() << PDEBUG << ":" << "Configuration file" << settings.fileName();
 
