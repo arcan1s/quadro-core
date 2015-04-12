@@ -62,6 +62,12 @@ public:
      */
     QMap<QString, ApplicationItem *> applicationsByCategory(const QString _category);
     /**
+     * @brief find applications by substring in name
+     * @param _substr
+     * @return map of applications by substring
+     */
+    QMap<QString, ApplicationItem *> applicationsBySubstr(const QString _substr);
+    /**
      * @brief available application categories
      * @return list of available categories
      */

@@ -28,6 +28,7 @@
 
 #include <QMap>
 #include <QObject>
+#include <QStringList>
 
 
 class ApplicationItem;
@@ -76,6 +77,10 @@ public slots:
      * @brief init application using given paths
      */
     void initApplications();
+    /**
+     * @brief sort applications by correct order
+     */
+    void sortApplications();
 
 private:
     /**
@@ -87,10 +92,19 @@ private:
      */
     QMap<QString, ApplicationItem *> m_applications;
     /**
+     * @brief order of applications
+     */
+    QStringList m_order;
+    /**
      * @brief return applications which has desktop files
      * @return map of generated ApplicationItem
      */
     QMap<QString, ApplicationItem *> getApplicationsFromDesktops();
+    /**
+     * @brief return correct applications order
+     * @return list of applications in the correct order
+     */
+    QStringList getApplicationsOrder();
 };
 
 

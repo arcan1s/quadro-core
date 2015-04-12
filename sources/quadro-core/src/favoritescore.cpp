@@ -25,7 +25,6 @@
 
 #include <QDebug>
 #include <QDir>
-#include <QStandardPaths>
 
 #include <quadro/quadro.h>
 #include <pdebug/pdebug.h>
@@ -104,8 +103,27 @@ void FavoritesCore::initApplications()
 
     // start cleanup
     m_applications.clear();
+    m_order.clear();
 
     m_applications = getApplicationsFromDesktops();
+    m_order = getApplicationsOrder();
+    sortApplications();
+}
+
+
+/**
+ * @fn sortApplications
+ */
+void FavoritesCore::sortApplications()
+{
+    if (debug) qDebug() << PDEBUG;
+
+    QMap<QString, ApplicationItem *> items;
+    items.swap(m_applications);
+
+    for (int i=0; i<m_order.count(); i++)
+        m_applications[m_order[i]] = items.take(m_order[i]);
+    items.clear();
 }
 
 
@@ -120,6 +138,7 @@ QMap<QString, ApplicationItem *> FavoritesCore::getApplicationsFromDesktops()
 
     QStringList entries = QDir(desktopPath()).entryList(QDir::Files);
     for (int i=0; i<entries.count(); i++) {
+        if (!entries.endsWith(QString(".desktop"))) continue;
         QString desktop = QFileInfo(QDir(desktopPath()), entries[i]).filePath();
         if (debug) qDebug() << PDEBUG << ":" << "Desktop" << desktop;
         ApplicationItem *item = ApplicationItem::fromDesktop(desktop);
@@ -127,4 +146,33 @@ QMap<QString, ApplicationItem *> FavoritesCore::getApplicationsFromDesktops()
     }
 
     return items;
+}
+
+
+/**
+ * @fn getApplicationsOrder
+ */
+QStringList FavoritesCore::getApplicationsOrder()
+{
+    if (debug) qDebug() << PDEBUG;
+
+    QStringList order;
+    QString fileName = QFileInfo(QDir(desktopPath()), QString("order.conf")).filePath();
+    if (debug) qDebug() << PDEBUG << ":" << "Configuration file" << fileName;
+    QFile configFile(fileName);
+    if (!configFile.open(QIODevice::ReadOnly)) return order;
+
+    QString fileStr;
+    QStringList value;
+    while (true) {
+        fileStr = QString(configFile.readLine()).trimmed();
+        if ((fileStr.isEmpty()) && (!configFile.atEnd())) continue;
+        if ((fileStr[0] == QChar('#')) && (!configFile.atEnd())) continue;
+        if ((fileStr[0] == QChar(';')) && (!configFile.atEnd())) continue;
+        if (!fileStr.isEmpty()) order.append(fileStr);
+        if (configFile.atEnd()) break;
+    }
+    configFile.close();
+
+    return order;
 }

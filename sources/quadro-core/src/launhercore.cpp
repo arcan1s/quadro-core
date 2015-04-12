@@ -92,6 +92,25 @@ QMap<QString, ApplicationItem *> LauncherCore::applicationsByCategory(const QStr
 
 
 /**
+ * @fn applicationsBySubstr
+ */
+QMap<QString, ApplicationItem *> LauncherCore::applicationsBySubstr(const QString _substr)
+{
+    if (debug) qDebug() << PDEBUG;
+    if (debug) qDebug() << PDEBUG << ":" << "Substring" << _substr;
+
+    QMap<QString, ApplicationItem *> apps;
+    QStringList keys = static_cast<QStringList>(m_applications.keys())
+                                                .filter(_substr, Qt::CaseInsensitive);
+
+    for (int i=0; i<keys.count(); i++)
+        apps[keys[i]] = m_applications[keys[i]];
+
+    return apps;
+}
+
+
+/**
  * @fn availableCategories
  */
 QStringList LauncherCore::availableCategories()
@@ -156,6 +175,7 @@ QMap<QString, ApplicationItem *> LauncherCore::getApplicationsFromDesktops()
     for (int i=desktopPaths.count()-1; i>=0; i--) {
         QStringList entries = QDir(desktopPaths[i]).entryList(QDir::Files);
         for (int j=0; j<entries.count(); j++) {
+            if (!entries.endsWith(QString(".desktop"))) continue;
             QString desktop = QFileInfo(QDir(desktopPaths[i]), entries[j]).filePath();
             if (debug) qDebug() << PDEBUG << ":" << "Desktop" << desktop;
             ApplicationItem *item = ApplicationItem::fromDesktop(desktop);
@@ -184,6 +204,7 @@ QMap<QString, ApplicationItem *> LauncherCore::getApplicationsFromPaths()
         QStringList entries = QDir(paths[i]).entryList(QDir::Files);
         for (int j=0; j<entries.count(); j++) {
             QString executable = QFileInfo(QDir(paths[i]), entries[j]).filePath();
+            if (!QFileInfo(executable).isExecutable()) continue;
             if (debug) qDebug() << PDEBUG << ":" << "Executable" << executable;
             ApplicationItem *item = new ApplicationItem(executable);
             items[item->name()] = item;
