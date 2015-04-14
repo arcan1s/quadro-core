@@ -44,9 +44,10 @@ class FavoritesCore : public QObject
 public:
     /**
      * @brief FavoritesCore class constructor
+     * @param parent         pointer to parent item
      * @param debugCmd       show debug messages
      */
-    explicit FavoritesCore(const bool debugCmd = false);
+    explicit FavoritesCore(QObject *parent, const bool debugCmd = false);
     /**
      * @brief FavoritesCore class destructor
      */
@@ -63,9 +64,9 @@ public:
      * @param _iconName      icon name in the theme
      * @return application item
      */
-    static ApplicationItem *addToFavorites(const QString _executable,
-                                           const QString _name = QString(),
-                                           const QString _iconName = QString("system-run"));
+    ApplicationItem *addToFavorites(const QString _executable,
+                                    const QString _name = QString(),
+                                    const QString _iconName = QString("system-run"));
     /**
      * @brief path to desktop files
      * @return full path to desktop files
@@ -74,13 +75,19 @@ public:
 
 public slots:
     /**
+     * @brief move given application up or down
+     * @param _name          desktop name
+     * @param _up            move application up, default is true
+     */
+    void changeApplicationState(const QString _name, const bool _up = true);
+    /**
      * @brief init application using given paths
      */
     void initApplications();
     /**
-     * @brief sort applications by correct order
+     * @brief save current application order to the index file
      */
-    void sortApplications();
+    void saveApplicationsOrder();
 
 private:
     /**

@@ -38,8 +38,9 @@
 /**
  * @fn LauncherCore
  */
-LauncherCore::LauncherCore(const bool debugCmd)
-    : debug(debugCmd)
+LauncherCore::LauncherCore(QObject *parent, const bool debugCmd)
+    : QObject(parent),
+      debug(debugCmd)
 {
 }
 
@@ -178,7 +179,7 @@ QMap<QString, ApplicationItem *> LauncherCore::getApplicationsFromDesktops()
             if (!entries.endsWith(QString(".desktop"))) continue;
             QString desktop = QFileInfo(QDir(desktopPaths[i]), entries[j]).filePath();
             if (debug) qDebug() << PDEBUG << ":" << "Desktop" << desktop;
-            ApplicationItem *item = ApplicationItem::fromDesktop(desktop);
+            ApplicationItem *item = ApplicationItem::fromDesktop(desktop, this);
             items[item->name()] = item;
         }
     }
@@ -206,7 +207,7 @@ QMap<QString, ApplicationItem *> LauncherCore::getApplicationsFromPaths()
             QString executable = QFileInfo(QDir(paths[i]), entries[j]).filePath();
             if (!QFileInfo(executable).isExecutable()) continue;
             if (debug) qDebug() << PDEBUG << ":" << "Executable" << executable;
-            ApplicationItem *item = new ApplicationItem(executable);
+            ApplicationItem *item = new ApplicationItem(this, executable);
             items[item->name()] = item;
         }
     }

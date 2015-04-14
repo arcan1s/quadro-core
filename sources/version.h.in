@@ -42,4 +42,7 @@
 #define HOME_PATH ".quadro"
 #define FAVORITES_PATH "favorites"
 
+// plugin configuration
+#define PLUGIN_API 1
+
 #endif /* VERSION_H */

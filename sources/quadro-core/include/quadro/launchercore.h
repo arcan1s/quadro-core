@@ -43,9 +43,10 @@ class LauncherCore : public QObject
 public:
     /**
      * @brief LauncherCore class constructor
+     * @param parent         pointer to parent item
      * @param debugCmd       show debug messages
      */
-    explicit LauncherCore(const bool debugCmd = false);
+    explicit LauncherCore(QObject *parent, const bool debugCmd = false);
     /**
      * @brief LauncherCore class destructor
      */

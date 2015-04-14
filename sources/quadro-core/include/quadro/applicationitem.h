@@ -45,12 +45,14 @@ class ApplicationItem : public QObject
 public:
     /**
      * @brief ApplicationItem class constructor
+     * @param parent         pointer to parent item
      * @param exePath        full path to executable file
      * @param name           application name. If name is not given it will be
      *                       assigned from exePath
      * @param debugCmd       show debug messages
      */
-    explicit ApplicationItem(const QString exePath,
+    explicit ApplicationItem(QObject *parent,
+                             const QString exePath,
                              const QString name = QString(),
                              const bool debugCmd = false);
     /**
@@ -114,9 +116,10 @@ public:
     /**
      * @brief read application information from desktop file
      * @param _desktopPath   full path to desktop file
+     * @param _parent        pointer to parent item
      * @return ApplicationItem structure
      */
-    static ApplicationItem *fromDesktop(const QString _desktopPath);
+    static ApplicationItem *fromDesktop(const QString _desktopPath, QObject *_parent);
 
 public slots:
     /**

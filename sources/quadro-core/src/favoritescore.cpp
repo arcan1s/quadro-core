@@ -38,8 +38,9 @@
 /**
  * @fn FavoritesCore
  */
-FavoritesCore::FavoritesCore(const bool debugCmd)
-    : debug(debugCmd)
+FavoritesCore::FavoritesCore(QObject *parent, const bool debugCmd)
+    : QObject(parent),
+      debug(debugCmd)
 {
 }
 
@@ -73,12 +74,16 @@ ApplicationItem *FavoritesCore::addToFavorites(const QString _executable,
                                                const QString _name,
                                                const QString _iconName)
 {
-    ApplicationItem *item = new ApplicationItem(_executable, _name);
+    ApplicationItem *item = new ApplicationItem(this, _executable, _name);
     item->setIconByName(_iconName);
 
     if (!item->saveDesktop(desktopPath()).isEmpty()) {
         delete item;
         item = nullptr;
+        // update data
+        m_applications[_name] = item;
+        m_order.append(_name);
+        saveApplicationsOrder();
     }
 
     return item;
@@ -95,6 +100,23 @@ QString FavoritesCore::desktopPath()
 
 
 /**
+ * @fn changeApplicationState
+ */
+void FavoritesCore::changeApplicationState(const QString _name, const bool _up)
+{
+    if (debug) qDebug() << PDEBUG;
+
+    int current = m_order.indexOf(_name);
+    if (current == -1) return;
+
+    int next = _up ? current - 1 : current + 1;
+    if ((next == -1) || (next == m_order.count())) return;
+
+    m_order.swap(current, next);
+}
+
+
+/**
  * @fn initApplications
  */
 void FavoritesCore::initApplications()
@@ -107,23 +129,26 @@ void FavoritesCore::initApplications()
 
     m_applications = getApplicationsFromDesktops();
     m_order = getApplicationsOrder();
-    sortApplications();
 }
 
 
 /**
- * @fn sortApplications
+ * @fn saveApplicationsOrder
  */
-void FavoritesCore::sortApplications()
+void FavoritesCore::saveApplicationsOrder()
 {
     if (debug) qDebug() << PDEBUG;
 
-    QMap<QString, ApplicationItem *> items;
-    items.swap(m_applications);
+    QString fileName = QFileInfo(QDir(desktopPath()), QString("index.conf")).filePath();
+    if (debug) qDebug() << PDEBUG << ":" << "Configuration file" << fileName;
+    QFile configFile(fileName);
+    if (!configFile.open(QIODevice::WriteOnly)) return;
 
-    for (int i=0; i<m_order.count(); i++)
-        m_applications[m_order[i]] = items.take(m_order[i]);
-    items.clear();
+    for (int i=0; i<m_order.count(); i++) {
+        QByteArray string = QString("%1\n").arg(m_order[i]).toUtf8();
+        configFile.write(string);
+    }
+    configFile.close();
 }
 
 
@@ -141,7 +166,7 @@ QMap<QString, ApplicationItem *> FavoritesCore::getApplicationsFromDesktops()
         if (!entries.endsWith(QString(".desktop"))) continue;
         QString desktop = QFileInfo(QDir(desktopPath()), entries[i]).filePath();
         if (debug) qDebug() << PDEBUG << ":" << "Desktop" << desktop;
-        ApplicationItem *item = ApplicationItem::fromDesktop(desktop);
+        ApplicationItem *item = ApplicationItem::fromDesktop(desktop, this);
         items[item->name()] = item;
     }
 
@@ -157,7 +182,7 @@ QStringList FavoritesCore::getApplicationsOrder()
     if (debug) qDebug() << PDEBUG;
 
     QStringList order;
-    QString fileName = QFileInfo(QDir(desktopPath()), QString("order.conf")).filePath();
+    QString fileName = QFileInfo(QDir(desktopPath()), QString("index.conf")).filePath();
     if (debug) qDebug() << PDEBUG << ":" << "Configuration file" << fileName;
     QFile configFile(fileName);
     if (!configFile.open(QIODevice::ReadOnly)) return order;
@@ -166,9 +191,8 @@ QStringList FavoritesCore::getApplicationsOrder()
     QStringList value;
     while (true) {
         fileStr = QString(configFile.readLine()).trimmed();
-        if ((fileStr.isEmpty()) && (!configFile.atEnd())) continue;
-        if ((fileStr[0] == QChar('#')) && (!configFile.atEnd())) continue;
-        if ((fileStr[0] == QChar(';')) && (!configFile.atEnd())) continue;
+        if (fileStr.startsWith(QString('#')) && (!configFile.atEnd())) continue;
+        if (fileStr.startsWith(QString(';')) && (!configFile.atEnd())) continue;
         if (!fileStr.isEmpty()) order.append(fileStr);
         if (configFile.atEnd()) break;
     }

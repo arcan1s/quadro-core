@@ -40,9 +40,10 @@
 /**
  * @fn ApplicationItem
  */
-ApplicationItem::ApplicationItem(const QString exePath, const QString name,
-                                 const bool debugCmd)
-    : debug(debugCmd),
+ApplicationItem::ApplicationItem(QObject *parent, const QString exePath,
+                                 const QString name, const bool debugCmd)
+    : QObject(parent),
+      debug(debugCmd),
       m_executable(exePath)
 {
     setName(name);
@@ -175,7 +176,7 @@ void ApplicationItem::setName(const QString _name)
 /**
  * @fn fromDesktop
  */
-ApplicationItem *ApplicationItem::fromDesktop(const QString _desktopPath)
+ApplicationItem *ApplicationItem::fromDesktop(const QString _desktopPath, QObject *_parent)
 {
     QSettings settings(_desktopPath, QSettings::IniFormat);
 
@@ -192,7 +193,7 @@ ApplicationItem *ApplicationItem::fromDesktop(const QString _desktopPath)
                         settings.value(QString("Comment")).toString();
     settings.endGroup();
 
-    ApplicationItem *item = new ApplicationItem(executable, name);
+    ApplicationItem *item = new ApplicationItem(_parent, executable, name);
     item->setComment(comment);
     item->setIconByName(iconPath);
     item->setCategories(categories.split(QChar(';'), QString::SkipEmptyParts));
