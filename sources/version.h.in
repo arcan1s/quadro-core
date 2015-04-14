@@ -43,6 +43,7 @@
 #define FAVORITES_PATH "favorites"
 
 // plugin configuration
+#define MINIMAL_TIMER 333
 #define PLUGIN_API 1
 
 #endif /* VERSION_H */

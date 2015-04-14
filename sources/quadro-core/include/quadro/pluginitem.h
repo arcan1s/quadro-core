@@ -29,6 +29,7 @@
 #include <QImage>
 #include <QMap>
 #include <QObject>
+#include <QVariant>
 
 
 class PluginAdaptor;
@@ -40,16 +41,17 @@ class PluginItem : public QObject
 {
     Q_OBJECT
     // core properties
-    Q_PROPERTY(int api READ api)
+    Q_PROPERTY(int api READ api WRITE setApi)
     Q_PROPERTY(QString comment READ comment WRITE setComment)
     Q_PROPERTY(QString data READ data)
+    Q_PROPERTY(bool ui READ hasUi WRITE setHasUi)
     Q_PROPERTY(QString name READ name WRITE setName)
     Q_PROPERTY(QString path READ path WRITE setPath)
     Q_PROPERTY(int timer READ timer WRITE setTimer)
     // ui properties
     Q_PROPERTY(QString background READ background WRITE setBackground)
     Q_PROPERTY(int height READ height WRITE setHeight)
-    Q_PROPERTY(QImage image READ image)
+    Q_PROPERTY(QString htmlImage READ htmlImage)
     Q_PROPERTY(int width READ width WRITE setWidth)
 
 public:
@@ -64,6 +66,25 @@ public:
      * @brief PluginItem class destructor
      */
     ~PluginItem();
+    // enums
+    /**
+     * @enum ImageType
+     * @brief image type defined from string
+     * @var ImageType::None
+     * type is not defined
+     * @var ImageType::Color
+     * the string is a valid Qt color
+     * @var ImageType::Path
+     * the string is path to image
+     * @var ImageType::Hash
+     * the string is a hash
+     */
+    enum ImageType {
+        None = 0,
+        Color,
+        Path,
+        Hash
+    };
     // get methods
     /**
      * @brief plugin API version
@@ -81,10 +102,21 @@ public:
      */
     QString comment();
     /**
+     * @brief plugin current settings which will be applied on next start
+     * @return configuration map
+     */
+    QMap<QString, QVariant> configuration();
+    /**
      * @brief plugin data in text
      * @return data
      */
     QString data();
+    /**
+     * @brief has plugin UI or not
+     * @return true if it has one
+     * @return false it it hasn't UI
+     */
+    bool hasUi();
     /**
      * @brief plugin UI height
      * @return height in UI grids
@@ -94,7 +126,7 @@ public:
      * @brief plugin UI image. It fills from background()
      * @return QImage object
      */
-    QImage image();
+    QString htmlImage();
     /**
      * @brief plugin name
      * @return name
@@ -106,13 +138,9 @@ public:
      */
     QString path();
     /**
-     * @brief plugin current settings which will be applied on next start
-     * @return map of settings
-     */
-    QMap<QString, QString> settings();
-    /**
      * @brief plugin events timer
-     * @return plugin timer in milliseconds
+     * @return plugin timer in milliseconds. May be more than MINIMAL_TIMER or
+     * less than 0 in case of skiping automatic update
      */
     int timer();
     /**
@@ -126,7 +154,7 @@ public:
      * @param _background    background. May be color in valid format or path to
      *                       image. Default is #ffffffff
      */
-    void setBackground(const QString _background = QString("#ffffffff"));
+    void setBackground(QString _background = QString("#ffffffff"));
     /**
      * @brief set plugin comment
      * @param _comment       comment
@@ -136,12 +164,12 @@ public:
      * @brief set plugin UI height
      * @param _height        plugin height in UI grid
      */
-    void setHeight(const int _height);
+    void setHeight(int _height);
     /**
      * @brief set plugin UI width
      * @param _width         plugin width in UI grid
      */
-    void setWidth(const int _width);
+    void setWidth(int _width);
 
 signals:
     /**
@@ -150,6 +178,10 @@ signals:
     void updated(QString _data);
 
 public slots:
+    /**
+     * @brief called if plugin has been clicked
+     */
+    virtual void actionRequired() = 0;
     /**
      * @brief create plugin DBus session
      */
@@ -160,10 +192,17 @@ public slots:
      */
     void readDesktop(const QString _desktopPath);
     /**
-     * @brief read plugin settings from desktop file
+     * @brief read plugin settings from configuration file
      * @param _desktopPath   full path to settings file
      */
     void readSettings(const QString _desktopPath);
+    /**
+     * @brief save plugin settings to configuration file
+     * @param _desktopPath   full path to settings file
+     * @return true if settings has been saved successfully
+     * @return false if there was an error while settings sync
+     */
+    bool saveSettings(const QString _desktopPath);
     /**
      * @brief update data. May be called to force update
      */
@@ -180,56 +219,88 @@ private:
      */
     PluginAdaptor *m_adaptor = nullptr;
     /**
-     * @brief plugin API version
+     * @brief plugin API version. Default is 1
      */
     int m_api = 1;
     /**
-     * @brief plugin background. May be color or path to image
+     * @brief plugin background. May be color or path to image. Default is empty
      */
-    QString m_background;
+    QString m_background = QString();
     /**
-     * @brief plugin comment
+     * @brief plugin comment. Default is empty
      */
-    QString m_comment;
+    QString m_comment = QString();
     /**
      * @brief cached data
      */
     QString m_data;
     /**
-     * @brief plugin height in UI grids
+     * @brief plugin height in UI grids. Default is 1
      */
-    int m_height;
+    int m_height = 1;
     /**
-     * @brief plugin name
+     * @brief plugin name. Default is "none"
      */
-    QString m_name;
+    QString m_name = QString("none");
     /**
-     * @brief path in the DBus interface
+     * @brief path in the DBus interface. Default is m_name
      */
-    QString m_path;
+    QString m_path = QString();
     /**
-     * @brief plugin timer in milliseconds
+     * @brief plugin timer in milliseconds. Default is 0
      */
-    int m_timer;
+    int m_timer = 0;
     /**
-     * @brief plugin width in UI grids
+     * @brief has the plugin UI or not. Default is false
      */
-    int m_width;
+    bool m_ui = false;
+    /**
+     * @brief plugin width in UI grids. Default is 1
+     */
+    int m_width = 1;
     // methods
     /**
-     * @brief init the plugin if required
+     * @brief convert image from native QImage type to valid hash
+     * @param _image         source image
+     * @return image hash
      */
-    virtual void init();
+    QString convertImage(const QImage _image);
+    /**
+     * @brief define image type from given string
+     * @param _source        image source
+     * @return valid image type
+     */
+    ImageType defineImageType(const QString _source);
+    /**
+     * @brief init the plugin. Should be implemented by any derivative class
+     */
+    virtual void init() = 0;
     /**
      * @brief remove plugin DBus session
      */
     void removeSession();
     /**
-     * @brief get data from source
+     * @brief update data from source. Should be implemented by any derivative
+     * class
      * @return new data
      */
-    virtual QString getData();
+    virtual QString getData() = 0;
+    /**
+     * @brief update image from source
+     * @return new background
+     */
+    virtual QString getBackground() = 0;
     // private set methods
+    /**
+     * @brief set API version
+     * @param _api           plugin API version
+     */
+    void setApi(int _api = 1);
+    /**
+     * @brief set has plugin UI or not
+     * @param _hasUi         has plugin UI or not
+     */
+    void setHasUi(const bool _hasUi);
     /**
      * @brief set plugin name
      * @param _name          plugin name
@@ -242,9 +313,10 @@ private:
     void setPath(QString _path);
     /**
      * @brief set timer for events
-     * @param _timer         plugin timer in milliseconds
+     * @param _timer         plugin timer in milliseconds. Should be more than
+     *                       MINIMAL_TIMER or less than 0 (skip automatic update)
      */
-    void setTimer(const int _timer);
+    void setTimer(int _timer);
 };
 
 
