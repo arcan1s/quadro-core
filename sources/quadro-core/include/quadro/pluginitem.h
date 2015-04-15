@@ -173,9 +173,10 @@ public:
 
 signals:
     /**
-     * @brief send if data updated
+     * @brief send if data has been updated
+     * @param _data          updated data
      */
-    void updated(QString _data);
+    void updated(const QString _data);
 
 public slots:
     /**
@@ -186,6 +187,10 @@ public slots:
      * @brief create plugin DBus session
      */
     void createSession();
+    /**
+     * @brief quit from plugin
+     */
+    virtual void quit();
     /**
      * @brief read plugin information from desktop file
      * @param _desktopPath   full path to desktop file
@@ -207,6 +212,13 @@ public slots:
      * @brief update data. May be called to force update
      */
     void updateData();
+
+private slots:
+    /**
+     * @brief send updated signal to DBus interface
+     * @param _data          updated data
+     */
+    void sendUpdateToDBus(const QString _data);
 
 private:
     /**
@@ -272,9 +284,9 @@ private:
      */
     ImageType defineImageType(const QString _source);
     /**
-     * @brief init the plugin. Should be implemented by any derivative class
+     * @brief init the plugin. May be implemented by derivative class
      */
-    virtual void init() = 0;
+    virtual void init();
     /**
      * @brief remove plugin DBus session
      */

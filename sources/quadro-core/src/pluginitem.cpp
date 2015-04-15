@@ -23,10 +23,11 @@
  */
 
 
+#include <QDBusConnection>
+#include <QDBusMessage>
 #include <QBuffer>
 #include <QColor>
 #include <QDBusConnection>
-#include <QDBusMessage>
 #include <QDebug>
 #include <QSettings>
 
@@ -350,10 +351,12 @@ void PluginItem::createSession()
     if (debug) qDebug() << PDEBUG;
 
     QDBusConnection bus = QDBusConnection::sessionBus();
-    if (!bus.registerObject(path(), m_adaptor, QDBusConnection::ExportAllContents)) {
+    if (!bus.registerObject(path(), m_adaptor, QDBusConnection::ExportAllSlots |
+                            QDBusConnection::ExportAllSignals)) {
         if (debug) qDebug() << PDEBUG << ":" << "Could not register object";
         if (debug) qDebug() << PDEBUG << ":" << bus.lastError().message();
     }
+    connect(this, SIGNAL(updated(QString)), this, SLOT(sendUpdateToDBus(QString)));
 }
 
 
@@ -367,6 +370,17 @@ void PluginItem::updateData()
     m_data = getData();
     m_background = getBackground();
     emit(updated(m_data));
+}
+
+
+/**
+ * @fn sendUpdateToDBus
+ */
+void PluginItem::sendUpdateToDBus(const QString _data)
+{
+    if (debug) qDebug() << PDEBUG;
+
+    return m_adaptor->UpdatesReceived(_data);
 }
 
 
