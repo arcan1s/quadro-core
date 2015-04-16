@@ -58,7 +58,6 @@ public:
     /**
      * @brief PluginItem class constructor
      * @param parent         pointer to parent item
-     * @param name           plugin name
      * @param debugCmd       show debug messages
      */
     explicit PluginItem(QObject *parent, const bool debugCmd = false);
@@ -292,16 +291,16 @@ private:
      */
     void removeSession();
     /**
+     * @brief update image from source
+     * @return new background
+     */
+    virtual QString getBackground() = 0;
+    /**
      * @brief update data from source. Should be implemented by any derivative
      * class
      * @return new data
      */
     virtual QString getData() = 0;
-    /**
-     * @brief update image from source
-     * @return new background
-     */
-    virtual QString getBackground() = 0;
     // private set methods
     /**
      * @brief set API version
