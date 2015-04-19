@@ -58,13 +58,13 @@ public:
     QMap<QString, ApplicationItem *> applications();
     /**
      * @brief find applications by category
-     * @param _category
+     * @param _category      category
      * @return map of applications by category
      */
     QMap<QString, ApplicationItem *> applicationsByCategory(const QString _category);
     /**
      * @brief find applications by substring in name
-     * @param _substr
+     * @param _substr        substring to which application need to be found
      * @return map of applications by substring
      */
     QMap<QString, ApplicationItem *> applicationsBySubstr(const QString _substr);
@@ -73,6 +73,13 @@ public:
      * @return list of available categories
      */
     QStringList availableCategories();
+    /**
+     * @brief is application has been read
+     * @param _name          application name
+     * @return true if application has been found
+     * @return false if the application has not been found
+     */
+    bool hasApplication(const QString _name);
 
 public slots:
     /**

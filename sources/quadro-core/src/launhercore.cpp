@@ -140,6 +140,18 @@ QStringList LauncherCore::availableCategories()
 
 
 /**
+ * @fn hasApplication
+ */
+bool LauncherCore::hasApplication(const QString _name)
+{
+    if (debug) qDebug() << PDEBUG;
+    if (debug) qDebug() << PDEBUG << ":" << "Application name" << _name;
+
+    return m_applications.contains(_name);
+}
+
+
+/**
  * @fn initApplications
  */
 void LauncherCore::initApplications()
@@ -151,10 +163,16 @@ void LauncherCore::initApplications()
 
     QMap<QString, ApplicationItem *> paths = getApplicationsFromPaths();
     QMap<QString, ApplicationItem *> desktops = getApplicationsFromDesktops();
-    for (int i=0; i<desktops.keys().count(); i++)
+    for (int i=0; i<desktops.keys().count(); i++) {
+        if (desktops[desktops.keys()[i]]->isHidden() ||
+            desktops[desktops.keys()[i]]->noDesktop()) continue;
         m_applications[desktops.keys()[i]] = desktops[desktops.keys()[i]];
-    for (int i=0; i<desktops.keys().count(); i++)
+    }
+    for (int i=0; i<desktops.keys().count(); i++) {
+        if (desktops[desktops.keys()[i]]->isHidden() ||
+            desktops[desktops.keys()[i]]->noDesktop()) continue;
         m_applications[desktops.keys()[i]] = desktops[desktops.keys()[i]];
+    }
 
     // cleanup
     paths.clear();

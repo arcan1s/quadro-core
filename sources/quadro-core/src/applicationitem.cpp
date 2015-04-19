@@ -93,6 +93,17 @@ QString ApplicationItem::executable()
 
 
 /**
+ * @fn isHidden
+ */
+bool ApplicationItem::isHidden()
+{
+    if (debug) qDebug() << PDEBUG;
+
+    return m_hidden;
+}
+
+
+/**
  * @fn icon
  */
 QIcon ApplicationItem::icon()
@@ -111,6 +122,17 @@ QString ApplicationItem::name()
     if (debug) qDebug() << PDEBUG;
 
     return m_name;
+}
+
+
+/**
+ * @fn noDesktop
+ */
+bool ApplicationItem::noDesktop()
+{
+    if (debug) qDebug() << PDEBUG;
+
+    return m_noDesktop;
 }
 
 
@@ -135,6 +157,18 @@ void ApplicationItem::setComment(const QString _comment)
     if (debug) qDebug() << PDEBUG << ":" << "Comment" << _comment;
 
     m_comment = _comment;
+}
+
+
+/**
+ * @fn setHidden
+ */
+void ApplicationItem::setHidden(const bool _hidden)
+{
+    if (debug) qDebug() << PDEBUG;
+    if (debug) qDebug() << PDEBUG << ":" << "Is hidden" << _hidden;
+
+    m_hidden = _hidden;
 }
 
 
@@ -174,6 +208,18 @@ void ApplicationItem::setName(const QString _name)
 
 
 /**
+ * @fn setNoDesktop
+ */
+void ApplicationItem::setNoDesktop(const bool _noDesktop)
+{
+    if (debug) qDebug() << PDEBUG;
+    if (debug) qDebug() << PDEBUG << ":" << "No desktop" << _noDesktop;
+
+    m_noDesktop = _noDesktop;
+}
+
+
+/**
  * @fn fromDesktop
  */
 ApplicationItem *ApplicationItem::fromDesktop(const QString _desktopPath, QObject *_parent)
@@ -185,17 +231,21 @@ ApplicationItem *ApplicationItem::fromDesktop(const QString _desktopPath, QObjec
     QString executable = settings.value(QString("Exec")).toString();
     QString iconPath = settings.value(QString("Icon")).toString();
     QString categories = settings.value(QString("Categories")).toString();
+    bool hidden = settings.value(QString("Hidden"), QVariant(false)).toString() == QString("true");
+    bool noDesktop = settings.value(QString("NoDesktop"), QVariant(false)).toString() == QString("true");
     // comments field
     QString locale = QLocale::system().name();
     QString localeCommentKey = QString("Comment[%1]").arg(locale.split(QChar('_'))[0]);
     QString comment = settings.contains(localeCommentKey) ?
-                        settings.value(localeCommentKey).toString() :
-                        settings.value(QString("Comment")).toString();
+                          settings.value(localeCommentKey).toString() :
+                          settings.value(QString("Comment")).toString();
     settings.endGroup();
 
     ApplicationItem *item = new ApplicationItem(_parent, executable, name);
     item->setComment(comment);
+    item->setHidden(hidden);
     item->setIconByName(iconPath);
+    item->setNoDesktop(noDesktop);
     item->setCategories(categories.split(QChar(';'), QString::SkipEmptyParts));
 
     return item;
@@ -232,6 +282,8 @@ QString ApplicationItem::saveDesktop(const QString _desktopPath)
     settings.setValue(QString("Exec"), executable());
     settings.setValue(QString("Icon"), icon().name());
     settings.setValue(QString("Categories"), categories().join(QChar(';')));
+    settings.setValue(QString("Hidden"), QVariant(isHidden()).toString());
+    settings.setValue(QString("NoDesktop"), QVariant(noDesktop()).toString());
     settings.endGroup();
 
     settings.sync();

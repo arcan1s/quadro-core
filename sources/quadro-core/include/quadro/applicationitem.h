@@ -39,8 +39,10 @@ class ApplicationItem : public QObject
     Q_PROPERTY(QStringList categories READ categories WRITE setCategories)
     Q_PROPERTY(QString comment READ comment WRITE setComment)
     Q_PROPERTY(QString executable READ executable)
+    Q_PROPERTY(bool hidden READ isHidden WRITE setHidden)
     Q_PROPERTY(QIcon icon READ icon WRITE setIcon)
     Q_PROPERTY(QString name READ name WRITE setName)
+    Q_PROPERTY(bool noDesktop READ noDesktop WRITE setNoDesktop)
 
 public:
     /**
@@ -76,6 +78,12 @@ public:
      */
     QString executable();
     /**
+     * @brief is application hidden
+     * @return true if application is hidden
+     * @return false if application is not hidden
+     */
+    bool isHidden();
+    /**
      * @brief application icon
      * @return icon
      */
@@ -85,6 +93,12 @@ public:
      * @return name
      */
     QString name();
+    /**
+     * @brief should application be shown or not
+     * @return true if application should not be shown
+     * @return false if application should be shown
+     */
+    bool noDesktop();
     // set methods
     /**
      * @brief set application categories
@@ -96,6 +110,11 @@ public:
      * @param _comment       application comment
      */
     void setComment(const QString _comment = QString());
+    /**
+     * @brief set is application hidden or not
+     * @param _hidden        is application hidden
+     */
+    void setHidden(const bool _hidden = false);
     /**
      * @brief set application icon
      * @param _icon          application icon
@@ -112,6 +131,11 @@ public:
      * @param _name          application name
      */
     void setName(const QString _name = QString());
+    /**
+     * @brief set should application be shown or not
+     * @param _noDesktop     false if application should be shown
+     */
+    void setNoDesktop(const bool _noDesktop = false);
     // desktop methods
     /**
      * @brief read application information from desktop file
@@ -154,6 +178,10 @@ private:
      */
     QString m_executable;
     /**
+     * @brief is application hidden
+     */
+    bool m_hidden;
+    /**
      * @brief application icon
      */
     QIcon m_icon = QIcon::fromTheme(QString("system-run"));
@@ -161,6 +189,10 @@ private:
      * @brief application name
      */
     QString m_name = QString();
+    /**
+     * @brief should application be shown or not
+     */
+    bool m_noDesktop;
 };
 
 
