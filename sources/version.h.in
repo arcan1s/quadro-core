@@ -39,8 +39,10 @@
 #define DBUS_OBJECT_PATH "/quadro"
 
 // path configuration
-#define HOME_PATH ".quadro"
 #define FAVORITES_PATH "favorites"
+#define HOME_PATH ".quadro"
+#define PLUGIN_PATH "plugins"
+#define SYSTEM_PATH "quadro"
 
 // plugin configuration
 #define MINIMAL_TIMER 333

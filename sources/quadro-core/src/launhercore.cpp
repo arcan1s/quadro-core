@@ -185,17 +185,17 @@ QMap<QString, ApplicationItem *> LauncherCore::getApplicationsFromDesktops()
 {
     if (debug) qDebug() << PDEBUG;
 
+    QStringList filter("*.desktop");
     QStringList desktopPaths = QStandardPaths::standardLocations(QStandardPaths::ApplicationsLocation);
     if (debug) qDebug() << PDEBUG << ":" << "Paths" << desktopPaths;
     QMap<QString, ApplicationItem *> items;
 
     for (int i=desktopPaths.count()-1; i>=0; i--) {
-        QStringList entries = QDir(desktopPaths[i]).entryList(QDir::Files);
+        QStringList entries = QDir(desktopPaths[i]).entryList(filter, QDir::Files);
         for (int j=0; j<entries.count(); j++) {
-            if (!entries.endsWith(QString(".desktop"))) continue;
             QString desktop = QFileInfo(QDir(desktopPaths[i]), entries[j]).filePath();
             if (debug) qDebug() << PDEBUG << ":" << "Desktop" << desktop;
-            ApplicationItem *item = ApplicationItem::fromDesktop(desktop, this);
+            ApplicationItem *item = ApplicationItem::fromDesktop(desktop, this, debug);
             items[item->name()] = item;
         }
     }

@@ -233,7 +233,8 @@ void ApplicationItem::setNoDesktop(const bool _noDesktop)
 /**
  * @fn fromDesktop
  */
-ApplicationItem *ApplicationItem::fromDesktop(const QString _desktopPath, QObject *_parent)
+ApplicationItem *ApplicationItem::fromDesktop(const QString _desktopPath, QObject *_parent,
+                                              const bool debugCmd)
 {
     QSettings settings(_desktopPath, QSettings::IniFormat);
 
@@ -252,7 +253,7 @@ ApplicationItem *ApplicationItem::fromDesktop(const QString _desktopPath, QObjec
                           settings.value(QString("Comment")).toString();
     settings.endGroup();
 
-    ApplicationItem *item = new ApplicationItem(_parent, executable, name);
+    ApplicationItem *item = new ApplicationItem(_parent, executable, name, debugCmd);
     item->setComment(comment);
     item->setHidden(hidden);
     item->setIconByName(iconPath);

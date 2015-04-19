@@ -31,6 +31,7 @@
 #include "favoritescore.h"
 #include "launchercore.h"
 #include "pluginadaptor.h"
+#include "plugincore.h"
 #include "pluginitem.h"
 
 

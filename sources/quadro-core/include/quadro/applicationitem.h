@@ -149,9 +149,11 @@ public:
      * @brief read application information from desktop file
      * @param _desktopPath   full path to desktop file
      * @param _parent        pointer to parent item
+     * @param debugCmd       show debug messages
      * @return ApplicationItem structure
      */
-    static ApplicationItem *fromDesktop(const QString _desktopPath, QObject *_parent);
+    static ApplicationItem *fromDesktop(const QString _desktopPath, QObject *_parent,
+                                        const bool debugCmd = false);
 
 public slots:
     /**

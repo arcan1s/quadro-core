@@ -169,6 +169,14 @@ public:
      * @param _width         plugin width in UI grid
      */
     void setWidth(int _width);
+    // additional methods
+    /**
+     * @brief whether or not plugin is desktop plugin
+     * @param _desktopPath   path to desktop file
+     * @return true if desktop file contains "Desktop plugin" section
+     * @return false if desktop file doesn't contain "Desktop plugin" section
+     */
+    static bool isDesktopPlugin(const QString _desktopPath);
 
 signals:
     /**
@@ -181,7 +189,7 @@ public slots:
     /**
      * @brief called if plugin has been clicked
      */
-    virtual void actionRequired() = 0;
+    virtual void actionRequired();
     /**
      * @brief create plugin DBus session
      */
@@ -294,13 +302,13 @@ private:
      * @brief update image from source
      * @return new background
      */
-    virtual QString getBackground() = 0;
+    virtual QString getBackground();
     /**
      * @brief update data from source. Should be implemented by any derivative
      * class
      * @return new data
      */
-    virtual QString getData() = 0;
+    virtual QString getData();
     // private set methods
     /**
      * @brief set API version

@@ -25,6 +25,7 @@
 
 #include <QDebug>
 #include <QDir>
+#include <QSettings>
 
 #include <quadro/quadro.h>
 #include <pdebug/pdebug.h>
@@ -141,14 +142,11 @@ void FavoritesCore::saveApplicationsOrder()
 
     QString fileName = QFileInfo(QDir(desktopPath()), QString("index.conf")).filePath();
     if (debug) qDebug() << PDEBUG << ":" << "Configuration file" << fileName;
-    QFile configFile(fileName);
-    if (!configFile.open(QIODevice::WriteOnly)) return;
+    QSettings settings(fileName, QSettings::IniFormat);
 
-    for (int i=0; i<m_order.count(); i++) {
-        QByteArray string = QString("%1\n").arg(m_order[i]).toUtf8();
-        configFile.write(string);
-    }
-    configFile.close();
+    settings.setValue(QString("Order"), m_order);
+
+    settings.sync();
 }
 
 
@@ -159,14 +157,14 @@ QMap<QString, ApplicationItem *> FavoritesCore::getApplicationsFromDesktops()
 {
     if (debug) qDebug() << PDEBUG;
 
+    QStringList filter("*.desktop");
     QMap<QString, ApplicationItem *> items;
 
-    QStringList entries = QDir(desktopPath()).entryList(QDir::Files);
+    QStringList entries = QDir(desktopPath()).entryList(filter, QDir::Files);
     for (int i=0; i<entries.count(); i++) {
-        if (!entries.endsWith(QString(".desktop"))) continue;
         QString desktop = QFileInfo(QDir(desktopPath()), entries[i]).filePath();
         if (debug) qDebug() << PDEBUG << ":" << "Desktop" << desktop;
-        ApplicationItem *item = ApplicationItem::fromDesktop(desktop, this);
+        ApplicationItem *item = ApplicationItem::fromDesktop(desktop, this, debug);
         items[item->name()] = item;
     }
 
@@ -181,22 +179,9 @@ QStringList FavoritesCore::getApplicationsOrder()
 {
     if (debug) qDebug() << PDEBUG;
 
-    QStringList order;
     QString fileName = QFileInfo(QDir(desktopPath()), QString("index.conf")).filePath();
     if (debug) qDebug() << PDEBUG << ":" << "Configuration file" << fileName;
-    QFile configFile(fileName);
-    if (!configFile.open(QIODevice::ReadOnly)) return order;
+    QSettings settings(fileName, QSettings::IniFormat);
 
-    QString fileStr;
-    QStringList value;
-    while (true) {
-        fileStr = QString(configFile.readLine()).trimmed();
-        if (fileStr.startsWith(QString('#')) && (!configFile.atEnd())) continue;
-        if (fileStr.startsWith(QString(';')) && (!configFile.atEnd())) continue;
-        if (!fileStr.isEmpty()) order.append(fileStr);
-        if (configFile.atEnd()) break;
-    }
-    configFile.close();
-
-    return order;
+    return settings.value(QString("Order")).toStringList();
 }

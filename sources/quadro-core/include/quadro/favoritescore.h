@@ -81,7 +81,7 @@ public slots:
      */
     void changeApplicationState(const QString _name, const bool _up = true);
     /**
-     * @brief init application using given paths
+     * @brief init application from default paths
      */
     void initApplications();
     /**

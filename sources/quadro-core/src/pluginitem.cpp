@@ -274,6 +274,17 @@ void PluginItem::setWidth(int _width)
 
 
 /**
+ * @fn isDesktopPlugin
+ */
+bool PluginItem::isDesktopPlugin(const QString _desktopPath)
+{
+    QSettings settings(_desktopPath, QSettings::IniFormat);
+
+    return settings.childGroups().contains(QString("[Desktop plugin]"));
+}
+
+
+/**
  * @fn readDesktop
  */
 void PluginItem::readDesktop(const QString _desktopPath)
@@ -304,6 +315,8 @@ void PluginItem::readSettings(const QString _desktopPath)
 
     QSettings settings(_desktopPath, QSettings::IniFormat);
 
+    settings.beginGroup(name());
+
     settings.beginGroup(QString("[Core]"));
     setComment(settings.value(QString("Comment"), m_comment).toString());
     setTimer(settings.value(QString("Timer"), m_timer).toInt());
@@ -312,6 +325,8 @@ void PluginItem::readSettings(const QString _desktopPath)
     settings.beginGroup(QString("[UI]"));
     setHeight(settings.value(QString("Height"), m_height).toInt());
     setWidth(settings.value(QString("Width"), m_width).toInt());
+    settings.endGroup();
+
     settings.endGroup();
 }
 
@@ -327,6 +342,8 @@ bool PluginItem::saveSettings(const QString _desktopPath)
     QMap<QString, QVariant> config = configuration();
     QSettings settings(_desktopPath, QSettings::IniFormat);
 
+    settings.beginGroup(name());
+
     settings.beginGroup(QString("[Core]"));
     settings.setValue(QString("Comment"), config[QString("Comment")]);
     settings.setValue(QString("Timer"), config[QString("Timer")]);
@@ -335,6 +352,8 @@ bool PluginItem::saveSettings(const QString _desktopPath)
     settings.beginGroup(QString("[UI]"));
     settings.setValue(QString("Height"), config[QString("Height")]);
     settings.setValue(QString("Width"), config[QString("Width")]);
+    settings.endGroup();
+
     settings.endGroup();
 
     settings.sync();
