@@ -43,6 +43,7 @@ class ApplicationItem : public QObject
     Q_PROPERTY(QIcon icon READ icon WRITE setIcon)
     Q_PROPERTY(QString name READ name WRITE setName)
     Q_PROPERTY(bool noDesktop READ noDesktop WRITE setNoDesktop)
+    Q_PROPERTY(bool shouldBeShown READ shouldBeShown)
 
 public:
     /**
@@ -99,6 +100,13 @@ public:
      * @return false if application should be shown
      */
     bool noDesktop();
+    /**
+     * @brief additional method indicates should application be shown in the menu
+     * or not
+     * @return true if application should not be shown
+     * @return false if application should be shown
+     */
+    bool shouldBeShown();
     // set methods
     /**
      * @brief set application categories

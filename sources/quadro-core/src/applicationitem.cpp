@@ -137,6 +137,17 @@ bool ApplicationItem::noDesktop()
 
 
 /**
+ * @fn shouldBeShown
+ */
+bool ApplicationItem::shouldBeShown()
+{
+    if (debug) qDebug() << PDEBUG;
+
+    return (!noDesktop() && !isHidden());
+}
+
+
+/**
  * @fn setCategories
  */
 void ApplicationItem::setCategories(const QStringList _categories)

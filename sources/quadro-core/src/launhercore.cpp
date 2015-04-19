@@ -164,13 +164,11 @@ void LauncherCore::initApplications()
     QMap<QString, ApplicationItem *> paths = getApplicationsFromPaths();
     QMap<QString, ApplicationItem *> desktops = getApplicationsFromDesktops();
     for (int i=0; i<desktops.keys().count(); i++) {
-        if (desktops[desktops.keys()[i]]->isHidden() ||
-            desktops[desktops.keys()[i]]->noDesktop()) continue;
+        if (!desktops[desktops.keys()[i]]->shouldBeShown()) continue;
         m_applications[desktops.keys()[i]] = desktops[desktops.keys()[i]];
     }
     for (int i=0; i<desktops.keys().count(); i++) {
-        if (desktops[desktops.keys()[i]]->isHidden() ||
-            desktops[desktops.keys()[i]]->noDesktop()) continue;
+        if (!desktops[desktops.keys()[i]]->shouldBeShown()) continue;
         m_applications[desktops.keys()[i]] = desktops[desktops.keys()[i]];
     }
 
