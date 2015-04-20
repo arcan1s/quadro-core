@@ -29,6 +29,7 @@
 #include <QImage>
 #include <QMap>
 #include <QObject>
+#include <QTimer>
 #include <QVariant>
 
 
@@ -216,6 +217,14 @@ public slots:
      */
     bool saveSettings(const QString _desktopPath);
     /**
+     * @brief start plugin timer
+     */
+    void startTimer();
+    /**
+     * @brief stop plugin timer
+     */
+    void stopTimer();
+    /**
      * @brief update data. May be called to force update
      */
     void updateData();
@@ -269,6 +278,10 @@ private:
      * @brief plugin timer in milliseconds. Default is 0
      */
     int m_timer = 0;
+    /**
+     * @brief plugin timer item
+     */
+    QTimer *m_timerItem = nullptr;
     /**
      * @brief has the plugin UI or not. Default is false
      */

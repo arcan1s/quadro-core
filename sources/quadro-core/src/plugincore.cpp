@@ -27,6 +27,7 @@
 #include <QDir>
 #include <QSettings>
 #include <QStandardPaths>
+#include <dlfcn.h>
 
 #include <quadro/quadro.h>
 #include <pdebug/pdebug.h>
@@ -53,6 +54,11 @@ PluginCore::PluginCore(QObject *parent, const bool debugCmd)
 PluginCore::~PluginCore()
 {
     if (debug) qDebug() << PDEBUG;
+
+    m_plugins.clear();
+    for (int i=0; i<m_pluginsLibs.keys().count(); i++)
+        dlclose(m_pluginsLibs[m_pluginsLibs.keys()[i]]);
+    m_pluginsLibs.clear();
 }
 
 
@@ -164,9 +170,17 @@ QMap<QString, PluginItem *> PluginCore::getPlugins()
         for (int j=0; j<entries.count(); j++) {
             QString desktop = QFileInfo(QDir(locations[i]), entries[j]).filePath();
             if (debug) qDebug() << PDEBUG << ":" << "Desktop" << desktop;
-            PluginItem *item = new PluginItem(this, debug);
-            item->readDesktop(desktop);
-            items[desktop] = item;
+            // TODO is desktop plugin definition
+            QString libraryPath = desktop;
+            libraryPath.replace(QString(".desktop"), QString(".so"));
+            void *pluginLibrary = dlopen(libraryPath.toLocal8Bit().data(), RTLD_NOW);
+            if (pluginLibrary == nullptr) {
+                if (debug) qDebug() << PDEBUG << ":" << "Could not load the library for" << desktop;
+                if (debug) qDebug() << PDEBUG << ":" << "Error" << dlerror();
+                continue;
+            }
+            void *loadedLibrary = dlsym(pluginLibrary, "PluginItem");
+            items[desktop] = dynamic_cast<PluginItem *()>(loadedLibrary)();
         }
     }
 

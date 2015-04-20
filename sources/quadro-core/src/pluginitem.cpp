@@ -60,7 +60,8 @@ PluginItem::~PluginItem()
     if (debug) qDebug() << PDEBUG;
 
     removeSession();
-    delete m_adaptor;
+    if (m_adaptor != nullptr) delete m_adaptor;
+    if (m_timerItem != nullptr) delete m_timerItem;
 }
 
 
@@ -359,6 +360,37 @@ bool PluginItem::saveSettings(const QString _desktopPath)
     settings.sync();
 
     return settings.status() == QSettings::NoError;
+}
+
+
+/**
+ * @fn startTimer
+ */
+void PluginItem::startTimer()
+{
+    if (debug) qDebug() << PDEBUG;
+    if (timer() <= 0) return;
+
+    m_timerItem = new QTimer(this);
+    m_timerItem->setInterval(timer());
+    m_timerItem->setSingleShot(false);
+    connect(m_timerItem, SIGNAL(timeout()), this, SLOT(updateData()));
+
+    m_timerItem->start();
+}
+
+
+/**
+ * @fn stopTimer
+ */
+void PluginItem::stopTimer()
+{
+    if (debug) qDebug() << PDEBUG;
+    if (m_timerItem == nullptr) return;
+
+    disconnect(m_timerItem, SIGNAL(timeout()), this, SLOT(updateData()));
+    delete m_timerItem;
+    m_timerItem = nullptr;
 }
 
 

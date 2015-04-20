@@ -94,6 +94,10 @@ private:
      */
     QMap<QString, PluginItem *> m_plugins;
     /**
+     * @brief list of plugin libraries
+     */
+    QMap<QString, void *> m_pluginsLibs;
+    /**
      * @brief return plugins from default paths
      * @return map of generated PluginItem
      */

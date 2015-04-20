@@ -120,7 +120,7 @@ QStringList LauncherCore::availableCategories()
     // refer to http://standards.freedesktop.org/menu-spec/latest/apa.html
 
     QStringList categories;
-    categories.append(QString("AudioVideo"));
+    categories.append(QString("AudioVideo"));       // usually named as Multimedia
     categories.append(QString("Audio"));
     categories.append(QString("Video"));
     categories.append(QString("Development"));

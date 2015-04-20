@@ -248,6 +248,20 @@ bool PluginAdaptor::SaveSettings(const QString desktopPath)
 
 
 /**
+ * @fn Start
+ */
+void PluginAdaptor::Start(const bool start)
+{
+    if (debug) qDebug() << PDEBUG;
+
+    if (start)
+        return m_plugin->startTimer();
+    else
+        return m_plugin->stopTimer();
+}
+
+
+/**
  * @fn Update
  */
 void PluginAdaptor::Update()

@@ -146,6 +146,11 @@ public slots:
      */
     bool SaveSettings(const QString desktopPath);
     /**
+     * @brief start plugin timer
+     * @param start          true if timer should be started, false in other way
+     */
+    void Start(const bool start = true);
+    /**
      * @brief update data. May be called to force update
      */
     void Update();
