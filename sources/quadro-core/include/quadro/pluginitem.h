@@ -26,11 +26,8 @@
 #ifndef PLUGINITEM_H
 #define PLUGINITEM_H
 
-#include <QImage>
-#include <QMap>
-#include <QObject>
+#include <QtPlugin>
 #include <QTimer>
-#include <QVariant>
 
 
 class PluginAdaptor;
@@ -210,6 +207,10 @@ public slots:
      */
     void readSettings(const QString _desktopPath);
     /**
+     * @brief remove plugin DBus session
+     */
+    void removeSession();
+    /**
      * @brief save plugin settings to configuration file
      * @param _desktopPath   full path to settings file
      * @return true if settings has been saved successfully
@@ -308,10 +309,6 @@ private:
      */
     virtual void init();
     /**
-     * @brief remove plugin DBus session
-     */
-    void removeSession();
-    /**
      * @brief update image from source
      * @return new background
      */
@@ -350,6 +347,8 @@ private:
      */
     void setTimer(int _timer);
 };
+
+Q_DECLARE_INTERFACE(PluginItem, "org.quadro.plugin")
 
 
 #endif /* PLUGINITEM_H */

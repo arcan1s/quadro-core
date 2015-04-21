@@ -47,7 +47,6 @@ PluginItem::PluginItem(QObject *parent, const bool debugCmd)
     : QObject(parent),
       debug(debugCmd)
 {
-    m_adaptor = new PluginAdaptor(this, debug);
     init();
 }
 
@@ -333,6 +332,19 @@ void PluginItem::readSettings(const QString _desktopPath)
 
 
 /**
+ * @fn removeSession
+ */
+void PluginItem::removeSession()
+{
+    if (debug) qDebug() << PDEBUG;
+
+    QDBusConnection::sessionBus().unregisterObject(path());
+    if (m_adaptor != nullptr) delete m_adaptor;
+    m_adaptor = nullptr;
+}
+
+
+/**
  * @fn saveSettings
  */
 bool PluginItem::saveSettings(const QString _desktopPath)
@@ -389,7 +401,7 @@ void PluginItem::stopTimer()
     if (m_timerItem == nullptr) return;
 
     disconnect(m_timerItem, SIGNAL(timeout()), this, SLOT(updateData()));
-    delete m_timerItem;
+    if (m_timerItem != nullptr) delete m_timerItem;
     m_timerItem = nullptr;
 }
 
@@ -401,6 +413,7 @@ void PluginItem::createSession()
 {
     if (debug) qDebug() << PDEBUG;
 
+    m_adaptor = new PluginAdaptor(this, debug);
     QDBusConnection bus = QDBusConnection::sessionBus();
     if (!bus.registerObject(path(), m_adaptor, QDBusConnection::ExportAllSlots |
                             QDBusConnection::ExportAllSignals)) {
@@ -468,17 +481,6 @@ PluginItem::ImageType PluginItem::defineImageType(const QString _source)
         type = PluginItem::Hash;
 
     return type;
-}
-
-
-/**
- * @fn removeSession
- */
-void PluginItem::removeSession()
-{
-    if (debug) qDebug() << PDEBUG;
-
-    QDBusConnection::sessionBus().unregisterObject(path());
 }
 
 

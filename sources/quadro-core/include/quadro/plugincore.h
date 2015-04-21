@@ -83,6 +83,11 @@ public slots:
      * @param _plugins       names of desktop files of plugins which should be saved
      */
     void saveActivePlugins(const QStringList _plugins);
+    /**
+     * @brief stop specified plugin
+     * @param _plugin        name of desktop file of plugin which should be stoped
+     */
+    void stopPlugin(const QString _plugin);
 
 private:
     /**
@@ -93,10 +98,6 @@ private:
      * @brief list of plugins
      */
     QMap<QString, PluginItem *> m_plugins;
-    /**
-     * @brief list of plugin libraries
-     */
-    QMap<QString, void *> m_pluginsLibs;
     /**
      * @brief return plugins from default paths
      * @return map of generated PluginItem

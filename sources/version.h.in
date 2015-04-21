@@ -20,7 +20,7 @@
 
 // build information
 #define BUILD_DATE "@CURRENT_DATE@"
-#define DATE "2014-@CURRENT_YEAR@"
+#define DATE "2015-@CURRENT_YEAR@"
 
 // cmake properties
 #define CMAKE_BUILD_TYPE "@CMAKE_BUILD_TYPE@"

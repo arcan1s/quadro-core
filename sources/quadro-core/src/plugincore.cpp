@@ -25,9 +25,9 @@
 
 #include <QDebug>
 #include <QDir>
+#include <QPluginLoader>
 #include <QSettings>
 #include <QStandardPaths>
-#include <dlfcn.h>
 
 #include <quadro/quadro.h>
 #include <pdebug/pdebug.h>
@@ -56,9 +56,6 @@ PluginCore::~PluginCore()
     if (debug) qDebug() << PDEBUG;
 
     m_plugins.clear();
-    for (int i=0; i<m_pluginsLibs.keys().count(); i++)
-        dlclose(m_pluginsLibs[m_pluginsLibs.keys()[i]]);
-    m_pluginsLibs.clear();
 }
 
 
@@ -131,6 +128,8 @@ void PluginCore::runPlugins(const QStringList _plugins)
             if (debug) qDebug() << PDEBUG << ":" << "Could not find plugin" << _plugins[i];
             continue;
         }
+        m_plugins[_plugins[i]]->createSession();
+        m_plugins[_plugins[i]]->startTimer();
     }
 }
 
@@ -154,6 +153,23 @@ void PluginCore::saveActivePlugins(const QStringList _plugins)
 
 
 /**
+ * @fn stopPlugin
+ */
+void PluginCore::stopPlugin(const QString _plugin)
+{
+    if (debug) qDebug() << PDEBUG;
+    if (debug) qDebug() << PDEBUG << ":" << "Plugin" << _plugin;
+    if (!m_plugins.contains(_plugin)) {
+        if (debug) qDebug() << PDEBUG << ":" << "Could not find plugin" << _plugin;
+        return;
+    }
+
+    m_plugins[_plugin]->stopTimer();
+    m_plugins[_plugin]->removeSession();
+}
+
+
+/**
  * @fn getPlugins
  */
 QMap<QString, PluginItem *> PluginCore::getPlugins()
@@ -170,17 +186,20 @@ QMap<QString, PluginItem *> PluginCore::getPlugins()
         for (int j=0; j<entries.count(); j++) {
             QString desktop = QFileInfo(QDir(locations[i]), entries[j]).filePath();
             if (debug) qDebug() << PDEBUG << ":" << "Desktop" << desktop;
-            // TODO is desktop plugin definition
-            QString libraryPath = desktop;
-            libraryPath.replace(QString(".desktop"), QString(".so"));
-            void *pluginLibrary = dlopen(libraryPath.toLocal8Bit().data(), RTLD_NOW);
-            if (pluginLibrary == nullptr) {
+            // generate path
+            QString libraryName = QString("lib%1").arg(entries[j]);
+            libraryName.replace(QString(".desktop"), QString(".so"));
+            QPluginLoader loader(libraryName);
+            // load plugin
+            QObject *plugin = loader.instance();
+            if (plugin) {
+                if (debug) qDebug() << PDEBUG << ":" << "Loading" << libraryName;
+                items[desktop] = dynamic_cast<PluginItem *>(plugin);
+            } else {
                 if (debug) qDebug() << PDEBUG << ":" << "Could not load the library for" << desktop;
-                if (debug) qDebug() << PDEBUG << ":" << "Error" << dlerror();
+                if (debug) qDebug() << PDEBUG << ":" << "Error" << loader.errorString();
                 continue;
             }
-            void *loadedLibrary = dlsym(pluginLibrary, "PluginItem");
-            items[desktop] = dynamic_cast<PluginItem *()>(loadedLibrary)();
         }
     }
 

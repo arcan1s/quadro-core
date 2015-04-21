@@ -27,7 +27,6 @@
 #define QUADRO_H
 
 #include "applicationitem.h"
-#include "desktopplugin.h"
 #include "favoritescore.h"
 #include "launchercore.h"
 #include "pluginadaptor.h"
