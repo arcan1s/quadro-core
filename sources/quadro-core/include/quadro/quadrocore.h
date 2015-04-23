@@ -15,7 +15,7 @@
  *   along with quadro. If not, see http://www.gnu.org/licenses/           *
  ***************************************************************************/
 /**
- * @file quadro.h
+ * @file quadrocore.h
  * Header of quadro library
  * @author Evgeniy Alekseev
  * @copyright GPLv3
@@ -23,18 +23,39 @@
  */
 
 
-#ifndef QUADRO_H
-#define QUADRO_H
+#ifndef QUADROCORE_H
+#define QUADROCORE_H
 
-#include "applicationitem.h"
-#include "favoritescore.h"
-#include "filemanagercore.h"
-#include "launchercore.h"
-#include "pluginadaptor.h"
-#include "plugincore.h"
-#include "pluginitem.h"
-#include "quadroadaptor.h"
-#include "quadrocore.h"
+#include <QObject>
 
 
-#endif /* QUADRO_H */
+/**
+ * @brief The QuadroCore class provides Quadro backend
+ */
+class QuadroCore : public QObject
+{
+    Q_OBJECT
+
+public:
+    /**
+     * @brief QuadroCore class constructor
+     * @param parent         pointer to parent item
+     * @param debugCmd       show debug messages
+     */
+    explicit QuadroCore(QObject *parent, const bool debugCmd = false);
+    /**
+     * @brief QuadroCore class destructor
+     */
+    ~QuadroCore();
+
+public slots:
+
+private:
+    /**
+     * @brief show debug messages. Default is false
+     */
+    bool debug = false;
+};
+
+
+#endif /* QUADROCORE_H */

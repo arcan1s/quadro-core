@@ -15,7 +15,7 @@
  *   along with quadro. If not, see http://www.gnu.org/licenses/           *
  ***************************************************************************/
 /**
- * @file quadro.h
+ * @file quadroadaptor.h
  * Header of quadro library
  * @author Evgeniy Alekseev
  * @copyright GPLv3
@@ -23,18 +23,53 @@
  */
 
 
-#ifndef QUADRO_H
-#define QUADRO_H
+#ifndef QUADROADAPTOR_H
+#define QUADROADAPTOR_H
 
-#include "applicationitem.h"
-#include "favoritescore.h"
-#include "filemanagercore.h"
-#include "launchercore.h"
-#include "pluginadaptor.h"
-#include "plugincore.h"
-#include "pluginitem.h"
-#include "quadroadaptor.h"
-#include "quadrocore.h"
+#include <QDBusAbstractAdaptor>
+#include <QObject>
+
+#include "version.h"
 
 
-#endif /* QUADRO_H */
+class QuadroCore;
+
+/**
+ * @brief The QuadroAdaptor class provides core DBus adaptor
+ */
+class QuadroAdaptor : public QDBusAbstractAdaptor
+{
+    Q_OBJECT
+    Q_CLASSINFO("D-Bus Interface", DBUS_INTERFACE)
+
+public:
+    /**
+     * @brief QuadroAdaptor class constructor
+     * @param core           pointer to core part
+     * @param debugCmd       show debug messages
+     */
+    explicit QuadroAdaptor(QuadroCore *core,
+                           const bool debugCmd = false);
+    /**
+     * @brief QuadroAdaptor class destructor
+     */
+    ~QuadroAdaptor();
+
+public slots:
+
+signals:
+
+private:
+    /**
+     * @brief show debug messages. Default is false
+     */
+    bool debug = false;
+    // properties
+    /**
+     * @brief pointer to the core
+     */
+    QuadroCore *m_core = nullptr;
+};
+
+
+#endif /* QuadroAdaptor */

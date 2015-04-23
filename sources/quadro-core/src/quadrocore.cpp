@@ -15,26 +15,37 @@
  *   along with quadro. If not, see http://www.gnu.org/licenses/           *
  ***************************************************************************/
 /**
- * @file quadro.h
- * Header of quadro library
+ * @file quadrocore.cpp
+ * Source code of quadro library
  * @author Evgeniy Alekseev
  * @copyright GPLv3
  * @bug https://github.com/arcan1s/quadro-core/issues
  */
 
 
-#ifndef QUADRO_H
-#define QUADRO_H
+#include <QDebug>
 
-#include "applicationitem.h"
-#include "favoritescore.h"
-#include "filemanagercore.h"
-#include "launchercore.h"
-#include "pluginadaptor.h"
-#include "plugincore.h"
-#include "pluginitem.h"
-#include "quadroadaptor.h"
-#include "quadrocore.h"
+#include <quadro/quadro.h>
+#include <pdebug/pdebug.h>
 
 
-#endif /* QUADRO_H */
+/**
+ * @class QuadroCore
+ */
+/**
+ * @fn QuadroCore
+ */
+QuadroCore::QuadroCore(QObject *parent, const bool debugCmd)
+    : QObject(parent),
+      debug(debugCmd)
+{
+}
+
+
+/**
+ * @fn ~QuadroCore
+ */
+QuadroCore::~QuadroCore()
+{
+    if (debug) qDebug() << PDEBUG;
+}
