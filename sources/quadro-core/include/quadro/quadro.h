@@ -27,6 +27,7 @@
 #define QUADRO_H
 
 #include "applicationitem.h"
+#include "applicationlauncheritem.h"
 #include "favoritescore.h"
 #include "filemanagercore.h"
 #include "launchercore.h"

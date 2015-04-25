@@ -274,17 +274,6 @@ void PluginItem::setWidth(int _width)
 
 
 /**
- * @fn isDesktopPlugin
- */
-bool PluginItem::isDesktopPlugin(const QString _desktopPath)
-{
-    QSettings settings(_desktopPath, QSettings::IniFormat);
-
-    return settings.childGroups().contains(QString("[Desktop plugin]"));
-}
-
-
-/**
  * @fn readDesktop
  */
 void PluginItem::readDesktop(const QString _desktopPath)

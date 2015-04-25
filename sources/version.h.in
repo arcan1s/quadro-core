@@ -8,7 +8,7 @@
 #define TRANSLATORS ""
 #define EMAIL "@PROJECT_CONTACT@"
 #define LICENSE "@PROJECT_LICENSE@"
-#define TRDPARTY_LICENSE "tasks,BSD,https://github.com/mhogomchungu/tasks"
+#define TRDPARTY_LICENSE "tasks,BSD,https://github.com/mhogomchungu/tasks;wmctrl,GPLv2,https://sites.google.com/site/tstyblo/wmctrl"
 #define DOCS_PATH "@CMAKE_INSTALL_PREFIX@/share/doc/quadro/"
 
 // links

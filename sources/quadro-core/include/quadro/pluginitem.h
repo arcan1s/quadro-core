@@ -167,14 +167,6 @@ public:
      * @param _width         plugin width in UI grid
      */
     void setWidth(int _width);
-    // additional methods
-    /**
-     * @brief whether or not plugin is desktop plugin
-     * @param _desktopPath   path to desktop file
-     * @return true if desktop file contains "Desktop plugin" section
-     * @return false if desktop file doesn't contain "Desktop plugin" section
-     */
-    static bool isDesktopPlugin(const QString _desktopPath);
 
 signals:
     /**

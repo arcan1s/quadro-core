@@ -23,8 +23,10 @@ else ()
   set (QT_NEEDED_LIBS ${QT_QTCORE_LIBRARY} ${QT_QTDBUS_LIBRARY} ${QT_QTGUI_LIBRARY})
   qt4_wrap_cpp (MOC_SOURCES ${HEADERS})
 endif()
+find_package (X11)
+include_directories (${X11_INCLUDE_DIR})
 
 add_library (${SUBPROJECT} SHARED ${SOURCES} ${HEADERS} ${MOC_SOURCES})
-target_link_libraries (${SUBPROJECT} ${QT_NEEDED_LIBS})
+target_link_libraries (${SUBPROJECT} ${QT_NEEDED_LIBS} ${X11_LIBRARIES})
 # install properties
 install (TARGETS ${SUBPROJECT} DESTINATION lib)
