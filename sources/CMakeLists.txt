@@ -21,7 +21,6 @@ message (STATUS "Version: ${PROJECT_VERSION}")
 message (STATUS "Build date: ${CURRENT_DATE}")
 
 # install options
-option (USE_QT5 "Use Qt5 instead of Qt4" ON)
 option (BUILD_DOCS "Build Doxygen documentation" OFF)
 option (BUILD_TEST "Build unit tests" OFF)
 

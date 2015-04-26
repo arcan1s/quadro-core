@@ -29,7 +29,6 @@
 #define PROJECT_BUILD_DOCS "@BUILD_DOCS@"
 #define PROJECT_BUILD_TEST "@BUILD_TEST@"
 // project properties
-#define PROJECT_USE_QT5 "@USE_QT5@"
 
 // dbus configuration
 #define DBUS_SERVICE "org.quadro.core"

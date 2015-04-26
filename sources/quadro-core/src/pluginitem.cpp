@@ -159,17 +159,17 @@ QString PluginItem::htmlImage()
     QString image;
 
     switch (type) {
-    case PluginItem::Color:
+    case ImageType::COLOR:
         pluginImage.fill(background());
         image = convertImage(pluginImage);
         break;
-    case PluginItem::Path:
+    case ImageType::PATH:
         image = convertImage(pluginImage);
         break;
-    case PluginItem::Hash:
+    case ImageType::HASH:
         image = background();
         break;
-    case PluginItem::None:
+    case ImageType::NONE:
     default:
         break;
     }
@@ -460,14 +460,14 @@ PluginItem::ImageType PluginItem::defineImageType(const QString _source)
     if (debug) qDebug() << PDEBUG;
     if (debug) qDebug() << PDEBUG << ":" << "Source" << _source;
 
-    PluginItem::ImageType type = PluginItem::None;
+    PluginItem::ImageType type = ImageType::NONE;
     QImage testImage;
     if (QColor::isValidColor(_source))
-        type = PluginItem::Color;
+        type = ImageType::COLOR;
     else if (testImage.load(_source))
-        type = PluginItem::Path;
+        type = ImageType::PATH;
     else
-        type = PluginItem::Hash;
+        type = ImageType::HASH;
 
     return type;
 }

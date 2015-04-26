@@ -15,7 +15,7 @@
  *   along with quadro. If not, see http://www.gnu.org/licenses/           *
  ***************************************************************************/
 /**
- * @file quadro.h
+ * @file x11adaptor.h
  * Header of quadro library
  * @author Evgeniy Alekseev
  * @copyright GPLv3
@@ -23,19 +23,62 @@
  */
 
 
-#ifndef QUADRO_H
-#define QUADRO_H
+#ifndef X11ADAPTOR_H
+#define X11ADAPTOR_H
 
-#include "applicationitem.h"
-#include "applicationlauncheritem.h"
-#include "favoritescore.h"
-#include "filemanagercore.h"
-#include "launchercore.h"
-#include "pluginadaptor.h"
-#include "plugincore.h"
-#include "pluginitem.h"
-#include "quadroadaptor.h"
-#include "quadrocore.h"
-#include "x11adaptor.h"
+#include <QMap>
+#include <QObject>
+#include <QX11Info>
+#include <X11/Xlib.h>
+#include <X11/Xatom.h>
 
-#endif /* QUADRO_H */
+#define MAX_PROPERTY_VALUE_LEN 4096
+
+
+/**
+ * @brief The X11Adaptor class provides adaptor to the common X11 calls
+ * @remark this class is adapted from wmctrl https://sites.google.com/site/tstyblo/wmctrl
+ */
+class X11Adaptor : public QObject
+{
+    Q_OBJECT
+
+public:
+    /**
+     * @brief X11Adaptor class constructor
+     * @param parent         pointer to parent item
+     * @param debugCmd       show debug messages
+     */
+    explicit X11Adaptor(QObject *parent, const bool debugCmd = false);
+    /**
+     * @brief X11Adaptor class destructor
+     */
+    ~X11Adaptor();
+    /**
+     * @brief get active windows
+     * @return map of windows keys of which are Q_PIDs
+     */
+    QMap<long long, unsigned long> getWindowsList();
+
+public slots:
+
+private:
+    /**
+     * @brief show debug messages. Default is false
+     */
+    bool debug = false;
+    /**
+     * @brief get client list
+     * @return client list
+     */
+    Window *getClientList(unsigned long *size);
+    /**
+     * @brief get propery by window
+     * @return propery
+     */
+    char *getPropery(const Window _win, const Atom _xaPropType,
+                     const char *_propery, unsigned long *size);
+};
+
+
+#endif /* X11ADAPTOR_H */

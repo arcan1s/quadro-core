@@ -67,20 +67,20 @@ public:
     /**
      * @enum ImageType
      * @brief image type defined from string
-     * @var ImageType::None
+     * @var ImageType::NONE
      * type is not defined
-     * @var ImageType::Color
+     * @var ImageType::COLOR
      * the string is a valid Qt color
-     * @var ImageType::Path
+     * @var ImageType::PATH
      * the string is path to image
-     * @var ImageType::Hash
+     * @var ImageType::HASH
      * the string is a hash
      */
     enum ImageType {
-        None = 0,
-        Color,
-        Path,
-        Hash
+        NONE = 0,
+        COLOR,
+        PATH,
+        HASH
     };
     // get methods
     /**

@@ -11,18 +11,15 @@ include_directories (${SUBPROJECT_INCLUDE_DIR}
                      ${CMAKE_CURRENT_BINARY_DIR}
                      ${PROJECT_TRDPARTY_DIR})
 
-if (USE_QT5)
-  find_package (Qt5 COMPONENTS Core DBus Widgets REQUIRED)
-  add_definitions (${Qt5Core_DEFINITIONS} ${Qt5DBus_DEFINITIONS} ${Qt5Widgets_DEFINITIONS})
-  include_directories (${Qt5Core_INCLUDE_DIRS} ${Qt5DBus_INCLUDE_DIRS} ${Qt5Widgets_INCLUDE_DIRS})
-  set (QT_NEEDED_LIBS ${Qt5Core_LIBRARIES} ${Qt5DBus_LIBRARIES} ${Qt5Widgets_LIBRARIES})
-  qt5_wrap_cpp (MOC_SOURCES ${HEADERS})
-else ()
-  find_package (Qt4 COMPONENTS QtCore QtDBus QtGui REQUIRED)
-  include (${QT_USE_FILE})
-  set (QT_NEEDED_LIBS ${QT_QTCORE_LIBRARY} ${QT_QTDBUS_LIBRARY} ${QT_QTGUI_LIBRARY})
-  qt4_wrap_cpp (MOC_SOURCES ${HEADERS})
-endif()
+find_package (Qt5 COMPONENTS Core DBus Widgets X11Extras REQUIRED)
+add_definitions (${Qt5Core_DEFINITIONS} ${Qt5DBus_DEFINITIONS}
+                 ${Qt5Widgets_DEFINITIONS} ${Qt5X11Extras_DEFINITIONS})
+include_directories (${Qt5Core_INCLUDE_DIRS} ${Qt5DBus_INCLUDE_DIRS}
+                     ${Qt5Widgets_INCLUDE_DIRS} ${Qt5X11Extras_INCLUDE_DIRS})
+set (QT_NEEDED_LIBS ${Qt5Core_LIBRARIES} ${Qt5DBus_LIBRARIES}
+                    ${Qt5Widgets_LIBRARIES} ${Qt5X11Extras_LIBRARIES})
+qt5_wrap_cpp (MOC_SOURCES ${HEADERS})
+# x11
 find_package (X11)
 include_directories (${X11_INCLUDE_DIR})
 

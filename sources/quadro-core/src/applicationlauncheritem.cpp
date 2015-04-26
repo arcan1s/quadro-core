@@ -28,14 +28,6 @@
 #include <quadro/quadro.h>
 #include <pdebug/pdebug.h>
 
-/**
- * @namespace Xlib
- * @brief namespace which provides X11 control functions
- */
-namespace XLib {
-    #include <X11/Xlib.h>
-}
-
 
 /**
  * @class ApplicationLauncherItem
