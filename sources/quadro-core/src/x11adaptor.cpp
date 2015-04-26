@@ -62,24 +62,28 @@ X11Adaptor::~X11Adaptor()
 /**
  * @fn getWindowsList
  */
-QMap<long long, unsigned long> X11Adaptor::getWindowsList()
+QMap<long long, unsigned long long> X11Adaptor::getWindowsList(const bool debugCmd)
 {
-    if (debug) qDebug() << PDEBUG;
+    if (debugCmd) qDebug() << PDEBUG;
 
-    QMap<long long, unsigned long> windows;
+    QMap<long long, unsigned long long> windows;
     if (QX11Info::display() == nullptr) return windows;
 
+    X11Adaptor *instance = new X11Adaptor(nullptr, debugCmd);
     unsigned long clientListSize;
-    Window *clientList = getClientList(&clientListSize);
-    if (clientList == nullptr)
+    Window *clientList = instance->getClientList(&clientListSize);
+    if (clientList == nullptr) {
+        delete instance;
         return windows;
+    }
 
-    for (unsigned int i = 0; i<clientListSize / sizeof(Window); i++) {
-        long long *pid = (long long *)getPropery(clientList[i], XA_CARDINAL,
-                                                 "_NET_WM_PID", nullptr);
+    for (unsigned int i=0; i<clientListSize / sizeof(Window); i++) {
+        long long *pid = (long long *)instance->getPropery(clientList[i], XA_CARDINAL,
+                                                           "_NET_WM_PID", nullptr);
         windows[*pid] = clientList[i];
     }
 
+    delete instance;
     return windows;
 }
 

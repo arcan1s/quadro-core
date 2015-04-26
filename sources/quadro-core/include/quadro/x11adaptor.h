@@ -56,9 +56,10 @@ public:
     ~X11Adaptor();
     /**
      * @brief get active windows
+     * @param debugCmd       show debug messages
      * @return map of windows keys of which are Q_PIDs
      */
-    QMap<long long, unsigned long> getWindowsList();
+    static QMap<long long, unsigned long long> getWindowsList(const bool debugCmd = false);
 
 public slots:
 
@@ -69,11 +70,16 @@ private:
     bool debug = false;
     /**
      * @brief get client list
+     * @param size           pointer to size, will be filled in the method
      * @return client list
      */
     Window *getClientList(unsigned long *size);
     /**
      * @brief get propery by window
+     * @param _win           window to which need to get propery
+     * @param _xaPropType    required propery type
+     * @param _propery       propery name
+     * @param size           pointer to size, will be filled in the method
      * @return propery
      */
     char *getPropery(const Window _win, const Atom _xaPropType,

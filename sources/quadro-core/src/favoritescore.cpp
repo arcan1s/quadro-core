@@ -26,6 +26,7 @@
 #include <QDebug>
 #include <QDir>
 #include <QSettings>
+#include <QStandardPaths>
 
 #include <quadro/quadro.h>
 #include <pdebug/pdebug.h>
@@ -96,7 +97,10 @@ ApplicationItem *FavoritesCore::addToFavorites(const QString _executable,
  */
 QString FavoritesCore::desktopPath()
 {
-    return QString("%1/%2/%3").arg(QDir::homePath()).arg(HOME_PATH).arg(FAVORITES_PATH);
+    QString homePath = QString("%1/%2").arg(QStandardPaths::writableLocation(QStandardPaths::DataLocation))
+                                       .arg(HOME_PATH);
+
+    return QString("%1/%2").arg(homePath).arg(FAVORITES_PATH);
 }
 
 

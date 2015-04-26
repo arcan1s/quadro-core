@@ -24,6 +24,7 @@
 
 
 #include <QDebug>
+#include <QWindow>
 
 #include <quadro/quadro.h>
 #include <pdebug/pdebug.h>
@@ -42,6 +43,7 @@ ApplicationLauncherItem::ApplicationLauncherItem(QWidget *parent, const QString 
       m_command(cmd),
       m_parent(parent)
 {
+    m_process = new QProcess(this);
     connect(m_process, SIGNAL(finished(int, QProcess::ExitStatus)),
             this, SLOT(finished(int, QProcess::ExitStatus)));
 }
@@ -54,7 +56,8 @@ ApplicationLauncherItem::~ApplicationLauncherItem()
 {
     if (debug) qDebug() << PDEBUG;
 
-    if (m_process == nullptr) delete m_process;
+    if (m_process != nullptr) delete m_process;
+    if (m_widget != nullptr) delete m_widget;
 }
 
 
@@ -94,6 +97,17 @@ QProcess::ProcessState ApplicationLauncherItem::processState()
 
 
 /**
+ * @fn widget
+ */
+QWidget *ApplicationLauncherItem::widget()
+{
+    if (debug) qDebug() << PDEBUG;
+
+    return m_widget;
+}
+
+
+/**
  * @fn startApplication
  */
 void ApplicationLauncherItem::startApplication()
@@ -101,7 +115,19 @@ void ApplicationLauncherItem::startApplication()
     if (debug) qDebug() << PDEBUG;
     if (m_process == nullptr) return;
 
+    //run process and find its wid
     m_process->start(m_command);
+    QMap<Q_PID, WId> windows = X11Adaptor::getWindowsList(debug);
+    if (!windows.contains(processId())) {
+        if (debug) qDebug() << PDEBUG << ":" << "Could not find window for PID" << processId();
+        return;
+    }
+
+    // init widget
+    QWindow *window = QWindow::fromWinId(windows[processId()]);
+    // delete widget if exist
+    if (m_widget != nullptr) delete m_widget;
+    m_widget = QWidget::createWindowContainer(window, m_parent, Qt::SubWindow);
 }
 
 
@@ -113,7 +139,7 @@ void ApplicationLauncherItem::stopApplication()
     if (debug) qDebug() << PDEBUG;
     if (m_process == nullptr) return;
 
-    return m_process->terminate();
+    m_process->terminate();
 }
 
 
@@ -127,18 +153,5 @@ void ApplicationLauncherItem::finished(const int exitCode,
     if (debug) qDebug() << PDEBUG << ":" << "Exit code" << exitCode;
     if (debug) qDebug() << PDEBUG << ":" << "Exit status" << exitStatus;
 
-    emit(processFinished(exitCode));
-}
-
-
-/**
- * @fn getX11WindowList
- */
-QMap<Q_PID, WId> ApplicationLauncherItem::getX11WindowList()
-{
-    if (debug) qDebug() << PDEBUG;
-
-    QMap<Q_PID, WId> windows;
-
-    return windows;
+    if (m_widget != nullptr) delete m_widget;
 }

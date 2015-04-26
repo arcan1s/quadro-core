@@ -80,11 +80,9 @@ QStringList PluginCore::activePlugins()
 QStringList PluginCore::desktopPaths()
 {
     QStringList locations;
-    locations.append(QString("%1/%2/%3").arg(QDir::homePath()).arg(HOME_PATH).arg(PLUGIN_PATH));
-
     QStringList defaultLocations = QStandardPaths::standardLocations(QStandardPaths::DataLocation);
     for (int i=0; i<defaultLocations.count(); i++)
-        locations.append(QString("%1/%2/%3").arg(defaultLocations[i]).arg(SYSTEM_PATH).arg(PLUGIN_PATH));
+        locations.append(QString("%1/%2/%3").arg(defaultLocations[i]).arg(HOME_PATH).arg(PLUGIN_PATH));
 
     return locations;
 }
