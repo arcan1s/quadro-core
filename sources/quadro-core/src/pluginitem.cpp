@@ -284,7 +284,7 @@ void PluginItem::readDesktop(const QString _desktopPath)
     QSettings settings(_desktopPath, QSettings::IniFormat);
 
     settings.beginGroup(QString("[Quadro plugin]"));
-    setTimer(settings.value(QString("API"), m_api).toInt());
+    setApi(settings.value(QString("API"), m_api).toInt());
     setComment(settings.value(QString("Comment"), m_comment).toString());
     setPath(settings.value(QString("DBusPath"), m_path).toString());
     setHasUi(settings.value(QString("HasUi"), m_ui).toBool());

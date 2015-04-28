@@ -36,6 +36,7 @@
 #include "pluginitem.h"
 #include "quadroadaptor.h"
 #include "quadrocore.h"
+#include "tabpluginitem.h"
 #include "x11adaptor.h"
 
 #endif /* QUADRO_H */
