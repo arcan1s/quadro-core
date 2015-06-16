@@ -102,7 +102,7 @@ public:
      * @brief plugin current settings which will be applied on next start
      * @return configuration map
      */
-    QMap<QString, QVariant> configuration();
+    QVariantMap configuration();
     /**
      * @brief plugin data in text
      * @return data
@@ -179,7 +179,7 @@ public slots:
     /**
      * @brief called if plugin has been clicked
      */
-    virtual void actionRequired();
+    virtual void actionRequired() {};
     /**
      * @brief create plugin DBus session
      */
@@ -187,7 +187,7 @@ public slots:
     /**
      * @brief quit from plugin
      */
-    virtual void quit();
+    virtual void quit() {};
     /**
      * @brief read plugin information from desktop file
      * @param _desktopPath   full path to desktop file
@@ -299,18 +299,22 @@ private:
     /**
      * @brief init the plugin. May be implemented by derivative class
      */
-    virtual void init();
+    virtual void init() {};
     /**
      * @brief update image from source
      * @return new background
      */
-    virtual QString getBackground();
+    virtual QString getBackground() {
+        return QString();
+    };
     /**
      * @brief update data from source. Should be implemented by any derivative
      * class
      * @return new data
      */
-    virtual QString getData();
+    virtual QString getData() {
+        return QString();
+    };
     // private set methods
     /**
      * @brief set API version

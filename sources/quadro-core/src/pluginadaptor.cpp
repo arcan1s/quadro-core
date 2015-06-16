@@ -103,7 +103,7 @@ QStringList PluginAdaptor::Configuration()
 {
     if (debug) qDebug() << PDEBUG;
 
-    QMap<QString, QVariant> configMap = m_plugin->configuration();
+    QVariantMap configMap = m_plugin->configuration();
     QStringList output;
     for (int i=0; i<configMap.keys().count(); i++) {
         QString key = configMap.keys()[i];

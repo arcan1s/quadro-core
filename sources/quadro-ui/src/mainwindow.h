@@ -14,13 +14,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with quadro. If not, see http://www.gnu.org/licenses/           *
  ***************************************************************************/
-/**
- * @file applicationitem.cpp
- * Source code of quadro library
- * @author Evgeniy Alekseev
- * @copyright GPLv3
- * @bug https://github.com/arcan1s/quadro-core/issues
- */
+
 
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
@@ -50,6 +44,7 @@ protected:
     void closeEvent(QCloseEvent *event);
 
 public slots:
+    void closeMainWindow();
     void updateConfiguration(const QVariantMap args);
 
 signals:
@@ -63,6 +58,7 @@ private:
     void createDBusSession();
     void createObjects();
     void deleteObjects();
+    QString configPath;
     bool debug = false;
     QTranslator *qtTranslator = nullptr;
     QTranslator *translator = nullptr;

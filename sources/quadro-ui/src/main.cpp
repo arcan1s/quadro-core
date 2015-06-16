@@ -14,13 +14,6 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with quadro. If not, see http://www.gnu.org/licenses/           *
  ***************************************************************************/
-/**
- * @file applicationitem.cpp
- * Source code of quadro library
- * @author Evgeniy Alekseev
- * @copyright GPLv3
- * @bug https://github.com/arcan1s/quadro-core/issues
- */
 
 
 #include <QApplication>
@@ -36,7 +29,7 @@
 #include <language/language.h>
 
 #include "mainwindow.h"
-// #include "messages.h"
+#include "messages.h"
 #include "version.h"
 
 
@@ -63,9 +56,16 @@ int main(int argc, char *argv[])
     }
     QProcessEnvironment environment = QProcessEnvironment::systemEnvironment();
     QString debugEnv = environment.value(QString("DEBUG"), QString("no"));
+    if (!args[QString("debug")].toBool()) args[QString("debug")] = (debugEnv == QString("yes"));
+    if ((args[QString("debug")].toBool()) ||
+        (args[QString("help")].toBool()) ||
+        (args[QString("info")].toBool()) ||
+        (args[QString("version")].toBool()) ||
+        (args[QString("error")].toBool()))
+        args[QString("nodaemon")] = true;
 
     // detach from console
-    if (args[QString("detached")].toBool())
+    if (!args[QString("nodaemon")].toBool())
         daemon(0, 0);
     QApplication a(argc, argv);
     QApplication::setQuitOnLastWindowClosed(false);
@@ -80,22 +80,22 @@ int main(int argc, char *argv[])
     translator.load(QString(":/translations/%1").arg(language));
     a.installTranslator(&translator);
 
-//     // running
-//     if (args[QString("error")].toBool()) {
-//         cout << errorMessage().toUtf8().data() << endl;
-//         cout << helpMessage().toUtf8().data();
-//         return 1;
-//     } else if (args[QString("help")].toBool()) {
-//         cout << helpMessage().toUtf8().data();
-//         return 0;
-//     } else if (args[QString("info")].toBool()) {
-//         cout << versionMessage().toUtf8().data() << endl;
-//         cout << infoMessage().toUtf8().data();
-//         return 0;
-//     } else if (args[QString("version")].toBool()) {
-//         cout << versionMessage().toUtf8().data();
-//         return 0;
-//     }
+    // running
+    if (args[QString("error")].toBool()) {
+        cout << errorMessage().toUtf8().data() << endl;
+        cout << helpMessage().toUtf8().data();
+        return 1;
+    } else if (args[QString("help")].toBool()) {
+        cout << helpMessage().toUtf8().data();
+        return 0;
+    } else if (args[QString("info")].toBool()) {
+        cout << versionMessage().toUtf8().data() << endl;
+        cout << infoMessage().toUtf8().data();
+        return 0;
+    } else if (args[QString("version")].toBool()) {
+        cout << versionMessage().toUtf8().data();
+        return 0;
+    }
 
     // check if exists
     if (existingSessionOperation(QString("Active"))) {

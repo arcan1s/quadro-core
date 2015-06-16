@@ -28,13 +28,9 @@
 #include <quadro/quadro.h>
 #include <pdebug/pdebug.h>
 
-/**
- * @namespace Xlib
- * @brief namespace which provides X11 control functions
- */
-// namespace Xlib {
-    #include <X11/Xlib.h>
-// };
+#include <X11/Xatom.h>
+#include <X11/Xlib.h>
+
 
 
 /**

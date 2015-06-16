@@ -91,11 +91,11 @@ QString TabPluginItem::comment()
 /**
  * @fn configuration
  */
-QMap<QString, QVariant> TabPluginItem::configuration()
+QVariantMap TabPluginItem::configuration()
 {
     if (debug) qDebug() << PDEBUG;
 
-    QMap<QString, QVariant> pluginSettings;
+    QVariantMap pluginSettings;
     pluginSettings[QString("Comment")] = comment();
 
     return pluginSettings;
@@ -216,7 +216,7 @@ bool TabPluginItem::saveSettings(const QString _desktopPath)
     if (debug) qDebug() << PDEBUG;
     if (debug) qDebug() << PDEBUG << ":" << "Path" << _desktopPath;
 
-    QMap<QString, QVariant> config = configuration();
+    QVariantMap config = configuration();
     QSettings settings(_desktopPath, QSettings::IniFormat);
 
     settings.beginGroup(name());

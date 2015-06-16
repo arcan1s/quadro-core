@@ -14,14 +14,7 @@
  *   You should have received a copy of the GNU General Public License     *
  *   along with quadro. If not, see http://www.gnu.org/licenses/           *
  ***************************************************************************/
-/**
- * @file applicationitem.cpp
- * Source code of quadro library
- * @author Evgeniy Alekseev
- * @copyright GPLv3
- * @bug https://github.com/arcan1s/quadro-core/issues
- */
-#include <qtextstream.h>
+
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -61,6 +54,26 @@ MainWindow::~MainWindow()
 }
 
 
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    if (debug) qDebug() << PDEBUG;
+
+//     if ((QSystemTrayIcon::isSystemTrayAvailable()) && (configuration[QString("SYSTRAY")] == QString("true"))) {
+//         hide();
+//         event->ignore();
+//     } else
+//         closeMainWindow();
+}
+
+
+void MainWindow::closeMainWindow()
+{
+    if (debug) qDebug() << PDEBUG;
+
+    qApp->quit();
+}
+
+
 void MainWindow::updateConfiguration(const QVariantMap args)
 {
     if (debug) qDebug() << PDEBUG;
@@ -84,12 +97,12 @@ void MainWindow::createDBusSession()
         if (debug) qDebug() << PDEBUG << ":" << "Could not register service";
         if (debug) qDebug() << PDEBUG << ":" << bus.lastError().message();
     }
-    if (!bus.registerObject(DBUS_OBJECT_PATH,
-                            new NetctlGuiAdaptor(this),
-                            QDBusConnection::ExportAllContents)) {
-        if (debug) qDebug() << PDEBUG << ":" << "Could not register GUI object";
-        if (debug) qDebug() << PDEBUG << ":" << bus.lastError().message();
-    }
+//     if (!bus.registerObject(DBUS_OBJECT_PATH,
+//                             new QuadroUiAdaptor(this),
+//                             QDBusConnection::ExportAllContents)) {
+//         if (debug) qDebug() << PDEBUG << ":" << "Could not register GUI object";
+//         if (debug) qDebug() << PDEBUG << ":" << bus.lastError().message();
+//     }
 }
 
 

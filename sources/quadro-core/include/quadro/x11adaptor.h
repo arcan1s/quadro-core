@@ -29,10 +29,11 @@
 #include <QMap>
 #include <QObject>
 #include <QX11Info>
-#include <X11/Xlib.h>
-#include <X11/Xatom.h>
 
 #define MAX_PROPERTY_VALUE_LEN 4096
+
+typedef unsigned long Window;
+typedef unsigned long Atom;
 
 
 /**

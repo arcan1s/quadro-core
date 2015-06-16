@@ -100,11 +100,11 @@ QString PluginItem::comment()
 /**
  * @fn configuration
  */
-QMap<QString, QVariant> PluginItem::configuration()
+QVariantMap PluginItem::configuration()
 {
     if (debug) qDebug() << PDEBUG;
 
-    QMap<QString, QVariant> pluginSettings;
+    QVariantMap pluginSettings;
     pluginSettings[QString("Comment")] = comment();
     pluginSettings[QString("Height")] = height();
     pluginSettings[QString("Timer")] = timer();
@@ -341,7 +341,7 @@ bool PluginItem::saveSettings(const QString _desktopPath)
     if (debug) qDebug() << PDEBUG;
     if (debug) qDebug() << PDEBUG << ":" << "Path" << _desktopPath;
 
-    QMap<QString, QVariant> config = configuration();
+    QVariantMap config = configuration();
     QSettings settings(_desktopPath, QSettings::IniFormat);
 
     settings.beginGroup(name());

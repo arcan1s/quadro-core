@@ -75,7 +75,7 @@ public:
      * @brief plugin current settings which will be applied on next start
      * @return configuration map
      */
-    QMap<QString, QVariant> configuration();
+    QVariantMap configuration();
     /**
      * @brief plugin UI image. It fills from background()
      * @return valid HTML image as text
@@ -108,7 +108,7 @@ public slots:
     /**
      * @brief quit from plugin
      */
-    virtual void quit();
+    virtual void quit() {};
     /**
      * @brief read plugin information from desktop file
      * @param _desktopPath   full path to desktop file
@@ -157,7 +157,7 @@ private:
     /**
      * @brief init the plugin. May be implemented by derivative class
      */
-    virtual void init();
+    virtual void init() {};
     // private set methods
     /**
      * @brief set API version
