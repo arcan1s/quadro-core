@@ -62,6 +62,11 @@ public:
      */
     int api();
     /**
+     * @brief plugin background
+     * @return background
+     */
+    QString background();
+    /**
      * @brief plugin comment
      * @return comment
      */
@@ -71,6 +76,11 @@ public:
      * @return configuration map
      */
     QMap<QString, QVariant> configuration();
+    /**
+     * @brief plugin UI image. It fills from background()
+     * @return valid HTML image as text
+     */
+    QString htmlImage();
     /**
      * @brief plugin name
      * @return name
@@ -82,6 +92,12 @@ public:
      */
     QWidget *ui();
     // set methods
+    /**
+     * @brief set plugin background
+     * @param _background    background. May be color in valid format or path to
+     *                       image. Default is #ffffffff
+     */
+    void setBackground(QString _background = QString("#ffffffff"));
     /**
      * @brief set plugin comment
      * @param _comment       comment
@@ -121,6 +137,10 @@ private:
      * @brief plugin API version. Default is 1
      */
     int m_api = 1;
+    /**
+     * @brief plugin background. May be color or path to image. Default is empty
+     */
+    QString m_background = QString();
     /**
      * @brief plugin comment. Default is empty
      */

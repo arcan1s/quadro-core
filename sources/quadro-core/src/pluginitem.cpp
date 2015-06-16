@@ -148,7 +148,7 @@ int PluginItem::height()
 
 
 /**
- * @fn image
+ * @fn htmlImage
  */
 QString PluginItem::htmlImage()
 {

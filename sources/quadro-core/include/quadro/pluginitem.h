@@ -121,7 +121,7 @@ public:
     int height();
     /**
      * @brief plugin UI image. It fills from background()
-     * @return QImage object
+     * @return valid HTML image as text
      */
     QString htmlImage();
     /**

@@ -67,6 +67,17 @@ int TabPluginItem::api()
 
 
 /**
+ * @fn background
+ */
+QString TabPluginItem::background()
+{
+    if (debug) qDebug() << PDEBUG;
+
+    return m_background;
+}
+
+
+/**
  * @fn comment
  */
 QString TabPluginItem::comment()
@@ -88,6 +99,37 @@ QMap<QString, QVariant> TabPluginItem::configuration()
     pluginSettings[QString("Comment")] = comment();
 
     return pluginSettings;
+}
+
+
+/**
+ * @fn htmlImage
+ */
+QString TabPluginItem::htmlImage()
+{
+    if (debug) qDebug() << PDEBUG;
+
+//     PluginItem::ImageType type = defineImageType(background());
+    QImage pluginImage;
+    QString image;
+
+//     switch (type) {
+//     case ImageType::COLOR:
+//         pluginImage.fill(background());
+//         image = convertImage(pluginImage);
+//         break;
+//     case ImageType::PATH:
+//         image = convertImage(pluginImage);
+//         break;
+//     case ImageType::HASH:
+//         image = background();
+//         break;
+//     case ImageType::NONE:
+//     default:
+//         break;
+//     }
+
+    return image;
 }
 
 
@@ -197,7 +239,7 @@ bool TabPluginItem::saveSettings(const QString _desktopPath)
 /**
  * @fn setApi
  */
-void PluginItem::setApi(int _api)
+void TabPluginItem::setApi(int _api)
 {
     if (debug) qDebug() << PDEBUG;
     if (debug) qDebug() << PDEBUG << ":" << "API version" << _api;
@@ -209,9 +251,22 @@ void PluginItem::setApi(int _api)
 
 
 /**
+ * @fn setBackground
+ */
+void TabPluginItem::setBackground(QString _background)
+{
+    if (debug) qDebug() << PDEBUG;
+    if (debug) qDebug() << PDEBUG << ":" << "Background" << _background;
+    if (_background.isEmpty()) _background = QString("#ffffffff");
+
+    m_background = _background;
+}
+
+
+/**
  * @fn setName
  */
-void PluginItem::setName(const QString _name)
+void TabPluginItem::setName(const QString _name)
 {
     if (debug) qDebug() << PDEBUG;
     if (debug) qDebug() << PDEBUG << ":" << "Name" << _name;
