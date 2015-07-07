@@ -19,11 +19,14 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QAction>
 #include <QApplication>
 #include <QMainWindow>
 
 #include <quadro/quadro.h>
 
+
+class SettingsWindow;
 
 namespace Ui {
 class MainWindow;
@@ -34,24 +37,32 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0,
+    explicit MainWindow(QWidget *parent = nullptr,
                         const QVariantMap args = QVariantMap(),
-                        QTranslator *qtAppTranslator = 0,
-                        QTranslator *appTranslator = 0);
+                        QTranslator *qtAppTranslator = nullptr,
+                        QTranslator *appTranslator = nullptr);
     ~MainWindow();
 
 protected:
     void closeEvent(QCloseEvent *event);
 
 public slots:
+    void changeTab(const int number = -1);
     void closeMainWindow();
-    void updateConfiguration(const QVariantMap args);
+    void showSettingsWindow();
+    void updateConfiguration(const QVariantMap args = QVariantMap());
 
 signals:
     void needToBeConfigured();
 
+private slots:
+    void changeTabByAction(QAction *action);
+    void clearTabs();
+    void initTabs();
+
 private:
     // ui
+    SettingsWindow *settingsWindow = nullptr;
     Ui::MainWindow *ui = nullptr;
     // backend
     void createActions();

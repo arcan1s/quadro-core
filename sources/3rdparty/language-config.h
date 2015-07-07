@@ -8,7 +8,9 @@
 // the first language is default language
 #define LANGUAGES "en"
 // language key in the configuration file
-#define LANGUAGE_KEY "LANGUAGE"
+#define LANGUAGE_KEY "Language"
+// name of config section in the file if any
+#define LANGUAGE_SECTION "Global"
 
 
 #endif /* LANGUAGE_CONFIG_H */

@@ -5,7 +5,7 @@ cmake_policy (SET CMP0002 OLD)
 cmake_policy (SET CMP0011 NEW)
 cmake_policy (SET CMP0015 NEW)
 
-project (quadro-core)
+project (quadro)
 set (PROJECT_AUTHOR "Evgeniy Alekseev")
 set (PROJECT_CONTACT "esalexeev@gmail.com")
 set (PROJECT_LICENSE "GPLv3")
@@ -43,7 +43,7 @@ set (PROJECT_RESOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/resources)
 add_subdirectory (${PROJECT_RESOURCE_DIR})
 
 # components
-add_subdirectory (quadro-core)
+add_subdirectory (quadro)
 add_subdirectory (quadro-ui)
 if (BUILD_TEST)
   enable_testing ()
