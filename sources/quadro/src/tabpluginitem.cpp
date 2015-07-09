@@ -177,7 +177,7 @@ void TabPluginItem::readDesktop(const QString _desktopPath)
 
     QSettings settings(_desktopPath, QSettings::IniFormat);
 
-    settings.beginGroup(QString("[Quadro tabplugin]"));
+    settings.beginGroup(QString("Quadro tabplugin"));
     setApi(settings.value(QString("API"), m_api).toInt());
     setComment(settings.value(QString("Comment"), m_comment).toString());
     setName(settings.value(QString("Name"), m_name).toString());
@@ -197,11 +197,11 @@ void TabPluginItem::readSettings(const QString _desktopPath)
 
     settings.beginGroup(name());
 
-    settings.beginGroup(QString("[Core]"));
+    settings.beginGroup(QString("Core"));
     setComment(settings.value(QString("Comment"), m_comment).toString());
     settings.endGroup();
 
-    settings.beginGroup(QString("[UI]"));
+    settings.beginGroup(QString("UI"));
     settings.endGroup();
 
     settings.endGroup();
@@ -221,11 +221,11 @@ bool TabPluginItem::saveSettings(const QString _desktopPath)
 
     settings.beginGroup(name());
 
-    settings.beginGroup(QString("[Core]"));
+    settings.beginGroup(QString("Core"));
     settings.setValue(QString("Comment"), config[QString("Comment")]);
     settings.endGroup();
 
-    settings.beginGroup(QString("[UI]"));
+    settings.beginGroup(QString("UI"));
     settings.endGroup();
 
     settings.endGroup();

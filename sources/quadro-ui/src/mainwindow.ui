@@ -24,31 +24,6 @@
     </item>
    </layout>
   </widget>
-  <widget class="QMenuBar" name="menuBar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>600</width>
-     <height>22</height>
-    </rect>
-   </property>
-   <widget class="QMenu" name="menuMenu">
-    <property name="title">
-     <string>&amp;Menu</string>
-    </property>
-    <addaction name="actionSettings"/>
-    <addaction name="separator"/>
-    <addaction name="actionDBus_API"/>
-    <addaction name="actionLibrary"/>
-    <addaction name="separator"/>
-    <addaction name="actionReport_a_bug"/>
-    <addaction name="actionAbout"/>
-    <addaction name="separator"/>
-    <addaction name="actionQuit"/>
-   </widget>
-   <addaction name="menuMenu"/>
-  </widget>
   <widget class="QToolBar" name="toolBar">
    <property name="windowTitle">
     <string>Toolbar</string>
@@ -63,19 +38,31 @@
     <bool>false</bool>
    </attribute>
   </widget>
-  <action name="actionSecurity">
-   <property name="icon">
-    <iconset theme="security-medium">
-     <normaloff/>
-    </iconset>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>600</width>
+     <height>23</height>
+    </rect>
    </property>
-   <property name="text">
-    <string>Security</string>
-   </property>
-   <property name="toolTip">
-    <string>Show security notes</string>
-   </property>
-  </action>
+   <widget class="QMenu" name="menuMenu">
+    <property name="icon">
+     <iconset theme="configure"/>
+    </property>
+    <addaction name="actionSettings"/>
+    <addaction name="separator"/>
+    <addaction name="actionDBus_API"/>
+    <addaction name="actionLibrary"/>
+    <addaction name="separator"/>
+    <addaction name="actionReport_a_bug"/>
+    <addaction name="actionAbout"/>
+    <addaction name="separator"/>
+    <addaction name="actionQuit"/>
+   </widget>
+   <addaction name="menuMenu"/>
+  </widget>
   <action name="actionDBus_API">
    <property name="text">
     <string>&amp;DBus API</string>
@@ -95,8 +82,7 @@
   <action name="actionReport_a_bug">
    <property name="icon">
     <iconset theme="tools-report-bug">
-     <normaloff/>
-    </iconset>
+     <normaloff>../../../../../../.designer/backup</normaloff>../../../../../../.designer/backup</iconset>
    </property>
    <property name="text">
     <string>&amp;Report a bug</string>
@@ -105,8 +91,7 @@
   <action name="actionAbout">
    <property name="icon">
     <iconset theme="help-about">
-     <normaloff/>
-    </iconset>
+     <normaloff>../../../../../../.designer/backup</normaloff>../../../../../../.designer/backup</iconset>
    </property>
    <property name="text">
     <string>&amp;About</string>
@@ -118,8 +103,7 @@
   <action name="actionQuit">
    <property name="icon">
     <iconset theme="application-exit">
-     <normaloff/>
-    </iconset>
+     <normaloff>../../../../../../.designer/backup</normaloff>../../../../../../.designer/backup</iconset>
    </property>
    <property name="text">
     <string>&amp;Quit</string>
@@ -131,8 +115,7 @@
   <action name="actionSettings">
    <property name="icon">
     <iconset theme="configure">
-     <normaloff/>
-    </iconset>
+     <normaloff>../../../../../../.designer/backup</normaloff>../../../../../../.designer/backup</iconset>
    </property>
    <property name="text">
     <string>&amp;Settings</string>

@@ -16,67 +16,50 @@
  ***************************************************************************/
 
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef APPLAUNCHERWIDGET_H
+#define APPLAUNCHERWIDGET_H
 
-#include <QAction>
-#include <QApplication>
-#include <QMainWindow>
+#include <QPushButton>
+#include <QWidget>
 
 #include <quadro/quadro.h>
 
 
-class SettingsWindow;
-
 namespace Ui {
-class MainWindow;
+class AppLauncher;
 }
 
-class MainWindow : public QMainWindow
+class AppLauncher : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = nullptr,
-                        const QVariantMap args = QVariantMap(),
-                        QTranslator *qtAppTranslator = nullptr,
-                        QTranslator *appTranslator = nullptr);
-    ~MainWindow();
-
-protected:
-    void closeEvent(QCloseEvent *event);
+    explicit AppLauncher(QWidget *parent,
+                         QVariantMap settings = QVariantMap(),
+                         const bool debugCmd = false);
+    ~AppLauncher();
 
 public slots:
-    void changeTab(const int index = -1);
-    void closeMainWindow();
-    void showSettingsWindow();
-    void updateConfiguration(const QVariantMap args = QVariantMap());
-
-signals:
-    void needToBeConfigured();
+    void changeCategory(const int index);
 
 private slots:
-    void changeTabByAction(QAction *action);
-    void clearTabs();
-    void initTabs();
+    void changeCategoryByButton();
 
 private:
     // ui
-    QList<QAction *> tabActions;
-    SettingsWindow *settingsWindow = nullptr;
-    Ui::MainWindow *ui = nullptr;
+    QList<QPushButton *> categoryButtons;
+    QList<QWidget *> categoryWidgets;
+    Ui::AppLauncher *ui = nullptr;
     // backend
     void createActions();
-    void createDBusSession();
     void createObjects();
     void deleteObjects();
-    QString configPath;
+    void initCategory(const QString category, const int index);
     bool debug = false;
-    QTranslator *qtTranslator = nullptr;
-    QTranslator *translator = nullptr;
+    LauncherCore *launcher = nullptr;
     // configuration
     QVariantMap configuration;
 };
 
 
-#endif /* MAINWINDOW_H */
+#endif /* APPLAUNCHERWIDGET_H */

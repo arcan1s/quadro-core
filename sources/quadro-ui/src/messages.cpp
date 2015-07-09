@@ -41,7 +41,7 @@ QVariantMap getArgs()
     args[QString("select")] = QString("PROFILE");
     // additional functions
     args[QString("config")] = QString("%1/.config/quadro.conf").arg(QDir::homePath());
-    args[QString("debug")] = false;
+    args[QString("debug")] = true;
     args[QString("defaults")] = false;
     // messages
     args[QString("error")] = false;

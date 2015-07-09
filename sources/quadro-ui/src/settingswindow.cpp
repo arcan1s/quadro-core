@@ -51,48 +51,34 @@ SettingsWindow::~SettingsWindow()
 }
 
 
-void SettingsWindow::createActions()
+QVariantMap SettingsWindow::getDefault()
 {
     if (debug) qDebug() << PDEBUG;
 
-    connect(ui->buttonBox->button(QDialogButtonBox::Cancel), SIGNAL(clicked(bool)), this, SLOT(close()));
-    connect(ui->buttonBox->button(QDialogButtonBox::Ok), SIGNAL(clicked(bool)), this, SLOT(closeWindow()));
-    connect(ui->buttonBox->button(QDialogButtonBox::Reset), SIGNAL(clicked(bool)), this, SLOT(restoreSettings()));
-    connect(ui->buttonBox->button(QDialogButtonBox::RestoreDefaults), SIGNAL(clicked(bool)), this, SLOT(setDefault()));
-    connect(ui->treeWidget, SIGNAL(currentItemChanged(QTreeWidgetItem *, QTreeWidgetItem *)),
-            this, SLOT(changePage(QTreeWidgetItem *, QTreeWidgetItem *)));
+    return getSettings(QString("/dev/null"));
 }
 
 
-// ESC press event
-void SettingsWindow::keyPressEvent(QKeyEvent *pressedKey)
+QVariantMap SettingsWindow::getSettings(QString fileName)
 {
     if (debug) qDebug() << PDEBUG;
+    if (fileName.isEmpty()) fileName = file;
 
-    if (pressedKey->key() == Qt::Key_Escape)
-        close();
-}
+    QVariantMap config;
+    QSettings settings(fileName, QSettings::IniFormat);
 
+    config[QString("Language")] = Language::defineLanguage(fileName, QString(""));
+    settings.beginGroup(QString("Common"));
+    config[QString("Language")] = settings.value(QString("Language"), config[QString("Language")]);
+    config[QString("Tabs")] = settings.value(QString("Tabs"), QStringList() <<
+                                             QString("favorites") <<
+                                             QString("applauncher"));
+    settings.endGroup();
 
-void SettingsWindow::addLanguages()
-{
-    if (debug) qDebug() << PDEBUG;
+    for (int i=0; i<config.keys().count(); i++)
+        if (debug) qDebug() << PDEBUG << ":" << config.keys()[i] << config[config.keys()[i]];
 
-    ui->comboBox_language->clear();
-    ui->comboBox_language->addItems(Language::getAvailableLanguages());
-}
-
-
-void SettingsWindow::changePage(QTreeWidgetItem *current, QTreeWidgetItem *previous)
-{
-    Q_UNUSED(previous);
-    if (debug) qDebug() << PDEBUG;
-
-    for (int i=0; i<ui->treeWidget->topLevelItemCount(); i++) {
-        if (current != ui->treeWidget->topLevelItem(i)) continue;
-        ui->stackedWidget->setCurrentIndex(i);
-        break;
-    }
+    return config;
 }
 
 
@@ -103,22 +89,6 @@ void SettingsWindow::closeWindow()
     saveSettings();
     close();
     dynamic_cast<MainWindow *>(parent())->updateConfiguration();
-}
-
-
-void SettingsWindow::saveSettings()
-{
-    if (debug) qDebug() << PDEBUG;
-
-    QVariantMap config = readSettings();
-    QSettings settings(file, QSettings::IniFormat);
-
-    settings.beginGroup(QString("Global"));
-    settings.setValue(QString("Language"), config[QString("Language")]);
-    settings.setValue(QString("Tabs"), config[QString("Tabs")]);
-    settings.endGroup();
-
-    settings.sync();
 }
 
 
@@ -147,6 +117,67 @@ void SettingsWindow::showWindow()
     setSettings(getSettings());
 
     show();
+}
+
+
+void SettingsWindow::addLanguages()
+{
+    if (debug) qDebug() << PDEBUG;
+
+    ui->comboBox_language->clear();
+    ui->comboBox_language->addItems(Language::getAvailableLanguages());
+}
+
+
+void SettingsWindow::changePage(QTreeWidgetItem *current, QTreeWidgetItem *previous)
+{
+    Q_UNUSED(previous);
+    if (debug) qDebug() << PDEBUG;
+
+    for (int i=0; i<ui->treeWidget->topLevelItemCount(); i++) {
+        if (current != ui->treeWidget->topLevelItem(i)) continue;
+        ui->stackedWidget->setCurrentIndex(i);
+        break;
+    }
+}
+
+
+void SettingsWindow::saveSettings()
+{
+    if (debug) qDebug() << PDEBUG;
+
+    QVariantMap config = readSettings();
+    QSettings settings(file, QSettings::IniFormat);
+
+    settings.beginGroup(QString("Global"));
+    settings.setValue(QString("Language"), config[QString("Language")]);
+    settings.setValue(QString("Tabs"), config[QString("Tabs")]);
+    settings.endGroup();
+
+    settings.sync();
+}
+
+
+void SettingsWindow::createActions()
+{
+    if (debug) qDebug() << PDEBUG;
+
+    connect(ui->buttonBox->button(QDialogButtonBox::Cancel), SIGNAL(clicked(bool)), this, SLOT(close()));
+    connect(ui->buttonBox->button(QDialogButtonBox::Ok), SIGNAL(clicked(bool)), this, SLOT(closeWindow()));
+    connect(ui->buttonBox->button(QDialogButtonBox::Reset), SIGNAL(clicked(bool)), this, SLOT(restoreSettings()));
+    connect(ui->buttonBox->button(QDialogButtonBox::RestoreDefaults), SIGNAL(clicked(bool)), this, SLOT(setDefault()));
+    connect(ui->treeWidget, SIGNAL(currentItemChanged(QTreeWidgetItem *, QTreeWidgetItem *)),
+            this, SLOT(changePage(QTreeWidgetItem *, QTreeWidgetItem *)));
+}
+
+
+// ESC press event
+void SettingsWindow::keyPressEvent(QKeyEvent *pressedKey)
+{
+    if (debug) qDebug() << PDEBUG;
+
+    if (pressedKey->key() == Qt::Key_Escape)
+        close();
 }
 
 
@@ -182,35 +213,4 @@ void SettingsWindow::setSettings(const QVariantMap config)
 
     for (int i=0; i<config.keys().count(); i++)
         if (debug) qDebug() << PDEBUG << ":" << config.keys()[i] << config[config.keys()[i]];
-}
-
-
-QVariantMap SettingsWindow::getDefault()
-{
-    if (debug) qDebug() << PDEBUG;
-
-    return getSettings(QString("/dev/null"));
-}
-
-
-QVariantMap SettingsWindow::getSettings(QString fileName)
-{
-    if (debug) qDebug() << PDEBUG;
-    if (fileName.isEmpty()) fileName = file;
-
-    QVariantMap config;
-    QSettings settings(fileName, QSettings::IniFormat);
-
-    config[QString("Language")] = Language::defineLanguage(fileName, QString(""));
-    settings.beginGroup(QString("Common"));
-    config[QString("Language")] = settings.value(QString("Language"), config[QString("Language")]);
-    config[QString("Tabs")] = settings.value(QString("Tabs"), QStringList() <<
-                                             QString("favorites") <<
-                                             QString("applauncher"));
-    settings.endGroup();
-
-    for (int i=0; i<config.keys().count(); i++)
-        if (debug) qDebug() << PDEBUG << ":" << config.keys()[i] << config[config.keys()[i]];
-
-    return config;
 }

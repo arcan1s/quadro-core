@@ -237,8 +237,9 @@ ApplicationItem *ApplicationItem::fromDesktop(const QString _desktopPath, QObjec
                                               const bool debugCmd)
 {
     QSettings settings(_desktopPath, QSettings::IniFormat);
+    qDebug() << settings.allKeys();
 
-    settings.beginGroup(QString("[Desktop Entry]"));
+    settings.beginGroup(QString("Desktop Entry"));
     QString name = settings.value(QString("Name")).toString();
     QString executable = settings.value(QString("Exec")).toString();
     QString iconPath = settings.value(QString("Icon")).toString();

@@ -283,7 +283,7 @@ void PluginItem::readDesktop(const QString _desktopPath)
 
     QSettings settings(_desktopPath, QSettings::IniFormat);
 
-    settings.beginGroup(QString("[Quadro plugin]"));
+    settings.beginGroup(QString("Quadro plugin"));
     setApi(settings.value(QString("API"), m_api).toInt());
     setComment(settings.value(QString("Comment"), m_comment).toString());
     setPath(settings.value(QString("DBusPath"), m_path).toString());
@@ -306,12 +306,12 @@ void PluginItem::readSettings(const QString _desktopPath)
 
     settings.beginGroup(name());
 
-    settings.beginGroup(QString("[Core]"));
+    settings.beginGroup(QString("Core"));
     setComment(settings.value(QString("Comment"), m_comment).toString());
     setTimer(settings.value(QString("Timer"), m_timer).toInt());
     settings.endGroup();
 
-    settings.beginGroup(QString("[UI]"));
+    settings.beginGroup(QString("UI"));
     setHeight(settings.value(QString("Height"), m_height).toInt());
     setWidth(settings.value(QString("Width"), m_width).toInt());
     settings.endGroup();
@@ -346,12 +346,12 @@ bool PluginItem::saveSettings(const QString _desktopPath)
 
     settings.beginGroup(name());
 
-    settings.beginGroup(QString("[Core]"));
+    settings.beginGroup(QString("Core"));
     settings.setValue(QString("Comment"), config[QString("Comment")]);
     settings.setValue(QString("Timer"), config[QString("Timer")]);
     settings.endGroup();
 
-    settings.beginGroup(QString("[UI]"));
+    settings.beginGroup(QString("UI"));
     settings.setValue(QString("Height"), config[QString("Height")]);
     settings.setValue(QString("Width"), config[QString("Width")]);
     settings.endGroup();

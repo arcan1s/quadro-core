@@ -29,6 +29,7 @@
 #include <language/language.h>
 #include <pdebug/pdebug.h>
 
+#include "applauncherwidget.h"
 #include "settingswindow.h"
 #include "version.h"
 
@@ -76,13 +77,13 @@ void MainWindow::closeEvent(QCloseEvent *event)
 }
 
 
-void MainWindow::changeTab(const int number)
+void MainWindow::changeTab(const int index)
 {
     if (debug) qDebug() << PDEBUG;
-    if (debug) qDebug() << PDEBUG << "Index" << number;
-    if ((number == -1) || (number >= ui->stackedWidget->count())) return;
+    if (debug) qDebug() << PDEBUG << "Index" << index;
+    if ((index == -1) || (index >= ui->stackedWidget->count())) return;
 
-    return ui->stackedWidget->setCurrentIndex(number);
+    return ui->stackedWidget->setCurrentIndex(index);
 }
 
 
@@ -108,7 +109,7 @@ void MainWindow::updateConfiguration(const QVariantMap args)
 
     deleteObjects();
     // update configuration
-    QString actualConfigPath = QFile(configPath).exists() ? configPath : QString("/etc/netctl-gui.conf");
+    QString actualConfigPath = QFile(configPath).exists() ? configPath : QString("/etc/quadro.conf");
     settingsWindow = new SettingsWindow(this, debug, actualConfigPath);
     if (args[QString("default")].toBool())
         settingsWindow->setDefault();
@@ -135,9 +136,14 @@ void MainWindow::changeTabByAction(QAction *action)
 {
     if (debug) qDebug() << PDEBUG;
 
-    QWidget *actionWidget = ui->toolBar->widgetForAction(action);
+    int index = -1;
+    for (int i=0; i<tabActions.count(); i++) {
+        if (tabActions[i] != action) continue;
+        index = i;
+        break;
+    }
 
-    return ui->stackedWidget->setCurrentWidget(actionWidget);
+    return changeTab(index);
 }
 
 
@@ -148,6 +154,7 @@ void MainWindow::clearTabs()
     disconnect(ui->toolBar, SIGNAL(actionTriggered(QAction *)),
                this, SLOT(changeTabByAction(QAction *)));
 
+    tabActions.clear();
     ui->toolBar->clear();
     while (ui->stackedWidget->count() > 0) {
         QWidget *widget = ui->stackedWidget->widget(0);
@@ -164,11 +171,13 @@ void MainWindow::initTabs()
     QStringList tabs = configuration[QString("Tabs")].toStringList();
     for (int i=0; i<tabs.count(); i++) {
         if (tabs[i] == QString("applauncher")) {
+            ui->stackedWidget->addWidget(new AppLauncher(this, configuration, debug));
         } else if (tabs[i] == QString("favorites")) {
+            ui->stackedWidget->addWidget(new QWidget());
         } else if (tabs[i] == QString("filemanager")) {
+            ui->stackedWidget->addWidget(new QWidget());
         } else continue;
-//         ui->stackedWidget->addWidget(widget init);
-        ui->toolBar->addWidget(ui->stackedWidget->widget(ui->stackedWidget->count() - 1));
+        tabActions.append(ui->toolBar->addAction(tabs[i]));
     }
 
     connect(ui->toolBar, SIGNAL(actionTriggered(QAction *)),
@@ -215,6 +224,7 @@ void MainWindow::createObjects()
     if (debug) qDebug() << PDEBUG;
 
     ui->retranslateUi(this);
+    initTabs();
     settingsWindow = new SettingsWindow(this, debug, configPath);
 }
 
