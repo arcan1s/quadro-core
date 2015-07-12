@@ -20,6 +20,7 @@
 #include "ui_applauncherwidget.h"
 
 #include <QDebug>
+#include <QPushButton>
 
 #include <flowlayout/flowlayout.h>
 #include <pdebug/pdebug.h>
@@ -27,7 +28,7 @@
 
 AppLauncher::AppLauncher(QWidget *parent, const QVariantMap settings,
                          const bool debugCmd)
-    : QWidget(parent),
+    : QMainWindow(parent),
       debug(debugCmd),
       configuration(settings)
 {
@@ -59,18 +60,47 @@ void AppLauncher::changeCategory(const int index)
 }
 
 
-void AppLauncher::changeCategoryByButton()
+void AppLauncher::changeCategoryByAction(QAction *action)
 {
     if (debug) qDebug() << PDEBUG;
 
     int index = -1;
     for (int i=0; i<categoryButtons.count(); i++) {
-        if (categoryButtons[i] != dynamic_cast<QPushButton *>(sender())) continue;
+        if (categoryButtons[i] != action) continue;
         index = i;
         break;
     }
 
     return changeCategory(index);
+}
+
+
+void AppLauncher::showSearchResults(const QString search)
+{
+    if (debug) qDebug() << PDEBUG;
+    if (debug) qDebug() << PDEBUG << "Search substring" << search;
+
+    // clear
+    QLayoutItem *item;
+    while ((item = categoryWidgets.last()->layout()->takeAt(0))) {
+        delete item->widget();
+        delete item;
+    }
+
+    // return if none to do here
+    if (search.isEmpty()) return ui->stackedWidget->setCurrentIndex(0);
+    // add items
+    QMap<QString, ApplicationItem *> apps = launcher->applicationsBySubstr(search);
+    for (int i=0; i<apps.keys().count(); i++) {
+        QPushButton *item = new QPushButton(categoryWidgets.last());
+        item->setText(apps.keys()[i]);
+        item->setIcon(apps[apps.keys()[i]]->icon());
+
+        categoryWidgets.last()->layout()->addWidget(item);
+        connect(item, SIGNAL(pressed()), apps[apps.keys()[i]], SLOT(launch()));
+    }
+
+    return ui->stackedWidget->setCurrentWidget(categoryWidgets.last());
 }
 
 
@@ -89,16 +119,23 @@ void AppLauncher::createObjects()
 
     QStringList categories = launcher->availableCategories();
     for (int i=0; i<categories.count(); i++) {
-        categoryButtons.append(new QPushButton(categories[i], this));
-        ui->layout_buttons->addWidget(categoryButtons[i]);
+        categoryButtons.append(ui->toolBar->addAction(categories[i]));
 
         categoryWidgets.append(new QWidget(this));
         categoryWidgets[i]->setLayout(new FlowLayout(categoryWidgets[i]));
         initCategory(categories[i], i);
         ui->stackedWidget->addWidget(categoryWidgets[i]);
-
-        connect(categoryButtons[i], SIGNAL(pressed()), this, SLOT(changeCategoryByButton()));
     }
+
+    // search widget
+    categoryWidgets.append(new QWidget(this));
+    categoryWidgets.last()->setLayout(new FlowLayout(categoryWidgets.last()));
+    ui->stackedWidget->addWidget(categoryWidgets.last());
+
+    connect(ui->toolBar, SIGNAL(actionTriggered(QAction *)),
+            this, SLOT(changeCategoryByAction(QAction *)));
+    connect(ui->lineEdit, SIGNAL(textChanged(QString)),
+            this, SLOT(showSearchResults(QString)));
 }
 
 

@@ -237,13 +237,11 @@ ApplicationItem *ApplicationItem::fromDesktop(const QString _desktopPath, QObjec
                                               const bool debugCmd)
 {
     QSettings settings(_desktopPath, QSettings::IniFormat);
-    qDebug() << settings.allKeys();
 
     settings.beginGroup(QString("Desktop Entry"));
     QString name = settings.value(QString("Name")).toString();
     QString executable = settings.value(QString("Exec")).toString();
     QString iconPath = settings.value(QString("Icon")).toString();
-    QString categories = settings.value(QString("Categories")).toString();
     bool hidden = settings.value(QString("Hidden"), QVariant(false)).toString() == QString("true");
     bool noDesktop = settings.value(QString("NoDesktop"), QVariant(false)).toString() == QString("true");
     // comments field
@@ -259,9 +257,39 @@ ApplicationItem *ApplicationItem::fromDesktop(const QString _desktopPath, QObjec
     item->setHidden(hidden);
     item->setIconByName(iconPath);
     item->setNoDesktop(noDesktop);
-    item->setCategories(categories.split(QChar(';'), QString::SkipEmptyParts));
+    item->defineCategories(_desktopPath);
 
     return item;
+}
+
+
+/**
+ * @fn defineCategories
+ */
+void ApplicationItem::defineCategories(const QString _desktopPath)
+{
+    if (debug) qDebug() << PDEBUG;
+    if (debug) qDebug() << PDEBUG << "Desktop path" << _desktopPath;
+
+    // open
+    QFile desktopFile(_desktopPath);
+    if (!desktopFile.open(QIODevice::ReadOnly))
+        return setCategories();
+    // parse
+    QStringList foundCategories;
+    while (true) {
+        QString fileStr = QString(desktopFile.readLine()).trimmed();
+        if (fileStr.startsWith(QString("Categories"))) {
+            // hope category name will not contain '='
+            foundCategories = fileStr.split(QChar('='))[1].split(QChar(';'), QString::SkipEmptyParts);
+            break;
+        }
+        if (desktopFile.atEnd()) break;
+    }
+    // close
+    desktopFile.close();
+
+    return setCategories(foundCategories);
 }
 
 

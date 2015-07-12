@@ -19,8 +19,8 @@
 #ifndef APPLAUNCHERWIDGET_H
 #define APPLAUNCHERWIDGET_H
 
-#include <QPushButton>
-#include <QWidget>
+#include <QAction>
+#include <QMainWindow>
 
 #include <quadro/quadro.h>
 
@@ -29,7 +29,7 @@ namespace Ui {
 class AppLauncher;
 }
 
-class AppLauncher : public QWidget
+class AppLauncher : public QMainWindow
 {
     Q_OBJECT
 
@@ -43,11 +43,12 @@ public slots:
     void changeCategory(const int index);
 
 private slots:
-    void changeCategoryByButton();
+    void changeCategoryByAction(QAction *action);
+    void showSearchResults(const QString search);
 
 private:
     // ui
-    QList<QPushButton *> categoryButtons;
+    QList<QAction *> categoryButtons;
     QList<QWidget *> categoryWidgets;
     Ui::AppLauncher *ui = nullptr;
     // backend

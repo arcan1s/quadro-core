@@ -157,6 +157,11 @@ public:
 
 public slots:
     /**
+     * @brief define categories list from desktop file
+     * @param _desktopPath   full path to desktop file
+     */
+    void defineCategories(const QString _desktopPath);
+    /**
      * @brief launch the application
      * @return status of the running application
      */

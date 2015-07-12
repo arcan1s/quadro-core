@@ -163,10 +163,10 @@ void LauncherCore::initApplications()
 
     QMap<QString, ApplicationItem *> paths = getApplicationsFromPaths();
     QMap<QString, ApplicationItem *> desktops = getApplicationsFromDesktops();
-    for (int i=0; i<desktops.keys().count(); i++) {
-        if (!desktops[desktops.keys()[i]]->shouldBeShown()) continue;
-        m_applications[desktops.keys()[i]] = desktops[desktops.keys()[i]];
-    }
+//     for (int i=0; i<paths.keys().count(); i++) {
+//         if (!paths[paths.keys()[i]]->shouldBeShown()) continue;
+//         m_applications[paths.keys()[i]] = paths[paths.keys()[i]];
+//     }
     for (int i=0; i<desktops.keys().count(); i++) {
         if (!desktops[desktops.keys()[i]]->shouldBeShown()) continue;
         m_applications[desktops.keys()[i]] = desktops[desktops.keys()[i]];
@@ -187,6 +187,13 @@ QMap<QString, ApplicationItem *> LauncherCore::getApplicationsFromDesktops()
 
     QStringList filter("*.desktop");
     QStringList desktopPaths = QStandardPaths::standardLocations(QStandardPaths::ApplicationsLocation);
+    // append from subdirectories
+    for (int i=desktopPaths.count()-1; i>=0; i--) {
+        QStringList entries = QDir(desktopPaths[i]).entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+        for (int j=0; j<entries.count(); j++)
+            desktopPaths.append(QString("%1/%2").arg(desktopPaths[i]).arg(entries[j]));
+    }
+    // show
     if (debug) qDebug() << PDEBUG << ":" << "Paths" << desktopPaths;
     QMap<QString, ApplicationItem *> items;
 
