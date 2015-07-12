@@ -101,11 +101,14 @@ QMap<QString, ApplicationItem *> LauncherCore::applicationsBySubstr(const QStrin
     if (debug) qDebug() << PDEBUG << ":" << "Substring" << _substr;
 
     QMap<QString, ApplicationItem *> apps;
-    QStringList keys = static_cast<QStringList>(m_applications.keys())
-                                                .filter(_substr, Qt::CaseInsensitive);
-
+    // from desktops
+    QStringList keys = static_cast<QStringList>(m_applications.keys()).filter(_substr, Qt::CaseInsensitive);
     for (int i=0; i<keys.count(); i++)
         apps[keys[i]] = m_applications[keys[i]];
+    // from path
+    keys = static_cast<QStringList>(m_applicationsFromPaths.keys()).filter(_substr, Qt::CaseInsensitive);
+    for (int i=0; i<keys.count(); i++)
+        apps[keys[i]] = m_applicationsFromPaths[keys[i]];
 
     return apps;
 }
@@ -160,20 +163,16 @@ void LauncherCore::initApplications()
 
     // start cleanup
     m_applications.clear();
+    m_applicationsFromPaths.clear();
 
-    QMap<QString, ApplicationItem *> paths = getApplicationsFromPaths();
     QMap<QString, ApplicationItem *> desktops = getApplicationsFromDesktops();
-//     for (int i=0; i<paths.keys().count(); i++) {
-//         if (!paths[paths.keys()[i]]->shouldBeShown()) continue;
-//         m_applications[paths.keys()[i]] = paths[paths.keys()[i]];
-//     }
     for (int i=0; i<desktops.keys().count(); i++) {
         if (!desktops[desktops.keys()[i]]->shouldBeShown()) continue;
         m_applications[desktops.keys()[i]] = desktops[desktops.keys()[i]];
     }
+    m_applicationsFromPaths = getApplicationsFromPaths();
 
     // cleanup
-    paths.clear();
     desktops.clear();
 }
 

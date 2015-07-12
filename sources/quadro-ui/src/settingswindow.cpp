@@ -68,7 +68,8 @@ QVariantMap SettingsWindow::getSettings(QString fileName)
     QSettings settings(fileName, QSettings::IniFormat);
 
     config[QString("Language")] = Language::defineLanguage(fileName, QString(""));
-    settings.beginGroup(QString("Common"));
+    settings.beginGroup(QString("Global"));
+    config[QString("GridSize")] = settings.value(QString("GridSize"), 150.0);
     config[QString("Language")] = settings.value(QString("Language"), config[QString("Language")]);
     config[QString("Tabs")] = settings.value(QString("Tabs"), QStringList() <<
                                              QString("favorites") <<
@@ -150,6 +151,7 @@ void SettingsWindow::saveSettings()
     QSettings settings(file, QSettings::IniFormat);
 
     settings.beginGroup(QString("Global"));
+    settings.setValue(QString("GridSize"), config[QString("GridSize")]);
     settings.setValue(QString("Language"), config[QString("Language")]);
     settings.setValue(QString("Tabs"), config[QString("Tabs")]);
     settings.endGroup();

@@ -171,7 +171,8 @@ void MainWindow::initTabs()
     QStringList tabs = configuration[QString("Tabs")].toStringList();
     for (int i=0; i<tabs.count(); i++) {
         if (tabs[i] == QString("applauncher")) {
-            ui->stackedWidget->addWidget(new AppLauncher(this, configuration, debug));
+            ui->stackedWidget->addWidget(new AppLauncher(this, launcher,
+                                                         configuration, debug));
         } else if (tabs[i] == QString("favorites")) {
             ui->stackedWidget->addWidget(new QWidget());
         } else if (tabs[i] == QString("filemanager")) {
@@ -223,6 +224,11 @@ void MainWindow::createObjects()
 {
     if (debug) qDebug() << PDEBUG;
 
+    // backend
+    launcher = new LauncherCore(this, debug);
+    launcher->initApplications();
+
+    // frontend
     ui->retranslateUi(this);
     initTabs();
     settingsWindow = new SettingsWindow(this, debug, configPath);
@@ -233,7 +239,10 @@ void MainWindow::deleteObjects()
 {
     if (debug) qDebug() << PDEBUG;
 
+    // frontend
     if (settingsWindow != nullptr) delete settingsWindow;
-
     clearTabs();
+
+    // backend
+    if (launcher != nullptr) delete launcher;
 }

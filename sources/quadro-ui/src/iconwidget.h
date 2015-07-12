@@ -16,53 +16,37 @@
  ***************************************************************************/
 
 
-#ifndef APPLAUNCHERWIDGET_H
-#define APPLAUNCHERWIDGET_H
+#ifndef ICONWIDGET_H
+#define ICONWIDGET_H
 
-#include <QAction>
-#include <QMainWindow>
-#include <QToolButton>
+#include <QMouseEvent>
+#include <QSize>
+#include <QWidget>
 
 #include <quadro/quadro.h>
 
 
-namespace Ui {
-class AppLauncher;
-}
-
-class AppLauncher : public QMainWindow
+class IconWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit AppLauncher(QWidget *parent, LauncherCore *appLauncher,
-                         QVariantMap settings = QVariantMap(), const bool debugCmd = false);
-    ~AppLauncher();
-    inline QSize itemSize();
+    explicit IconWidget(ApplicationItem *appItem, const QSize size,
+                        QWidget *parent, const bool debugCmd = false);
+    ~IconWidget();
+    inline QSize convertSize(const QSize size);
+    ApplicationItem *associatedItem();
 
-public slots:
-    void changeCategory(const int index);
+signals:
+    void widgetPressed();
 
-private slots:
-    void changeCategoryByAction(QAction *action);
-    void runApplication();
-    void showSearchResults(const QString search);
+protected:
+    void mousePressEvent(QMouseEvent *event);
 
 private:
-    // ui
-    QList<QAction *> categoryButtons;
-    QList<QWidget *> categoryWidgets;
-    Ui::AppLauncher *ui = nullptr;
-    // backend
-    void createActions();
-    void createObjects();
-    void deleteObjects();
-    void initCategory(const QString category, const int index);
     bool debug = false;
-    LauncherCore *launcher = nullptr;
-    // configuration
-    QVariantMap configuration;
+    ApplicationItem *item = nullptr;
 };
 
 
-#endif /* APPLAUNCHERWIDGET_H */
+#endif /* ICONWIDGET_H */

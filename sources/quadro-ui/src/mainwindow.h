@@ -37,7 +37,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = nullptr,
+    explicit MainWindow(QWidget *parent,
                         const QVariantMap args = QVariantMap(),
                         QTranslator *qtAppTranslator = nullptr,
                         QTranslator *appTranslator = nullptr);
@@ -72,6 +72,7 @@ private:
     void deleteObjects();
     QString configPath;
     bool debug = false;
+    LauncherCore *launcher = nullptr;
     QTranslator *qtTranslator = nullptr;
     QTranslator *translator = nullptr;
     // configuration

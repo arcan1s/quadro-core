@@ -27,7 +27,7 @@
     <item>
      <widget class="QLineEdit" name="lineEdit">
       <property name="placeholderText">
-       <string>Input application name here</string>
+       <string>Type application name here</string>
       </property>
      </widget>
     </item>
@@ -37,9 +37,6 @@
    </layout>
   </widget>
   <widget class="QToolBar" name="toolBar">
-   <property name="windowTitle">
-    <string>toolBar</string>
-   </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
    </attribute>

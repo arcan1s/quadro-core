@@ -97,6 +97,10 @@ private:
      */
     QMap<QString, ApplicationItem *> m_applications;
     /**
+     * @brief list of applications defined by PATH variable
+     */
+    QMap<QString, ApplicationItem *> m_applicationsFromPaths;
+    /**
      * @brief return applications which has desktop files
      * @return map of generated ApplicationItem
      */
