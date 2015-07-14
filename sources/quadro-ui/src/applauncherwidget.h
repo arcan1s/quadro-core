@@ -57,7 +57,7 @@ private:
     void createActions();
     void createObjects();
     void deleteObjects();
-    void initCategory(const QString category, const int index);
+    void initCategory(const QString category, QWidget *widget);
     bool debug = false;
     LauncherCore *launcher = nullptr;
     // configuration

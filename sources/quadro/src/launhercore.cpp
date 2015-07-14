@@ -68,6 +68,17 @@ QMap<QString, ApplicationItem *> LauncherCore::applications()
 
 
 /**
+ * @fn applicationsFromPaths
+ */
+QMap<QString, ApplicationItem *> LauncherCore::applicationsFromPaths()
+{
+    if (debug) qDebug() << PDEBUG;
+
+    return m_applicationsFromPaths;
+}
+
+
+/**
  * @fn applicationsByCategory
  */
 QMap<QString, ApplicationItem *> LauncherCore::applicationsByCategory(const QString _category)
@@ -106,9 +117,8 @@ QMap<QString, ApplicationItem *> LauncherCore::applicationsBySubstr(const QStrin
     for (int i=0; i<keys.count(); i++)
         apps[keys[i]] = m_applications[keys[i]];
     // from path
-    keys = static_cast<QStringList>(m_applicationsFromPaths.keys()).filter(_substr, Qt::CaseInsensitive);
-    for (int i=0; i<keys.count(); i++)
-        apps[keys[i]] = m_applicationsFromPaths[keys[i]];
+    if (m_applicationsFromPaths.contains(_substr))
+        apps[_substr] = m_applicationsFromPaths[_substr];
 
     return apps;
 }

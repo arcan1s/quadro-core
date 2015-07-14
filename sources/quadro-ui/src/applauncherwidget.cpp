@@ -138,10 +138,16 @@ void AppLauncher::createObjects()
         // backend
         categoryButtons.append(ui->toolBar->addAction(categories[i]));
         // frontend
-        categoryWidgets.append(new QWidget(this));
+        // scroll area
+        QScrollArea *area = new QScrollArea(this);
+        area->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        area->setWidgetResizable(true);
+        ui->stackedWidget->addWidget(area);
+        // widget
+        categoryWidgets.append(new QWidget(area));
         categoryWidgets[i]->setLayout(new FlowLayout(categoryWidgets[i]));
-        initCategory(categories[i], i);
-        ui->stackedWidget->addWidget(categoryWidgets[i]);
+        initCategory(categories[i], categoryWidgets[i]);
+        area->setWidget(categoryWidgets[i]);
     }
 
     // search widget
@@ -151,7 +157,7 @@ void AppLauncher::createObjects()
 
     connect(ui->toolBar, SIGNAL(actionTriggered(QAction *)),
             this, SLOT(changeCategoryByAction(QAction *)));
-    connect(ui->lineEdit, SIGNAL(textChanged(QString)),
+    connect(ui->lineEdit, SIGNAL(textEdited(QString)),
             this, SLOT(showSearchResults(QString)));
 }
 
@@ -165,17 +171,15 @@ void AppLauncher::deleteObjects()
 }
 
 
-void AppLauncher::initCategory(const QString category, const int index)
+void AppLauncher::initCategory(const QString category, QWidget *widget)
 {
     if (debug) qDebug() << PDEBUG;
     if (debug) qDebug() << PDEBUG << "Category" << category;
-    if (debug) qDebug() << PDEBUG << "Index" << index;
 
     QMap<QString, ApplicationItem *> apps = launcher->applicationsByCategory(category);
     for (int i=0; i<apps.keys().count(); i++) {
-        QWidget *item = new IconWidget(apps[apps.keys()[i]], itemSize(),
-                                       categoryWidgets[index], debug);
-        categoryWidgets[index]->layout()->addWidget(item);
+        QWidget *item = new IconWidget(apps[apps.keys()[i]], itemSize(), widget, debug);
+        widget->layout()->addWidget(item);
         connect(item, SIGNAL(widgetPressed()), this, SLOT(runApplication()));
     }
 }

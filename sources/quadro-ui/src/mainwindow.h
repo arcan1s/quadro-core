@@ -43,9 +43,6 @@ public:
                         QTranslator *appTranslator = nullptr);
     ~MainWindow();
 
-protected:
-    void closeEvent(QCloseEvent *event);
-
 public slots:
     void changeTab(const int index = -1);
     void closeMainWindow();
@@ -59,6 +56,9 @@ private slots:
     void changeTabByAction(QAction *action);
     void clearTabs();
     void initTabs();
+
+protected:
+    void closeEvent(QCloseEvent *event);
 
 private:
     // ui

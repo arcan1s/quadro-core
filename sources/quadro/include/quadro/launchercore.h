@@ -57,6 +57,11 @@ public:
      */
     QMap<QString, ApplicationItem *> applications();
     /**
+     * @brief find applications from path variables
+     * @return map of applications
+     */
+    QMap<QString, ApplicationItem *> applicationsFromPaths();
+    /**
      * @brief find applications by category
      * @param _category      category
      * @return map of applications by category
