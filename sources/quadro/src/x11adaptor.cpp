@@ -84,7 +84,7 @@ QMap<long long, unsigned long long> X11Adaptor::getWindowsList(const bool debugC
 }
 
 
-Window *X11Adaptor::getClientList(unsigned long *size)
+Window *X11Adaptor::getClientList(unsigned long *size) const
 {
     if (debug) qDebug() << PDEBUG;
 
@@ -102,7 +102,7 @@ Window *X11Adaptor::getClientList(unsigned long *size)
 
 
 char *X11Adaptor::getPropery(const Window _win, const Atom _xaPropType,
-                             const char *_propery, unsigned long *size)
+                             const char *_propery, unsigned long *size) const
 {
     if (debug) qDebug() << PDEBUG;
     if (debug) qDebug() << PDEBUG << ":" << "Property" << _propery;

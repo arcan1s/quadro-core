@@ -64,7 +64,7 @@ ApplicationLauncherItem::~ApplicationLauncherItem()
 /**
  * @fn command
  */
-QString ApplicationLauncherItem::command()
+QString ApplicationLauncherItem::command() const
 {
     if (debug) qDebug() << PDEBUG;
 
@@ -75,7 +75,7 @@ QString ApplicationLauncherItem::command()
 /**
  * @fn processId
  */
-Q_PID ApplicationLauncherItem::processId()
+Q_PID ApplicationLauncherItem::processId() const
 {
     if (debug) qDebug() << PDEBUG;
     if (m_process == nullptr) return 0;
@@ -87,7 +87,7 @@ Q_PID ApplicationLauncherItem::processId()
 /**
  * @fn processState
  */
-QProcess::ProcessState ApplicationLauncherItem::processState()
+QProcess::ProcessState ApplicationLauncherItem::processState() const
 {
     if (debug) qDebug() << PDEBUG;
     if (m_process == nullptr) return QProcess::NotRunning;

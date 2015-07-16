@@ -26,6 +26,7 @@
 #ifndef QUADRO_H
 #define QUADRO_H
 
+#include "abstractappaggregator.h"
 #include "applicationitem.h"
 #include "applicationlauncheritem.h"
 #include "favoritescore.h"

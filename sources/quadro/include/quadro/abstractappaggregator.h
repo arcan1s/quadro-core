@@ -15,7 +15,7 @@
  *   along with quadro. If not, see http://www.gnu.org/licenses/           *
  ***************************************************************************/
 /**
- * @file favoritescore.h
+ * @file abstractappaggregator.h
  * Header of quadro library
  * @author Evgeniy Alekseev
  * @copyright GPLv3
@@ -23,8 +23,8 @@
  */
 
 
-#ifndef FAVORITECORE_H
-#define FAVORITECORE_H
+#ifndef ABSTRACTAPPAGGREGATOR_H
+#define ABSTRACTAPPAGGREGATOR_H
 
 #include <QMap>
 #include <QObject>
@@ -34,60 +34,67 @@
 class ApplicationItem;
 
 /**
- * @brief The FavoritesCore class provides favorites backend
+ * @brief The AbstractAppAggregator class provides application aggregator backend
  */
-class FavoritesCore : public QObject
+class AbstractAppAggregator : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString desktopPath READ desktopPath)
 
 public:
     /**
-     * @brief FavoritesCore class constructor
+     * @brief AbstractAppAggregator class constructor
      * @param parent         pointer to parent item
      * @param debugCmd       show debug messages
      */
-    explicit FavoritesCore(QObject *parent, const bool debugCmd = false);
+    explicit AbstractAppAggregator(QObject *parent, const bool debugCmd = false);
     /**
-     * @brief FavoritesCore class destructor
+     * @brief AbstractAppAggregator class destructor
      */
-    virtual ~FavoritesCore();
+    virtual ~AbstractAppAggregator();
     /**
      * @brief find applications
      * @return map of applications
      */
     QMap<QString, ApplicationItem *> applications() const;
     /**
-     * @brief add new application to the favorites items
-     * @param _executable    path to executable
-     * @param _name          desktop name
-     * @param _iconName      icon name in the theme
-     * @return application item
+     * @brief find applications by category
+     * @param _category      category
+     * @return map of applications by category
      */
-    ApplicationItem *addToFavorites(const QString _executable,
-                                    const QString _name = QString(),
-                                    const QString _iconName = QString("system-run"));
+    QMap<QString, ApplicationItem *> applicationsByCategory(const QString _category) const;
     /**
-     * @brief path to desktop files
-     * @return full path to desktop files
+     * @brief find applications by substring in name
+     * @param _substr        substring to which application need to be found
+     * @return map of applications by substring
      */
-    static QString desktopPath();
+    QMap<QString, ApplicationItem *> applicationsBySubstr(const QString _substr) const;
+    /**
+     * @brief available application categories
+     * @return list of available categories
+     */
+    QStringList availableCategories() const;
+    /**
+     * @brief is application has been read
+     * @param _name          application name
+     * @return true if application has been found
+     * @return false if the application has not been found
+     */
+    bool hasApplication(const QString _name) const;
 
 public slots:
     /**
-     * @brief move given application up or down
-     * @param _name          desktop name
-     * @param _up            move application up, default is true
+     * @brief add application to array
+     * @param _item          application item
      */
-    void changeApplicationState(const QString _name, const bool _up = true);
+    void addApplication(ApplicationItem *_item);
     /**
-     * @brief init application from default paths
+     * @brief clear application array
      */
-    void initApplications();
+    void dropApplications();
     /**
-     * @brief save current application order to the index file
+     * @brief init application using given paths
      */
-    void saveApplicationsOrder() const;
+    virtual void initApplications() = 0;
 
 private:
     /**
@@ -99,20 +106,11 @@ private:
      */
     QMap<QString, ApplicationItem *> m_applications;
     /**
-     * @brief order of applications
-     */
-    QStringList m_order;
-    /**
      * @brief return applications which has desktop files
      * @return map of generated ApplicationItem
      */
-    QMap<QString, ApplicationItem *> getApplicationsFromDesktops();
-    /**
-     * @brief return correct applications order
-     * @return list of applications in the correct order
-     */
-    QStringList getApplicationsOrder() const;
+    virtual QMap<QString, ApplicationItem *> getApplicationsFromDesktops() = 0;
 };
 
 
-#endif /* FAVORITECORE_H */
+#endif /* ABSTRACTAPPAGGREGATOR_H */

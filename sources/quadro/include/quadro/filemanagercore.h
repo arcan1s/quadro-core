@@ -49,7 +49,7 @@ public:
     /**
      * @brief FileManager class destructor
      */
-    ~FileManager();
+    virtual ~FileManager();
     /**
      * @brief find directory entries
      * @param _directory     path to directory on which you are looking for
@@ -59,19 +59,19 @@ public:
      */
     QFileInfoList directoryEntries(const QString _directory,
                                    const bool _hidden = false,
-                                   const QStringList _filter = QStringList());
+                                   const QStringList _filter = QStringList()) const;
     /**
      * @brief get icon by file name
      * @param _file          path to file
      * @return QIcon of the file
      */
-    QIcon iconByFileName(const QString _file);
+    QIcon iconByFileName(const QString _file) const;
     /**
      * @brief get mime type of given file
      * @param _file          path to file
      * @return QMimeType construction
      */
-    QMimeType mimeByFileName(const QString _file);
+    QMimeType mimeByFileName(const QString _file) const;
 
 public slots:
     /**
@@ -80,7 +80,7 @@ public slots:
      * @return true if opening successfully
      * @return false if an error occurs
      */
-    bool openFile(const QFileInfo _file);
+    bool openFile(const QFileInfo _file) const;
 
 private:
     /**

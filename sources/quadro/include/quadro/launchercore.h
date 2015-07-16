@@ -27,8 +27,9 @@
 #define LAUNCHERCORE_H
 
 #include <QMap>
-#include <QObject>
 #include <QStringList>
+
+#include "abstractappaggregator.h"
 
 
 class ApplicationItem;
@@ -36,7 +37,7 @@ class ApplicationItem;
 /**
  * @brief The LauncherCore class provides launcher backend
  */
-class LauncherCore : public QObject
+class LauncherCore : public AbstractAppAggregator
 {
     Q_OBJECT
 
@@ -50,41 +51,18 @@ public:
     /**
      * @brief LauncherCore class destructor
      */
-    ~LauncherCore();
-    /**
-     * @brief find applications
-     * @return map of applications
-     */
-    QMap<QString, ApplicationItem *> applications();
+    virtual ~LauncherCore();
     /**
      * @brief find applications from path variables
      * @return map of applications
      */
-    QMap<QString, ApplicationItem *> applicationsFromPaths();
-    /**
-     * @brief find applications by category
-     * @param _category      category
-     * @return map of applications by category
-     */
-    QMap<QString, ApplicationItem *> applicationsByCategory(const QString _category);
+    QMap<QString, ApplicationItem *> applicationsFromPaths() const;
     /**
      * @brief find applications by substring in name
      * @param _substr        substring to which application need to be found
      * @return map of applications by substring
      */
-    QMap<QString, ApplicationItem *> applicationsBySubstr(const QString _substr);
-    /**
-     * @brief available application categories
-     * @return list of available categories
-     */
-    QStringList availableCategories();
-    /**
-     * @brief is application has been read
-     * @param _name          application name
-     * @return true if application has been found
-     * @return false if the application has not been found
-     */
-    bool hasApplication(const QString _name);
+    QMap<QString, ApplicationItem *> applicationsBySubstr(const QString _substr) const;
 
 public slots:
     /**
@@ -97,10 +75,6 @@ private:
      * @brief show debug messages. Default is false
      */
     bool debug = false;
-    /**
-     * @brief list of applications
-     */
-    QMap<QString, ApplicationItem *> m_applications;
     /**
      * @brief list of applications defined by PATH variable
      */

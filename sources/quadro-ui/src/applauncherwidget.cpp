@@ -119,7 +119,7 @@ void AppLauncher::showSearchResults(const QString search)
         connect(item, SIGNAL(widgetPressed()), this, SLOT(runApplication()));
     }
 
-    return ui->stackedWidget->setCurrentWidget(categoryWidgets.last());
+    return ui->stackedWidget->setCurrentIndex(ui->stackedWidget->count() - 1);
 }
 
 
@@ -151,9 +151,13 @@ void AppLauncher::createObjects()
     }
 
     // search widget
-    categoryWidgets.append(new QWidget(this));
+    QScrollArea *area = new QScrollArea(this);
+    area->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    area->setWidgetResizable(true);
+    ui->stackedWidget->addWidget(area);
+    categoryWidgets.append(new QWidget(area));
     categoryWidgets.last()->setLayout(new FlowLayout(categoryWidgets.last()));
-    ui->stackedWidget->addWidget(categoryWidgets.last());
+    area->setWidget(categoryWidgets.last());
 
     connect(ui->toolBar, SIGNAL(actionTriggered(QAction *)),
             this, SLOT(changeCategoryByAction(QAction *)));

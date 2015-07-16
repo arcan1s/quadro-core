@@ -61,52 +61,59 @@ public:
     /**
      * @brief ApplicationItem class destructor
      */
-    ~ApplicationItem();
+    virtual ~ApplicationItem();
     // get methods
     /**
      * @brief application categories
      * @return list of categories
      */
-    QStringList categories();
+    QStringList categories() const;
     /**
      * @brief application comment
      * @return comment in system locale or English
      */
-    QString comment();
+    QString comment() const;
     /**
      * @brief full application executable path
      * @return full executable path
      */
-    QString executable();
+    QString executable() const;
+    /**
+     * @brief has application specified substring or not
+     * @param _substr        substring for search
+     * @return true if comment or name is equal to substring
+     * @return false if comment or name is not found
+     */
+    bool hasSubstring(const QString _substr) const;
     /**
      * @brief is application hidden
      * @return true if application is hidden
      * @return false if application is not hidden
      */
-    bool isHidden();
+    bool isHidden() const;
     /**
      * @brief application icon
      * @return icon
      */
-    QIcon icon();
+    QIcon icon() const;
     /**
      * @brief application name
      * @return name
      */
-    QString name();
+    QString name() const;
     /**
      * @brief should application be shown or not
      * @return true if application should not be shown
      * @return false if application should be shown
      */
-    bool noDesktop();
+    bool noDesktop() const;
     /**
      * @brief additional method indicates should application be shown in the menu
      * or not
      * @return true if application should not be shown
      * @return false if application should be shown
      */
-    bool shouldBeShown();
+    bool shouldBeShown() const;
     // set methods
     /**
      * @brief set application categories
@@ -165,13 +172,13 @@ public slots:
      * @brief launch the application
      * @return status of the running application
      */
-    bool launch();
+    bool launch() const;
     /**
      * @brief write settings to desktop file
      * @param _desktopPath   full path to desktop file
      * @return full path to created file or empty string
      */
-    QString saveDesktop(const QString _desktopPath);
+    QString saveDesktop(const QString _desktopPath) const;
 
 private:
     // main

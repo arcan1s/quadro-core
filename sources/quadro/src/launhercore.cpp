@@ -39,7 +39,7 @@
  * @fn LauncherCore
  */
 LauncherCore::LauncherCore(QObject *parent, const bool debugCmd)
-    : QObject(parent),
+    : AbstractAppAggregator(parent, debugCmd),
       debug(debugCmd)
 {
 }
@@ -52,25 +52,14 @@ LauncherCore::~LauncherCore()
 {
     if (debug) qDebug() << PDEBUG;
 
-    m_applications.clear();
-}
-
-
-/**
- * @fn applications
- */
-QMap<QString, ApplicationItem *> LauncherCore::applications()
-{
-    if (debug) qDebug() << PDEBUG;
-
-    return m_applications;
+    m_applicationsFromPaths.clear();
 }
 
 
 /**
  * @fn applicationsFromPaths
  */
-QMap<QString, ApplicationItem *> LauncherCore::applicationsFromPaths()
+QMap<QString, ApplicationItem *> LauncherCore::applicationsFromPaths() const
 {
     if (debug) qDebug() << PDEBUG;
 
@@ -79,88 +68,18 @@ QMap<QString, ApplicationItem *> LauncherCore::applicationsFromPaths()
 
 
 /**
- * @fn applicationsByCategory
- */
-QMap<QString, ApplicationItem *> LauncherCore::applicationsByCategory(const QString _category)
-{
-    if (debug) qDebug() << PDEBUG;
-    if (debug) qDebug() << PDEBUG << ":" << "Category" << _category;
-
-    QMap<QString, ApplicationItem *> apps;
-    if (!availableCategories().contains(_category)) {
-        if (debug) qDebug() << PDEBUG << ":" << "Incorrect category" << _category;
-        return apps;
-    }
-
-    for (int i=0; i<m_applications.keys().count(); i++) {
-        QString key = m_applications.keys()[i];
-        QStringList categories = m_applications[key]->categories();
-        if (!categories.contains(_category)) continue;
-        apps[key] = m_applications[key];
-    }
-
-    return apps;
-}
-
-
-/**
  * @fn applicationsBySubstr
  */
-QMap<QString, ApplicationItem *> LauncherCore::applicationsBySubstr(const QString _substr)
+QMap<QString, ApplicationItem *> LauncherCore::applicationsBySubstr(const QString _substr) const
 {
     if (debug) qDebug() << PDEBUG;
     if (debug) qDebug() << PDEBUG << ":" << "Substring" << _substr;
 
-    QMap<QString, ApplicationItem *> apps;
-    // from desktops
-    QStringList keys = static_cast<QStringList>(m_applications.keys()).filter(_substr, Qt::CaseInsensitive);
-    for (int i=0; i<keys.count(); i++)
-        apps[keys[i]] = m_applications[keys[i]];
-    // from path
+    QMap<QString, ApplicationItem *> apps = AbstractAppAggregator::applicationsBySubstr(_substr);
     if (m_applicationsFromPaths.contains(_substr))
         apps[_substr] = m_applicationsFromPaths[_substr];
 
     return apps;
-}
-
-
-/**
- * @fn availableCategories
- */
-QStringList LauncherCore::availableCategories()
-{
-    if (debug) qDebug() << PDEBUG;
-    // refer to http://standards.freedesktop.org/menu-spec/latest/apa.html
-
-    QStringList categories;
-    categories.append(QString("AudioVideo"));       // usually named as Multimedia
-    categories.append(QString("Audio"));
-    categories.append(QString("Video"));
-    categories.append(QString("Development"));
-    categories.append(QString("Education"));
-    categories.append(QString("Game"));
-    categories.append(QString("Graphics"));
-    categories.append(QString("Network"));
-    categories.append(QString("Office"));
-    categories.append(QString("Science"));
-    categories.append(QString("Settings"));
-    categories.append(QString("System"));
-    categories.append(QString("Utility"));
-
-    if (debug) qDebug() << PDEBUG << ":" << "Found categories" << categories;
-    return categories;
-}
-
-
-/**
- * @fn hasApplication
- */
-bool LauncherCore::hasApplication(const QString _name)
-{
-    if (debug) qDebug() << PDEBUG;
-    if (debug) qDebug() << PDEBUG << ":" << "Application name" << _name;
-
-    return m_applications.contains(_name);
 }
 
 
@@ -172,13 +91,13 @@ void LauncherCore::initApplications()
     if (debug) qDebug() << PDEBUG;
 
     // start cleanup
-    m_applications.clear();
+    dropApplications();
     m_applicationsFromPaths.clear();
 
     QMap<QString, ApplicationItem *> desktops = getApplicationsFromDesktops();
     for (int i=0; i<desktops.keys().count(); i++) {
         if (!desktops[desktops.keys()[i]]->shouldBeShown()) continue;
-        m_applications[desktops.keys()[i]] = desktops[desktops.keys()[i]];
+        addApplication(desktops[desktops.keys()[i]]);
     }
     m_applicationsFromPaths = getApplicationsFromPaths();
 

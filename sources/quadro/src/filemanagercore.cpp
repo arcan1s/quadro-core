@@ -59,7 +59,7 @@ FileManager::~FileManager()
  * @fn directoryEntries
  */
 QFileInfoList FileManager::directoryEntries(const QString _directory, const bool _hidden,
-                                            const QStringList _filter)
+                                            const QStringList _filter) const
 {
     if (debug) qDebug() << PDEBUG;
     if (debug) qDebug() << PDEBUG << ":" << "Directory" << _directory;
@@ -82,7 +82,7 @@ QFileInfoList FileManager::directoryEntries(const QString _directory, const bool
 /**
  * @fn iconByFileName
  */
-QIcon FileManager::iconByFileName(const QString _file)
+QIcon FileManager::iconByFileName(const QString _file) const
 {
     if (debug) qDebug() << PDEBUG;
     if (debug) qDebug() << PDEBUG << ":" << "File" << _file;
@@ -97,7 +97,7 @@ QIcon FileManager::iconByFileName(const QString _file)
 /**
  * @fn mimeTypeForFile
  */
-QMimeType FileManager::mimeByFileName(const QString _file)
+QMimeType FileManager::mimeByFileName(const QString _file) const
 {
     if (debug) qDebug() << PDEBUG;
     if (debug) qDebug() << PDEBUG << ":" << "File" << _file;
@@ -113,7 +113,7 @@ QMimeType FileManager::mimeByFileName(const QString _file)
 /**
  * @fn
  */
-bool FileManager::openFile(const QFileInfo _file)
+bool FileManager::openFile(const QFileInfo _file) const
 {
     if (debug) qDebug() << PDEBUG;
     if (debug) qDebug() << PDEBUG << ":" << "File" << _file.absoluteFilePath();

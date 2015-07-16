@@ -61,7 +61,7 @@ FavoritesCore::~FavoritesCore()
 /**
  * @fn applications
  */
-QMap<QString, ApplicationItem *> FavoritesCore::applications()
+QMap<QString, ApplicationItem *> FavoritesCore::applications() const
 {
     if (debug) qDebug() << PDEBUG;
 
@@ -140,7 +140,7 @@ void FavoritesCore::initApplications()
 /**
  * @fn saveApplicationsOrder
  */
-void FavoritesCore::saveApplicationsOrder()
+void FavoritesCore::saveApplicationsOrder() const
 {
     if (debug) qDebug() << PDEBUG;
 
@@ -179,7 +179,7 @@ QMap<QString, ApplicationItem *> FavoritesCore::getApplicationsFromDesktops()
 /**
  * @fn getApplicationsOrder
  */
-QStringList FavoritesCore::getApplicationsOrder()
+QStringList FavoritesCore::getApplicationsOrder() const
 {
     if (debug) qDebug() << PDEBUG;
 

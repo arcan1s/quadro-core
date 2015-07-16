@@ -62,7 +62,7 @@ ApplicationItem::~ApplicationItem()
 /**
  * @fn categories
  */
-QStringList ApplicationItem::categories()
+QStringList ApplicationItem::categories() const
 {
     if (debug) qDebug() << PDEBUG;
 
@@ -73,7 +73,7 @@ QStringList ApplicationItem::categories()
 /**
  * @fn comment
  */
-QString ApplicationItem::comment()
+QString ApplicationItem::comment() const
 {
     if (debug) qDebug() << PDEBUG;
 
@@ -84,7 +84,7 @@ QString ApplicationItem::comment()
 /**
  * @fn executable
  */
-QString ApplicationItem::executable()
+QString ApplicationItem::executable() const
 {
     if (debug) qDebug() << PDEBUG;
 
@@ -93,9 +93,21 @@ QString ApplicationItem::executable()
 
 
 /**
+ * @fn hasSubstring
+ */
+bool ApplicationItem::hasSubstring(const QString _substr) const
+{
+    if (debug) qDebug() << PDEBUG;
+
+    return ((m_name.contains(_substr, Qt::CaseInsensitive)) ||
+            (m_comment.contains(_substr, Qt::CaseInsensitive)));
+}
+
+
+/**
  * @fn isHidden
  */
-bool ApplicationItem::isHidden()
+bool ApplicationItem::isHidden() const
 {
     if (debug) qDebug() << PDEBUG;
 
@@ -106,7 +118,7 @@ bool ApplicationItem::isHidden()
 /**
  * @fn icon
  */
-QIcon ApplicationItem::icon()
+QIcon ApplicationItem::icon() const
 {
     if (debug) qDebug() << PDEBUG;
 
@@ -117,7 +129,7 @@ QIcon ApplicationItem::icon()
 /**
  * @fn name
  */
-QString ApplicationItem::name()
+QString ApplicationItem::name() const
 {
     if (debug) qDebug() << PDEBUG;
 
@@ -128,7 +140,7 @@ QString ApplicationItem::name()
 /**
  * @fn noDesktop
  */
-bool ApplicationItem::noDesktop()
+bool ApplicationItem::noDesktop() const
 {
     if (debug) qDebug() << PDEBUG;
 
@@ -139,7 +151,7 @@ bool ApplicationItem::noDesktop()
 /**
  * @fn shouldBeShown
  */
-bool ApplicationItem::shouldBeShown()
+bool ApplicationItem::shouldBeShown() const
 {
     if (debug) qDebug() << PDEBUG;
 
@@ -296,7 +308,7 @@ void ApplicationItem::defineCategories(const QString _desktopPath)
 /**
  * @fn launch
  */
-bool ApplicationItem::launch()
+bool ApplicationItem::launch() const
 {
     if (debug) qDebug() << PDEBUG;
 
@@ -307,7 +319,7 @@ bool ApplicationItem::launch()
 /**
  * @fn saveDesktop
  */
-QString ApplicationItem::saveDesktop(const QString _desktopPath)
+QString ApplicationItem::saveDesktop(const QString _desktopPath) const
 {
     if (debug) qDebug() << PDEBUG;
     if (debug) qDebug() << PDEBUG << ":" << "Desktop path" << _desktopPath;

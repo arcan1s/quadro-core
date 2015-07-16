@@ -54,7 +54,7 @@ public:
     /**
      * @brief TabPluginItem class destructor
      */
-    ~TabPluginItem();
+    virtual ~TabPluginItem();
     // get methods
     /**
      * @brief plugin API version

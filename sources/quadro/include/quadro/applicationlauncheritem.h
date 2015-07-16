@@ -55,23 +55,23 @@ public:
     /**
      * @brief ApplicationLauncherItem class destructor
      */
-    ~ApplicationLauncherItem();
+    virtual ~ApplicationLauncherItem();
     // get methods
     /**
      * @brief command which is under control
      * @return path to command
      */
-    QString command();
+    QString command() const;
     /**
      * @brief PID of the child process
      * @return QProcess::processId()
      */
-    Q_PID processId();
+    Q_PID processId() const;
     /**
      * @brief status of the child process
      * @return state of the child process
      */
-    QProcess::ProcessState processState();
+    QProcess::ProcessState processState() const;
     /**
      * @brief widget with run applicaiton
      * @return pointer to widget

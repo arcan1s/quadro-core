@@ -54,7 +54,7 @@ public:
     /**
      * @brief X11Adaptor class destructor
      */
-    ~X11Adaptor();
+    virtual ~X11Adaptor();
     /**
      * @brief get active windows
      * @param debugCmd       show debug messages
@@ -74,7 +74,7 @@ private:
      * @param size           pointer to size, will be filled in the method
      * @return client list
      */
-    Window *getClientList(unsigned long *size);
+    Window *getClientList(unsigned long *size) const;
     /**
      * @brief get propery by window
      * @param _win           window to which need to get propery
@@ -84,7 +84,7 @@ private:
      * @return propery
      */
     char *getPropery(const Window _win, const Atom _xaPropType,
-                     const char *_propery, unsigned long *size);
+                     const char *_propery, unsigned long *size) const;
 };
 
 
