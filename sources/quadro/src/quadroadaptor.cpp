@@ -23,10 +23,7 @@
  */
 
 
-#include <QDebug>
-
-#include <quadro/quadro.h>
-#include <pdebug/pdebug.h>
+#include "quadro/quadro.h"
 
 
 /**
@@ -35,11 +32,11 @@
 /**
  * @fn QuadroAdaptor
  */
-QuadroAdaptor::QuadroAdaptor(QuadroCore *core, const bool debugCmd)
+QuadroAdaptor::QuadroAdaptor(QuadroCore *core)
     : QDBusAbstractAdaptor(core),
-      debug(debugCmd),
       m_core(core)
 {
+    qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
 }
 
 
@@ -48,5 +45,5 @@ QuadroAdaptor::QuadroAdaptor(QuadroCore *core, const bool debugCmd)
  */
 QuadroAdaptor::~QuadroAdaptor()
 {
-    if (debug) qDebug() << PDEBUG;
+    qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
 }

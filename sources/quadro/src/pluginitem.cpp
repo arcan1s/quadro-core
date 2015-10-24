@@ -23,6 +23,8 @@
  */
 
 
+#include "quadro/quadro.h"
+
 #include <QDBusConnection>
 #include <QDBusMessage>
 #include <QBuffer>
@@ -30,9 +32,6 @@
 #include <QDBusConnection>
 #include <QDebug>
 #include <QSettings>
-
-#include <quadro/quadro.h>
-#include <pdebug/pdebug.h>
 
 #include "version.h"
 
@@ -43,10 +42,14 @@
 /**
  * @fn PluginItem
  */
-PluginItem::PluginItem(QObject *parent, const bool debugCmd)
-    : QObject(parent),
-      debug(debugCmd)
+PluginItem::PluginItem(QObject *parent)
+    : QObject(parent)
 {
+    qSetMessagePattern(LOG_FORMAT);
+    qCDebug(LOG_PL) << __PRETTY_FUNCTION__;
+    foreach (const QString metadata, getBuildData())
+        qCDebug(LOG_PL) << metadata;
+
     init();
 }
 
@@ -56,11 +59,11 @@ PluginItem::PluginItem(QObject *parent, const bool debugCmd)
  */
 PluginItem::~PluginItem()
 {
-    if (debug) qDebug() << PDEBUG;
+    qCDebug(LOG_PL) << __PRETTY_FUNCTION__;
 
     removeSession();
-    if (m_adaptor != nullptr) delete m_adaptor;
-    if (m_timerItem != nullptr) delete m_timerItem;
+    delete m_adaptor;
+    delete m_timerItem;
 }
 
 
@@ -69,8 +72,6 @@ PluginItem::~PluginItem()
  */
 int PluginItem::api()
 {
-    if (debug) qDebug() << PDEBUG;
-
     return m_api;
 }
 
@@ -80,8 +81,6 @@ int PluginItem::api()
  */
 QString PluginItem::background()
 {
-    if (debug) qDebug() << PDEBUG;
-
     return m_background;
 }
 
@@ -91,8 +90,6 @@ QString PluginItem::background()
  */
 QString PluginItem::comment()
 {
-    if (debug) qDebug() << PDEBUG;
-
     return m_comment;
 }
 
@@ -102,8 +99,6 @@ QString PluginItem::comment()
  */
 QVariantMap PluginItem::configuration()
 {
-    if (debug) qDebug() << PDEBUG;
-
     QVariantMap pluginSettings;
     pluginSettings[QString("Comment")] = comment();
     pluginSettings[QString("Height")] = height();
@@ -119,8 +114,6 @@ QVariantMap PluginItem::configuration()
  */
 QString PluginItem::data()
 {
-    if (debug) qDebug() << PDEBUG;
-
     return m_data;
 }
 
@@ -130,8 +123,6 @@ QString PluginItem::data()
  */
 bool PluginItem::hasUi()
 {
-    if (debug) qDebug() << PDEBUG;
-
     return m_ui;
 }
 
@@ -141,8 +132,6 @@ bool PluginItem::hasUi()
  */
 int PluginItem::height()
 {
-    if (debug) qDebug() << PDEBUG;
-
     return m_height;
 }
 
@@ -152,8 +141,6 @@ int PluginItem::height()
  */
 QString PluginItem::htmlImage()
 {
-    if (debug) qDebug() << PDEBUG;
-
     PluginItem::ImageType type = defineImageType(background());
     QImage pluginImage;
     QString image;
@@ -183,8 +170,6 @@ QString PluginItem::htmlImage()
  */
 QString PluginItem::name()
 {
-    if (debug) qDebug() << PDEBUG;
-
     return m_name;
 }
 
@@ -194,8 +179,6 @@ QString PluginItem::name()
  */
 QString PluginItem::path()
 {
-    if (debug) qDebug() << PDEBUG;
-
     return m_path;
 }
 
@@ -205,8 +188,6 @@ QString PluginItem::path()
  */
 int PluginItem::timer()
 {
-    if (debug) qDebug() << PDEBUG;
-
     return m_timer;
 }
 
@@ -216,8 +197,6 @@ int PluginItem::timer()
  */
 int PluginItem::width()
 {
-    if (debug) qDebug() << PDEBUG;
-
     return m_width;
 }
 
@@ -227,8 +206,7 @@ int PluginItem::width()
  */
 void PluginItem::setBackground(QString _background)
 {
-    if (debug) qDebug() << PDEBUG;
-    if (debug) qDebug() << PDEBUG << ":" << "Background" << _background;
+    qCDebug(LOG_PL) << "Background" << _background;
     if (_background.isEmpty()) _background = QString("#ffffffff");
 
     m_background = _background;
@@ -240,8 +218,7 @@ void PluginItem::setBackground(QString _background)
  */
 void PluginItem::setComment(const QString _comment)
 {
-    if (debug) qDebug() << PDEBUG;
-    if (debug) qDebug() << PDEBUG << ":" << "Comment" << _comment;
+    qCDebug(LOG_PL) << "Comment" << _comment;
 
     m_comment = _comment;
 }
@@ -252,8 +229,7 @@ void PluginItem::setComment(const QString _comment)
  */
 void PluginItem::setHeight(int _height)
 {
-    if (debug) qDebug() << PDEBUG;
-    if (debug) qDebug() << PDEBUG << ":" << "Height" << _height;
+    qCDebug(LOG_PL) << "Height" << _height;
     if (_height < 1) _height = 1;
 
     m_height = _height;
@@ -265,8 +241,7 @@ void PluginItem::setHeight(int _height)
  */
 void PluginItem::setWidth(int _width)
 {
-    if (debug) qDebug() << PDEBUG;
-    if (debug) qDebug() << PDEBUG << ":" << "Width" << _width;
+    qCDebug(LOG_PL) << "Width" << _width;
     if (_width < 1) _width = 1;
 
     m_width = _width;
@@ -278,8 +253,7 @@ void PluginItem::setWidth(int _width)
  */
 void PluginItem::readDesktop(const QString _desktopPath)
 {
-    if (debug) qDebug() << PDEBUG;
-    if (debug) qDebug() << PDEBUG << ":" << "Path" << _desktopPath;
+    qCDebug(LOG_PL) << "Path" << _desktopPath;
 
     QSettings settings(_desktopPath, QSettings::IniFormat);
 
@@ -299,8 +273,7 @@ void PluginItem::readDesktop(const QString _desktopPath)
  */
 void PluginItem::readSettings(const QString _desktopPath)
 {
-    if (debug) qDebug() << PDEBUG;
-    if (debug) qDebug() << PDEBUG << ":" << "Path" << _desktopPath;
+    qCDebug(LOG_PL) << "Path" << _desktopPath;
 
     QSettings settings(_desktopPath, QSettings::IniFormat);
 
@@ -325,10 +298,8 @@ void PluginItem::readSettings(const QString _desktopPath)
  */
 void PluginItem::removeSession()
 {
-    if (debug) qDebug() << PDEBUG;
-
     QDBusConnection::sessionBus().unregisterObject(path());
-    if (m_adaptor != nullptr) delete m_adaptor;
+    delete m_adaptor;
     m_adaptor = nullptr;
 }
 
@@ -338,8 +309,7 @@ void PluginItem::removeSession()
  */
 bool PluginItem::saveSettings(const QString _desktopPath)
 {
-    if (debug) qDebug() << PDEBUG;
-    if (debug) qDebug() << PDEBUG << ":" << "Path" << _desktopPath;
+    qCDebug(LOG_PL) << "Path" << _desktopPath;
 
     QVariantMap config = configuration();
     QSettings settings(_desktopPath, QSettings::IniFormat);
@@ -369,7 +339,6 @@ bool PluginItem::saveSettings(const QString _desktopPath)
  */
 void PluginItem::startTimer()
 {
-    if (debug) qDebug() << PDEBUG;
     if (timer() <= 0) return;
 
     m_timerItem = new QTimer(this);
@@ -386,11 +355,10 @@ void PluginItem::startTimer()
  */
 void PluginItem::stopTimer()
 {
-    if (debug) qDebug() << PDEBUG;
     if (m_timerItem == nullptr) return;
 
     disconnect(m_timerItem, SIGNAL(timeout()), this, SLOT(updateData()));
-    if (m_timerItem != nullptr) delete m_timerItem;
+    delete m_timerItem;
     m_timerItem = nullptr;
 }
 
@@ -400,14 +368,12 @@ void PluginItem::stopTimer()
  */
 void PluginItem::createSession()
 {
-    if (debug) qDebug() << PDEBUG;
-
-    m_adaptor = new PluginAdaptor(this, debug);
+    m_adaptor = new PluginAdaptor(this);
     QDBusConnection bus = QDBusConnection::sessionBus();
     if (!bus.registerObject(path(), m_adaptor, QDBusConnection::ExportAllSlots |
                             QDBusConnection::ExportAllSignals)) {
-        if (debug) qDebug() << PDEBUG << ":" << "Could not register object";
-        if (debug) qDebug() << PDEBUG << ":" << bus.lastError().message();
+        qCCritical(LOG_PL) << "Could not register object";
+        qCCritical(LOG_PL) << bus.lastError().message();
     }
     connect(this, SIGNAL(updated(QString)), this, SLOT(sendUpdateToDBus(QString)));
 }
@@ -418,8 +384,6 @@ void PluginItem::createSession()
  */
 void PluginItem::updateData()
 {
-    if (debug) qDebug() << PDEBUG;
-
     m_data = getData();
     m_background = getBackground();
     emit(updated(m_data));
@@ -431,7 +395,7 @@ void PluginItem::updateData()
  */
 void PluginItem::sendUpdateToDBus(const QString _data)
 {
-    if (debug) qDebug() << PDEBUG;
+    qCDebug(LOG_PL) << "Data" << _data;
 
     return m_adaptor->UpdatesReceived(_data);
 }
@@ -442,8 +406,6 @@ void PluginItem::sendUpdateToDBus(const QString _data)
  */
 QString PluginItem::convertImage(const QImage _image)
 {
-    if (debug) qDebug() << PDEBUG;
-
     QByteArray byteArray;
     QBuffer buffer(&byteArray);
     _image.save(&buffer, "PNG");
@@ -457,8 +419,7 @@ QString PluginItem::convertImage(const QImage _image)
  */
 PluginItem::ImageType PluginItem::defineImageType(const QString _source)
 {
-    if (debug) qDebug() << PDEBUG;
-    if (debug) qDebug() << PDEBUG << ":" << "Source" << _source;
+    qCDebug(LOG_PL) << "Source" << _source;
 
     PluginItem::ImageType type = ImageType::NONE;
     QImage testImage;
@@ -478,8 +439,7 @@ PluginItem::ImageType PluginItem::defineImageType(const QString _source)
  */
 void PluginItem::setApi(int _api)
 {
-    if (debug) qDebug() << PDEBUG;
-    if (debug) qDebug() << PDEBUG << ":" << "API version" << _api;
+    qCDebug(LOG_PL) << "API version" << _api;
     if (_api < 1) _api = 1;
     if (_api > PLUGIN_API) _api = PLUGIN_API;
 
@@ -492,8 +452,7 @@ void PluginItem::setApi(int _api)
  */
 void PluginItem::setHasUi(const bool _hasUi)
 {
-    if (debug) qDebug() << PDEBUG;
-    if (debug) qDebug() << PDEBUG << ":" << "Has UI" << _hasUi;
+    qCDebug(LOG_PL) << "Has UI" << _hasUi;
 
     m_ui = _hasUi;
 }
@@ -504,8 +463,7 @@ void PluginItem::setHasUi(const bool _hasUi)
  */
 void PluginItem::setName(const QString _name)
 {
-    if (debug) qDebug() << PDEBUG;
-    if (debug) qDebug() << PDEBUG << ":" << "Name" << _name;
+    qCDebug(LOG_PL) << "Name" << _name;
 
     m_name = _name;
 }
@@ -516,8 +474,7 @@ void PluginItem::setName(const QString _name)
  */
 void PluginItem::setPath(QString _path)
 {
-    if (debug) qDebug() << PDEBUG;
-    if (debug) qDebug() << PDEBUG << ":" << "Path" << _path;
+    qCDebug(LOG_PL) << "Path" << _path;
     if (!_path.startsWith(QString("/"))) _path = QString("/%1").arg(_path);
 
     m_path = _path;
@@ -529,8 +486,7 @@ void PluginItem::setPath(QString _path)
  */
 void PluginItem::setTimer(int _timer)
 {
-    if (debug) qDebug() << PDEBUG;
-    if (debug) qDebug() << PDEBUG << ":" << "Timer" << _timer;
+    qCDebug(LOG_PL) << "Timer" << _timer;
     if ((_timer >= 0) && (_timer < MINIMAL_TIMER)) _timer = MINIMAL_TIMER;
 
     m_timer = _timer;

@@ -15,29 +15,41 @@
  *   along with quadro. If not, see http://www.gnu.org/licenses/           *
  ***************************************************************************/
 /**
- * @file main.cpp
- * Source code of quadro library
+ * @file quadrodebug.h
+ * Header of quadro library
  * @author Evgeniy Alekseev
  * @copyright GPLv3
  * @bug https://github.com/arcan1s/quadro-core/issues
  */
 
 
-#include "quadro/quadro.h"
+#ifndef QUADRODEBUG_H
+#define QUADRODEBUG_H
 
+#include <QLoggingCategory>
+
+#ifndef LOG_FORMAT
+#define LOG_FORMAT                                                             \
+    "[%{time process}][%{if-debug}DD%{endif}%{if-info}II%{endif}%{if-"         \
+    "warning}WW%{endif}%{if-critical}CC%{endif}%{if-fatal}FF%{endif}][%{"      \
+    "category}][%{function}] %{message}"
+#endif /* LOG_FORMAT */
+
+// redefine info because it doesn't log properly
+#ifdef qCInfo
+#undef qCInfo
+#endif /* qCInfo */
+#define qCInfo qCDebug
+
+
+Q_DECLARE_LOGGING_CATEGORY(LOG_LIB)
+Q_DECLARE_LOGGING_CATEGORY(LOG_PL)
+Q_DECLARE_LOGGING_CATEGORY(LOG_UI)
 
 /**
- * @fn main
- */
-int main(int argc, char *argv[])
-/**
- * @return 0              - exit without errors
- */
-{
-    qSetMessagePattern(LOG_FORMAT);
-    qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
-    foreach (const QString metadata, getBuildData())
-        qCDebug(LOG_LIB) << metadata;
+ * @brief additional method to get build details declared in version.h
+*/
+const QStringList getBuildData();
 
-    return 0;
-}
+
+#endif /* QUADRODEBUG_H */

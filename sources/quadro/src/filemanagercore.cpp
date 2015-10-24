@@ -23,14 +23,12 @@
  */
 
 
-#include <QDebug>
+#include "quadro/quadro.h"
+
 #include <QDesktopServices>
 #include <QDir>
 #include <QMimeDatabase>
 #include <QUrl>
-
-#include <quadro/quadro.h>
-#include <pdebug/pdebug.h>
 
 
 /**
@@ -39,10 +37,10 @@
 /**
  * @fn FileManager
  */
-FileManager::FileManager(QObject *parent, const bool debugCmd)
-    : QObject(parent),
-      debug(debugCmd)
+FileManager::FileManager(QObject *parent)
+    : QObject(parent)
 {
+    qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
 }
 
 
@@ -51,7 +49,7 @@ FileManager::FileManager(QObject *parent, const bool debugCmd)
  */
 FileManager::~FileManager()
 {
-    if (debug) qDebug() << PDEBUG;
+    qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
 }
 
 
@@ -61,14 +59,13 @@ FileManager::~FileManager()
 QFileInfoList FileManager::directoryEntries(const QString _directory, const bool _hidden,
                                             const QStringList _filter) const
 {
-    if (debug) qDebug() << PDEBUG;
-    if (debug) qDebug() << PDEBUG << ":" << "Directory" << _directory;
-    if (debug) qDebug() << PDEBUG << ":" << "Show hidden" << _hidden;
-    if (debug) qDebug() << PDEBUG << ":" << "Filter" << _filter;
+    qCDebug(LOG_LIB) << "Directory" << _directory;
+    qCDebug(LOG_LIB) << "Show hidden" << _hidden;
+    qCDebug(LOG_LIB) << "Filter" << _filter;
 
     QDir dir = QDir(_directory);
     if (!dir.exists()) {
-        if (debug) qDebug() << PDEBUG << ":" << "Could not find directory";
+        qCWarning(LOG_LIB) << "Could not find directory" << _directory;
         return QFileInfoList();
     }
 
@@ -84,11 +81,10 @@ QFileInfoList FileManager::directoryEntries(const QString _directory, const bool
  */
 QIcon FileManager::iconByFileName(const QString _file) const
 {
-    if (debug) qDebug() << PDEBUG;
-    if (debug) qDebug() << PDEBUG << ":" << "File" << _file;
+    qCDebug(LOG_LIB) << "File" << _file;
 
     QString iconName = mimeByFileName(_file).iconName();
-    if (debug) qDebug() << PDEBUG << ":" << "Icon name" << iconName;
+    qCDebug(LOG_LIB) << "Icon name" << iconName;
 
     return QIcon::fromTheme(iconName);
 }
@@ -99,12 +95,11 @@ QIcon FileManager::iconByFileName(const QString _file) const
  */
 QMimeType FileManager::mimeByFileName(const QString _file) const
 {
-    if (debug) qDebug() << PDEBUG;
-    if (debug) qDebug() << PDEBUG << ":" << "File" << _file;
+    qCDebug(LOG_LIB) << "File" << _file;
 
     QMimeDatabase database;
     QMimeType type = database.mimeTypeForFile(_file);
-    if (debug) qDebug() << PDEBUG << ":" << "Mime type" << type.name();
+    qCDebug(LOG_LIB) << "Mime type" << type.name();
 
     return type;
 }
@@ -115,8 +110,7 @@ QMimeType FileManager::mimeByFileName(const QString _file) const
  */
 bool FileManager::openFile(const QFileInfo _file) const
 {
-    if (debug) qDebug() << PDEBUG;
-    if (debug) qDebug() << PDEBUG << ":" << "File" << _file.absoluteFilePath();
+    qCDebug(LOG_LIB) << "File" << _file.absoluteFilePath();
 
     QUrl url = QUrl::fromLocalFile(_file.absoluteFilePath());
 

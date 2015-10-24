@@ -15,7 +15,7 @@
  *   along with quadro. If not, see http://www.gnu.org/licenses/           *
  ***************************************************************************/
 /**
- * @file favoritescore.h
+ * @file recentlycore.h
  * Header of quadro library
  * @author Evgeniy Alekseev
  * @copyright GPLv3
@@ -23,49 +23,43 @@
  */
 
 
-#ifndef FAVORITECORE_H
-#define FAVORITECORE_H
+#ifndef RECENTLYCORE_H
+#define RECENTLYCORE_H
 
+#include <QDateTime>
 #include <QMap>
-#include <QObject>
 #include <QStringList>
 
+#include "abstractappaggregator.h"
 
-class ApplicationItem;
+#ifndef RECENT_ITEMS_COUNT
+#define RECENT_ITEMS_COUNT 20
+#endif /* RECENT_ITEMS_COUNT */
+
 
 /**
- * @brief The FavoritesCore class provides favorites backend
+ * @brief The RecentlyCore class provides backend for recently run items
  */
-class FavoritesCore : public QObject
+class RecentlyCore : public AbstractAppAggregator
 {
     Q_OBJECT
-    Q_PROPERTY(QString desktopPath READ desktopPath)
 
 public:
     /**
-     * @brief FavoritesCore class constructor
+     * @brief RecentlyCore class constructor
      * @param parent         pointer to parent item
      */
-    explicit FavoritesCore(QObject *parent);
+    explicit RecentlyCore(QObject *parent);
     /**
-     * @brief FavoritesCore class destructor
+     * @brief RecentlyCore class destructor
      */
-    virtual ~FavoritesCore();
+    virtual ~RecentlyCore();
     /**
-     * @brief find applications
-     * @return map of applications
+     * @brief find applications by substring in name
+     * @param _substr        substring to which application need to be found
+     * @return map of applications by substring
      */
-    QMap<QString, ApplicationItem *> applications() const;
-    /**
-     * @brief add new application to the favorites items
-     * @param _executable    path to executable
-     * @param _name          desktop name
-     * @param _iconName      icon name in the theme
-     * @return application item
-     */
-    ApplicationItem *addToFavorites(const QString _executable,
-                                    const QString _name = QString(),
-                                    const QString _iconName = QString("system-run"));
+    QMap<QString, ApplicationItem *> applicationsBySubstr(const QString _substr) const;
     /**
      * @brief path to desktop files
      * @return full path to desktop files
@@ -74,40 +68,41 @@ public:
 
 public slots:
     /**
-     * @brief move given application up or down
-     * @param _name          desktop name
-     * @param _up            move application up, default is true
+     * @brief add item to recent run by its name
+     * @param _name          pointer to recent item run
+     * @return pointer to created ApplicationItem
      */
-    void changeApplicationState(const QString _name, const bool _up = true);
+    ApplicationItem *addItemByName(const QString _name);
     /**
-     * @brief init application from default paths
+     * @brief init application using given paths
      */
     void initApplications();
     /**
-     * @brief save current application order to the index file
+     * @brief remove item from recent run by its name
+     * @param _name          item name
      */
-    void saveApplicationsOrder() const;
+    void removeItemByName(const QString _name);
+    /**
+     * @brief touch application on new run
+     * @param _name          name if application item
+     */
+    void touchItem(const QString _name);
 
 private:
     /**
-     * @brief list of applications
+     * @brief application modification times
      */
-    QMap<QString, ApplicationItem *> m_applications;
-    /**
-     * @brief order of applications
-     */
-    QStringList m_order;
+    QMap<QString, QDateTime> m_modifications;
     /**
      * @brief return applications which has desktop files
      * @return map of generated ApplicationItem
      */
     QMap<QString, ApplicationItem *> getApplicationsFromDesktops();
     /**
-     * @brief return correct applications order
-     * @return list of applications in the correct order
+     * @brief rotate application data information
      */
-    QStringList getApplicationsOrder() const;
+    void rotate();
 };
 
 
-#endif /* FAVORITECORE_H */
+#endif /* RECENTLYCORE_H */

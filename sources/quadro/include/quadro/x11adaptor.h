@@ -48,9 +48,8 @@ public:
     /**
      * @brief X11Adaptor class constructor
      * @param parent         pointer to parent item
-     * @param debugCmd       show debug messages
      */
-    explicit X11Adaptor(QObject *parent, const bool debugCmd = false);
+    explicit X11Adaptor(QObject *parent);
     /**
      * @brief X11Adaptor class destructor
      */
@@ -60,15 +59,11 @@ public:
      * @param debugCmd       show debug messages
      * @return map of windows keys of which are Q_PIDs
      */
-    static QMap<long long, unsigned long long> getWindowsList(const bool debugCmd = false);
+    static QMap<long long, unsigned long long> getWindowsList();
 
 public slots:
 
 private:
-    /**
-     * @brief show debug messages. Default is false
-     */
-    bool debug = false;
     /**
      * @brief get client list
      * @param size           pointer to size, will be filled in the method

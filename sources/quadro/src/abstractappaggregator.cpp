@@ -23,13 +23,11 @@
  */
 
 
-#include <QDebug>
+#include "quadro/quadro.h"
+
 #include <QDir>
 #include <QProcessEnvironment>
 #include <QStandardPaths>
-
-#include <quadro/quadro.h>
-#include <pdebug/pdebug.h>
 
 
 /**
@@ -38,10 +36,10 @@
 /**
  * @fn AbstractAppAggregator
  */
-AbstractAppAggregator::AbstractAppAggregator(QObject *parent, const bool debugCmd)
-    : QObject(parent),
-      debug(debugCmd)
+AbstractAppAggregator::AbstractAppAggregator(QObject *parent)
+    : QObject(parent)
 {
+    qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
 }
 
 
@@ -50,7 +48,7 @@ AbstractAppAggregator::AbstractAppAggregator(QObject *parent, const bool debugCm
  */
 AbstractAppAggregator::~AbstractAppAggregator()
 {
-    if (debug) qDebug() << PDEBUG;
+    qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
 
     dropApplications();
 }
@@ -61,8 +59,6 @@ AbstractAppAggregator::~AbstractAppAggregator()
  */
 QMap<QString, ApplicationItem *> AbstractAppAggregator::applications() const
 {
-    if (debug) qDebug() << PDEBUG;
-
     return m_applications;
 }
 
@@ -72,12 +68,11 @@ QMap<QString, ApplicationItem *> AbstractAppAggregator::applications() const
  */
 QMap<QString, ApplicationItem *> AbstractAppAggregator::applicationsByCategory(const QString _category) const
 {
-    if (debug) qDebug() << PDEBUG;
-    if (debug) qDebug() << PDEBUG << ":" << "Category" << _category;
+    qCDebug(LOG_LIB) << "Category" << _category;
 
     QMap<QString, ApplicationItem *> apps;
     if (!availableCategories().contains(_category)) {
-        if (debug) qDebug() << PDEBUG << ":" << "Incorrect category" << _category;
+        qCWarning(LOG_LIB) << "Incorrect category" << _category;
         return apps;
     }
 
@@ -97,8 +92,7 @@ QMap<QString, ApplicationItem *> AbstractAppAggregator::applicationsByCategory(c
  */
 QMap<QString, ApplicationItem *> AbstractAppAggregator::applicationsBySubstr(const QString _substr) const
 {
-    if (debug) qDebug() << PDEBUG;
-    if (debug) qDebug() << PDEBUG << ":" << "Substring" << _substr;
+    qCDebug(LOG_LIB) << "Substring" << _substr;
 
     QMap<QString, ApplicationItem *> apps;
     // from desktops
@@ -117,7 +111,6 @@ QMap<QString, ApplicationItem *> AbstractAppAggregator::applicationsBySubstr(con
  */
 QStringList AbstractAppAggregator::availableCategories() const
 {
-    if (debug) qDebug() << PDEBUG;
     // refer to http://standards.freedesktop.org/menu-spec/latest/apa.html
 
     QStringList categories;
@@ -135,7 +128,7 @@ QStringList AbstractAppAggregator::availableCategories() const
     categories.append(QString("System"));
     categories.append(QString("Utility"));
 
-    if (debug) qDebug() << PDEBUG << ":" << "Found categories" << categories;
+    qCInfo(LOG_LIB) << "Found categories" << categories;
     return categories;
 }
 
@@ -145,8 +138,7 @@ QStringList AbstractAppAggregator::availableCategories() const
  */
 bool AbstractAppAggregator::hasApplication(const QString _name) const
 {
-    if (debug) qDebug() << PDEBUG;
-    if (debug) qDebug() << PDEBUG << ":" << "Application name" << _name;
+    qCDebug(LOG_LIB) << "Application name" << _name;
 
     return m_applications.contains(_name);
 }
@@ -157,8 +149,6 @@ bool AbstractAppAggregator::hasApplication(const QString _name) const
  */
 void AbstractAppAggregator::addApplication(ApplicationItem *_item)
 {
-    if (debug) qDebug() << PDEBUG;
-
     m_applications[_item->name()] = _item;
 }
 
@@ -168,7 +158,17 @@ void AbstractAppAggregator::addApplication(ApplicationItem *_item)
  */
 void AbstractAppAggregator::dropApplications()
 {
-    if (debug) qDebug() << PDEBUG;
-
     m_applications.clear();
+}
+
+
+/**
+ * @fn removeApplication
+ */
+void AbstractAppAggregator::removeApplication(ApplicationItem *_item)
+{
+    QStringList keys = m_applications.keys(_item);
+
+    for (int i=0; i<keys.count(); i++)
+        m_applications.remove(keys[i]);
 }

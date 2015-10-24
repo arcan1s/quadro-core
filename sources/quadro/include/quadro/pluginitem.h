@@ -56,13 +56,12 @@ public:
     /**
      * @brief PluginItem class constructor
      * @param parent         pointer to parent item
-     * @param debugCmd       show debug messages
      */
-    explicit PluginItem(QObject *parent, const bool debugCmd = false);
+    explicit PluginItem(QObject *parent);
     /**
      * @brief PluginItem class destructor
      */
-    ~PluginItem();
+    virtual ~PluginItem();
     // enums
     /**
      * @enum ImageType
@@ -230,10 +229,6 @@ private slots:
     void sendUpdateToDBus(const QString _data);
 
 private:
-    /**
-     * @brief show debug messages. Default is false
-     */
-    bool debug = false;
     // properties
     /**
      * @brief plugin adaptor

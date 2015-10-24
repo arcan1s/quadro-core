@@ -45,13 +45,12 @@ public:
     /**
      * @brief PluginCore class constructor
      * @param parent         pointer to parent item
-     * @param debugCmd       show debug messages
      */
-    explicit PluginCore(QObject *parent, const bool debugCmd = false);
+    explicit PluginCore(QObject *parent);
     /**
      * @brief PluginCore class destructor
      */
-    ~PluginCore();
+    virtual ~PluginCore();
     /**
      * @brief get list of enabled plugins
      * @return list of active plugins
@@ -90,10 +89,6 @@ public slots:
     void stopPlugin(const QString _plugin);
 
 private:
-    /**
-     * @brief show debug messages. Default is false
-     */
-    bool debug = false;
     /**
      * @brief list of plugins
      */

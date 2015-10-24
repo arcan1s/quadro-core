@@ -23,14 +23,12 @@
  */
 
 
-#include <QDebug>
+#include "quadro/quadro.h"
+
 #include <QDir>
 #include <QPluginLoader>
 #include <QSettings>
 #include <QStandardPaths>
-
-#include <quadro/quadro.h>
-#include <pdebug/pdebug.h>
 
 #include "version.h"
 
@@ -41,10 +39,10 @@
 /**
  * @fn PluginCore
  */
-PluginCore::PluginCore(QObject *parent, const bool debugCmd)
-    : QObject(parent),
-      debug(debugCmd)
+PluginCore::PluginCore(QObject *parent)
+    : QObject(parent)
 {
+    qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
 }
 
 
@@ -53,8 +51,6 @@ PluginCore::PluginCore(QObject *parent, const bool debugCmd)
  */
 PluginCore::~PluginCore()
 {
-    if (debug) qDebug() << PDEBUG;
-
     m_plugins.clear();
 }
 
@@ -64,10 +60,8 @@ PluginCore::~PluginCore()
  */
 QStringList PluginCore::activePlugins()
 {
-    if (debug) qDebug() << PDEBUG;
-
     QString fileName = QFileInfo(QDir(desktopPaths()[0]), QString("index.conf")).filePath();
-    if (debug) qDebug() << PDEBUG << ":" << "Configuration file" << fileName;
+    qCInfo(LOG_LIB) << "Configuration file" << fileName;
     QSettings settings(fileName, QSettings::IniFormat);
 
     return settings.value(QString("Plugins")).toStringList();
@@ -93,8 +87,6 @@ QStringList PluginCore::desktopPaths()
  */
 QMap<QString, PluginItem *> PluginCore::plugins()
 {
-    if (debug) qDebug() << PDEBUG;
-
     return m_plugins;
 }
 
@@ -104,8 +96,6 @@ QMap<QString, PluginItem *> PluginCore::plugins()
  */
 void PluginCore::initPlugins()
 {
-    if (debug) qDebug() << PDEBUG;
-
     // start cleanup
     m_plugins.clear();
 
@@ -118,12 +108,11 @@ void PluginCore::initPlugins()
  */
 void PluginCore::runPlugins(const QStringList _plugins)
 {
-    if (debug) qDebug() << PDEBUG;
-    if (debug) qDebug() << PDEBUG << ":" << "Plugins" << _plugins;
+    qCDebug(LOG_LIB) << "Plugins" << _plugins;
 
     for (int i=0; i<_plugins.count(); i++) {
         if (!m_plugins.contains(_plugins[i])) {
-            if (debug) qDebug() << PDEBUG << ":" << "Could not find plugin" << _plugins[i];
+            qCWarning(LOG_LIB) << "Could not find plugin" << _plugins[i];
             continue;
         }
         m_plugins[_plugins[i]]->createSession();
@@ -137,11 +126,10 @@ void PluginCore::runPlugins(const QStringList _plugins)
  */
 void PluginCore::saveActivePlugins(const QStringList _plugins)
 {
-    if (debug) qDebug() << PDEBUG;
-    if (debug) qDebug() << PDEBUG << ":" << "Plugins" << _plugins;
+    qCDebug(LOG_LIB) << "Plugins" << _plugins;
 
     QString fileName = QFileInfo(QDir(desktopPaths()[0]), QString("index.conf")).filePath();
-    if (debug) qDebug() << PDEBUG << ":" << "Configuration file" << fileName;
+    qCInfo(LOG_LIB) << "Configuration file" << fileName;
     QSettings settings(fileName, QSettings::IniFormat);
 
     settings.setValue(QString("Plugins"), _plugins);
@@ -155,10 +143,9 @@ void PluginCore::saveActivePlugins(const QStringList _plugins)
  */
 void PluginCore::stopPlugin(const QString _plugin)
 {
-    if (debug) qDebug() << PDEBUG;
-    if (debug) qDebug() << PDEBUG << ":" << "Plugin" << _plugin;
+    qCDebug(LOG_LIB) << "Plugin" << _plugin;
     if (!m_plugins.contains(_plugin)) {
-        if (debug) qDebug() << PDEBUG << ":" << "Could not find plugin" << _plugin;
+        qCWarning(LOG_LIB) << "Could not find plugin" << _plugin;
         return;
     }
 
@@ -172,18 +159,16 @@ void PluginCore::stopPlugin(const QString _plugin)
  */
 QMap<QString, PluginItem *> PluginCore::getPlugins()
 {
-    if (debug) qDebug() << PDEBUG;
-
     QStringList filter("*.desktop");
     QStringList locations = desktopPaths();
-    if (debug) qDebug() << PDEBUG << ":" << "Paths" << locations;
+    qCInfo(LOG_LIB) << "Paths" << locations;
     QMap<QString, PluginItem *> items;
 
-    for (int i=locations.count()-1; i>=0; i--) {
-        QStringList entries = QDir(locations[i]).entryList(filter, QDir::Files);
+    foreach(const QString loc, locations) {
+        QStringList entries = QDir(loc).entryList(filter, QDir::Files);
         for (int j=0; j<entries.count(); j++) {
-            QString desktop = QFileInfo(QDir(locations[i]), entries[j]).filePath();
-            if (debug) qDebug() << PDEBUG << ":" << "Desktop" << desktop;
+            QString desktop = QFileInfo(QDir(loc), entries[j]).filePath();
+            qCInfo(LOG_LIB) << "Desktop" << desktop;
             // generate path
             QString libraryName = QString("lib%1").arg(entries[j]);
             libraryName.replace(QString(".desktop"), QString(".so"));
@@ -191,11 +176,11 @@ QMap<QString, PluginItem *> PluginCore::getPlugins()
             // load plugin
             QObject *plugin = loader.instance();
             if (plugin) {
-                if (debug) qDebug() << PDEBUG << ":" << "Loading" << libraryName;
+                qCInfo(LOG_LIB) << "Loading" << libraryName;
                 items[desktop] = dynamic_cast<PluginItem *>(plugin);
             } else {
-                if (debug) qDebug() << PDEBUG << ":" << "Could not load the library for" << desktop;
-                if (debug) qDebug() << PDEBUG << ":" << "Error" << loader.errorString();
+                qCWarning(LOG_LIB) << "Could not load the library for" << desktop;
+                qCWarning(LOG_LIB) << "Error" << loader.errorString();
                 continue;
             }
         }

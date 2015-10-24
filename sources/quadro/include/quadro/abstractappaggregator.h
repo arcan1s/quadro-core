@@ -44,9 +44,8 @@ public:
     /**
      * @brief AbstractAppAggregator class constructor
      * @param parent         pointer to parent item
-     * @param debugCmd       show debug messages
      */
-    explicit AbstractAppAggregator(QObject *parent, const bool debugCmd = false);
+    explicit AbstractAppAggregator(QObject *parent);
     /**
      * @brief AbstractAppAggregator class destructor
      */
@@ -95,12 +94,13 @@ public slots:
      * @brief init application using given paths
      */
     virtual void initApplications() = 0;
+    /**
+     * @brief remove application from array
+     * @param _item          application item
+     */
+    void removeApplication(ApplicationItem *_item);
 
 private:
-    /**
-     * @brief show debug messages. Default is false
-     */
-    bool debug = false;
     /**
      * @brief list of applications
      */

@@ -43,9 +43,8 @@ public:
     /**
      * @brief FileManager class constructor
      * @param parent         pointer to parent item
-     * @param debugCmd       show debug messages
      */
-    explicit FileManager(QObject *parent, const bool debugCmd = false);
+    explicit FileManager(QObject *parent);
     /**
      * @brief FileManager class destructor
      */
@@ -83,10 +82,6 @@ public slots:
     bool openFile(const QFileInfo _file) const;
 
 private:
-    /**
-     * @brief show debug messages. Default is false
-     */
-    bool debug = false;
 };
 
 

@@ -2,28 +2,47 @@
 *.slo
 *.lo
 *.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
 
 # Compiled Dynamic libraries
 *.so
 *.dylib
+*.dll
+
+# Fortran module files
+*.mod
 
 # Compiled Static libraries
 *.lai
 *.la
 *.a
+*.lib
 
-# Source archive
-*.tar.xz
-*.tar.gz
-*.sig
+# Executables
+*.exe
+*.out
+*.app
 
-# Build directory
-build/
-tmp/
-usr/
+# cmake
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+Makefile
+cmake_install.cmake
+install_manifest.txt
 
-# translations
-*.qm
+# build directory
+build
 
-# temporary bckps
-*~
+# archives
+*src.tar.[gx]z
+*pkg.tar.[gx]z
+src
+pkg
+
+# clion settings
+.idea

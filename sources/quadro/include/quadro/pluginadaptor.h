@@ -46,14 +46,12 @@ public:
     /**
      * @brief PluginAdaptor class constructor
      * @param plugin         pointer to plugin item
-     * @param debugCmd       show debug messages
      */
-    explicit PluginAdaptor(PluginItem *plugin,
-                           const bool debugCmd = false);
+    explicit PluginAdaptor(PluginItem *plugin);
     /**
      * @brief PluginAdaptor class destructor
      */
-    ~PluginAdaptor();
+    virtual ~PluginAdaptor();
 
 public slots:
     /**
@@ -170,10 +168,6 @@ signals:
     void Updated(QString data);
 
 private:
-    /**
-     * @brief show debug messages. Default is false
-     */
-    bool debug = false;
     // properties
     /**
      * @brief pointer to the plugin

@@ -23,10 +23,7 @@
  */
 
 
-#include <QDebug>
-
-#include <quadro/quadro.h>
-#include <pdebug/pdebug.h>
+#include "quadro/quadro.h"
 
 #include <X11/Xatom.h>
 #include <X11/Xlib.h>
@@ -39,10 +36,10 @@
 /**
  * @fn X11Adaptor
  */
-X11Adaptor::X11Adaptor(QObject *parent, const bool debugCmd)
-    : QObject(parent),
-      debug(debugCmd)
+X11Adaptor::X11Adaptor(QObject *parent)
+    : QObject(parent)
 {
+    qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
 }
 
 
@@ -51,21 +48,19 @@ X11Adaptor::X11Adaptor(QObject *parent, const bool debugCmd)
  */
 X11Adaptor::~X11Adaptor()
 {
-    if (debug) qDebug() << PDEBUG;
+    qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
 }
 
 
 /**
  * @fn getWindowsList
  */
-QMap<long long, unsigned long long> X11Adaptor::getWindowsList(const bool debugCmd)
+QMap<long long, unsigned long long> X11Adaptor::getWindowsList()
 {
-    if (debugCmd) qDebug() << PDEBUG;
-
     QMap<long long, unsigned long long> windows;
     if (QX11Info::display() == nullptr) return windows;
 
-    X11Adaptor *instance = new X11Adaptor(nullptr, debugCmd);
+    X11Adaptor *instance = new X11Adaptor(nullptr);
     unsigned long clientListSize;
     Window *clientList = instance->getClientList(&clientListSize);
     if (clientList == nullptr) {
@@ -86,14 +81,14 @@ QMap<long long, unsigned long long> X11Adaptor::getWindowsList(const bool debugC
 
 Window *X11Adaptor::getClientList(unsigned long *size) const
 {
-    if (debug) qDebug() << PDEBUG;
+    qCDebug(LOG_LIB) << "Size" << size;
 
     Window *clientList = nullptr;
     if ((clientList = (Window *)getPropery(DefaultRootWindow(QX11Info::display()),
                                            XA_WINDOW, "_NET_CLIENT_LIST", size)) == nullptr)
         if ((clientList = (Window *)getPropery(DefaultRootWindow(QX11Info::display()),
                                                XA_CARDINAL, "_WIN_CLIENT_LIST", size)) == nullptr) {
-            if (debug) qDebug() << PDEBUG << ":" << "Could not get properties _NET_CLIENT_LIST or _WIN_CLIENT_LIST";
+            qCCritical(LOG_LIB) << "Could not get properties _NET_CLIENT_LIST or _WIN_CLIENT_LIST";
             return nullptr;
         }
 
@@ -104,8 +99,7 @@ Window *X11Adaptor::getClientList(unsigned long *size) const
 char *X11Adaptor::getPropery(const Window _win, const Atom _xaPropType,
                              const char *_propery, unsigned long *size) const
 {
-    if (debug) qDebug() << PDEBUG;
-    if (debug) qDebug() << PDEBUG << ":" << "Property" << _propery;
+    qCDebug(LOG_LIB) << "Property" << _propery;
 
     Atom xaPropName = XInternAtom(QX11Info::display(), _propery, false);
 
@@ -118,12 +112,12 @@ char *X11Adaptor::getPropery(const Window _win, const Atom _xaPropType,
                            MAX_PROPERTY_VALUE_LEN / 4, false,
                            _xaPropType, &xaRetType, &retFormat,
                            &retNitems, &retBytesAfter, &retProperty) != Success) {
-        if (debug) qDebug() << PDEBUG << ":" << "Could not get property" << _propery;
+        qCCritical(LOG_LIB) << ":" << "Could not get property" << _propery;
         return nullptr;
     }
 
     if (xaRetType != _xaPropType) {
-        if (debug) qDebug() << PDEBUG << ":" << "Invalid property name" << _propery;
+        qCCritical(LOG_LIB) << "Invalid property name" << _propery;
         XFree(retProperty);
         return nullptr;
     }

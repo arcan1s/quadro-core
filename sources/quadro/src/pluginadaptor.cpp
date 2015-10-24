@@ -23,10 +23,7 @@
  */
 
 
-#include <QDebug>
-
-#include <quadro/quadro.h>
-#include <pdebug/pdebug.h>
+#include "quadro/quadro.h"
 
 
 /**
@@ -35,11 +32,11 @@
 /**
  * @fn PluginAdaptor
  */
-PluginAdaptor::PluginAdaptor(PluginItem *plugin, const bool debugCmd)
+PluginAdaptor::PluginAdaptor(PluginItem *plugin)
     : QDBusAbstractAdaptor(plugin),
-      debug(debugCmd),
       m_plugin(plugin)
 {
+    qCDebug(LOG_PL) << __PRETTY_FUNCTION__;
 }
 
 
@@ -48,7 +45,7 @@ PluginAdaptor::PluginAdaptor(PluginItem *plugin, const bool debugCmd)
  */
 PluginAdaptor::~PluginAdaptor()
 {
-    if (debug) qDebug() << PDEBUG;
+    qCDebug(LOG_PL) << __PRETTY_FUNCTION__;
 }
 
 
@@ -57,8 +54,6 @@ PluginAdaptor::~PluginAdaptor()
  */
 bool PluginAdaptor::Ping()
 {
-    if (debug) qDebug() << PDEBUG;
-
     return true;
 }
 
@@ -68,8 +63,6 @@ bool PluginAdaptor::Ping()
  */
 int PluginAdaptor::Api()
 {
-    if (debug) qDebug() << PDEBUG;
-
     return m_plugin->api();
 }
 
@@ -79,8 +72,6 @@ int PluginAdaptor::Api()
  */
 QString PluginAdaptor::Background()
 {
-    if (debug) qDebug() << PDEBUG;
-
     return m_plugin->background();
 }
 
@@ -90,8 +81,6 @@ QString PluginAdaptor::Background()
  */
 QString PluginAdaptor::Comment()
 {
-    if (debug) qDebug() << PDEBUG;
-
     return m_plugin->comment();
 }
 
@@ -101,8 +90,6 @@ QString PluginAdaptor::Comment()
  */
 QStringList PluginAdaptor::Configuration()
 {
-    if (debug) qDebug() << PDEBUG;
-
     QVariantMap configMap = m_plugin->configuration();
     QStringList output;
     for (int i=0; i<configMap.keys().count(); i++) {
@@ -120,8 +107,6 @@ QStringList PluginAdaptor::Configuration()
  */
 QString PluginAdaptor::Data()
 {
-    if (debug) qDebug() << PDEBUG;
-
     return m_plugin->data();
 }
 
@@ -131,8 +116,6 @@ QString PluginAdaptor::Data()
  */
 bool PluginAdaptor::HasUi()
 {
-    if (debug) qDebug() << PDEBUG;
-
     return m_plugin->hasUi();
 }
 
@@ -142,8 +125,6 @@ bool PluginAdaptor::HasUi()
  */
 int PluginAdaptor::Height()
 {
-    if (debug) qDebug() << PDEBUG;
-
     return m_plugin->height();
 }
 
@@ -153,8 +134,6 @@ int PluginAdaptor::Height()
  */
 QString PluginAdaptor::HtmlImage()
 {
-    if (debug) qDebug() << PDEBUG;
-
     return m_plugin->htmlImage();
 }
 
@@ -164,8 +143,6 @@ QString PluginAdaptor::HtmlImage()
  */
 QString PluginAdaptor::Name()
 {
-    if (debug) qDebug() << PDEBUG;
-
     return m_plugin->name();
 }
 
@@ -175,8 +152,6 @@ QString PluginAdaptor::Name()
  */
 int PluginAdaptor::Timer()
 {
-    if (debug) qDebug() << PDEBUG;
-
     return m_plugin->timer();
 }
 
@@ -186,8 +161,6 @@ int PluginAdaptor::Timer()
  */
 int PluginAdaptor::Width()
 {
-    if (debug) qDebug() << PDEBUG;
-
     return m_plugin->width();
 }
 
@@ -197,8 +170,6 @@ int PluginAdaptor::Width()
  */
 void PluginAdaptor::Action()
 {
-    if (debug) qDebug() << PDEBUG;
-
     return m_plugin->actionRequired();
 }
 
@@ -208,8 +179,6 @@ void PluginAdaptor::Action()
  */
 void PluginAdaptor::Close()
 {
-    if (debug) qDebug() << PDEBUG;
-
     return m_plugin->quit();
 }
 
@@ -219,8 +188,6 @@ void PluginAdaptor::Close()
  */
 void PluginAdaptor::ReadDesktop(const QString desktopPath)
 {
-    if (debug) qDebug() << PDEBUG;
-
     return m_plugin->readDesktop(desktopPath);
 }
 
@@ -230,8 +197,6 @@ void PluginAdaptor::ReadDesktop(const QString desktopPath)
  */
 void PluginAdaptor::ReadSettings(const QString desktopPath)
 {
-    if (debug) qDebug() << PDEBUG;
-
     return m_plugin->readSettings(desktopPath);
 }
 
@@ -241,8 +206,6 @@ void PluginAdaptor::ReadSettings(const QString desktopPath)
  */
 bool PluginAdaptor::SaveSettings(const QString desktopPath)
 {
-    if (debug) qDebug() << PDEBUG;
-
     return m_plugin->saveSettings(desktopPath);
 }
 
@@ -252,8 +215,6 @@ bool PluginAdaptor::SaveSettings(const QString desktopPath)
  */
 void PluginAdaptor::Start(const bool start)
 {
-    if (debug) qDebug() << PDEBUG;
-
     if (start)
         return m_plugin->startTimer();
     else
@@ -266,8 +227,6 @@ void PluginAdaptor::Start(const bool start)
  */
 void PluginAdaptor::Update()
 {
-    if (debug) qDebug() << PDEBUG;
-
     return m_plugin->updateData();
 }
 
@@ -277,7 +236,5 @@ void PluginAdaptor::Update()
  */
 void PluginAdaptor::UpdatesReceived(const QString data)
 {
-    if (debug) qDebug() << PDEBUG;
-
     emit(Updated(data));
 }

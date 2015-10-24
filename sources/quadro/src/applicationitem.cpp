@@ -23,15 +23,13 @@
  */
 
 
-#include <QDebug>
+#include "quadro/quadro.h"
+
 #include <QDir>
 #include <QFileInfo>
 #include <QLocale>
 #include <QProcess>
 #include <QSettings>
-
-#include <quadro/quadro.h>
-#include <pdebug/pdebug.h>
 
 
 /**
@@ -41,11 +39,12 @@
  * @fn ApplicationItem
  */
 ApplicationItem::ApplicationItem(QObject *parent, const QString exePath,
-                                 const QString name, const bool debugCmd)
+                                 const QString name)
     : QObject(parent),
-      debug(debugCmd),
       m_executable(exePath)
 {
+    qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
+
     setName(name);
 }
 
@@ -55,7 +54,7 @@ ApplicationItem::ApplicationItem(QObject *parent, const QString exePath,
  */
 ApplicationItem::~ApplicationItem()
 {
-    if (debug) qDebug() << PDEBUG;
+    qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
 }
 
 
@@ -64,8 +63,6 @@ ApplicationItem::~ApplicationItem()
  */
 QStringList ApplicationItem::categories() const
 {
-    if (debug) qDebug() << PDEBUG;
-
     return m_categories;
 }
 
@@ -75,9 +72,16 @@ QStringList ApplicationItem::categories() const
  */
 QString ApplicationItem::comment() const
 {
-    if (debug) qDebug() << PDEBUG;
-
     return m_comment;
+}
+
+
+/**
+ * @fn desktopName
+ */
+QString ApplicationItem::desktopName() const
+{
+    return m_desktopName.isEmpty() ? QString("%1.desktop").arg(m_name) : m_desktopName;
 }
 
 
@@ -86,8 +90,6 @@ QString ApplicationItem::comment() const
  */
 QString ApplicationItem::executable() const
 {
-    if (debug) qDebug() << PDEBUG;
-
     return m_executable;
 }
 
@@ -97,8 +99,6 @@ QString ApplicationItem::executable() const
  */
 bool ApplicationItem::hasSubstring(const QString _substr) const
 {
-    if (debug) qDebug() << PDEBUG;
-
     return ((m_name.contains(_substr, Qt::CaseInsensitive)) ||
             (m_comment.contains(_substr, Qt::CaseInsensitive)));
 }
@@ -109,8 +109,6 @@ bool ApplicationItem::hasSubstring(const QString _substr) const
  */
 bool ApplicationItem::isHidden() const
 {
-    if (debug) qDebug() << PDEBUG;
-
     return m_hidden;
 }
 
@@ -120,8 +118,6 @@ bool ApplicationItem::isHidden() const
  */
 QIcon ApplicationItem::icon() const
 {
-    if (debug) qDebug() << PDEBUG;
-
     return m_icon;
 }
 
@@ -131,8 +127,6 @@ QIcon ApplicationItem::icon() const
  */
 QString ApplicationItem::name() const
 {
-    if (debug) qDebug() << PDEBUG;
-
     return m_name;
 }
 
@@ -142,8 +136,6 @@ QString ApplicationItem::name() const
  */
 bool ApplicationItem::noDesktop() const
 {
-    if (debug) qDebug() << PDEBUG;
-
     return m_noDesktop;
 }
 
@@ -153,9 +145,16 @@ bool ApplicationItem::noDesktop() const
  */
 bool ApplicationItem::shouldBeShown() const
 {
-    if (debug) qDebug() << PDEBUG;
+    return (!m_noDesktop && !m_hidden);
+}
 
-    return (!noDesktop() && !isHidden());
+
+/**
+ * @fn startsWith
+ */
+bool ApplicationItem::startsWith(const QString _substr) const
+{
+    return m_executable.startsWith(_substr);
 }
 
 
@@ -164,8 +163,7 @@ bool ApplicationItem::shouldBeShown() const
  */
 void ApplicationItem::setCategories(const QStringList _categories)
 {
-    if (debug) qDebug() << PDEBUG;
-    if (debug) qDebug() << PDEBUG << ":" << "Categories" << _categories;
+    qCDebug(LOG_LIB) << "Categories" << _categories;
 
     m_categories = _categories;
 }
@@ -176,10 +174,20 @@ void ApplicationItem::setCategories(const QStringList _categories)
  */
 void ApplicationItem::setComment(const QString _comment)
 {
-    if (debug) qDebug() << PDEBUG;
-    if (debug) qDebug() << PDEBUG << ":" << "Comment" << _comment;
+    qCDebug(LOG_LIB) << "Comment" << _comment;
 
     m_comment = _comment;
+}
+
+
+/**
+ * @fn setDesktopName
+ */
+void ApplicationItem::setDesktopName(const QString _desktopName)
+{
+    qCDebug(LOG_LIB) << "Desktop name" << _desktopName;
+
+    m_desktopName = _desktopName;
 }
 
 
@@ -188,8 +196,7 @@ void ApplicationItem::setComment(const QString _comment)
  */
 void ApplicationItem::setHidden(const bool _hidden)
 {
-    if (debug) qDebug() << PDEBUG;
-    if (debug) qDebug() << PDEBUG << ":" << "Is hidden" << _hidden;
+    qCDebug(LOG_LIB) << "Is hidden" << _hidden;
 
     m_hidden = _hidden;
 }
@@ -200,8 +207,6 @@ void ApplicationItem::setHidden(const bool _hidden)
  */
 void ApplicationItem::setIcon(const QIcon _icon)
 {
-    if (debug) qDebug() << PDEBUG;
-
     m_icon = _icon;
 }
 
@@ -211,8 +216,7 @@ void ApplicationItem::setIcon(const QIcon _icon)
  */
 void ApplicationItem::setIconByName(const QString _iconName)
 {
-    if (debug) qDebug() << PDEBUG;
-    if (debug) qDebug() << PDEBUG << ":" << "Icon name" << _iconName;
+    qCDebug(LOG_LIB) << "Icon name" << _iconName;
 
     return setIcon(QIcon::fromTheme(_iconName));
 }
@@ -223,8 +227,7 @@ void ApplicationItem::setIconByName(const QString _iconName)
  */
 void ApplicationItem::setName(const QString _name)
 {
-    if (debug) qDebug() << PDEBUG;
-    if (debug) qDebug() << PDEBUG << ":" << "Name" << _name;
+    qCDebug(LOG_LIB) << "Name" << _name;
 
     m_name = _name.isEmpty() ? QFileInfo(executable()).fileName() : _name;
 }
@@ -235,8 +238,7 @@ void ApplicationItem::setName(const QString _name)
  */
 void ApplicationItem::setNoDesktop(const bool _noDesktop)
 {
-    if (debug) qDebug() << PDEBUG;
-    if (debug) qDebug() << PDEBUG << ":" << "No desktop" << _noDesktop;
+    qCDebug(LOG_LIB) << "No desktop" << _noDesktop;
 
     m_noDesktop = _noDesktop;
 }
@@ -245,9 +247,9 @@ void ApplicationItem::setNoDesktop(const bool _noDesktop)
 /**
  * @fn fromDesktop
  */
-ApplicationItem *ApplicationItem::fromDesktop(const QString _desktopPath, QObject *_parent,
-                                              const bool debugCmd)
+ApplicationItem *ApplicationItem::fromDesktop(const QString _desktopPath, QObject *_parent)
 {
+    qCDebug(LOG_LIB) << "Desktop path" << _desktopPath;
     QSettings settings(_desktopPath, QSettings::IniFormat);
 
     settings.beginGroup(QString("Desktop Entry"));
@@ -264,12 +266,13 @@ ApplicationItem *ApplicationItem::fromDesktop(const QString _desktopPath, QObjec
                           settings.value(QString("Comment")).toString();
     settings.endGroup();
 
-    ApplicationItem *item = new ApplicationItem(_parent, executable, name, debugCmd);
+    ApplicationItem *item = new ApplicationItem(_parent, executable, name);
     item->setComment(comment);
     item->setHidden(hidden);
     item->setIconByName(iconPath);
     item->setNoDesktop(noDesktop);
     item->defineCategories(_desktopPath);
+    item->setDesktopName(QFileInfo(_desktopPath).fileName());
 
     return item;
 }
@@ -280,8 +283,7 @@ ApplicationItem *ApplicationItem::fromDesktop(const QString _desktopPath, QObjec
  */
 void ApplicationItem::defineCategories(const QString _desktopPath)
 {
-    if (debug) qDebug() << PDEBUG;
-    if (debug) qDebug() << PDEBUG << "Desktop path" << _desktopPath;
+    qCDebug(LOG_LIB) << "Desktop path" << _desktopPath;
 
     // open
     QFile desktopFile(_desktopPath);
@@ -310,9 +312,11 @@ void ApplicationItem::defineCategories(const QString _desktopPath)
  */
 bool ApplicationItem::launch() const
 {
-    if (debug) qDebug() << PDEBUG;
+    // FIXME workaround to allow launch items with parameters
+    QStringList args = executable().split(QChar(' ')).filter(QRegExp(QString("^(?!%).*")));
+    QString cmd = args.takeAt(0);
 
-    return QProcess::startDetached(executable());
+    return QProcess::startDetached(cmd, args);
 }
 
 
@@ -321,12 +325,11 @@ bool ApplicationItem::launch() const
  */
 QString ApplicationItem::saveDesktop(const QString _desktopPath) const
 {
-    if (debug) qDebug() << PDEBUG;
-    if (debug) qDebug() << PDEBUG << ":" << "Desktop path" << _desktopPath;
+    qCDebug(LOG_LIB) << "Desktop path" << _desktopPath;
 
-    QString fileName = QString("%1/%2.desktop").arg(_desktopPath).arg(name());
+    QString fileName = QString("%1/%2").arg(_desktopPath).arg(desktopName());
     QSettings settings(fileName, QSettings::IniFormat);
-    if (debug) qDebug() << PDEBUG << ":" << "Configuration file" << settings.fileName();
+    qCInfo(LOG_LIB) << "Configuration file" << settings.fileName();
 
     settings.beginGroup(QString("Desktop Entry"));
     settings.setValue(QString("Encoding"), QString("UTF-8"));

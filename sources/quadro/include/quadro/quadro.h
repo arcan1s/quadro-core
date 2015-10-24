@@ -37,6 +37,8 @@
 #include "pluginitem.h"
 #include "quadroadaptor.h"
 #include "quadrocore.h"
+#include "quadrodebug.h"
+#include "recentlycore.h"
 #include "tabpluginitem.h"
 #include "x11adaptor.h"
 

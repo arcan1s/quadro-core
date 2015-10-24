@@ -23,10 +23,7 @@
  */
 
 
-#include <QDebug>
-
-#include <quadro/quadro.h>
-#include <pdebug/pdebug.h>
+#include "quadro/quadro.h"
 
 
 /**
@@ -35,10 +32,10 @@
 /**
  * @fn QuadroCore
  */
-QuadroCore::QuadroCore(QObject *parent, const bool debugCmd)
-    : QObject(parent),
-      debug(debugCmd)
+QuadroCore::QuadroCore(QObject *parent)
+    : QObject(parent)
 {
+    qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
 }
 
 
@@ -47,5 +44,5 @@ QuadroCore::QuadroCore(QObject *parent, const bool debugCmd)
  */
 QuadroCore::~QuadroCore()
 {
-    if (debug) qDebug() << PDEBUG;
+    qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
 }

@@ -40,21 +40,16 @@ public:
     /**
      * @brief QuadroCore class constructor
      * @param parent         pointer to parent item
-     * @param debugCmd       show debug messages
      */
-    explicit QuadroCore(QObject *parent, const bool debugCmd = false);
+    explicit QuadroCore(QObject *parent);
     /**
      * @brief QuadroCore class destructor
      */
-    ~QuadroCore();
+    virtual ~QuadroCore();
 
 public slots:
 
 private:
-    /**
-     * @brief show debug messages. Default is false
-     */
-    bool debug = false;
 };
 
 

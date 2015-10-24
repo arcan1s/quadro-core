@@ -4,15 +4,19 @@
 // information
 #define NAME "Quadro"
 #define VERSION "@PROJECT_VERSION@"
+#define COMMIT_SHA "@PROJECT_COMMIT_SHA@"
 #define AUTHOR "@PROJECT_AUTHOR@"
 #define TRANSLATORS ""
 #define EMAIL "@PROJECT_CONTACT@"
 #define LICENSE "@PROJECT_LICENSE@"
 #define TRDPARTY_LICENSE "tasks,BSD,https://github.com/mhogomchungu/tasks;wmctrl,GPLv2,https://sites.google.com/site/tstyblo/wmctrl"
+
+// configuration
 #define DOCS_PATH "@CMAKE_INSTALL_PREFIX@/share/doc/quadro/"
+#cmakedefine BUILD_TESTING
 
 // links
-#define HOMEPAGE "http://arcanis.name/projects/quadro/"
+#define HOMEPAGE "https://arcanis.name/projects/quadro/"
 #define REPOSITORY "https://github.com/arcan1s/quadro-core"
 #define BUGTRACKER "https://github.com/arcan1s/quadro-core/issues"
 #define TRANSLATION "https://github.com/arcan1s/quadro-core/issues/1"
@@ -24,11 +28,22 @@
 
 // cmake properties
 #define CMAKE_BUILD_TYPE "@CMAKE_BUILD_TYPE@"
+#define CMAKE_CXX_COMPILER "@CMAKE_CXX_COMPILER@"
+#define CMAKE_CXX_FLAGS "@CMAKE_CXX_FLAGS@"
+#define CMAKE_CXX_FLAGS_DEBUG "@CMAKE_CXX_FLAGS_DEBUG@"
+#define CMAKE_CXX_FLAGS_RELEASE "@CMAKE_CXX_FLAGS_RELEASE@"
+#define CMAKE_CXX_FLAGS_OPTIMIZATION "@CMAKE_CXX_FLAGS_OPTIMIZATION@"
+#define CMAKE_DEFINITIONS "@CMAKE_DEFINITIONS@"
 #define CMAKE_INSTALL_PREFIX "@CMAKE_INSTALL_PREFIX@"
-// additional components
-#define PROJECT_BUILD_DOCS "@BUILD_DOCS@"
-#define PROJECT_BUILD_TEST "@BUILD_TEST@"
-// project properties
+#define CMAKE_SHARED_LINKER_FLAGS "@CMAKE_SHARED_LINKER_FLAGS@"
+// components
+#define BUILD_DEB_PACKAGE "@BUILD_DEB_PACKAGE@"
+#define BUILD_RPM_PACKAGE "@BUILD_RPM_PACKAGE@"
+#define CLANGFORMAT_EXECUTABLE "@CLANGFORMAT_EXECUTABLE@"
+#define CPPCHECK_EXECUTABLE "@CPPCHECK_EXECUTABLE@"
+// additional functions
+#define PROP_DOCS "@BUILD_DOCS@"
+#define PROP_TEST "@BUILD_TESTING@"
 
 // dbus configuration
 #define DBUS_SERVICE "org.quadro.core"
@@ -41,6 +56,7 @@
 #define FAVORITES_PATH "favorites"
 #define HOME_PATH "quadro"
 #define PLUGIN_PATH "plugins"
+#define RECENT_PATH "recent"
 
 // plugin configuration
 #define MINIMAL_TIMER 333

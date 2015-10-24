@@ -23,11 +23,9 @@
  */
 
 
-#include <QDebug>
-#include <QWindow>
+#include "quadro/quadro.h"
 
-#include <quadro/quadro.h>
-#include <pdebug/pdebug.h>
+#include <QWindow>
 
 
 /**
@@ -36,13 +34,13 @@
 /**
  * @fn ApplicationLauncherItem
  */
-ApplicationLauncherItem::ApplicationLauncherItem(QWidget *parent, const QString cmd,
-                                                 const bool debugCmd)
+ApplicationLauncherItem::ApplicationLauncherItem(QWidget *parent, const QString cmd)
     : QObject(parent),
-      debug(debugCmd),
       m_command(cmd),
       m_parent(parent)
 {
+    qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
+
     m_process = new QProcess(this);
     connect(m_process, SIGNAL(finished(int, QProcess::ExitStatus)),
             this, SLOT(finished(int, QProcess::ExitStatus)));
@@ -54,10 +52,10 @@ ApplicationLauncherItem::ApplicationLauncherItem(QWidget *parent, const QString 
  */
 ApplicationLauncherItem::~ApplicationLauncherItem()
 {
-    if (debug) qDebug() << PDEBUG;
+    qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
 
-    if (m_process != nullptr) delete m_process;
-    if (m_widget != nullptr) delete m_widget;
+    delete m_process;
+    delete m_widget;
 }
 
 
@@ -66,8 +64,6 @@ ApplicationLauncherItem::~ApplicationLauncherItem()
  */
 QString ApplicationLauncherItem::command() const
 {
-    if (debug) qDebug() << PDEBUG;
-
     return m_command;
 }
 
@@ -77,7 +73,6 @@ QString ApplicationLauncherItem::command() const
  */
 Q_PID ApplicationLauncherItem::processId() const
 {
-    if (debug) qDebug() << PDEBUG;
     if (m_process == nullptr) return 0;
 
     return m_process->processId();
@@ -89,7 +84,6 @@ Q_PID ApplicationLauncherItem::processId() const
  */
 QProcess::ProcessState ApplicationLauncherItem::processState() const
 {
-    if (debug) qDebug() << PDEBUG;
     if (m_process == nullptr) return QProcess::NotRunning;
 
     return m_process->state();
@@ -101,8 +95,6 @@ QProcess::ProcessState ApplicationLauncherItem::processState() const
  */
 QWidget *ApplicationLauncherItem::widget()
 {
-    if (debug) qDebug() << PDEBUG;
-
     return m_widget;
 }
 
@@ -112,21 +104,20 @@ QWidget *ApplicationLauncherItem::widget()
  */
 void ApplicationLauncherItem::startApplication()
 {
-    if (debug) qDebug() << PDEBUG;
     if (m_process == nullptr) return;
 
     //run process and find its wid
     m_process->start(m_command);
-    QMap<Q_PID, WId> windows = X11Adaptor::getWindowsList(debug);
+    QMap<Q_PID, WId> windows = X11Adaptor::getWindowsList();
     if (!windows.contains(processId())) {
-        if (debug) qDebug() << PDEBUG << ":" << "Could not find window for PID" << processId();
+        qCWarning(LOG_LIB) << "Could not find window for PID" << processId();
         return;
     }
 
     // init widget
     QWindow *window = QWindow::fromWinId(windows[processId()]);
     // delete widget if exist
-    if (m_widget != nullptr) delete m_widget;
+    delete m_widget;
     m_widget = QWidget::createWindowContainer(window, m_parent, Qt::SubWindow);
 }
 
@@ -136,7 +127,6 @@ void ApplicationLauncherItem::startApplication()
  */
 void ApplicationLauncherItem::stopApplication()
 {
-    if (debug) qDebug() << PDEBUG;
     if (m_process == nullptr) return;
 
     m_process->terminate();
@@ -149,9 +139,9 @@ void ApplicationLauncherItem::stopApplication()
 void ApplicationLauncherItem::finished(const int exitCode,
                                        const QProcess::ExitStatus exitStatus)
 {
-    if (debug) qDebug() << PDEBUG;
-    if (debug) qDebug() << PDEBUG << ":" << "Exit code" << exitCode;
-    if (debug) qDebug() << PDEBUG << ":" << "Exit status" << exitStatus;
+    qCDebug(LOG_LIB) << "Exit code" << exitCode;
+    qCDebug(LOG_LIB) << "Exit status" << exitStatus;
 
-    if (m_widget != nullptr) delete m_widget;
+    delete m_widget;
+    m_widget = nullptr;
 }

@@ -46,24 +46,18 @@ public:
     /**
      * @brief QuadroAdaptor class constructor
      * @param core           pointer to core part
-     * @param debugCmd       show debug messages
      */
-    explicit QuadroAdaptor(QuadroCore *core,
-                           const bool debugCmd = false);
+    explicit QuadroAdaptor(QuadroCore *core);
     /**
      * @brief QuadroAdaptor class destructor
      */
-    ~QuadroAdaptor();
+    virtual ~QuadroAdaptor();
 
 public slots:
 
 signals:
 
 private:
-    /**
-     * @brief show debug messages. Default is false
-     */
-    bool debug = false;
     // properties
     /**
      * @brief pointer to the core

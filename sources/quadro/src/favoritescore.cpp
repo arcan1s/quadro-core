@@ -23,13 +23,11 @@
  */
 
 
-#include <QDebug>
+#include "quadro/quadro.h"
+
 #include <QDir>
 #include <QSettings>
 #include <QStandardPaths>
-
-#include <quadro/quadro.h>
-#include <pdebug/pdebug.h>
 
 #include "version.h"
 
@@ -40,10 +38,10 @@
 /**
  * @fn FavoritesCore
  */
-FavoritesCore::FavoritesCore(QObject *parent, const bool debugCmd)
-    : QObject(parent),
-      debug(debugCmd)
+FavoritesCore::FavoritesCore(QObject *parent)
+    : QObject(parent)
 {
+    qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
 }
 
 
@@ -52,7 +50,7 @@ FavoritesCore::FavoritesCore(QObject *parent, const bool debugCmd)
  */
 FavoritesCore::~FavoritesCore()
 {
-    if (debug) qDebug() << PDEBUG;
+    qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
 
     m_applications.clear();
 }
@@ -63,8 +61,6 @@ FavoritesCore::~FavoritesCore()
  */
 QMap<QString, ApplicationItem *> FavoritesCore::applications() const
 {
-    if (debug) qDebug() << PDEBUG;
-
     return m_applications;
 }
 
@@ -76,6 +72,10 @@ ApplicationItem *FavoritesCore::addToFavorites(const QString _executable,
                                                const QString _name,
                                                const QString _iconName)
 {
+    qCDebug(LOG_LIB) << "Executable" << _executable;
+    qCDebug(LOG_LIB) << "Name" << _name;
+    qCDebug(LOG_LIB) << "Icon" << _iconName;
+
     ApplicationItem *item = new ApplicationItem(this, _executable, _name);
     item->setIconByName(_iconName);
 
@@ -109,8 +109,6 @@ QString FavoritesCore::desktopPath()
  */
 void FavoritesCore::changeApplicationState(const QString _name, const bool _up)
 {
-    if (debug) qDebug() << PDEBUG;
-
     int current = m_order.indexOf(_name);
     if (current == -1) return;
 
@@ -126,8 +124,6 @@ void FavoritesCore::changeApplicationState(const QString _name, const bool _up)
  */
 void FavoritesCore::initApplications()
 {
-    if (debug) qDebug() << PDEBUG;
-
     // start cleanup
     m_applications.clear();
     m_order.clear();
@@ -142,10 +138,8 @@ void FavoritesCore::initApplications()
  */
 void FavoritesCore::saveApplicationsOrder() const
 {
-    if (debug) qDebug() << PDEBUG;
-
     QString fileName = QFileInfo(QDir(desktopPath()), QString("index.conf")).filePath();
-    if (debug) qDebug() << PDEBUG << ":" << "Configuration file" << fileName;
+    qCInfo(LOG_LIB) << "Configuration file" << fileName;
     QSettings settings(fileName, QSettings::IniFormat);
 
     settings.setValue(QString("Order"), m_order);
@@ -159,16 +153,14 @@ void FavoritesCore::saveApplicationsOrder() const
  */
 QMap<QString, ApplicationItem *> FavoritesCore::getApplicationsFromDesktops()
 {
-    if (debug) qDebug() << PDEBUG;
-
     QStringList filter("*.desktop");
     QMap<QString, ApplicationItem *> items;
 
     QStringList entries = QDir(desktopPath()).entryList(filter, QDir::Files);
     for (int i=0; i<entries.count(); i++) {
         QString desktop = QFileInfo(QDir(desktopPath()), entries[i]).filePath();
-        if (debug) qDebug() << PDEBUG << ":" << "Desktop" << desktop;
-        ApplicationItem *item = ApplicationItem::fromDesktop(desktop, this, debug);
+        qCInfo(LOG_LIB) << "Desktop" << desktop;
+        ApplicationItem *item = ApplicationItem::fromDesktop(desktop, this);
         items[item->name()] = item;
     }
 
@@ -181,10 +173,8 @@ QMap<QString, ApplicationItem *> FavoritesCore::getApplicationsFromDesktops()
  */
 QStringList FavoritesCore::getApplicationsOrder() const
 {
-    if (debug) qDebug() << PDEBUG;
-
     QString fileName = QFileInfo(QDir(desktopPath()), QString("index.conf")).filePath();
-    if (debug) qDebug() << PDEBUG << ":" << "Configuration file" << fileName;
+    qCInfo(LOG_LIB) << "Configuration file" << fileName;
     QSettings settings(fileName, QSettings::IniFormat);
 
     return settings.value(QString("Order")).toStringList();

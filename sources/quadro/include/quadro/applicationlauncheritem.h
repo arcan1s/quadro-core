@@ -48,10 +48,8 @@ public:
      * @param parent         pointer to parent item (widget in which it will be
      *                       runned)
      * @param cmd            path to command which should be runned
-     * @param debugCmd       show debug messages
      */
-    explicit ApplicationLauncherItem(QWidget *parent, const QString cmd,
-                                     const bool debugCmd = false);
+    explicit ApplicationLauncherItem(QWidget *parent, const QString cmd);
     /**
      * @brief ApplicationLauncherItem class destructor
      */
@@ -97,10 +95,6 @@ private slots:
     void finished(const int exitCode, const QProcess::ExitStatus exitStatus);
 
 private:
-    /**
-     * @brief show debug messages. Default is false
-     */
-    bool debug = false;
     /**
      * @brief command line
      */

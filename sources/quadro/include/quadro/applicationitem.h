@@ -52,12 +52,10 @@ public:
      * @param exePath        full path to executable file
      * @param name           application name. If name is not given it will be
      *                       assigned from exePath
-     * @param debugCmd       show debug messages
      */
     explicit ApplicationItem(QObject *parent,
                              const QString exePath,
-                             const QString name = QString(),
-                             const bool debugCmd = false);
+                             const QString name = QString());
     /**
      * @brief ApplicationItem class destructor
      */
@@ -74,12 +72,17 @@ public:
      */
     QString comment() const;
     /**
+     * @brief desktop name
+     * @return recommended name of desktop file
+     */
+    QString desktopName() const;
+    /**
      * @brief full application executable path
      * @return full executable path
      */
     QString executable() const;
     /**
-     * @brief has application specified substring or not
+     * @brief does application have specified substring or not
      * @param _substr        substring for search
      * @return true if comment or name is equal to substring
      * @return false if comment or name is not found
@@ -114,6 +117,13 @@ public:
      * @return false if application should be shown
      */
     bool shouldBeShown() const;
+    /**
+     * @brief is application start with substring
+     * @param _substr        substring for search
+     * @return true if executable starts with substring
+     * @return false if executable doesn't start with substring
+     */
+    bool startsWith(const QString _substr) const;
     // set methods
     /**
      * @brief set application categories
@@ -125,6 +135,11 @@ public:
      * @param _comment       application comment
      */
     void setComment(const QString _comment = QString());
+    /**
+     * @brief set desktop name
+     * @param _desktopName   name of desktop file
+     */
+    void setDesktopName(const QString _desktopName = QString());
     /**
      * @brief set is application hidden or not
      * @param _hidden        is application hidden
@@ -159,8 +174,7 @@ public:
      * @param debugCmd       show debug messages
      * @return ApplicationItem structure
      */
-    static ApplicationItem *fromDesktop(const QString _desktopPath, QObject *_parent,
-                                        const bool debugCmd = false);
+    static ApplicationItem *fromDesktop(const QString _desktopPath, QObject *_parent);
 
 public slots:
     /**
@@ -182,10 +196,6 @@ public slots:
 
 private:
     // main
-    /**
-     * @brief show debug messages. Default is false
-     */
-    bool debug = false;
     // properties
     /**
      * @brief application categories
@@ -195,6 +205,10 @@ private:
      * @brief application comment in default system locale or English
      */
     QString m_comment = QString();
+    /**
+     * @brief name of desktop file if any
+     */
+    QString m_desktopName = QString();
     /**
      * @brief application executable
      */

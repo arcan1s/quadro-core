@@ -23,11 +23,9 @@
  */
 
 
-#include <QDebug>
-#include <QSettings>
+#include "quadro/quadro.h"
 
-#include <quadro/quadro.h>
-#include <pdebug/pdebug.h>
+#include <QSettings>
 
 #include "version.h"
 
@@ -38,10 +36,11 @@
 /**
  * @fn TabPluginItem
  */
-TabPluginItem::TabPluginItem(QObject *parent, const bool debugCmd)
-    : QObject(parent),
-      debug(debugCmd)
+TabPluginItem::TabPluginItem(QObject *parent)
+    : QObject(parent)
 {
+    qCDebug(LOG_PL) << __PRETTY_FUNCTION__;
+
     init();
 }
 
@@ -51,7 +50,7 @@ TabPluginItem::TabPluginItem(QObject *parent, const bool debugCmd)
  */
 TabPluginItem::~TabPluginItem()
 {
-    if (debug) qDebug() << PDEBUG;
+    qCDebug(LOG_PL) << __PRETTY_FUNCTION__;
 }
 
 
@@ -60,8 +59,6 @@ TabPluginItem::~TabPluginItem()
  */
 int TabPluginItem::api()
 {
-    if (debug) qDebug() << PDEBUG;
-
     return m_api;
 }
 
@@ -71,8 +68,6 @@ int TabPluginItem::api()
  */
 QString TabPluginItem::background()
 {
-    if (debug) qDebug() << PDEBUG;
-
     return m_background;
 }
 
@@ -82,8 +77,6 @@ QString TabPluginItem::background()
  */
 QString TabPluginItem::comment()
 {
-    if (debug) qDebug() << PDEBUG;
-
     return m_comment;
 }
 
@@ -93,8 +86,6 @@ QString TabPluginItem::comment()
  */
 QVariantMap TabPluginItem::configuration()
 {
-    if (debug) qDebug() << PDEBUG;
-
     QVariantMap pluginSettings;
     pluginSettings[QString("Comment")] = comment();
 
@@ -107,8 +98,6 @@ QVariantMap TabPluginItem::configuration()
  */
 QString TabPluginItem::htmlImage()
 {
-    if (debug) qDebug() << PDEBUG;
-
 //     PluginItem::ImageType type = defineImageType(background());
     QImage pluginImage;
     QString image;
@@ -138,8 +127,6 @@ QString TabPluginItem::htmlImage()
  */
 QString TabPluginItem::name()
 {
-    if (debug) qDebug() << PDEBUG;
-
     return m_name;
 }
 
@@ -149,8 +136,6 @@ QString TabPluginItem::name()
  */
 QWidget *TabPluginItem::ui()
 {
-    if (debug) qDebug() << PDEBUG;
-
     return m_ui;
 }
 
@@ -160,8 +145,7 @@ QWidget *TabPluginItem::ui()
  */
 void TabPluginItem::setComment(const QString _comment)
 {
-    if (debug) qDebug() << PDEBUG;
-    if (debug) qDebug() << PDEBUG << ":" << "Comment" << _comment;
+    qCDebug(LOG_PL) << "Comment" << _comment;
 
     m_comment = _comment;
 }
@@ -172,8 +156,7 @@ void TabPluginItem::setComment(const QString _comment)
  */
 void TabPluginItem::readDesktop(const QString _desktopPath)
 {
-    if (debug) qDebug() << PDEBUG;
-    if (debug) qDebug() << PDEBUG << ":" << "Path" << _desktopPath;
+    qCDebug(LOG_PL) << "Path" << _desktopPath;
 
     QSettings settings(_desktopPath, QSettings::IniFormat);
 
@@ -190,8 +173,7 @@ void TabPluginItem::readDesktop(const QString _desktopPath)
  */
 void TabPluginItem::readSettings(const QString _desktopPath)
 {
-    if (debug) qDebug() << PDEBUG;
-    if (debug) qDebug() << PDEBUG << ":" << "Path" << _desktopPath;
+    qCDebug(LOG_PL) << "Path" << _desktopPath;
 
     QSettings settings(_desktopPath, QSettings::IniFormat);
 
@@ -213,8 +195,7 @@ void TabPluginItem::readSettings(const QString _desktopPath)
  */
 bool TabPluginItem::saveSettings(const QString _desktopPath)
 {
-    if (debug) qDebug() << PDEBUG;
-    if (debug) qDebug() << PDEBUG << ":" << "Path" << _desktopPath;
+    qCDebug(LOG_PL) << "Path" << _desktopPath;
 
     QVariantMap config = configuration();
     QSettings settings(_desktopPath, QSettings::IniFormat);
@@ -241,8 +222,7 @@ bool TabPluginItem::saveSettings(const QString _desktopPath)
  */
 void TabPluginItem::setApi(int _api)
 {
-    if (debug) qDebug() << PDEBUG;
-    if (debug) qDebug() << PDEBUG << ":" << "API version" << _api;
+    qCDebug(LOG_PL) << "API version" << _api;
     if (_api < 1) _api = 1;
     if (_api > PLUGIN_API) _api = PLUGIN_API;
 
@@ -255,8 +235,7 @@ void TabPluginItem::setApi(int _api)
  */
 void TabPluginItem::setBackground(QString _background)
 {
-    if (debug) qDebug() << PDEBUG;
-    if (debug) qDebug() << PDEBUG << ":" << "Background" << _background;
+    qCDebug(LOG_PL) << "Background" << _background;
     if (_background.isEmpty()) _background = QString("#ffffffff");
 
     m_background = _background;
@@ -268,8 +247,7 @@ void TabPluginItem::setBackground(QString _background)
  */
 void TabPluginItem::setName(const QString _name)
 {
-    if (debug) qDebug() << PDEBUG;
-    if (debug) qDebug() << PDEBUG << ":" << "Name" << _name;
+    qCDebug(LOG_PL) << "Name" << _name;
 
     m_name = _name;
 }

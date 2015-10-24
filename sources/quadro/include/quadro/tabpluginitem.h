@@ -48,9 +48,8 @@ public:
     /**
      * @brief TabPluginItem class constructor
      * @param parent         pointer to parent item
-     * @param debugCmd       show debug messages
      */
-    explicit TabPluginItem(QObject *parent, const bool debugCmd = false);
+    explicit TabPluginItem(QObject *parent);
     /**
      * @brief TabPluginItem class destructor
      */
@@ -128,10 +127,6 @@ public slots:
     bool saveSettings(const QString _desktopPath);
 
 private:
-    /**
-     * @brief show debug messages. Default is false
-     */
-    bool debug = false;
     // properties
     /**
      * @brief plugin API version. Default is 1

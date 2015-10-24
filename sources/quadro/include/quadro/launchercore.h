@@ -32,8 +32,6 @@
 #include "abstractappaggregator.h"
 
 
-class ApplicationItem;
-
 /**
  * @brief The LauncherCore class provides launcher backend
  */
@@ -45,9 +43,8 @@ public:
     /**
      * @brief LauncherCore class constructor
      * @param parent         pointer to parent item
-     * @param debugCmd       show debug messages
      */
-    explicit LauncherCore(QObject *parent, const bool debugCmd = false);
+    explicit LauncherCore(QObject *parent);
     /**
      * @brief LauncherCore class destructor
      */
@@ -71,10 +68,6 @@ public slots:
     void initApplications();
 
 private:
-    /**
-     * @brief show debug messages. Default is false
-     */
-    bool debug = false;
     /**
      * @brief list of applications defined by PATH variable
      */

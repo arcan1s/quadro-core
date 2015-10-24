@@ -23,13 +23,11 @@
  */
 
 
-#include <QDebug>
+#include "quadro/quadro.h"
+
 #include <QDir>
 #include <QProcessEnvironment>
 #include <QStandardPaths>
-
-#include <quadro/quadro.h>
-#include <pdebug/pdebug.h>
 
 
 /**
@@ -38,10 +36,10 @@
 /**
  * @fn LauncherCore
  */
-LauncherCore::LauncherCore(QObject *parent, const bool debugCmd)
-    : AbstractAppAggregator(parent, debugCmd),
-      debug(debugCmd)
+LauncherCore::LauncherCore(QObject *parent)
+    : AbstractAppAggregator(parent)
 {
+    qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
 }
 
 
@@ -50,7 +48,7 @@ LauncherCore::LauncherCore(QObject *parent, const bool debugCmd)
  */
 LauncherCore::~LauncherCore()
 {
-    if (debug) qDebug() << PDEBUG;
+    qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
 
     m_applicationsFromPaths.clear();
 }
@@ -61,8 +59,6 @@ LauncherCore::~LauncherCore()
  */
 QMap<QString, ApplicationItem *> LauncherCore::applicationsFromPaths() const
 {
-    if (debug) qDebug() << PDEBUG;
-
     return m_applicationsFromPaths;
 }
 
@@ -72,8 +68,7 @@ QMap<QString, ApplicationItem *> LauncherCore::applicationsFromPaths() const
  */
 QMap<QString, ApplicationItem *> LauncherCore::applicationsBySubstr(const QString _substr) const
 {
-    if (debug) qDebug() << PDEBUG;
-    if (debug) qDebug() << PDEBUG << ":" << "Substring" << _substr;
+    qCDebug(LOG_LIB) << "Substring" << _substr;
 
     QMap<QString, ApplicationItem *> apps = AbstractAppAggregator::applicationsBySubstr(_substr);
     if (m_applicationsFromPaths.contains(_substr))
@@ -88,8 +83,6 @@ QMap<QString, ApplicationItem *> LauncherCore::applicationsBySubstr(const QStrin
  */
 void LauncherCore::initApplications()
 {
-    if (debug) qDebug() << PDEBUG;
-
     // start cleanup
     dropApplications();
     m_applicationsFromPaths.clear();
@@ -111,8 +104,6 @@ void LauncherCore::initApplications()
  */
 QMap<QString, ApplicationItem *> LauncherCore::getApplicationsFromDesktops()
 {
-    if (debug) qDebug() << PDEBUG;
-
     QStringList filter("*.desktop");
     QStringList desktopPaths = QStandardPaths::standardLocations(QStandardPaths::ApplicationsLocation);
     // append from subdirectories
@@ -122,15 +113,15 @@ QMap<QString, ApplicationItem *> LauncherCore::getApplicationsFromDesktops()
             desktopPaths.append(QString("%1/%2").arg(desktopPaths[i]).arg(entries[j]));
     }
     // show
-    if (debug) qDebug() << PDEBUG << ":" << "Paths" << desktopPaths;
+    qCInfo(LOG_LIB) << "Paths" << desktopPaths;
     QMap<QString, ApplicationItem *> items;
 
     for (int i=desktopPaths.count()-1; i>=0; i--) {
         QStringList entries = QDir(desktopPaths[i]).entryList(filter, QDir::Files);
         for (int j=0; j<entries.count(); j++) {
             QString desktop = QFileInfo(QDir(desktopPaths[i]), entries[j]).filePath();
-            if (debug) qDebug() << PDEBUG << ":" << "Desktop" << desktop;
-            ApplicationItem *item = ApplicationItem::fromDesktop(desktop, this, debug);
+            qCInfo(LOG_LIB) << "Desktop" << desktop;
+            ApplicationItem *item = ApplicationItem::fromDesktop(desktop, this);
             items[item->name()] = item;
         }
     }
@@ -144,12 +135,10 @@ QMap<QString, ApplicationItem *> LauncherCore::getApplicationsFromDesktops()
  */
 QMap<QString, ApplicationItem *> LauncherCore::getApplicationsFromPaths()
 {
-    if (debug) qDebug() << PDEBUG;
-
     QProcessEnvironment environment = QProcessEnvironment::systemEnvironment();
     QString pathVariable = environment.value(QString("PATH"));
     QStringList paths = pathVariable.split(QChar(':'));
-    if (debug) qDebug() << PDEBUG << ":" << "Paths" << paths;
+    qCInfo(LOG_LIB) << "Paths" << paths;
     QMap<QString, ApplicationItem *> items;
 
     for (int i=0; i<paths.count(); i++) {
@@ -157,7 +146,7 @@ QMap<QString, ApplicationItem *> LauncherCore::getApplicationsFromPaths()
         for (int j=0; j<entries.count(); j++) {
             QString executable = QFileInfo(QDir(paths[i]), entries[j]).filePath();
             if (!QFileInfo(executable).isExecutable()) continue;
-            if (debug) qDebug() << PDEBUG << ":" << "Executable" << executable;
+            qCInfo(LOG_LIB) << "Executable" << executable;
             ApplicationItem *item = new ApplicationItem(this, executable);
             items[item->name()] = item;
         }
