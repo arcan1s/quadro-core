@@ -37,8 +37,8 @@ public:
     explicit SettingsWindow(QWidget *parent = nullptr,
                             const QString configFile = QString(""));
     virtual ~SettingsWindow();
-    QVariantMap getDefault();
-    QVariantMap getSettings(QString fileName = QString(""));
+    QVariantHash getDefault();
+    QVariantHash getSettings(QString fileName = QString(""));
 
 public slots:
     void closeWindow();
@@ -57,8 +57,8 @@ private:
     void createActions();
     // ESC pressed event
     void keyPressEvent(QKeyEvent *pressedKey);
-    QVariantMap readSettings();
-    void setSettings(const QVariantMap config);
+    QVariantHash readSettings();
+    void setSettings(const QVariantHash config);
 };
 
 

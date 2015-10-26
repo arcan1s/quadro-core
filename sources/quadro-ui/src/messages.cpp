@@ -29,20 +29,14 @@ QString errorMessage()
 }
 
 
-QVariantMap getArgs()
+QVariantHash getArgs()
 {
-    QVariantMap args;
+    QVariantHash args;
     // windows
     args[QString("nodaemon")] = false;
     args[QString("minimized")] = false;
-    // main functions
-    args[QString("essid")] = QString("ESSID");
-    args[QString("open")] = QString("PROFILE");
-    args[QString("select")] = QString("PROFILE");
     // additional functions
-    args[QString("config")] = QString("%1/.config/quadro.conf").arg(QDir::homePath());
     args[QString("debug")] = true;
-    args[QString("defaults")] = false;
     // messages
     args[QString("error")] = false;
     args[QString("help")] = false;
@@ -65,9 +59,7 @@ QString helpMessage()
     helpMessage += QString("       --minimized       - %1\n").arg(QApplication::translate("MainWindow", "start minimized to tray"));
     // additional functions
     helpMessage += QString(" %1\n").arg(QApplication::translate("MainWindow", "Additional flags:"));
-    helpMessage += QString("   -c, --config <arg>    - %1\n").arg(QApplication::translate("MainWindow", "read configuration from this file"));
     helpMessage += QString("   -d, --debug           - %1\n").arg(QApplication::translate("MainWindow", "print debug information"));
-    helpMessage += QString("       --default         - %1\n").arg(QApplication::translate("MainWindow", "start with default settings"));
     // messages
     helpMessage += QString(" %1\n").arg(QApplication::translate("MainWindow", "Show messages:"));
     helpMessage += QString("   -v, --version         - %1\n").arg(QApplication::translate("MainWindow", "show version and exit"));

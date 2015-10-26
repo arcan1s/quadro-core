@@ -20,13 +20,13 @@
 #define MESSAGES_H
 
 #include <QChar>
-#include <QMap>
+#include <QHash>
 #include <QString>
 #include <QVariant>
 
 
 QString errorMessage();
-QVariantMap getArgs();
+QVariantHash getArgs();
 QString helpMessage();
 QString infoMessage();
 QString versionMessage();

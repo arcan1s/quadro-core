@@ -23,19 +23,20 @@
 #include <QDBusMessage>
 #include <QLibraryInfo>
 #include <QTranslator>
+#include <QStandardPaths>
 #include <QUrl>
 
 #include <language/language.h>
 
 #include "applauncherwidget.h"
+#include "favlauncherwidget.h"
 #include "settingswindow.h"
 #include "version.h"
 
 
-MainWindow::MainWindow(QWidget *parent, const QVariantMap args,
+MainWindow::MainWindow(QWidget *parent, const QVariantHash args,
                        QTranslator *qtAppTranslator, QTranslator *appTranslator)
     : QMainWindow(parent),
-      configPath(args[QString("config")].toString()),
       qtTranslator(qtAppTranslator),
       translator(appTranslator)
 {
@@ -98,20 +99,23 @@ void MainWindow::showSettingsWindow()
 }
 
 
-void MainWindow::updateConfiguration(const QVariantMap args)
+void MainWindow::updateConfiguration(const QVariantHash args)
 {
     deleteObjects();
     // update configuration
-    QString actualConfigPath = QFile(configPath).exists() ? configPath : QString("/etc/quadro.conf");
-    settingsWindow = new SettingsWindow(this, actualConfigPath);
+    configPath = QStandardPaths::locate(QStandardPaths::ConfigLocation,
+                                        QString("quadro.conf"));
+    qCInfo(LOG_UI) << "Load configuration from" << configPath;
+    settingsWindow = new SettingsWindow(this, configPath);
     if (args[QString("default")].toBool())
         settingsWindow->setDefault();
     configuration = settingsWindow->getSettings();
     delete settingsWindow;
+    settingsWindow = nullptr;
 
     // update translation
     qApp->removeTranslator(translator);
-    QString language = Language::defineLanguage(actualConfigPath, args[QString("options")].toString());
+    QString language = Language::defineLanguage(configPath, args[QString("options")].toString());
     qCInfo(LOG_UI) << "Language is" << language;
     qtTranslator->load(QString("qt_%1").arg(language), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
     qApp->installTranslator(qtTranslator);
@@ -129,7 +133,7 @@ void MainWindow::changeTabByAction(QAction *action)
 {
     int index = -1;
     for (int i=0; i<tabActions.count(); i++) {
-        if (tabActions[i] != action) continue;
+        if (tabActions.at(i) != action) continue;
         index = i;
         break;
     }
@@ -156,16 +160,19 @@ void MainWindow::clearTabs()
 void MainWindow::initTabs()
 {
     QStringList tabs = configuration[QString("Tabs")].toStringList();
-    for (int i=0; i<tabs.count(); i++) {
-        if (tabs[i] == QString("applauncher")) {
+    foreach (const QString tab, tabs) {
+        if (tab == QString("applauncher")) {
             ui->stackedWidget->addWidget(new AppLauncher(this, launcher, recent,
                                                          configuration));
-        } else if (tabs[i] == QString("favorites")) {
+        } else if (tab == QString("favorites")) {
+            ui->stackedWidget->addWidget(new FavLauncher(this, favLauncher,
+                                                         configuration));
+        } else if (tab == QString("filemanager")) {
             ui->stackedWidget->addWidget(new QWidget());
-        } else if (tabs[i] == QString("filemanager")) {
-            ui->stackedWidget->addWidget(new QWidget());
-        } else continue;
-        tabActions.append(ui->toolBar->addAction(tabs[i]));
+        } else {
+            continue;
+        }
+        tabActions.append(ui->toolBar->addAction(tab));
     }
 
     connect(ui->toolBar, SIGNAL(actionTriggered(QAction *)),
@@ -206,9 +213,11 @@ void MainWindow::createDBusSession()
 void MainWindow::createObjects()
 {
     // backend
+    favLauncher = new FavoritesCore(this);
+    favLauncher->initApplications();
     launcher = new LauncherCore(this);
     launcher->initApplications();
-    recent = new RecentlyCore(this);
+    recent = new RecentlyCore(this, configuration[QString("RecentItemsCount")].toInt());
     recent->initApplications();
 
     // frontend
@@ -221,11 +230,16 @@ void MainWindow::createObjects()
 void MainWindow::deleteObjects()
 {
     // frontend
-    if (settingsWindow != nullptr) delete settingsWindow;
+    delete settingsWindow;
+    settingsWindow = nullptr;
     clearTabs();
 
     // backend
-    if (launcher != nullptr) delete launcher;
-    if (recent != nullptr) delete recent;
+    delete favLauncher;
+    favLauncher = nullptr;
+    delete launcher;
+    launcher = nullptr;
+    delete recent;
+    recent = nullptr;
 
 }

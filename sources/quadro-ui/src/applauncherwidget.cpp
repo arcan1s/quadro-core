@@ -30,7 +30,7 @@
 
 
 AppLauncher::AppLauncher(QWidget *parent, LauncherCore *appLauncher,
-                         RecentlyCore *recentLauncher, const QVariantMap settings)
+                         RecentlyCore *recentLauncher, const QVariantHash settings)
     : QMainWindow(parent),
       launcher(appLauncher),
       recent(recentLauncher),
@@ -75,7 +75,7 @@ void AppLauncher::changeCategoryByAction(QAction *action)
 {
     int index = -1;
     for (int i=0; i<categoryButtons.count(); i++) {
-        if (categoryButtons[i] != action) continue;
+        if (categoryButtons.at(i) != action) continue;
         index = i;
         break;
     }
@@ -116,15 +116,8 @@ void AppLauncher::showSearchResults(const QString search)
     // add items
     QMap<QString, ApplicationItem *> apps = recent->applicationsBySubstr(search);
     QMap<QString, ApplicationItem *> launcherApps = launcher->applicationsBySubstr(search);
-    for (int i=0; i<apps.keys().count(); i++) {
-        QWidget *wItem = new IconWidget(apps[apps.keys()[i]], itemSize(),
-                                        categoryWidgets.last());
-        categoryWidgets.last()->layout()->addWidget(wItem);
-        connect(wItem, SIGNAL(widgetPressed()), this, SLOT(runApplication()));
-    }
-    for (int i=0; i<launcherApps.keys().count(); i++) {
-        QWidget *wItem = new IconWidget(launcherApps[launcherApps.keys()[i]], itemSize(),
-                                        categoryWidgets.last());
+    foreach (ApplicationItem *app, apps.values() + launcherApps.values()) {
+        QWidget *wItem = new IconWidget(app, itemSize(), categoryWidgets.last());
         categoryWidgets.last()->layout()->addWidget(wItem);
         connect(wItem, SIGNAL(widgetPressed()), this, SLOT(runApplication()));
     }
@@ -142,9 +135,9 @@ void AppLauncher::createActions()
 void AppLauncher::createObjects()
 {
     QStringList categories = launcher->availableCategories();
-    for (int i=0; i<categories.count(); i++) {
+    foreach (const QString cat, categories) {
         // backend
-        categoryButtons.append(ui->toolBar->addAction(categories[i]));
+        categoryButtons.append(ui->toolBar->addAction(cat));
         // frontend
         // scroll area
         QScrollArea *area = new QScrollArea(this);
@@ -153,9 +146,9 @@ void AppLauncher::createObjects()
         ui->stackedWidget->addWidget(area);
         // widget
         categoryWidgets.append(new QWidget(area));
-        categoryWidgets[i]->setLayout(new FlowLayout(categoryWidgets[i]));
-        initCategory(categories[i], categoryWidgets[i]);
-        area->setWidget(categoryWidgets[i]);
+        categoryWidgets.last()->setLayout(new FlowLayout(categoryWidgets.last()));
+        initCategory(cat, categoryWidgets.last());
+        area->setWidget(categoryWidgets.last());
     }
 
     // search widget
@@ -186,8 +179,8 @@ void AppLauncher::initCategory(const QString category, QWidget *widget)
     qCDebug(LOG_UI) << "Category" << category;
 
     QMap<QString, ApplicationItem *> apps = launcher->applicationsByCategory(category);
-    for (int i=0; i<apps.keys().count(); i++) {
-        QWidget *wItem = new IconWidget(apps[apps.keys()[i]], itemSize(), widget);
+    foreach (ApplicationItem *app, apps.values()) {
+        QWidget *wItem = new IconWidget(app, itemSize(), widget);
         widget->layout()->addWidget(wItem);
         connect(wItem, SIGNAL(widgetPressed()), this, SLOT(runApplication()));
     }

@@ -38,16 +38,16 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent,
-                        const QVariantMap args = QVariantMap(),
+                        const QVariantHash args = QVariantHash(),
                         QTranslator *qtAppTranslator = nullptr,
                         QTranslator *appTranslator = nullptr);
-    ~MainWindow();
+    virtual ~MainWindow();
 
 public slots:
     void changeTab(const int index = -1);
     void closeMainWindow();
     void showSettingsWindow();
-    void updateConfiguration(const QVariantMap args = QVariantMap());
+    void updateConfiguration(const QVariantHash args = QVariantHash());
 
 signals:
     void needToBeConfigured();
@@ -72,13 +72,14 @@ private:
     void deleteObjects();
     QString configPath;
     // library
+    FavoritesCore *favLauncher = nullptr;
     LauncherCore *launcher = nullptr;
     RecentlyCore *recent = nullptr;
     // translators
     QTranslator *qtTranslator = nullptr;
     QTranslator *translator = nullptr;
     // configuration
-    QVariantMap configuration;
+    QVariantHash configuration;
 };
 
 

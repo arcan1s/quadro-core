@@ -50,23 +50,24 @@ SettingsWindow::~SettingsWindow()
 }
 
 
-QVariantMap SettingsWindow::getDefault()
+QVariantHash SettingsWindow::getDefault()
 {
     return getSettings(QString("/dev/null"));
 }
 
 
-QVariantMap SettingsWindow::getSettings(QString fileName)
+QVariantHash SettingsWindow::getSettings(QString fileName)
 {
     if (fileName.isEmpty()) fileName = file;
 
-    QVariantMap config;
+    QVariantHash config;
     QSettings settings(fileName, QSettings::IniFormat);
 
     config[QString("Language")] = Language::defineLanguage(fileName, QString(""));
     settings.beginGroup(QString("Global"));
     config[QString("GridSize")] = settings.value(QString("GridSize"), 150.0);
     config[QString("Language")] = settings.value(QString("Language"), config[QString("Language")]);
+    config[QString("RecentItemsCount")] = settings.value(QString("RecentItemsCount"), 20);
     config[QString("Tabs")] = settings.value(QString("Tabs"), QStringList() <<
                                              QString("favorites") <<
                                              QString("applauncher"));
@@ -130,7 +131,7 @@ void SettingsWindow::changePage(QTreeWidgetItem *current, QTreeWidgetItem *previ
 
 void SettingsWindow::saveSettings()
 {
-    QVariantMap config = readSettings();
+    QVariantHash config = readSettings();
     QSettings settings(file, QSettings::IniFormat);
 
     settings.beginGroup(QString("Global"));
@@ -162,9 +163,9 @@ void SettingsWindow::keyPressEvent(QKeyEvent *pressedKey)
 }
 
 
-QVariantMap SettingsWindow::readSettings()
+QVariantHash SettingsWindow::readSettings()
 {
-    QVariantMap config;
+    QVariantHash config;
 
     // main tab
     config[QString("Language")] = ui->comboBox_language->currentText();
@@ -172,14 +173,14 @@ QVariantMap SettingsWindow::readSettings()
     // TODO tab settings
     config[QString("Tabs")] = tabs;
 
-    for (int i=0; i<config.keys().count(); i++)
-        qCInfo(LOG_UI) << config.keys()[i] << config[config.keys()[i]];
+    foreach (const QString key, config.keys())
+        qCInfo(LOG_UI) << key << config[key];
 
     return config;
 }
 
 
-void SettingsWindow::setSettings(const QVariantMap config)
+void SettingsWindow::setSettings(const QVariantHash config)
 {
     // main tab
     int index = ui->comboBox_language->findText(config[QString("Language")].toString());
@@ -188,6 +189,6 @@ void SettingsWindow::setSettings(const QVariantMap config)
         // TODO tab settings
     }
 
-    for (int i=0; i<config.keys().count(); i++)
-        qCInfo(LOG_UI) << config.keys()[i] << config[config.keys()[i]];
+    foreach (const QString key, config.keys())
+        qCInfo(LOG_UI) << key << config[key];
 }

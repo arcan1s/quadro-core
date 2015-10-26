@@ -37,7 +37,7 @@ class AppLauncher : public QMainWindow
 public:
     explicit AppLauncher(QWidget *parent, LauncherCore *appLauncher,
                          RecentlyCore *recentLauncher,
-                         QVariantMap settings = QVariantMap());
+                         QVariantHash settings = QVariantHash());
     virtual ~AppLauncher();
     inline QSize itemSize();
 
@@ -63,7 +63,7 @@ private:
     LauncherCore *launcher = nullptr;
     RecentlyCore *recent = nullptr;
     // configuration
-    QVariantMap configuration;
+    QVariantHash configuration;
 };
 
 

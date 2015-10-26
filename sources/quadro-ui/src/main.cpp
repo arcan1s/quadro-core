@@ -50,7 +50,7 @@ bool existingSessionOperation(const QString operation)
 
 int main(int argc, char *argv[])
 {
-    QVariantMap args = getArgs();
+    QVariantHash args = getArgs();
     // reading
     for (int i=1; i<argc; i++) {
     }
