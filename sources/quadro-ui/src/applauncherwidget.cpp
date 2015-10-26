@@ -19,24 +19,25 @@
 #include "applauncherwidget.h"
 #include "ui_applauncherwidget.h"
 
-#include <QDebug>
 #include <QIcon>
 #include <QLabel>
 #include <QScrollArea>
 
 #include <flowlayout/flowlayout.h>
-#include <pdebug/pdebug.h>
 
 #include "iconwidget.h"
+#include "quadro/quadrodebug.h"
 
 
 AppLauncher::AppLauncher(QWidget *parent, LauncherCore *appLauncher,
-                         const QVariantMap settings, const bool debugCmd)
+                         RecentlyCore *recentLauncher, const QVariantMap settings)
     : QMainWindow(parent),
-      debug(debugCmd),
       launcher(appLauncher),
+      recent(recentLauncher),
       configuration(settings)
 {
+    qCDebug(LOG_UI) << __PRETTY_FUNCTION__;
+
     ui = new Ui::AppLauncher;
     ui->setupUi(this);
 
@@ -47,7 +48,7 @@ AppLauncher::AppLauncher(QWidget *parent, LauncherCore *appLauncher,
 
 AppLauncher::~AppLauncher()
 {
-    if (debug) qDebug() << PDEBUG;
+    qCDebug(LOG_UI) << __PRETTY_FUNCTION__;
 
     deleteObjects();
     delete ui;
@@ -56,8 +57,6 @@ AppLauncher::~AppLauncher()
 
 QSize AppLauncher::itemSize()
 {
-    if (debug) qDebug() << PDEBUG;
-
     return QSize(configuration[QString("GridSize")].toFloat(),
                  configuration[QString("GridSize")].toFloat());
 }
@@ -65,8 +64,7 @@ QSize AppLauncher::itemSize()
 
 void AppLauncher::changeCategory(const int index)
 {
-    if (debug) qDebug() << PDEBUG;
-    if (debug) qDebug() << PDEBUG << "Index" << index;
+    qCDebug(LOG_UI) << "Index" << index;
     if ((index == -1) || (index >= ui->stackedWidget->count())) return;
 
     return ui->stackedWidget->setCurrentIndex(index);
@@ -75,8 +73,6 @@ void AppLauncher::changeCategory(const int index)
 
 void AppLauncher::changeCategoryByAction(QAction *action)
 {
-    if (debug) qDebug() << PDEBUG;
-
     int index = -1;
     for (int i=0; i<categoryButtons.count(); i++) {
         if (categoryButtons[i] != action) continue;
@@ -90,16 +86,23 @@ void AppLauncher::changeCategoryByAction(QAction *action)
 
 void AppLauncher::runApplication()
 {
-    if (debug) qDebug() << PDEBUG;
-
     // TODO implement mainwindow hidding (DBus?)
+}
+
+
+void AppLauncher::runCustomApplication()
+{
+    QString exec = ui->lineEdit->text();
+    ApplicationItem *item = recent->addItemByName(exec);
+
+    // TODO error checking
+    item->launch();
 }
 
 
 void AppLauncher::showSearchResults(const QString search)
 {
-    if (debug) qDebug() << PDEBUG;
-    if (debug) qDebug() << PDEBUG << "Search substring" << search;
+    qCDebug(LOG_UI) << "Search substring" << search;
 
     // clear
     QLayoutItem *item;
@@ -111,12 +114,19 @@ void AppLauncher::showSearchResults(const QString search)
     // return if none to do here
     if (search.isEmpty()) return ui->stackedWidget->setCurrentIndex(0);
     // add items
-    QMap<QString, ApplicationItem *> apps = launcher->applicationsBySubstr(search);
+    QMap<QString, ApplicationItem *> apps = recent->applicationsBySubstr(search);
+    QMap<QString, ApplicationItem *> launcherApps = launcher->applicationsBySubstr(search);
     for (int i=0; i<apps.keys().count(); i++) {
-        QWidget *item = new IconWidget(apps[apps.keys()[i]], itemSize(),
-                                       categoryWidgets.last(), debug);
-        categoryWidgets.last()->layout()->addWidget(item);
-        connect(item, SIGNAL(widgetPressed()), this, SLOT(runApplication()));
+        QWidget *wItem = new IconWidget(apps[apps.keys()[i]], itemSize(),
+                                        categoryWidgets.last());
+        categoryWidgets.last()->layout()->addWidget(wItem);
+        connect(wItem, SIGNAL(widgetPressed()), this, SLOT(runApplication()));
+    }
+    for (int i=0; i<launcherApps.keys().count(); i++) {
+        QWidget *wItem = new IconWidget(launcherApps[launcherApps.keys()[i]], itemSize(),
+                                        categoryWidgets.last());
+        categoryWidgets.last()->layout()->addWidget(wItem);
+        connect(wItem, SIGNAL(widgetPressed()), this, SLOT(runApplication()));
     }
 
     return ui->stackedWidget->setCurrentIndex(ui->stackedWidget->count() - 1);
@@ -125,14 +135,12 @@ void AppLauncher::showSearchResults(const QString search)
 
 void AppLauncher::createActions()
 {
-    if (debug) qDebug() << PDEBUG;
+    // TODO
 }
 
 
 void AppLauncher::createObjects()
 {
-    if (debug) qDebug() << PDEBUG;
-
     QStringList categories = launcher->availableCategories();
     for (int i=0; i<categories.count(); i++) {
         // backend
@@ -161,15 +169,13 @@ void AppLauncher::createObjects()
 
     connect(ui->toolBar, SIGNAL(actionTriggered(QAction *)),
             this, SLOT(changeCategoryByAction(QAction *)));
-    connect(ui->lineEdit, SIGNAL(textEdited(QString)),
-            this, SLOT(showSearchResults(QString)));
+    connect(ui->lineEdit, SIGNAL(returnPressed()), this, SLOT(runCustomApplication()));
+    connect(ui->lineEdit, SIGNAL(textEdited(QString)), this, SLOT(showSearchResults(QString)));
 }
 
 
 void AppLauncher::deleteObjects()
 {
-    if (debug) qDebug() << PDEBUG;
-
     categoryButtons.clear();
     categoryWidgets.clear();
 }
@@ -177,13 +183,12 @@ void AppLauncher::deleteObjects()
 
 void AppLauncher::initCategory(const QString category, QWidget *widget)
 {
-    if (debug) qDebug() << PDEBUG;
-    if (debug) qDebug() << PDEBUG << "Category" << category;
+    qCDebug(LOG_UI) << "Category" << category;
 
     QMap<QString, ApplicationItem *> apps = launcher->applicationsByCategory(category);
     for (int i=0; i<apps.keys().count(); i++) {
-        QWidget *item = new IconWidget(apps[apps.keys()[i]], itemSize(), widget, debug);
-        widget->layout()->addWidget(item);
-        connect(item, SIGNAL(widgetPressed()), this, SLOT(runApplication()));
+        QWidget *wItem = new IconWidget(apps[apps.keys()[i]], itemSize(), widget);
+        widget->layout()->addWidget(wItem);
+        connect(wItem, SIGNAL(widgetPressed()), this, SLOT(runApplication()));
     }
 }

@@ -36,8 +36,9 @@ class AppLauncher : public QMainWindow
 
 public:
     explicit AppLauncher(QWidget *parent, LauncherCore *appLauncher,
-                         QVariantMap settings = QVariantMap(), const bool debugCmd = false);
-    ~AppLauncher();
+                         RecentlyCore *recentLauncher,
+                         QVariantMap settings = QVariantMap());
+    virtual ~AppLauncher();
     inline QSize itemSize();
 
 public slots:
@@ -46,6 +47,7 @@ public slots:
 private slots:
     void changeCategoryByAction(QAction *action);
     void runApplication();
+    void runCustomApplication();
     void showSearchResults(const QString search);
 
 private:
@@ -58,8 +60,8 @@ private:
     void createObjects();
     void deleteObjects();
     void initCategory(const QString category, QWidget *widget);
-    bool debug = false;
     LauncherCore *launcher = nullptr;
+    RecentlyCore *recent = nullptr;
     // configuration
     QVariantMap configuration;
 };

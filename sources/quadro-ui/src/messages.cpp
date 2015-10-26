@@ -82,35 +82,35 @@ QString infoMessage()
 {
     QString infoMessage = QString("");
     // build information
-    infoMessage += QApplication::translate("MainWindow", "Build date: %1").arg(QString(BUILD_DATE));
-    // cmake
-    infoMessage += QString("\n%1:\n").arg(QApplication::translate("MainWindow", "cmake flags"));
-    // cmake properties
-    infoMessage += QString("%1:\n").arg(QApplication::translate("MainWindow", "cmake properties"));
-    infoMessage += QString("\t-DCMAKE_BUILD_TYPE=%1\n").arg(QString(CMAKE_BUILD_TYPE));
-    infoMessage += QString("\t-DCMAKE_INSTALL_PREFIX=%1\n").arg(QString(CMAKE_INSTALL_PREFIX));
-    // components
-    // additional components
-    infoMessage += QString("%1:\n").arg(QApplication::translate("MainWindow", "Additional components"));
-    infoMessage += QString("\t-DBUILD_DOCS=%1\n").arg(QString(PROJECT_BUILD_DOCS));
-    infoMessage += QString("\t-DBUILD_TEST=%1\n").arg(QString(PROJECT_BUILD_TEST));
-    // project properties
-    infoMessage += QString("%1:\n").arg(QApplication::translate("MainWindow", "Project properties"));
-    infoMessage += QString("\tDOCS_PATH=%1\n").arg(QString(DOCS_PATH));
-    infoMessage += QString("\tFAVORITES_PATH=%1\n").arg(QString(FAVORITES_PATH));
-    infoMessage += QString("\tHOME_PATH=%1\n").arg(QString(HOME_PATH));
-    infoMessage += QString("\tPLUGIN_PATH=%1\n").arg(QString(PLUGIN_PATH));
-    // plugin properties
-    infoMessage += QString("%1:\n").arg(QApplication::translate("MainWindow", "Plugin properties"));
-    infoMessage += QString("\tMINIMAL_TIMER=%1\n").arg(QString(MINIMAL_TIMER));
-    infoMessage += QString("\tPLUGIN_API=%1\n").arg(QString(PLUGIN_API));
-    // transport information
-    infoMessage += QString("%1:\n").arg(QApplication::translate("MainWindow", "DBus configuration"));
-    infoMessage += QString("\tDBUS_SERVICE=%1\n").arg(QString(DBUS_SERVICE));
-    infoMessage += QString("\tDBUS_PLUGIN_SERVICE=%1\n").arg(QString(DBUS_PLUGIN_SERVICE));
-    infoMessage += QString("\tDBUS_INTERFACE=%1\n").arg(QString(DBUS_INTERFACE));
-    infoMessage += QString("\tDBUS_PLUGIN_INTERFACE=%1\n").arg(QString(DBUS_PLUGIN_INTERFACE));
-    infoMessage += QString("\tDBUS_OBJECT_PATH=%1\n").arg(QString(DBUS_OBJECT_PATH));
+//     infoMessage += QApplication::translate("MainWindow", "Build date: %1").arg(QString(BUILD_DATE));
+//     // cmake
+//     infoMessage += QString("\n%1:\n").arg(QApplication::translate("MainWindow", "cmake flags"));
+//     // cmake properties
+//     infoMessage += QString("%1:\n").arg(QApplication::translate("MainWindow", "cmake properties"));
+//     infoMessage += QString("\t-DCMAKE_BUILD_TYPE=%1\n").arg(QString(CMAKE_BUILD_TYPE));
+//     infoMessage += QString("\t-DCMAKE_INSTALL_PREFIX=%1\n").arg(QString(CMAKE_INSTALL_PREFIX));
+//     // components
+//     // additional components
+//     infoMessage += QString("%1:\n").arg(QApplication::translate("MainWindow", "Additional components"));
+//     infoMessage += QString("\t-DBUILD_DOCS=%1\n").arg(QString(PROJECT_BUILD_DOCS));
+//     infoMessage += QString("\t-DBUILD_TEST=%1\n").arg(QString(PROJECT_BUILD_TEST));
+//     // project properties
+//     infoMessage += QString("%1:\n").arg(QApplication::translate("MainWindow", "Project properties"));
+//     infoMessage += QString("\tDOCS_PATH=%1\n").arg(QString(DOCS_PATH));
+//     infoMessage += QString("\tFAVORITES_PATH=%1\n").arg(QString(FAVORITES_PATH));
+//     infoMessage += QString("\tHOME_PATH=%1\n").arg(QString(HOME_PATH));
+//     infoMessage += QString("\tPLUGIN_PATH=%1\n").arg(QString(PLUGIN_PATH));
+//     // plugin properties
+//     infoMessage += QString("%1:\n").arg(QApplication::translate("MainWindow", "Plugin properties"));
+//     infoMessage += QString("\tMINIMAL_TIMER=%1\n").arg(QString(MINIMAL_TIMER));
+//     infoMessage += QString("\tPLUGIN_API=%1\n").arg(QString(PLUGIN_API));
+//     // transport information
+//     infoMessage += QString("%1:\n").arg(QApplication::translate("MainWindow", "DBus configuration"));
+//     infoMessage += QString("\tDBUS_SERVICE=%1\n").arg(QString(DBUS_SERVICE));
+//     infoMessage += QString("\tDBUS_PLUGIN_SERVICE=%1\n").arg(QString(DBUS_PLUGIN_SERVICE));
+//     infoMessage += QString("\tDBUS_INTERFACE=%1\n").arg(QString(DBUS_INTERFACE));
+//     infoMessage += QString("\tDBUS_PLUGIN_INTERFACE=%1\n").arg(QString(DBUS_PLUGIN_INTERFACE));
+//     infoMessage += QString("\tDBUS_OBJECT_PATH=%1\n").arg(QString(DBUS_OBJECT_PATH));
 
     return infoMessage;
 }

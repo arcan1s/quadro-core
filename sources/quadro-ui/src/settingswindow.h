@@ -35,9 +35,8 @@ class SettingsWindow : public QMainWindow
 
 public:
     explicit SettingsWindow(QWidget *parent = nullptr,
-                            const bool debugCmd = false,
                             const QString configFile = QString(""));
-    ~SettingsWindow();
+    virtual ~SettingsWindow();
     QVariantMap getDefault();
     QVariantMap getSettings(QString fileName = QString(""));
 
@@ -53,7 +52,6 @@ private slots:
     void saveSettings();
 
 private:
-    bool debug;
     QString file;
     Ui::SettingsWindow *ui;
     void createActions();

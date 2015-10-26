@@ -17,28 +17,25 @@ include_directories (${CMAKE_CURRENT_SOURCE_DIR}/../../${PROJECT_NAME}/include/
                      ${CMAKE_SOURCE_DIR}
                      ${CMAKE_BINARY_DIR}
                      ${CMAKE_CURRENT_BINARY_DIR}
-                     ${PROJECT_TRDPARTY_DIR})
+                     ${PROJECT_TRDPARTY_DIR}
+                     ${Qt_INCLUDE})
 link_directories (${PROJECT_NAME}/src/lib)
 
-find_package (Qt5 COMPONENTS Core DBus Widgets LinguistTools REQUIRED)
-add_definitions (${Qt5Core_DEFINITIONS} ${Qt5DBus_DEFINITIONS} ${Qt5Widgets_DEFINITIONS} ${Qt5LinguistTools_DEFINITIONS})
-include_directories (${Qt5Core_INCLUDE_DIRS} ${Qt5DBus_INCLUDE_DIRS} ${Qt5Widgets_INCLUDE_DIRS})
-set (QT_NEEDED_LIBS ${Qt5Core_LIBRARIES} ${Qt5DBus_LIBRARIES} ${Qt5Widgets_LIBRARIES})
 qt5_wrap_cpp (MOC_SOURCES ${HEADERS})
 qt5_wrap_ui (UI_HEADERS ${FORMS})
 qt5_add_resources (QRC_SOURCES ${RESOURCES})
 
 foreach (LANGUAGE ${LANGUAGES})
-  set (TS ${LANGUAGE})
-  string (REPLACE ".ts" ".qm" QM ${TS})
-  set (TRANSLATIONS ${TRANSLATIONS} ${TS})
-  set (TRANSLATIONS_BINARY ${TRANSLATIONS_BINARY} ${QM})
-  add_custom_command (OUTPUT ${QM} COMMAND ${Qt5_LRELEASE_EXECUTABLE} ${TS} MAIN_DEPENDENCY ${TS})
+    set (TS ${LANGUAGE})
+    string (REPLACE ".ts" ".qm" QM ${TS})
+    set (TRANSLATIONS ${TRANSLATIONS} ${TS})
+    set (TRANSLATIONS_BINARY ${TRANSLATIONS_BINARY} ${QM})
+    add_custom_command (OUTPUT ${QM} COMMAND ${Qt5_LRELEASE_EXECUTABLE} ${TS} MAIN_DEPENDENCY ${TS})
 endforeach ()
 add_custom_target (translations COMMAND ${Qt5_LUPDATE_EXECUTABLE} ${HEADERS} ${SOURCES} ${UI_HEADERS} -ts ${TRANSLATIONS})
 add_custom_command (TARGET translations COMMAND ${Qt5_LRELEASE_EXECUTABLE} ${TRANSLATIONS})
 
 add_executable (${SUBPROJECT} ${UI_HEADERS} ${HEADERS} ${SOURCES} ${MOC_SOURCES} ${QRC_SOURCES} ${TRANSLATIONS})
-target_link_libraries (${SUBPROJECT} ${PROJECT_NAME} ${QT_NEEDED_LIBS})
+target_link_libraries (${SUBPROJECT} ${PROJECT_NAME} ${Qt_LIBRARIES})
 # install properties
 install (TARGETS ${SUBPROJECT} DESTINATION bin)

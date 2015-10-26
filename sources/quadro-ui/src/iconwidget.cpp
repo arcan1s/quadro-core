@@ -18,20 +18,18 @@
 
 #include "iconwidget.h"
 
-#include <QDebug>
 #include <QIcon>
 #include <QLabel>
 #include <QVBoxLayout>
 
-#include <pdebug/pdebug.h>
-
 
 IconWidget::IconWidget(ApplicationItem *appItem, const QSize size,
-                       QWidget *parent, const bool debugCmd)
+                       QWidget *parent)
     : QWidget(parent),
-      debug(debugCmd),
       item(appItem)
 {
+    qCDebug(LOG_UI) << __PRETTY_FUNCTION__;
+
     setFixedSize(size);
     setLayout(new QVBoxLayout(this));
     // icon
@@ -49,7 +47,7 @@ IconWidget::IconWidget(ApplicationItem *appItem, const QSize size,
 
 IconWidget::~IconWidget()
 {
-    if (debug) qDebug() << PDEBUG;
+    qCDebug(LOG_UI) << __PRETTY_FUNCTION__;
 
     QLayoutItem *item;
     while ((item = layout()->takeAt(0))) {
@@ -61,16 +59,12 @@ IconWidget::~IconWidget()
 
 ApplicationItem *IconWidget::associatedItem()
 {
-    if (debug) qDebug() << PDEBUG;
-
     return item;
 }
 
 
 void IconWidget::mousePressEvent(QMouseEvent* event)
 {
-    if (debug) qDebug() << PDEBUG;
-
     if (event->button() == Qt::LeftButton) {
         if (item->launch()) emit(widgetPressed());
     }
@@ -80,8 +74,6 @@ void IconWidget::mousePressEvent(QMouseEvent* event)
 
 QSize IconWidget::convertSize(const QSize size)
 {
-    if (debug) qDebug() << PDEBUG;
-
     return QSize(size.width() * 0.75, size.height() * 0.75);
 }
 

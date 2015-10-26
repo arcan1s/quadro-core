@@ -23,7 +23,7 @@
 #include <QSize>
 #include <QWidget>
 
-#include <quadro/quadro.h>
+#include "quadro/quadro.h"
 
 
 class IconWidget : public QWidget
@@ -32,8 +32,8 @@ class IconWidget : public QWidget
 
 public:
     explicit IconWidget(ApplicationItem *appItem, const QSize size,
-                        QWidget *parent, const bool debugCmd = false);
-    ~IconWidget();
+                        QWidget *parent);
+    virtual ~IconWidget();
     inline QSize convertSize(const QSize size);
     ApplicationItem *associatedItem();
 
@@ -44,7 +44,6 @@ protected:
     void mousePressEvent(QMouseEvent *event);
 
 private:
-    bool debug = false;
     ApplicationItem *item = nullptr;
 };
 

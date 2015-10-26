@@ -21,13 +21,11 @@
 
 #include <QDBusConnection>
 #include <QDBusMessage>
-#include <QDebug>
 #include <QLibraryInfo>
 #include <QTranslator>
 #include <QUrl>
 
 #include <language/language.h>
-#include <pdebug/pdebug.h>
 
 #include "applauncherwidget.h"
 #include "settingswindow.h"
@@ -38,10 +36,14 @@ MainWindow::MainWindow(QWidget *parent, const QVariantMap args,
                        QTranslator *qtAppTranslator, QTranslator *appTranslator)
     : QMainWindow(parent),
       configPath(args[QString("config")].toString()),
-      debug(args[QString("debug")].toBool()),
       qtTranslator(qtAppTranslator),
       translator(appTranslator)
 {
+    qSetMessagePattern(LOG_FORMAT);
+    qCDebug(LOG_UI) << __PRETTY_FUNCTION__;
+        foreach (const QString metadata, getBuildData())
+            qCDebug(LOG_UI) << metadata;
+
     setWindowIcon(QIcon(":icon"));
 
     ui = new Ui::MainWindow;
@@ -58,7 +60,7 @@ MainWindow::MainWindow(QWidget *parent, const QVariantMap args,
 
 MainWindow::~MainWindow()
 {
-    if (debug) qDebug() << PDEBUG;
+    qCDebug(LOG_UI) << __PRETTY_FUNCTION__;
 
     deleteObjects();
     delete ui;
@@ -67,8 +69,6 @@ MainWindow::~MainWindow()
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    if (debug) qDebug() << PDEBUG;
-
 //     if ((QSystemTrayIcon::isSystemTrayAvailable()) && (configuration[QString("SYSTRAY")] == QString("true"))) {
 //         hide();
 //         event->ignore();
@@ -79,8 +79,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 void MainWindow::changeTab(const int index)
 {
-    if (debug) qDebug() << PDEBUG;
-    if (debug) qDebug() << PDEBUG << "Index" << index;
+    qCDebug(LOG_UI) << "Index" << index;
     if ((index == -1) || (index >= ui->stackedWidget->count())) return;
 
     return ui->stackedWidget->setCurrentIndex(index);
@@ -89,28 +88,22 @@ void MainWindow::changeTab(const int index)
 
 void MainWindow::closeMainWindow()
 {
-    if (debug) qDebug() << PDEBUG;
-
     qApp->quit();
 }
 
 
 void MainWindow::showSettingsWindow()
 {
-    if (debug) qDebug() << PDEBUG;
-
     settingsWindow->showWindow();
 }
 
 
 void MainWindow::updateConfiguration(const QVariantMap args)
 {
-    if (debug) qDebug() << PDEBUG;
-
     deleteObjects();
     // update configuration
     QString actualConfigPath = QFile(configPath).exists() ? configPath : QString("/etc/quadro.conf");
-    settingsWindow = new SettingsWindow(this, debug, actualConfigPath);
+    settingsWindow = new SettingsWindow(this, actualConfigPath);
     if (args[QString("default")].toBool())
         settingsWindow->setDefault();
     configuration = settingsWindow->getSettings();
@@ -119,7 +112,7 @@ void MainWindow::updateConfiguration(const QVariantMap args)
     // update translation
     qApp->removeTranslator(translator);
     QString language = Language::defineLanguage(actualConfigPath, args[QString("options")].toString());
-    if (debug) qDebug() << PDEBUG << ":" << "Language is" << language;
+    qCInfo(LOG_UI) << "Language is" << language;
     qtTranslator->load(QString("qt_%1").arg(language), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
     qApp->installTranslator(qtTranslator);
     translator->load(QString(":/translations/%1").arg(language));
@@ -134,8 +127,6 @@ void MainWindow::updateConfiguration(const QVariantMap args)
 
 void MainWindow::changeTabByAction(QAction *action)
 {
-    if (debug) qDebug() << PDEBUG;
-
     int index = -1;
     for (int i=0; i<tabActions.count(); i++) {
         if (tabActions[i] != action) continue;
@@ -149,8 +140,6 @@ void MainWindow::changeTabByAction(QAction *action)
 
 void MainWindow::clearTabs()
 {
-    if (debug) qDebug() << PDEBUG;
-
     disconnect(ui->toolBar, SIGNAL(actionTriggered(QAction *)),
                this, SLOT(changeTabByAction(QAction *)));
 
@@ -166,13 +155,11 @@ void MainWindow::clearTabs()
 
 void MainWindow::initTabs()
 {
-    if (debug) qDebug() << PDEBUG;
-
     QStringList tabs = configuration[QString("Tabs")].toStringList();
     for (int i=0; i<tabs.count(); i++) {
         if (tabs[i] == QString("applauncher")) {
-            ui->stackedWidget->addWidget(new AppLauncher(this, launcher,
-                                                         configuration, debug));
+            ui->stackedWidget->addWidget(new AppLauncher(this, launcher, recent,
+                                                         configuration));
         } else if (tabs[i] == QString("favorites")) {
             ui->stackedWidget->addWidget(new QWidget());
         } else if (tabs[i] == QString("filemanager")) {
@@ -188,8 +175,6 @@ void MainWindow::initTabs()
 
 void MainWindow::createActions()
 {
-    if (debug) qDebug() << PDEBUG;
-
     connect(this, SIGNAL(needToBeConfigured()), this, SLOT(showSettingsWindow()));
 
     // menu
@@ -204,12 +189,10 @@ void MainWindow::createActions()
 
 void MainWindow::createDBusSession()
 {
-    if (debug) qDebug() << PDEBUG;
-
     QDBusConnection bus = QDBusConnection::sessionBus();
     if (!bus.registerService(DBUS_SERVICE)) {
-        if (debug) qDebug() << PDEBUG << ":" << "Could not register service";
-        if (debug) qDebug() << PDEBUG << ":" << bus.lastError().message();
+        qCWarning(LOG_UI) << "Could not register service";
+        qCWarning(LOG_UI) << bus.lastError().message();
     }
 //     if (!bus.registerObject(DBUS_OBJECT_PATH,
 //                             new QuadroUiAdaptor(this),
@@ -222,27 +205,27 @@ void MainWindow::createDBusSession()
 
 void MainWindow::createObjects()
 {
-    if (debug) qDebug() << PDEBUG;
-
     // backend
-    launcher = new LauncherCore(this, debug);
+    launcher = new LauncherCore(this);
     launcher->initApplications();
+    recent = new RecentlyCore(this);
+    recent->initApplications();
 
     // frontend
     ui->retranslateUi(this);
     initTabs();
-    settingsWindow = new SettingsWindow(this, debug, configPath);
+    settingsWindow = new SettingsWindow(this, configPath);
 }
 
 
 void MainWindow::deleteObjects()
 {
-    if (debug) qDebug() << PDEBUG;
-
     // frontend
     if (settingsWindow != nullptr) delete settingsWindow;
     clearTabs();
 
     // backend
     if (launcher != nullptr) delete launcher;
+    if (recent != nullptr) delete recent;
+
 }

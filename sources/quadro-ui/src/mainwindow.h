@@ -23,7 +23,7 @@
 #include <QApplication>
 #include <QMainWindow>
 
-#include <quadro/quadro.h>
+#include "quadro/quadro.h"
 
 
 class SettingsWindow;
@@ -71,8 +71,10 @@ private:
     void createObjects();
     void deleteObjects();
     QString configPath;
-    bool debug = false;
+    // library
     LauncherCore *launcher = nullptr;
+    RecentlyCore *recent = nullptr;
+    // translators
     QTranslator *qtTranslator = nullptr;
     QTranslator *translator = nullptr;
     // configuration
