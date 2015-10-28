@@ -110,6 +110,13 @@ void SettingsWindow::showWindow()
 }
 
 
+void SettingsWindow::keyPressEvent(QKeyEvent *pressedKey)
+{
+    if (pressedKey->key() == Qt::Key_Escape)
+        close();
+}
+
+
 void SettingsWindow::addLanguages()
 {
     ui->comboBox_language->clear();
@@ -152,14 +159,6 @@ void SettingsWindow::createActions()
     connect(ui->buttonBox->button(QDialogButtonBox::RestoreDefaults), SIGNAL(clicked(bool)), this, SLOT(setDefault()));
     connect(ui->treeWidget, SIGNAL(currentItemChanged(QTreeWidgetItem *, QTreeWidgetItem *)),
             this, SLOT(changePage(QTreeWidgetItem *, QTreeWidgetItem *)));
-}
-
-
-// ESC press event
-void SettingsWindow::keyPressEvent(QKeyEvent *pressedKey)
-{
-    if (pressedKey->key() == Qt::Key_Escape)
-        close();
 }
 
 

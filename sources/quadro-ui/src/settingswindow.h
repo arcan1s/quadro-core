@@ -46,6 +46,10 @@ public slots:
     void setDefault();
     void showWindow();
 
+protected:
+    // ESC pressed event
+    void keyPressEvent(QKeyEvent *pressedKey);
+
 private slots:
     void addLanguages();
     void changePage(QTreeWidgetItem *current, QTreeWidgetItem *previous);
@@ -55,8 +59,6 @@ private:
     QString file;
     Ui::SettingsWindow *ui;
     void createActions();
-    // ESC pressed event
-    void keyPressEvent(QKeyEvent *pressedKey);
     QVariantHash readSettings();
     void setSettings(const QVariantHash config);
 };

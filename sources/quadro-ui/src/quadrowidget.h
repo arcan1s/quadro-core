@@ -16,40 +16,50 @@
  ***************************************************************************/
 
 
-#ifndef ICONWIDGET_H
-#define ICONWIDGET_H
+#ifndef QUADROWIDGET_H
+#define QUADROWIDGET_H
 
-#include <QSize>
-#include <QWidget>
-
-#include "quadro/quadro.h"
+#include <QScrollArea>
 
 
-class QKeyEvent;
-class QMouseEvent;
+class FlowLayout;
+class QFocusEvent;
 
-class IconWidget : public QWidget
+class QuadroWidget : public QScrollArea
 {
     Q_OBJECT
 
 public:
-    explicit IconWidget(ApplicationItem *appItem, const QSize size,
-                        QWidget *parent);
-    virtual ~IconWidget();
-    inline QSize convertSize(const QSize size);
-    ApplicationItem *associatedItem();
-
-signals:
-    void widgetPressed();
+    explicit QuadroWidget(QWidget *parent, const float grid,
+                          const Qt::ScrollBarPolicy hPolicy = Qt::ScrollBarAlwaysOff,
+                          const Qt::ScrollBarPolicy vPolicy = Qt::ScrollBarAsNeeded);
+    virtual ~QuadroWidget();
+    // override default method
+    QWidget *widget();
 
 protected:
-    void keyPressEvent(QKeyEvent *pressedKey);
-    void mousePressEvent(QMouseEvent *event);
+    void focusInEvent(QFocusEvent *event);
     void paintEvent(QPaintEvent *event);
 
+public slots:
+    void moveFocus(const int dx, const int dy);
+    void moveFocusDown();
+    void moveFocusLeft();
+    void moveFocusRight();
+    void moveFocusUp();
+    void resetFocus();
+
 private:
-    ApplicationItem *item = nullptr;
+    // ui
+    FlowLayout *m_layout = nullptr;
+    QWidget *m_widget = nullptr;
+    // methods
+    void createActions();
+    void createObjects();
+    int stringItemCount() const;
+    // properties
+    float m_grid = 0;
 };
 
 
-#endif /* ICONWIDGET_H */
+#endif /* QUADROWIDGET_H */

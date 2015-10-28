@@ -26,6 +26,7 @@
 #include <flowlayout/flowlayout.h>
 
 #include "iconwidget.h"
+#include "quadrowidget.h"
 #include "quadro/quadrodebug.h"
 
 
@@ -50,7 +51,8 @@ AppLauncher::~AppLauncher()
 {
     qCDebug(LOG_UI) << __PRETTY_FUNCTION__;
 
-    deleteObjects();
+    categoryButtons.clear();
+    categoryWidgets.clear();
     delete ui;
 }
 
@@ -106,7 +108,7 @@ void AppLauncher::showSearchResults(const QString search)
 
     // clear
     QLayoutItem *item;
-    while ((item = categoryWidgets.last()->layout()->takeAt(0))) {
+    while ((item = categoryWidgets.last()->widget()->layout()->takeAt(0))) {
         delete item->widget();
         delete item;
     }
@@ -117,8 +119,8 @@ void AppLauncher::showSearchResults(const QString search)
     QMap<QString, ApplicationItem *> apps = recent->applicationsBySubstr(search);
     QMap<QString, ApplicationItem *> launcherApps = launcher->applicationsBySubstr(search);
     foreach (ApplicationItem *app, apps.values() + launcherApps.values()) {
-        QWidget *wItem = new IconWidget(app, itemSize(), categoryWidgets.last());
-        categoryWidgets.last()->layout()->addWidget(wItem);
+        QWidget *wItem = new IconWidget(app, itemSize(), categoryWidgets.last()->widget());
+        categoryWidgets.last()->widget()->layout()->addWidget(wItem);
         connect(wItem, SIGNAL(widgetPressed()), this, SLOT(runApplication()));
     }
 
@@ -128,38 +130,6 @@ void AppLauncher::showSearchResults(const QString search)
 
 void AppLauncher::createActions()
 {
-    // TODO
-}
-
-
-void AppLauncher::createObjects()
-{
-    QStringList categories = launcher->availableCategories();
-    foreach (const QString cat, categories) {
-        // backend
-        categoryButtons.append(ui->toolBar->addAction(cat));
-        // frontend
-        // scroll area
-        QScrollArea *area = new QScrollArea(this);
-        area->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-        area->setWidgetResizable(true);
-        ui->stackedWidget->addWidget(area);
-        // widget
-        categoryWidgets.append(new QWidget(area));
-        categoryWidgets.last()->setLayout(new FlowLayout(categoryWidgets.last()));
-        initCategory(cat, categoryWidgets.last());
-        area->setWidget(categoryWidgets.last());
-    }
-
-    // search widget
-    QScrollArea *area = new QScrollArea(this);
-    area->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    area->setWidgetResizable(true);
-    ui->stackedWidget->addWidget(area);
-    categoryWidgets.append(new QWidget(area));
-    categoryWidgets.last()->setLayout(new FlowLayout(categoryWidgets.last()));
-    area->setWidget(categoryWidgets.last());
-
     connect(ui->toolBar, SIGNAL(actionTriggered(QAction *)),
             this, SLOT(changeCategoryByAction(QAction *)));
     connect(ui->lineEdit, SIGNAL(returnPressed()), this, SLOT(runCustomApplication()));
@@ -167,10 +137,19 @@ void AppLauncher::createObjects()
 }
 
 
-void AppLauncher::deleteObjects()
+void AppLauncher::createObjects()
 {
-    categoryButtons.clear();
-    categoryWidgets.clear();
+    QStringList categories = launcher->availableCategories();
+    foreach (const QString cat, categories) {
+        categoryButtons.append(ui->toolBar->addAction(cat));
+        categoryWidgets.append(new QuadroWidget(this, itemSize().width()));
+        ui->stackedWidget->addWidget(categoryWidgets.last());
+        initCategory(cat, categoryWidgets.last()->widget());
+    }
+
+    // search widget
+    categoryWidgets.append(new QuadroWidget(this, itemSize().width()));
+    ui->stackedWidget->addWidget(categoryWidgets.last());
 }
 
 

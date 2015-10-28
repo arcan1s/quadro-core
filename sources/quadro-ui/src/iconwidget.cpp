@@ -19,7 +19,11 @@
 #include "iconwidget.h"
 
 #include <QIcon>
+#include <QKeyEvent>
 #include <QLabel>
+#include <QMouseEvent>
+#include <QPainter>
+#include <QStyleOption>
 #include <QVBoxLayout>
 
 
@@ -42,6 +46,9 @@ IconWidget::IconWidget(ApplicationItem *appItem, const QSize size,
     textLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     textLabel->setWordWrap(true);
     layout()->addWidget(textLabel);
+
+    // FIXME temporary line
+    setStyleSheet("IconWidget:focus { background: black; color: white; }");
 }
 
 
@@ -63,12 +70,31 @@ ApplicationItem *IconWidget::associatedItem()
 }
 
 
+void IconWidget::keyPressEvent(QKeyEvent *pressedKey)
+{
+    if ((pressedKey->key() == Qt::Key_Enter)
+        || (pressedKey->key() == Qt::Key_Return)){
+        if (item->launch()) emit(widgetPressed());
+    }
+    QWidget::keyPressEvent(pressedKey);
+}
+
+
 void IconWidget::mousePressEvent(QMouseEvent* event)
 {
     if (event->button() == Qt::LeftButton) {
         if (item->launch()) emit(widgetPressed());
     }
     QWidget::mousePressEvent(event);
+}
+
+
+void IconWidget::paintEvent(QPaintEvent *event)
+{
+    QStyleOption options;
+    options.init(this);
+    QPainter painter(this);
+    style()->drawPrimitive(QStyle::PE_Widget, &options, &painter, this);
 }
 
 

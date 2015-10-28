@@ -41,8 +41,8 @@ build
 # archives
 *src.tar.[gx]z
 *pkg.tar.[gx]z
-src
-pkg
+/src
+/pkg
 
 # clion settings
 .idea

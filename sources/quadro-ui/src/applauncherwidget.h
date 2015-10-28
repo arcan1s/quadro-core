@@ -26,6 +26,8 @@
 #include <quadro/quadro.h>
 
 
+class QuadroWidget;
+
 namespace Ui {
 class AppLauncher;
 }
@@ -53,12 +55,11 @@ private slots:
 private:
     // ui
     QList<QAction *> categoryButtons;
-    QList<QWidget *> categoryWidgets;
+    QList<QuadroWidget *> categoryWidgets;
     Ui::AppLauncher *ui = nullptr;
     // backend
     void createActions();
     void createObjects();
-    void deleteObjects();
     void initCategory(const QString category, QWidget *widget);
     LauncherCore *launcher = nullptr;
     RecentlyCore *recent = nullptr;
