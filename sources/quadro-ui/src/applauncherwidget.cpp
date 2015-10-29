@@ -19,15 +19,10 @@
 #include "applauncherwidget.h"
 #include "ui_applauncherwidget.h"
 
-#include <QIcon>
-#include <QLabel>
-#include <QScrollArea>
+#include <QAction>
 
-#include <flowlayout/flowlayout.h>
-
-#include "iconwidget.h"
+#include "appiconwidget.h"
 #include "quadrowidget.h"
-#include "quadro/quadrodebug.h"
 
 
 AppLauncher::AppLauncher(QWidget *parent, LauncherCore *appLauncher,
@@ -119,7 +114,7 @@ void AppLauncher::showSearchResults(const QString search)
     QMap<QString, ApplicationItem *> apps = recent->applicationsBySubstr(search);
     QMap<QString, ApplicationItem *> launcherApps = launcher->applicationsBySubstr(search);
     foreach (ApplicationItem *app, apps.values() + launcherApps.values()) {
-        QWidget *wItem = new IconWidget(app, itemSize(), categoryWidgets.last()->widget());
+        QWidget *wItem = new AppIconWidget(app, itemSize(), categoryWidgets.last()->widget());
         categoryWidgets.last()->widget()->layout()->addWidget(wItem);
         connect(wItem, SIGNAL(widgetPressed()), this, SLOT(runApplication()));
     }
@@ -159,7 +154,7 @@ void AppLauncher::initCategory(const QString category, QWidget *widget)
 
     QMap<QString, ApplicationItem *> apps = launcher->applicationsByCategory(category);
     foreach (ApplicationItem *app, apps.values()) {
-        QWidget *wItem = new IconWidget(app, itemSize(), widget);
+        QWidget *wItem = new AppIconWidget(app, itemSize(), widget);
         widget->layout()->addWidget(wItem);
         connect(wItem, SIGNAL(widgetPressed()), this, SLOT(runApplication()));
     }

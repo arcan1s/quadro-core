@@ -19,13 +19,12 @@
 #ifndef APPLAUNCHERWIDGET_H
 #define APPLAUNCHERWIDGET_H
 
-#include <QAction>
 #include <QMainWindow>
-#include <QToolButton>
 
 #include <quadro/quadro.h>
 
 
+class QAction;
 class QuadroWidget;
 
 namespace Ui {

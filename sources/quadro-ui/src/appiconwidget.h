@@ -16,47 +16,38 @@
  ***************************************************************************/
 
 
-#ifndef ICONWIDGET_H
-#define ICONWIDGET_H
+#ifndef APPICONWIDGET_H
+#define APPICONWIDGET_H
 
-#include <QSize>
-#include <QWidget>
+#include "iconwidget.h"
+#include "quadro/quadro.h"
 
 
-class QIcon;
-class QKeyEvent;
-class QLabel;
-class QMouseEvent;
+class QMenu;
 
-class IconWidget : public QWidget
+class AppIconWidget : public IconWidget
 {
     Q_OBJECT
 
 public:
-    explicit IconWidget(const QSize size, QWidget *parent);
-    virtual ~IconWidget();
-    inline QSize convertSize(const QSize size);
-    void setIcon(const QIcon icon);
-    void setText(const QString text);
+    explicit AppIconWidget(ApplicationItem *appItem, const QSize size,
+                           QWidget *parent);
+    virtual ~AppIconWidget();
+    ApplicationItem *associatedItem();
 
 public slots:
-    virtual void showContextMenu(const QPoint &pos) = 0;
+    void showContextMenu(const QPoint &pos);
 
-signals:
-    void widgetPressed();
-
-protected:
-    void keyPressEvent(QKeyEvent *pressedKey);
-    void mousePressEvent(QMouseEvent *event);
-    void paintEvent(QPaintEvent *event);
+private slots:
+    void run();
+    void runInNewTab();
 
 private:
-    // ui
-    QLabel *m_iconLabel = nullptr;
-    QLabel *m_textLabel = nullptr;
-    // properties
-    QSize m_size;
+    ApplicationItem *item = nullptr;
+    QMenu *m_menu = nullptr;
+    // methdos
+    void createActions();
 };
 
 
-#endif /* ICONWIDGET_H */
+#endif /* APPICONWIDGET_H */

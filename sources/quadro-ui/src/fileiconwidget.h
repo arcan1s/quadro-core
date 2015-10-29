@@ -16,47 +16,32 @@
  ***************************************************************************/
 
 
-#ifndef ICONWIDGET_H
-#define ICONWIDGET_H
+#ifndef FILEICONWIDGET_H
+#define FILEICONWIDGET_H
 
-#include <QSize>
-#include <QWidget>
+#include <QFileInfo>
+
+#include "iconwidget.h"
 
 
-class QIcon;
-class QKeyEvent;
-class QLabel;
-class QMouseEvent;
-
-class IconWidget : public QWidget
+class FileIconWidget : public IconWidget
 {
     Q_OBJECT
 
 public:
-    explicit IconWidget(const QSize size, QWidget *parent);
-    virtual ~IconWidget();
-    inline QSize convertSize(const QSize size);
-    void setIcon(const QIcon icon);
-    void setText(const QString text);
+    explicit FileIconWidget(const QFileInfo info, const QIcon icon,
+                            const QSize size, QWidget *parent);
+    virtual ~FileIconWidget();
 
 public slots:
-    virtual void showContextMenu(const QPoint &pos) = 0;
+    void showContextMenu(const QPoint &pos) {};
 
 signals:
-    void widgetPressed();
-
-protected:
-    void keyPressEvent(QKeyEvent *pressedKey);
-    void mousePressEvent(QMouseEvent *event);
-    void paintEvent(QPaintEvent *event);
+    void openFile(const QFileInfo info);
 
 private:
-    // ui
-    QLabel *m_iconLabel = nullptr;
-    QLabel *m_textLabel = nullptr;
-    // properties
-    QSize m_size;
+    QFileInfo m_info;
 };
 
 
-#endif /* ICONWIDGET_H */
+#endif /* FILEICONWIDGET_H */

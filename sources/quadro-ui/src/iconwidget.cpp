@@ -26,26 +26,31 @@
 #include <QStyleOption>
 #include <QVBoxLayout>
 
+#include "quadro/quadrodebug.h"
 
-IconWidget::IconWidget(ApplicationItem *appItem, const QSize size,
-                       QWidget *parent)
-    : QWidget(parent),
-      item(appItem)
+
+IconWidget::IconWidget(const QSize size, QWidget *parent)
+    : QWidget(parent)
+    , m_size(size)
 {
     qCDebug(LOG_UI) << __PRETTY_FUNCTION__;
 
-    setFixedSize(size);
+    setFixedSize(m_size);
     setLayout(new QVBoxLayout(this));
     // icon
-    QLabel *iconLabel = new QLabel(this);
-    iconLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    iconLabel->setPixmap(item->icon().pixmap(convertSize(size)));
-    layout()->addWidget(iconLabel);
+    m_iconLabel = new QLabel(this);
+    m_iconLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    layout()->addWidget(m_iconLabel);
     // text
-    QLabel *textLabel = new QLabel(item->name(), this);
-    textLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    textLabel->setWordWrap(true);
-    layout()->addWidget(textLabel);
+    m_textLabel = new QLabel(this);
+    m_textLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    m_textLabel->setWordWrap(true);
+    layout()->addWidget(m_textLabel);
+
+    // context menu
+    setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this,
+            SLOT(showContextMenu(const QPoint &)));
 
     // FIXME temporary line
     setStyleSheet("IconWidget:focus { background: black; color: white; }");
@@ -56,34 +61,43 @@ IconWidget::~IconWidget()
 {
     qCDebug(LOG_UI) << __PRETTY_FUNCTION__;
 
-    QLayoutItem *item;
-    while ((item = layout()->takeAt(0))) {
-        delete item->widget();
-        delete item;
-    }
+    delete m_iconLabel;
+    delete m_textLabel;
 }
 
 
-ApplicationItem *IconWidget::associatedItem()
+QSize IconWidget::convertSize(const QSize size)
 {
-    return item;
+    return QSize(size.width() * 0.75, size.height() * 0.75);
+}
+
+
+void IconWidget::setIcon(const QIcon icon)
+{
+    m_iconLabel->setPixmap(icon.pixmap(convertSize(m_size)));
+}
+
+
+void IconWidget::setText(const QString text)
+{
+    m_textLabel->setText(text);
 }
 
 
 void IconWidget::keyPressEvent(QKeyEvent *pressedKey)
 {
     if ((pressedKey->key() == Qt::Key_Enter)
-        || (pressedKey->key() == Qt::Key_Return)){
-        if (item->launch()) emit(widgetPressed());
+        || (pressedKey->key() == Qt::Key_Return)) {
+        emit(widgetPressed());
     }
     QWidget::keyPressEvent(pressedKey);
 }
 
 
-void IconWidget::mousePressEvent(QMouseEvent* event)
+void IconWidget::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
-        if (item->launch()) emit(widgetPressed());
+        emit(widgetPressed());
     }
     QWidget::mousePressEvent(event);
 }
@@ -96,10 +110,3 @@ void IconWidget::paintEvent(QPaintEvent *event)
     QPainter painter(this);
     style()->drawPrimitive(QStyle::PE_Widget, &options, &painter, this);
 }
-
-
-QSize IconWidget::convertSize(const QSize size)
-{
-    return QSize(size.width() * 0.75, size.height() * 0.75);
-}
-
