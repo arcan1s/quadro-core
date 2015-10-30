@@ -90,10 +90,9 @@ QString PluginAdaptor::Comment()
  */
 QStringList PluginAdaptor::Configuration()
 {
-    QVariantMap configMap = m_plugin->configuration();
+    QVariantHash configMap = m_plugin->configuration();
     QStringList output;
-    for (int i=0; i<configMap.keys().count(); i++) {
-        QString key = configMap.keys()[i];
+    foreach (const QString key, configMap.keys()) {
         QString value = configMap[key].toString();
         output.append(QString("%1=%2").arg(key).arg(value));
     }

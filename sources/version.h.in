@@ -45,21 +45,4 @@
 #define PROP_DOCS "@BUILD_DOCS@"
 #define PROP_TEST "@BUILD_TESTING@"
 
-// dbus configuration
-#define DBUS_SERVICE "org.quadro.core"
-#define DBUS_PLUGIN_SERVICE "org.quadro.plugin"
-#define DBUS_INTERFACE "org.quadro.core"
-#define DBUS_PLUGIN_INTERFACE "org.quadro.plugin"
-#define DBUS_OBJECT_PATH "/quadro"
-
-// path configuration
-#define FAVORITES_PATH "favorites"
-#define HOME_PATH "quadro"
-#define PLUGIN_PATH "plugins"
-#define RECENT_PATH "recent"
-
-// plugin configuration
-#define MINIMAL_TIMER 333
-#define PLUGIN_API 1
-
 #endif /* VERSION_H */

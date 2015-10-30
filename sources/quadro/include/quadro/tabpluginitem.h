@@ -74,7 +74,7 @@ public:
      * @brief plugin current settings which will be applied on next start
      * @return configuration map
      */
-    QVariantMap configuration();
+    QVariantHash configuration();
     /**
      * @brief plugin UI image. It fills from background()
      * @return valid HTML image as text

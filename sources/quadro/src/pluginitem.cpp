@@ -33,8 +33,6 @@
 #include <QDebug>
 #include <QSettings>
 
-#include "version.h"
-
 
 /**
  * @class PluginItem
@@ -97,9 +95,9 @@ QString PluginItem::comment()
 /**
  * @fn configuration
  */
-QVariantMap PluginItem::configuration()
+QVariantHash PluginItem::configuration()
 {
-    QVariantMap pluginSettings;
+    QVariantHash pluginSettings;
     pluginSettings[QString("Comment")] = comment();
     pluginSettings[QString("Height")] = height();
     pluginSettings[QString("Timer")] = timer();
@@ -311,7 +309,7 @@ bool PluginItem::saveSettings(const QString _desktopPath)
 {
     qCDebug(LOG_PL) << "Path" << _desktopPath;
 
-    QVariantMap config = configuration();
+    QVariantHash config = configuration();
     QSettings settings(_desktopPath, QSettings::IniFormat);
 
     settings.beginGroup(name());

@@ -26,9 +26,9 @@
 #ifndef ABSTRACTAPPAGGREGATOR_H
 #define ABSTRACTAPPAGGREGATOR_H
 
+// QMap class required because applications should be sorted
 #include <QMap>
 #include <QObject>
-#include <QStringList>
 
 
 class ApplicationItem;
@@ -71,7 +71,7 @@ public:
      * @brief available application categories
      * @return list of available categories
      */
-    QStringList availableCategories() const;
+    static QStringList availableCategories();
     /**
      * @brief is application has been read
      * @param _name          application name

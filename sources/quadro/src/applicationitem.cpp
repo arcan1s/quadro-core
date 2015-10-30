@@ -294,7 +294,7 @@ void ApplicationItem::defineCategories(const QString _desktopPath)
     while (true) {
         QString fileStr = QString(desktopFile.readLine()).trimmed();
         if (fileStr.startsWith(QString("Categories"))) {
-            // hope category name will not contain '='
+            // FIXME hope category name will not contain '='
             foundCategories = fileStr.split(QChar('='))[1].split(QChar(';'), QString::SkipEmptyParts);
             break;
         }
@@ -344,6 +344,18 @@ QString ApplicationItem::saveDesktop(const QString _desktopPath) const
 
     settings.sync();
 
-    QString result = settings.status() == QSettings::NoError ? fileName : QString();
-    return result;
+    return settings.status() == QSettings::NoError ? fileName : QString();
+}
+
+
+/**
+ * @fn removeDesktop
+ */
+bool ApplicationItem::removeDesktop(const QString _desktopPath) const
+{
+    qCDebug(LOG_LIB) << "Desktop path" << _desktopPath;
+
+    QString fileName = QString("%1/%2").arg(_desktopPath).arg(desktopName());
+
+    return QFile::remove(fileName);
 }

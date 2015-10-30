@@ -32,10 +32,6 @@
 
 #include "abstractappaggregator.h"
 
-#ifndef RECENT_ITEMS_COUNT
-#define RECENT_ITEMS_COUNT 20
-#endif /* RECENT_ITEMS_COUNT */
-
 
 /**
  * @brief The RecentlyCore class provides backend for recently run items
@@ -48,8 +44,9 @@ public:
     /**
      * @brief RecentlyCore class constructor
      * @param parent         pointer to parent item
+     * @param recentItems    count of recent items in the launcher
      */
-    explicit RecentlyCore(QObject *parent);
+    explicit RecentlyCore(QObject *parent, const int recentItems);
     /**
      * @brief RecentlyCore class destructor
      */
@@ -93,6 +90,10 @@ private:
      * @brief application modification times
      */
     QMap<QString, QDateTime> m_modifications;
+    /**
+     * @brief recent items count
+     */
+    int m_recentItems;
     /**
      * @brief return applications which has desktop files
      * @return map of generated ApplicationItem

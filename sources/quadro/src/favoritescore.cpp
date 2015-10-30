@@ -29,8 +29,6 @@
 #include <QSettings>
 #include <QStandardPaths>
 
-#include "version.h"
-
 
 /**
  * @class FavoritesCore
@@ -57,11 +55,38 @@ FavoritesCore::~FavoritesCore()
 
 
 /**
+ * @fn add
+ */
+void FavoritesCore::add(ApplicationItem *_item)
+{
+    if (check(_item))
+        removeAppFromFavorites(_item);
+    else
+        addAppToFavorites(_item);
+}
+
+
+/**
  * @fn applications
  */
 QMap<QString, ApplicationItem *> FavoritesCore::applications() const
 {
     return m_applications;
+}
+
+
+/**
+ * @fn addToFavorites
+ */
+ApplicationItem *FavoritesCore::addToFavorites(ApplicationItem *_item)
+{
+    FavoritesCore *instance = new FavoritesCore(nullptr);
+    instance->initApplications();
+
+    instance->add(_item);
+    delete instance;
+
+    return _item;
 }
 
 
@@ -76,19 +101,24 @@ ApplicationItem *FavoritesCore::addToFavorites(const QString _executable,
     qCDebug(LOG_LIB) << "Name" << _name;
     qCDebug(LOG_LIB) << "Icon" << _iconName;
 
-    ApplicationItem *item = new ApplicationItem(this, _executable, _name);
+    ApplicationItem *item = new ApplicationItem(nullptr, _executable, _name);
     item->setIconByName(_iconName);
+    FavoritesCore *instance = new FavoritesCore(nullptr);
+    instance->initApplications();
 
-    if (!item->saveDesktop(desktopPath()).isEmpty()) {
-        delete item;
-        item = nullptr;
-        // update data
-        m_applications[_name] = item;
-        m_order.append(_name);
-        saveApplicationsOrder();
-    }
+    instance->add(item);
+    delete instance;
 
-    return item;
+    return addToFavorites(item);
+}
+
+
+/**
+ * @fn check
+ */
+bool FavoritesCore::check(ApplicationItem *_item)
+{
+    return m_applications.contains(_item->name());
 }
 
 
@@ -101,6 +131,18 @@ QString FavoritesCore::desktopPath()
                                        .arg(HOME_PATH);
 
     return QString("%1/%2").arg(homePath).arg(FAVORITES_PATH);
+}
+
+
+/**
+ * @fn hasApplication
+ */
+bool FavoritesCore::hasApplication(ApplicationItem *_item)
+{
+    FavoritesCore *instance = new FavoritesCore(nullptr);
+    instance->initApplications();
+
+    return instance->check(_item);
 }
 
 
@@ -149,6 +191,22 @@ void FavoritesCore::saveApplicationsOrder() const
 
 
 /**
+ * @fn addAppToFavorites
+ */
+void FavoritesCore::addAppToFavorites(ApplicationItem *_item)
+{
+    if (!_item->saveDesktop(desktopPath()).isEmpty()) {
+        // update data
+        m_applications[_item->name()] = _item;
+        m_order.append(_item->name());
+        saveApplicationsOrder();
+    } else {
+        qCWarning(LOG_LIB) << "Could not save item" << _item->name() << "to" << desktopPath();
+    }
+}
+
+
+/**
  * @fn getApplicationsFromDesktops
  */
 QMap<QString, ApplicationItem *> FavoritesCore::getApplicationsFromDesktops()
@@ -157,8 +215,8 @@ QMap<QString, ApplicationItem *> FavoritesCore::getApplicationsFromDesktops()
     QMap<QString, ApplicationItem *> items;
 
     QStringList entries = QDir(desktopPath()).entryList(filter, QDir::Files);
-    for (int i=0; i<entries.count(); i++) {
-        QString desktop = QFileInfo(QDir(desktopPath()), entries[i]).filePath();
+    foreach (const QString entry, entries) {
+        QString desktop = QFileInfo(QDir(desktopPath()), entry).filePath();
         qCInfo(LOG_LIB) << "Desktop" << desktop;
         ApplicationItem *item = ApplicationItem::fromDesktop(desktop, this);
         items[item->name()] = item;
@@ -178,4 +236,19 @@ QStringList FavoritesCore::getApplicationsOrder() const
     QSettings settings(fileName, QSettings::IniFormat);
 
     return settings.value(QString("Order")).toStringList();
+}
+
+
+/**
+ * @fn removeAppFromFavorites
+ */
+void FavoritesCore::removeAppFromFavorites(ApplicationItem *_item)
+{
+    if (_item->removeDesktop(desktopPath())) {
+        m_applications.remove(_item->name());
+        m_order.removeAll(_item->name());
+        saveApplicationsOrder();
+    } else {
+        qCWarning(LOG_LIB) << "Could not remove item" << _item->name() << "to" << desktopPath();
+    }
 }

@@ -171,7 +171,6 @@ public:
      * @brief read application information from desktop file
      * @param _desktopPath   full path to desktop file
      * @param _parent        pointer to parent item
-     * @param debugCmd       show debug messages
      * @return ApplicationItem structure
      */
     static ApplicationItem *fromDesktop(const QString _desktopPath, QObject *_parent);
@@ -193,6 +192,12 @@ public slots:
      * @return full path to created file or empty string
      */
     QString saveDesktop(const QString _desktopPath) const;
+    /**
+     * @brief remove desktop file from path
+     * @param _desktopPath   full path to desktop file
+     * @return true if file has been removed overwise returns false
+     */
+    bool removeDesktop(const QString _desktopPath) const;
 
 private:
     // main

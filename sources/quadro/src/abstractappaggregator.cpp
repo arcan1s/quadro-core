@@ -25,10 +25,6 @@
 
 #include "quadro/quadro.h"
 
-#include <QDir>
-#include <QProcessEnvironment>
-#include <QStandardPaths>
-
 
 /**
  * @class AbstractAppAggregator
@@ -72,15 +68,14 @@ QMap<QString, ApplicationItem *> AbstractAppAggregator::applicationsByCategory(c
 
     QMap<QString, ApplicationItem *> apps;
     if (!availableCategories().contains(_category)) {
-        qCWarning(LOG_LIB) << "Incorrect category" << _category;
+        qCCritical(LOG_LIB) << "Incorrect category" << _category;
         return apps;
     }
 
-    for (int i=0; i<m_applications.keys().count(); i++) {
-        QString key = m_applications.keys()[i];
-        QStringList categories = m_applications[key]->categories();
+    foreach (const QString app, m_applications.keys()) {
+        QStringList categories = m_applications[app]->categories();
         if (!categories.contains(_category)) continue;
-        apps[key] = m_applications[key];
+        apps[app] = m_applications[app];
     }
 
     return apps;
@@ -95,11 +90,9 @@ QMap<QString, ApplicationItem *> AbstractAppAggregator::applicationsBySubstr(con
     qCDebug(LOG_LIB) << "Substring" << _substr;
 
     QMap<QString, ApplicationItem *> apps;
-    // from desktops
-    for (int i=0; i<m_applications.keys().count(); i++) {
-        QString key = m_applications.keys()[i];
-        if (!m_applications[key]->hasSubstring(_substr)) continue;
-        apps[key] = m_applications[key];
+    foreach (const QString app, m_applications.keys()) {
+        if (!m_applications[app]->hasSubstring(_substr)) continue;
+        apps[app] = m_applications[app];
     }
 
     return apps;
@@ -109,7 +102,7 @@ QMap<QString, ApplicationItem *> AbstractAppAggregator::applicationsBySubstr(con
 /**
  * @fn availableCategories
  */
-QStringList AbstractAppAggregator::availableCategories() const
+QStringList AbstractAppAggregator::availableCategories()
 {
     // refer to http://standards.freedesktop.org/menu-spec/latest/apa.html
 
@@ -169,6 +162,6 @@ void AbstractAppAggregator::removeApplication(ApplicationItem *_item)
 {
     QStringList keys = m_applications.keys(_item);
 
-    for (int i=0; i<keys.count(); i++)
-        m_applications.remove(keys[i]);
+    foreach (const QString app, keys)
+        m_applications.remove(app);
 }

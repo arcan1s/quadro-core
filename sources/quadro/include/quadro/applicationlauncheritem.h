@@ -15,7 +15,7 @@
  *   along with quadro. If not, see http://www.gnu.org/licenses/           *
  ***************************************************************************/
 /**
- * @file applicationlaunheritem.h
+ * @file applicationlauncheritem.h
  * Header of quadro library
  * @author Evgeniy Alekseev
  * @copyright GPLv3
@@ -26,14 +26,13 @@
 #ifndef APPLICATIONLAUNCHERITEM_H
 #define APPLICATIONLAUNCHERITEM_H
 
-#include <QMap>
 #include <QProcess>
 #include <QWidget>
 
 
 /**
  * @brief The ApplicationLauncherItem class provides methods to control internal
- * applicaitons
+ * applications
  */
 class ApplicationLauncherItem : public QObject
 {
@@ -46,8 +45,8 @@ public:
     /**
      * @brief ApplicationLauncherItem class constructor
      * @param parent         pointer to parent item (widget in which it will be
-     *                       runned)
-     * @param cmd            path to command which should be runned
+     *                       run)
+     * @param cmd            path to command which should be run
      */
     explicit ApplicationLauncherItem(QWidget *parent, const QString cmd);
     /**
@@ -71,10 +70,10 @@ public:
      */
     QProcess::ProcessState processState() const;
     /**
-     * @brief widget with run applicaiton
+     * @brief widget with run application
      * @return pointer to widget
      */
-    QWidget *widget();
+    QList<QWidget *> widgets();
 
 public slots:
     /**
@@ -85,12 +84,22 @@ public slots:
      * @brief stop the application
      */
     void stopApplication();
+    /**
+     * @brief update widget list
+     */
+    void updateWidgets();
+
+signals:
+    /**
+     * @brief signal which is emitted when widgets are initialized
+     */
+    void ready();
 
 private slots:
     /**
      * @brief called when process has been finished
      * @param exitCode       exit code of the application
-     * @param exitStatus     exit status of the applicaiton
+     * @param exitStatus     exit status of the application
      */
     void finished(const int exitCode, const QProcess::ExitStatus exitStatus);
 
@@ -110,7 +119,7 @@ private:
     /**
      * @brief widget which contains app
      */
-    QWidget *m_widget = nullptr;
+    QList<QWidget *> m_widgets;
 };
 
 

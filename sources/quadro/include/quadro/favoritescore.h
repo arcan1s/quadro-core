@@ -28,7 +28,6 @@
 
 #include <QMap>
 #include <QObject>
-#include <QStringList>
 
 
 class ApplicationItem;
@@ -52,25 +51,48 @@ public:
      */
     virtual ~FavoritesCore();
     /**
+     * @brief add or remove application to the favorites items
+     * @param _item          pointer to application item object
+     */
+    void add(ApplicationItem *_item);
+    /**
      * @brief find applications
      * @return map of applications
      */
     QMap<QString, ApplicationItem *> applications() const;
     /**
-     * @brief add new application to the favorites items
+     * @brief add or remove application to the favorites items
+     * @param _item          pointer to application item object
+     * @return application item
+     */
+    static ApplicationItem *addToFavorites(ApplicationItem *_item);
+    /**
+     * @brief add or remove application to the favorites items
      * @param _executable    path to executable
      * @param _name          desktop name
      * @param _iconName      icon name in the theme
      * @return application item
      */
-    ApplicationItem *addToFavorites(const QString _executable,
-                                    const QString _name = QString(),
-                                    const QString _iconName = QString("system-run"));
+    static ApplicationItem *addToFavorites(const QString _executable,
+                                           const QString _name = QString(),
+                                           const QString _iconName = QString("system-run"));
+    /**
+     * @brief check whether the application in favorites
+     * @param _item          pointer to application item object
+     * @return true if application is in favorites otherwise returns false
+     */
+    bool check(ApplicationItem *_item);
     /**
      * @brief path to desktop files
      * @return full path to desktop files
      */
     static QString desktopPath();
+    /**
+     * @brief check whether the application in favorites
+     * @param _item          pointer to application item object
+     * @return true if application is in favorites otherwise returns false
+     */
+    static bool hasApplication(ApplicationItem *_item);
 
 public slots:
     /**
@@ -98,6 +120,11 @@ private:
      */
     QStringList m_order;
     /**
+     * @brief add application to favorites
+     * @param _item          pointer to application item
+     */
+    void addAppToFavorites(ApplicationItem *_item);
+    /**
      * @brief return applications which has desktop files
      * @return map of generated ApplicationItem
      */
@@ -107,6 +134,11 @@ private:
      * @return list of applications in the correct order
      */
     QStringList getApplicationsOrder() const;
+    /**
+     * @brief remove application from favorites
+     * @param _item          pointer to application item
+     */
+    void removeAppFromFavorites(ApplicationItem *_item);
 };
 
 

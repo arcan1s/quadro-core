@@ -15,7 +15,7 @@
  *   along with quadro. If not, see http://www.gnu.org/licenses/           *
  ***************************************************************************/
 /**
- * @file applicationlaunheritem.cpp
+ * @file applicationlauncheritem.cpp
  * Source code of quadro library
  * @author Evgeniy Alekseev
  * @copyright GPLv3
@@ -25,6 +25,7 @@
 
 #include "quadro/quadro.h"
 
+#include <QHash>
 #include <QWindow>
 
 
@@ -42,6 +43,7 @@ ApplicationLauncherItem::ApplicationLauncherItem(QWidget *parent, const QString 
     qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
 
     m_process = new QProcess(this);
+    connect(m_process, SIGNAL(started()), this, SLOT(updateWidgets()));
     connect(m_process, SIGNAL(finished(int, QProcess::ExitStatus)),
             this, SLOT(finished(int, QProcess::ExitStatus)));
 }
@@ -54,8 +56,8 @@ ApplicationLauncherItem::~ApplicationLauncherItem()
 {
     qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
 
+    m_widgets.clear();
     delete m_process;
-    delete m_widget;
 }
 
 
@@ -93,9 +95,9 @@ QProcess::ProcessState ApplicationLauncherItem::processState() const
 /**
  * @fn widget
  */
-QWidget *ApplicationLauncherItem::widget()
+QList<QWidget *> ApplicationLauncherItem::widgets()
 {
-    return m_widget;
+    return m_widgets;
 }
 
 
@@ -108,17 +110,6 @@ void ApplicationLauncherItem::startApplication()
 
     //run process and find its wid
     m_process->start(m_command);
-    QMap<Q_PID, WId> windows = X11Adaptor::getWindowsList();
-    if (!windows.contains(processId())) {
-        qCWarning(LOG_LIB) << "Could not find window for PID" << processId();
-        return;
-    }
-
-    // init widget
-    QWindow *window = QWindow::fromWinId(windows[processId()]);
-    // delete widget if exist
-    delete m_widget;
-    m_widget = QWidget::createWindowContainer(window, m_parent, Qt::SubWindow);
 }
 
 
@@ -134,6 +125,32 @@ void ApplicationLauncherItem::stopApplication()
 
 
 /**
+ * @fn updateWidgets
+ */
+void ApplicationLauncherItem::updateWidgets()
+{
+    if (processId() == 0) {
+        qCCritical(LOG_LIB) << "Cound not get PID";
+        return;
+    }
+
+    QList<WId> windows = X11Adaptor::getWindowByPid(processId());
+    if (windows.isEmpty()) {
+        qCCritical(LOG_LIB) << "Could not find window for PID" << processId();
+        return QTimer::singleShot(333, this, SLOT(updateWidgets()));
+    }
+    qCInfo(LOG_UI) << "Found WIds" << windows << "for PID" << processId();
+
+    // init widget
+    m_widgets.clear();
+    foreach (WId id, windows)
+        m_widgets.append(QWidget::createWindowContainer(QWindow::fromWinId(id), m_parent));
+
+    return emit(ready());
+}
+
+
+/**
  * @fn finished
  */
 void ApplicationLauncherItem::finished(const int exitCode,
@@ -142,6 +159,5 @@ void ApplicationLauncherItem::finished(const int exitCode,
     qCDebug(LOG_LIB) << "Exit code" << exitCode;
     qCDebug(LOG_LIB) << "Exit status" << exitStatus;
 
-    delete m_widget;
-    m_widget = nullptr;
+    m_widgets.clear();
 }

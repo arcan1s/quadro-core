@@ -26,11 +26,13 @@
 #ifndef X11ADAPTOR_H
 #define X11ADAPTOR_H
 
-#include <QMap>
+#include <QHash>
 #include <QObject>
 #include <QX11Info>
 
+#ifndef MAX_PROPERTY_VALUE_LEN
 #define MAX_PROPERTY_VALUE_LEN 4096
+#endif /* MAX_PROPERTY_VALUE_LEN */
 
 typedef unsigned long Window;
 typedef unsigned long Atom;
@@ -55,11 +57,16 @@ public:
      */
     virtual ~X11Adaptor();
     /**
+     * @brief get WIds by given PID
+     * @param _pid           PID
+     * @return list of WIds
+     */
+    static QList<unsigned long long> getWindowByPid(const long long _pid);
+    /**
      * @brief get active windows
-     * @param debugCmd       show debug messages
      * @return map of windows keys of which are Q_PIDs
      */
-    static QMap<long long, unsigned long long> getWindowsList();
+    QHash<long long, unsigned long long> getWindowsList();
 
 public slots:
 
@@ -71,15 +78,15 @@ private:
      */
     Window *getClientList(unsigned long *size) const;
     /**
-     * @brief get propery by window
-     * @param _win           window to which need to get propery
-     * @param _xaPropType    required propery type
-     * @param _propery       propery name
+     * @brief get property by window
+     * @param _win           window to which need to get property
+     * @param _xaPropType    required property type
+     * @param _property      property name
      * @param size           pointer to size, will be filled in the method
-     * @return propery
+     * @return property
      */
     char *getPropery(const Window _win, const Atom _xaPropType,
-                     const char *_propery, unsigned long *size) const;
+                     const char *_property, unsigned long *size) const;
 };
 
 

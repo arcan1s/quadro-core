@@ -27,17 +27,19 @@
 
 #include <QDesktopServices>
 #include <QDir>
+#include <QIcon>
 #include <QMimeDatabase>
+#include <QMimeType>
 #include <QUrl>
 
 
 /**
- * @class FileManager
+ * @class FileManagerCore
  */
 /**
- * @fn FileManager
+ * @fn FileManagerCore
  */
-FileManager::FileManager(QObject *parent)
+FileManagerCore::FileManagerCore(QObject *parent)
     : QObject(parent)
 {
     qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
@@ -45,9 +47,9 @@ FileManager::FileManager(QObject *parent)
 
 
 /**
- * @fn ~FileManager
+ * @fn ~FileManagerCore
  */
-FileManager::~FileManager()
+FileManagerCore::~FileManagerCore()
 {
     qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
 }
@@ -56,8 +58,8 @@ FileManager::~FileManager()
 /**
  * @fn directoryEntries
  */
-QFileInfoList FileManager::directoryEntries(const QString _directory, const bool _hidden,
-                                            const QStringList _filter) const
+QFileInfoList FileManagerCore::directoryEntries(const QString _directory, const bool _hidden,
+                                                const QStringList _filter) const
 {
     qCDebug(LOG_LIB) << "Directory" << _directory;
     qCDebug(LOG_LIB) << "Show hidden" << _hidden;
@@ -65,21 +67,21 @@ QFileInfoList FileManager::directoryEntries(const QString _directory, const bool
 
     QDir dir = QDir(_directory);
     if (!dir.exists()) {
-        qCWarning(LOG_LIB) << "Could not find directory" << _directory;
+        qCCritical(LOG_LIB) << "Could not find directory" << _directory;
         return QFileInfoList();
     }
 
     if (_hidden)
-        return dir.entryInfoList(_filter, QDir::AllEntries | QDir::Hidden | QDir::NoDotAndDotDot);
+        return dir.entryInfoList(_filter, QDir::AllEntries | QDir::Hidden | QDir::NoDot);
     else
-        return dir.entryInfoList(_filter, QDir::AllEntries | QDir::NoDotAndDotDot);
+        return dir.entryInfoList(_filter, QDir::AllEntries | QDir::NoDot);
 }
 
 
 /**
  * @fn iconByFileName
  */
-QIcon FileManager::iconByFileName(const QString _file) const
+QIcon FileManagerCore::iconByFileName(const QString _file) const
 {
     qCDebug(LOG_LIB) << "File" << _file;
 
@@ -93,7 +95,7 @@ QIcon FileManager::iconByFileName(const QString _file) const
 /**
  * @fn mimeTypeForFile
  */
-QMimeType FileManager::mimeByFileName(const QString _file) const
+QMimeType FileManagerCore::mimeByFileName(const QString _file) const
 {
     qCDebug(LOG_LIB) << "File" << _file;
 
@@ -108,7 +110,7 @@ QMimeType FileManager::mimeByFileName(const QString _file) const
 /**
  * @fn
  */
-bool FileManager::openFile(const QFileInfo _file) const
+bool FileManagerCore::openFile(const QFileInfo _file) const
 {
     qCDebug(LOG_LIB) << "File" << _file.absoluteFilePath();
 

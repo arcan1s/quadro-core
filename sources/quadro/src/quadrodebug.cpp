@@ -28,6 +28,7 @@
 #include "version.h"
 
 
+Q_LOGGING_CATEGORY(LOG_DBUS, "core.quadro.dbus", QtMsgType::QtWarningMsg)
 Q_LOGGING_CATEGORY(LOG_LIB, "core.quadro.library", QtMsgType::QtWarningMsg)
 Q_LOGGING_CATEGORY(LOG_PL, "core.quadro.plugin", QtMsgType::QtWarningMsg)
 Q_LOGGING_CATEGORY(LOG_UI, "core.quadro.ui", QtMsgType::QtWarningMsg)

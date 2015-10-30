@@ -27,15 +27,16 @@
 #define FILEMANAGERCORE_H
 
 #include <QFileInfo>
-#include <QIcon>
-#include <QMimeType>
 #include <QObject>
 
+
+class QIcon;
+class QMimeType;
 
 /**
  * @brief The FileManager class provides file manager backend
  */
-class FileManager : public QObject
+class FileManagerCore : public QObject
 {
     Q_OBJECT
 
@@ -44,11 +45,11 @@ public:
      * @brief FileManager class constructor
      * @param parent         pointer to parent item
      */
-    explicit FileManager(QObject *parent);
+    explicit FileManagerCore(QObject *parent);
     /**
      * @brief FileManager class destructor
      */
-    virtual ~FileManager();
+    virtual ~FileManagerCore();
     /**
      * @brief find directory entries
      * @param _directory     path to directory on which you are looking for

@@ -27,8 +27,6 @@
 
 #include <QSettings>
 
-#include "version.h"
-
 
 /**
  * @class TabPluginItem
@@ -84,9 +82,9 @@ QString TabPluginItem::comment()
 /**
  * @fn configuration
  */
-QVariantMap TabPluginItem::configuration()
+QVariantHash TabPluginItem::configuration()
 {
-    QVariantMap pluginSettings;
+    QVariantHash pluginSettings;
     pluginSettings[QString("Comment")] = comment();
 
     return pluginSettings;
@@ -98,6 +96,7 @@ QVariantMap TabPluginItem::configuration()
  */
 QString TabPluginItem::htmlImage()
 {
+    // TODO
 //     PluginItem::ImageType type = defineImageType(background());
     QImage pluginImage;
     QString image;
@@ -197,7 +196,7 @@ bool TabPluginItem::saveSettings(const QString _desktopPath)
 {
     qCDebug(LOG_PL) << "Path" << _desktopPath;
 
-    QVariantMap config = configuration();
+    QVariantHash config = configuration();
     QSettings settings(_desktopPath, QSettings::IniFormat);
 
     settings.beginGroup(name());

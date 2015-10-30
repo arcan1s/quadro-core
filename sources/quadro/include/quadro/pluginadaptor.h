@@ -29,7 +29,7 @@
 #include <QDBusAbstractAdaptor>
 #include <QObject>
 
-#include "version.h"
+#include "config.h"
 
 
 class PluginItem;

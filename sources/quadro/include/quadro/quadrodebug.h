@@ -28,6 +28,10 @@
 
 #include <QLoggingCategory>
 
+/**
+ * @def LOG_FORMAT
+ * default log string
+ */
 #ifndef LOG_FORMAT
 #define LOG_FORMAT                                                             \
     "[%{time process}][%{if-debug}DD%{endif}%{if-info}II%{endif}%{if-"         \
@@ -35,15 +39,32 @@
     "category}][%{function}] %{message}"
 #endif /* LOG_FORMAT */
 
-// redefine info because it doesn't log properly
+/**
+ * @def qCInfo
+ * required by older Qt versions
+ * @remark required because Info log level doesn't log properly
+ */
 #ifdef qCInfo
 #undef qCInfo
 #endif /* qCInfo */
 #define qCInfo qCDebug
 
 
+/**
+ * @brief DBus logging category
+ */
+Q_DECLARE_LOGGING_CATEGORY(LOG_DBUS)
+/**
+ * @brief library logging category
+ */
 Q_DECLARE_LOGGING_CATEGORY(LOG_LIB)
+/**
+ * @brief plugin logging category
+ */
 Q_DECLARE_LOGGING_CATEGORY(LOG_PL)
+/**
+ * @brief UI logging category
+ */
 Q_DECLARE_LOGGING_CATEGORY(LOG_UI)
 
 /**

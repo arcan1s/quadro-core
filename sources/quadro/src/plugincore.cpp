@@ -30,8 +30,6 @@
 #include <QSettings>
 #include <QStandardPaths>
 
-#include "version.h"
-
 
 /**
  * @class PluginCore

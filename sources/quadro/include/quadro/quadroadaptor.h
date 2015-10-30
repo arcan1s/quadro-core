@@ -27,9 +27,8 @@
 #define QUADROADAPTOR_H
 
 #include <QDBusAbstractAdaptor>
-#include <QObject>
 
-#include "version.h"
+#include "config.h"
 
 
 class QuadroCore;

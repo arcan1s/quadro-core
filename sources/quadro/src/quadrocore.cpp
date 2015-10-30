@@ -23,6 +23,9 @@
  */
 
 
+#include <QDBusConnection>
+#include <QDBusMessage>
+
 #include "quadro/quadro.h"
 
 
@@ -32,10 +35,21 @@
 /**
  * @fn QuadroCore
  */
-QuadroCore::QuadroCore(QObject *parent)
+QuadroCore::QuadroCore(QObject *parent, const QVariantHash configuration)
     : QObject(parent)
+    , m_configuration(configuration)
 {
     qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
+
+    m_favorites = new FavoritesCore(this);
+    m_favorites->initApplications();
+    m_filemanager = new FileManagerCore(this);
+    m_launcher = new LauncherCore(this);
+    m_launcher->initApplications();
+    m_recently = new RecentlyCore(this, m_configuration[QString("RecentItemsCount")].toInt());
+    m_recently->initApplications();
+
+    createDBusSession();
 }
 
 
@@ -45,4 +59,67 @@ QuadroCore::QuadroCore(QObject *parent)
 QuadroCore::~QuadroCore()
 {
     qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
+
+    QDBusConnection::sessionBus().unregisterObject(DBUS_OBJECT_PATH);
+    QDBusConnection::sessionBus().unregisterService(DBUS_SERVICE);
+
+    delete m_favorites;
+    delete m_filemanager;
+    delete m_launcher;
+    delete m_recently;
+}
+
+
+/**
+ * @fn favorites
+ */
+FavoritesCore *QuadroCore::favorites()
+{
+    return m_favorites;
+}
+
+
+/**
+ * @fn filemanager
+ */
+FileManagerCore *QuadroCore::filemanager()
+{
+    return m_filemanager;
+}
+
+
+/**
+ * @fn launcher
+ */
+LauncherCore *QuadroCore::launcher()
+{
+    return m_launcher;
+}
+
+
+/**
+ * @fn recently
+ */
+RecentlyCore *QuadroCore::recently()
+{
+    return m_recently;
+}
+
+
+/**
+ * @fn createDBusSession
+ */
+void QuadroCore::createDBusSession()
+{
+    QDBusConnection bus = QDBusConnection::sessionBus();
+    if (!bus.registerService(DBUS_SERVICE)) {
+        qCWarning(LOG_UI) << "Could not register service";
+        qCWarning(LOG_UI) << bus.lastError().message();
+    }
+    if (!bus.registerObject(DBUS_OBJECT_PATH,
+                            new QuadroAdaptor(this),
+                            QDBusConnection::ExportAllContents)) {
+        qCWarning(LOG_UI) << "Could not register library object";
+        qCWarning(LOG_UI) << bus.lastError().message();
+    }
 }

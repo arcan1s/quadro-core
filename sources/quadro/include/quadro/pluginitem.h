@@ -101,7 +101,7 @@ public:
      * @brief plugin current settings which will be applied on next start
      * @return configuration map
      */
-    QVariantMap configuration();
+    QVariantHash configuration();
     /**
      * @brief plugin data in text
      * @return data

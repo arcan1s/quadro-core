@@ -53,28 +53,43 @@ X11Adaptor::~X11Adaptor()
 
 
 /**
- * @fn getWindowsList
+ * @fn getWindowByPid
  */
-QMap<long long, unsigned long long> X11Adaptor::getWindowsList()
+QList<unsigned long long> X11Adaptor::getWindowByPid(const long long _pid)
 {
-    QMap<long long, unsigned long long> windows;
-    if (QX11Info::display() == nullptr) return windows;
+    if (QX11Info::display() == nullptr) {
+        qCCritical(LOG_LIB) << "Could not connect to display";
+        return QList<unsigned long long>();
+    }
 
     X11Adaptor *instance = new X11Adaptor(nullptr);
+    QHash<long long, unsigned long long> windows = instance->getWindowsList();
+    delete instance;
+
+    return windows.values(_pid);
+}
+
+
+/**
+ * @fn getWindowsList
+ */
+QHash<long long, unsigned long long> X11Adaptor::getWindowsList()
+{
+    QHash<long long, unsigned long long> windows;
+
     unsigned long clientListSize;
-    Window *clientList = instance->getClientList(&clientListSize);
+    Window *clientList = getClientList(&clientListSize);
     if (clientList == nullptr) {
-        delete instance;
+        qCCritical(LOG_LIB) << "Could not get client list";
         return windows;
     }
 
-    for (unsigned int i=0; i<clientListSize / sizeof(Window); i++) {
-        long long *pid = (long long *)instance->getPropery(clientList[i], XA_CARDINAL,
-                                                           "_NET_WM_PID", nullptr);
-        windows[*pid] = clientList[i];
+    for (int i=0; i<clientListSize / sizeof(Window); i++) {
+        long long *pid = reinterpret_cast<long long *>(getPropery(clientList[i], XA_CARDINAL,
+                                                       "_NET_WM_PID", nullptr));
+        windows.insertMulti(*pid, clientList[i]);
     }
 
-    delete instance;
     return windows;
 }
 
@@ -83,46 +98,47 @@ Window *X11Adaptor::getClientList(unsigned long *size) const
 {
     qCDebug(LOG_LIB) << "Size" << size;
 
-    Window *clientList = nullptr;
-    if ((clientList = (Window *)getPropery(DefaultRootWindow(QX11Info::display()),
-                                           XA_WINDOW, "_NET_CLIENT_LIST", size)) == nullptr)
-        if ((clientList = (Window *)getPropery(DefaultRootWindow(QX11Info::display()),
-                                               XA_CARDINAL, "_WIN_CLIENT_LIST", size)) == nullptr) {
+    char *clientList = nullptr;
+    if ((clientList = getPropery(DefaultRootWindow(QX11Info::display()),
+                                 XA_WINDOW, "_NET_CLIENT_LIST", size)) == nullptr) {
+        if ((clientList = getPropery(DefaultRootWindow(QX11Info::display()),
+                                     XA_CARDINAL, "_WIN_CLIENT_LIST", size)) == nullptr) {
             qCCritical(LOG_LIB) << "Could not get properties _NET_CLIENT_LIST or _WIN_CLIENT_LIST";
             return nullptr;
         }
+    }
 
-    return clientList;
+    return reinterpret_cast<Window *>(clientList);
 }
 
 
 char *X11Adaptor::getPropery(const Window _win, const Atom _xaPropType,
-                             const char *_propery, unsigned long *size) const
+                             const char *_property, unsigned long *size) const
 {
-    qCDebug(LOG_LIB) << "Property" << _propery;
+    qCDebug(LOG_LIB) << "Property" << _property;
 
-    Atom xaPropName = XInternAtom(QX11Info::display(), _propery, false);
+    Atom xaPropName = XInternAtom(QX11Info::display(), _property, False);
 
     Atom xaRetType;
     int retFormat;
     unsigned long retBytesAfter;
-    unsigned long retNitems;
+    unsigned long retNItems;
     unsigned char *retProperty;
     if (XGetWindowProperty(QX11Info::display(), _win, xaPropName, 0,
                            MAX_PROPERTY_VALUE_LEN / 4, false,
                            _xaPropType, &xaRetType, &retFormat,
-                           &retNitems, &retBytesAfter, &retProperty) != Success) {
-        qCCritical(LOG_LIB) << ":" << "Could not get property" << _propery;
+                           &retNItems, &retBytesAfter, &retProperty) != Success) {
+        qCCritical(LOG_LIB) << ":" << "Could not get property" << _property;
         return nullptr;
     }
 
     if (xaRetType != _xaPropType) {
-        qCCritical(LOG_LIB) << "Invalid property name" << _propery;
+        qCCritical(LOG_LIB) << "Invalid property name" << _property;
         XFree(retProperty);
         return nullptr;
     }
 
     if (size != nullptr)
-        *size = (retFormat / 8) * retNitems;
+        *size = (retFormat / 4) * retNItems;
     return reinterpret_cast<char *>(retProperty);
 }

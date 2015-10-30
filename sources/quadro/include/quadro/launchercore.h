@@ -61,6 +61,7 @@ public:
      */
     QMap<QString, ApplicationItem *> applicationsBySubstr(const QString _substr) const;
 
+
 public slots:
     /**
      * @brief init application using given paths

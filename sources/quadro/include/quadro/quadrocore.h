@@ -27,7 +27,13 @@
 #define QUADROCORE_H
 
 #include <QObject>
+#include "recentlycore.h"
 
+
+class FavoritesCore;
+class FileManagerCore;
+class LauncherCore;
+class RecentlyCore;
 
 /**
  * @brief The QuadroCore class provides Quadro backend
@@ -40,16 +46,59 @@ public:
     /**
      * @brief QuadroCore class constructor
      * @param parent         pointer to parent item
+     * @param configuration  setting map
      */
-    explicit QuadroCore(QObject *parent);
+    explicit QuadroCore(QObject *parent, const QVariantHash configuration);
     /**
      * @brief QuadroCore class destructor
      */
     virtual ~QuadroCore();
-
-public slots:
+    /**
+     * @brief favorites core object
+     * @return pointer to favorites core object
+     */
+    FavoritesCore *favorites();
+    /**
+     * @brief filemanager core object
+     * @return pointer to filemanager core object
+     */
+    FileManagerCore *filemanager();
+    /**
+     * @brief launcher core object
+     * @return pointer to launcher core object
+     */
+    LauncherCore *launcher();
+    /**
+     * @brief recently core object
+     * @return pointer to recently core object
+     */
+    RecentlyCore *recently();
 
 private:
+    /**
+     * @brief create DBus session
+     */
+    void createDBusSession();
+    /**
+     * @brief favorites core object
+     */
+    FavoritesCore *m_favorites = nullptr;
+    /**
+     * @brief filemanager core object
+     */
+    FileManagerCore *m_filemanager = nullptr;
+    /**
+     * @brief launcher core object
+     */
+    LauncherCore *m_launcher = nullptr;
+    /**
+     * @brief recently core object
+     */
+    RecentlyCore *m_recently = nullptr;
+    /**
+     * @brief configuration
+     */
+    QVariantHash m_configuration;
 };
 
 
