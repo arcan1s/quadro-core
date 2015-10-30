@@ -61,6 +61,7 @@ QStringList PluginCore::activePlugins()
     QString fileName = QFileInfo(QDir(desktopPaths()[0]), QString("index.conf")).filePath();
     qCInfo(LOG_LIB) << "Configuration file" << fileName;
     QSettings settings(fileName, QSettings::IniFormat);
+    settings.setIniCodec("UTF-8");
 
     return settings.value(QString("Plugins")).toStringList();
 }
@@ -129,6 +130,7 @@ void PluginCore::saveActivePlugins(const QStringList _plugins)
     QString fileName = QFileInfo(QDir(desktopPaths()[0]), QString("index.conf")).filePath();
     qCInfo(LOG_LIB) << "Configuration file" << fileName;
     QSettings settings(fileName, QSettings::IniFormat);
+    settings.setIniCodec("UTF-8");
 
     settings.setValue(QString("Plugins"), _plugins);
 

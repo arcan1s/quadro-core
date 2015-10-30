@@ -94,9 +94,10 @@ ApplicationItem *RecentlyCore::addItemByName(const QString _name)
     rotate();
 
     QDateTime modification = QDateTime::currentDateTime();
-    ApplicationItem *item = new ApplicationItem(this, _name, QString());
+    ApplicationItem *item = new ApplicationItem(this, _name);
+    item->setExec(_name);
     item->setComment(modification.toString(Qt::ISODate));
-    item->setIconByName(QString("emblem-favorites"));
+    item->setIcon(QString("emblem-favorites"));
     if (item->saveDesktop(desktopPath()).isEmpty()) {
         qCCritical(LOG_LIB) << "Could not save" << item->desktopName();
         return nullptr;

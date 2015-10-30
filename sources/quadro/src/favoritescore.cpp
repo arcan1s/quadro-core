@@ -101,8 +101,9 @@ ApplicationItem *FavoritesCore::addToFavorites(const QString _executable,
     qCDebug(LOG_LIB) << "Name" << _name;
     qCDebug(LOG_LIB) << "Icon" << _iconName;
 
-    ApplicationItem *item = new ApplicationItem(nullptr, _executable, _name);
-    item->setIconByName(_iconName);
+    ApplicationItem *item = new ApplicationItem(nullptr, _name);
+    item->setExec(_name);
+    item->setIcon(_iconName);
     FavoritesCore *instance = new FavoritesCore(nullptr);
     instance->initApplications();
 
@@ -183,6 +184,7 @@ void FavoritesCore::saveApplicationsOrder() const
     QString fileName = QFileInfo(QDir(desktopPath()), QString("index.conf")).filePath();
     qCInfo(LOG_LIB) << "Configuration file" << fileName;
     QSettings settings(fileName, QSettings::IniFormat);
+    settings.setIniCodec("UTF-8");
 
     settings.setValue(QString("Order"), m_order);
 
@@ -234,6 +236,7 @@ QStringList FavoritesCore::getApplicationsOrder() const
     QString fileName = QFileInfo(QDir(desktopPath()), QString("index.conf")).filePath();
     qCInfo(LOG_LIB) << "Configuration file" << fileName;
     QSettings settings(fileName, QSettings::IniFormat);
+    settings.setIniCodec("UTF-8");
 
     return settings.value(QString("Order")).toStringList();
 }

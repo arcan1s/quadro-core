@@ -254,6 +254,7 @@ void PluginItem::readDesktop(const QString _desktopPath)
     qCDebug(LOG_PL) << "Path" << _desktopPath;
 
     QSettings settings(_desktopPath, QSettings::IniFormat);
+    settings.setIniCodec("UTF-8");
 
     settings.beginGroup(QString("Quadro plugin"));
     setApi(settings.value(QString("API"), m_api).toInt());
@@ -274,6 +275,7 @@ void PluginItem::readSettings(const QString _desktopPath)
     qCDebug(LOG_PL) << "Path" << _desktopPath;
 
     QSettings settings(_desktopPath, QSettings::IniFormat);
+    settings.setIniCodec("UTF-8");
 
     settings.beginGroup(name());
 
@@ -311,6 +313,7 @@ bool PluginItem::saveSettings(const QString _desktopPath)
 
     QVariantHash config = configuration();
     QSettings settings(_desktopPath, QSettings::IniFormat);
+    settings.setIniCodec("UTF-8");
 
     settings.beginGroup(name());
 

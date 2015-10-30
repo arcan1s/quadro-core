@@ -147,7 +147,8 @@ QMap<QString, ApplicationItem *> LauncherCore::getApplicationsFromPaths()
             QString executable = QFileInfo(QDir(path), entry).filePath();
             if (!QFileInfo(executable).isExecutable()) continue;
             qCInfo(LOG_LIB) << "Executable" << executable;
-            ApplicationItem *item = new ApplicationItem(this, executable);
+            ApplicationItem *item = new ApplicationItem(this, QFileInfo(executable).fileName());
+            item->setExec(executable);
             items[item->name()] = item;
         }
     }
