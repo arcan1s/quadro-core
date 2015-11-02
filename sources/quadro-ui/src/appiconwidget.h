@@ -39,13 +39,14 @@ public slots:
     void showContextMenu(const QPoint &pos);
 
 private slots:
+    void addItemToFavorites();
     void run();
     void runInNewTab();
 
 private:
     ApplicationItem *item = nullptr;
     QMenu *m_menu = nullptr;
-    // methdos
+    // methods
     void createActions();
 };
 

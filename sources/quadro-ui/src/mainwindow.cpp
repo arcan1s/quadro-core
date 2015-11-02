@@ -25,12 +25,16 @@
 #include <QTranslator>
 #include <QStandardPaths>
 #include <QUrl>
+#include <QWindow>
 
 #include <language/language.h>
 
 #include "applauncherwidget.h"
 #include "favlauncherwidget.h"
+#include "filemanagerwidget.h"
 #include "settingswindow.h"
+#include "standaloneappwidget.h"
+#include "quadrouiadaptor.h"
 #include "version.h"
 
 
@@ -129,16 +133,38 @@ void MainWindow::updateConfiguration(const QVariantHash args)
 }
 
 
+void MainWindow::createContainer(const QString exec)
+{
+    qCDebug(LOG_UI) << "Executable" << exec;
+
+    StandaloneApp *app = new StandaloneApp(this, exec,
+                                           ui->stackedWidget->count(), configuration);
+    connect(app, SIGNAL(destroyWindow(const int)), this, SLOT(removeContainer(const int)));
+
+    ui->stackedWidget->addWidget(app);
+    tabActions.append(ui->toolBar->addAction(exec));
+
+    return ui->stackedWidget->setCurrentWidget(app);
+}
+
+
+void MainWindow::removeContainer(const int index)
+{
+    qCDebug(LOG_UI) << "Remove tab" << index;
+
+    ui->stackedWidget->setCurrentIndex(0);
+    QWidget *widget = ui->stackedWidget->widget(index);
+    ui->stackedWidget->removeWidget(widget);
+    ui->toolBar->removeAction(tabActions[index]);
+    tabActions.removeAt(index);
+
+    widget->deleteLater();
+}
+
+
 void MainWindow::changeTabByAction(QAction *action)
 {
-    int index = -1;
-    for (int i=0; i<tabActions.count(); i++) {
-        if (tabActions.at(i) != action) continue;
-        index = i;
-        break;
-    }
-
-    return changeTab(index);
+    return changeTab(tabActions.indexOf(action));
 }
 
 
@@ -162,13 +188,15 @@ void MainWindow::initTabs()
     QStringList tabs = configuration[QString("Tabs")].toStringList();
     foreach (const QString tab, tabs) {
         if (tab == QString("applauncher")) {
-            ui->stackedWidget->addWidget(new AppLauncher(this, launcher, recent,
+            ui->stackedWidget->addWidget(new AppLauncher(this, m_core->launcher(),
+                                                         m_core->recently(),
                                                          configuration));
         } else if (tab == QString("favorites")) {
-            ui->stackedWidget->addWidget(new FavLauncher(this, favLauncher,
+            ui->stackedWidget->addWidget(new FavLauncher(this, m_core->favorites(),
                                                          configuration));
         } else if (tab == QString("filemanager")) {
-            ui->stackedWidget->addWidget(new QWidget());
+            ui->stackedWidget->addWidget(new FileManager(this, m_core->filemanager(),
+                                                         configuration));
         } else {
             continue;
         }
@@ -201,24 +229,20 @@ void MainWindow::createDBusSession()
         qCWarning(LOG_UI) << "Could not register service";
         qCWarning(LOG_UI) << bus.lastError().message();
     }
-//     if (!bus.registerObject(DBUS_OBJECT_PATH,
-//                             new QuadroUiAdaptor(this),
-//                             QDBusConnection::ExportAllContents)) {
-//         if (debug) qDebug() << PDEBUG << ":" << "Could not register GUI object";
-//         if (debug) qDebug() << PDEBUG << ":" << bus.lastError().message();
-//     }
+    if (!bus.registerObject(DBUS_UI_OBJECT_PATH,
+                            new QuadroUiAdaptor(this),
+                            QDBusConnection::ExportAllContents)) {
+        qCWarning(LOG_UI) << "Could not register GUI object";
+        qCWarning(LOG_UI) << bus.lastError().message();
+    }
 }
 
 
 void MainWindow::createObjects()
 {
     // backend
-    favLauncher = new FavoritesCore(this);
-    favLauncher->initApplications();
-    launcher = new LauncherCore(this);
-    launcher->initApplications();
-    recent = new RecentlyCore(this, configuration[QString("RecentItemsCount")].toInt());
-    recent->initApplications();
+    m_core = new QuadroCore(this, configuration);
+    createDBusSession();
 
     // frontend
     ui->retranslateUi(this);
@@ -235,11 +259,9 @@ void MainWindow::deleteObjects()
     clearTabs();
 
     // backend
-    delete favLauncher;
-    favLauncher = nullptr;
-    delete launcher;
-    launcher = nullptr;
-    delete recent;
-    recent = nullptr;
+    delete m_core;
+    m_core = nullptr;
 
+    QDBusConnection::sessionBus().unregisterObject(DBUS_UI_OBJECT_PATH);
+    QDBusConnection::sessionBus().unregisterService(DBUS_SERVICE);
 }

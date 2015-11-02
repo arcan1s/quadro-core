@@ -47,6 +47,8 @@ IconWidget::IconWidget(const QSize size, QWidget *parent)
     m_textLabel->setWordWrap(true);
     layout()->addWidget(m_textLabel);
 
+    setMouseTracking(true);
+
     // context menu
     setContextMenuPolicy(Qt::CustomContextMenu);
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this,

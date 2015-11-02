@@ -16,20 +16,29 @@
  ***************************************************************************/
 
 
-#ifndef MESSAGES_H
-#define MESSAGES_H
+#include "quadrouiadaptor.h"
 
-#include <QChar>
-#include <QHash>
-#include <QString>
-#include <QVariant>
+#include "mainwindow.h"
+#include "quadro/quadrodebug.h"
 
 
-QString errorMessage();
-QVariantHash getArgs();
-QString helpMessage();
-QString infoMessage();
-QString versionMessage();
+QuadroUiAdaptor::QuadroUiAdaptor(MainWindow *parent)
+    : QDBusAbstractAdaptor(parent),
+      mainWindow(parent)
+{
+    qCDebug(LOG_DBUS) << __PRETTY_FUNCTION__;
+}
 
 
-#endif /* MESSAGES_H */
+QuadroUiAdaptor::~QuadroUiAdaptor()
+{
+    qCDebug(LOG_DBUS) << __PRETTY_FUNCTION__;
+}
+
+
+void QuadroUiAdaptor::RunContainer(const QString exec)
+{
+    qCDebug(LOG_DBUS) << "Run container with" << exec;
+
+    return mainWindow->createContainer(exec);
+}

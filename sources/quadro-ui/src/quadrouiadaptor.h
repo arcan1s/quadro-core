@@ -16,20 +16,31 @@
  ***************************************************************************/
 
 
-#ifndef MESSAGES_H
-#define MESSAGES_H
+#ifndef QUADROUIADAPTOR_H
+#define QUADROUIADAPTOR_H
 
-#include <QChar>
-#include <QHash>
-#include <QString>
-#include <QVariant>
+#include <QDBusAbstractAdaptor>
 
-
-QString errorMessage();
-QVariantHash getArgs();
-QString helpMessage();
-QString infoMessage();
-QString versionMessage();
+#include "quadro/config.h"
 
 
-#endif /* MESSAGES_H */
+class MainWindow;
+
+class QuadroUiAdaptor : public QDBusAbstractAdaptor
+{
+    Q_OBJECT
+    Q_CLASSINFO("D-Bus Interface", DBUS_INTERFACE)
+
+public:
+    explicit QuadroUiAdaptor(MainWindow *parent);
+    virtual ~QuadroUiAdaptor();
+
+public slots:
+g    void RunContainer(const QString exec);
+
+private:
+    MainWindow *mainWindow = nullptr;
+};
+
+
+#endif /* QUADROUIADAPTOR_H */

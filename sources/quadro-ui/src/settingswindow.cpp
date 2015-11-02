@@ -1,18 +1,18 @@
 /***************************************************************************
- *   This file is part of netctl-gui                                       *
+ *   This file is part of quadro                                           *
  *                                                                         *
- *   netctl-gui is free software: you can redistribute it and/or           *
+ *   quadro is free software: you can redistribute it and/or               *
  *   modify it under the terms of the GNU General Public License as        *
  *   published by the Free Software Foundation, either version 3 of the    *
  *   License, or (at your option) any later version.                       *
  *                                                                         *
- *   netctl-gui is distributed in the hope that it will be useful,         *
+ *   quadro is distributed in the hope that it will be useful,             *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
  *   GNU General Public License for more details.                          *
  *                                                                         *
  *   You should have received a copy of the GNU General Public License     *
- *   along with netctl-gui. If not, see http://www.gnu.org/licenses/       *
+ *   along with quadro. If not, see http://www.gnu.org/licenses/           *
  ***************************************************************************/
 
 #include "settingswindow.h"
@@ -68,9 +68,11 @@ QVariantHash SettingsWindow::getSettings(QString fileName)
     config[QString("GridSize")] = settings.value(QString("GridSize"), 150.0);
     config[QString("Language")] = settings.value(QString("Language"), config[QString("Language")]);
     config[QString("RecentItemsCount")] = settings.value(QString("RecentItemsCount"), 20);
+    config[QString("ShowHidden")] = settings.value(QString("ShowHidden"), false);
     config[QString("Tabs")] = settings.value(QString("Tabs"), QStringList() <<
                                              QString("favorites") <<
-                                             QString("applauncher"));
+                                             QString("applauncher") <<
+                                             QString("filemanager"));
     settings.endGroup();
 
     for (int i=0; i<config.keys().count(); i++)
@@ -144,6 +146,8 @@ void SettingsWindow::saveSettings()
     settings.beginGroup(QString("Global"));
     settings.setValue(QString("GridSize"), config[QString("GridSize")]);
     settings.setValue(QString("Language"), config[QString("Language")]);
+    settings.setValue(QString("RecentItemsCount"), config[QString("RecentItemsCount")]);
+    settings.setValue(QString("ShowHidden"), config[QString("ShowHidden")]);
     settings.setValue(QString("Tabs"), config[QString("Tabs")]);
     settings.endGroup();
 

@@ -16,72 +16,48 @@
  ***************************************************************************/
 
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef STANDALONEAPPWIDGET_H
+#define STANDALONEAPPWIDGET_H
 
-#include <QAction>
-#include <QApplication>
 #include <QMainWindow>
+#include <QToolButton>
 
-#include "quadro/quadro.h"
+#include <quadro/quadro.h>
 
-
-class SettingsWindow;
 
 namespace Ui {
-class MainWindow;
+class StandaloneApp;
 }
 
-class MainWindow : public QMainWindow
+class StandaloneApp : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent,
-                        const QVariantHash args = QVariantHash(),
-                        QTranslator *qtAppTranslator = nullptr,
-                        QTranslator *appTranslator = nullptr);
-    virtual ~MainWindow();
+    explicit StandaloneApp(QWidget *parent, const QString exec, const int index = 0,
+                           const QVariantHash settings = QVariantHash());
+    virtual ~StandaloneApp();
 
 public slots:
-    void changeTab(const int index = -1);
-    void closeMainWindow();
-    void showSettingsWindow();
-    void updateConfiguration(const QVariantHash args = QVariantHash());
-    // container settings
-    void createContainer(const QString exec);
-    void removeContainer(const int index);
+    void paintWidget();
 
 signals:
-    void needToBeConfigured();
+    void destroyWindow(const int index);
 
 private slots:
-    void changeTabByAction(QAction *action);
-    void clearTabs();
-    void initTabs();
-
-protected:
-    void closeEvent(QCloseEvent *event);
+    void subWindowDestroyed();
 
 private:
     // ui
-    QList<QAction *> tabActions;
-    SettingsWindow *settingsWindow = nullptr;
-    Ui::MainWindow *ui = nullptr;
+    Ui::StandaloneApp *ui = nullptr;
     // backend
-    void createActions();
-    void createDBusSession();
     void createObjects();
-    void deleteObjects();
-    QString configPath;
-    // library
-    QuadroCore *m_core = nullptr;
-    // translators
-    QTranslator *qtTranslator = nullptr;
-    QTranslator *translator = nullptr;
+    ApplicationLauncherItem *application = nullptr;
     // configuration
     QVariantHash configuration;
+    QString m_exec;
+    int m_index;
 };
 
 
-#endif /* MAINWINDOW_H */
+#endif /* STANDALONEAPPWIDGET_H */

@@ -16,20 +16,18 @@
  ***************************************************************************/
 
 
-#ifndef MESSAGES_H
-#define MESSAGES_H
+#ifndef DBUSOPERATION_H
+#define DBUSOPERATION_H
 
-#include <QChar>
-#include <QHash>
-#include <QString>
 #include <QVariant>
 
 
-QString errorMessage();
-QVariantHash getArgs();
-QString helpMessage();
-QString infoMessage();
-QString versionMessage();
+QVariantList sendRequest(const QString service, const QString path, const QString interface,
+                         const QString cmd, const QVariantList args);
+QVariantList sendRequestToLibrary(const QString cmd, const QVariantList args = QVariantList());
+QVariantList sendRequestToPlugin(const QString plugin, const QString cmd,
+                                 const QVariantList args = QVariantList());
+QVariantList sendRequestToUi(const QString cmd, const QVariantList args = QVariantList());
 
 
-#endif /* MESSAGES_H */
+#endif /* DBUSOPERATION_H */

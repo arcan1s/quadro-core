@@ -20,6 +20,8 @@
 #include <QMenu>
 
 #include "appiconwidget.h"
+#include "applauncherwidget.h"
+#include "dbusoperation.h"
 
 
 AppIconWidget::AppIconWidget(ApplicationItem *appItem, const QSize size,
@@ -29,8 +31,9 @@ AppIconWidget::AppIconWidget(ApplicationItem *appItem, const QSize size,
 {
     qCDebug(LOG_UI) << __PRETTY_FUNCTION__;
 
-    setIcon(item->icon());
+    setIcon(item->appIcon());
     setText(item->name());
+    setToolTip(item->comment());
     createActions();
 
     connect(this, SIGNAL(widgetPressed()), this, SLOT(run()));
@@ -57,6 +60,12 @@ void AppIconWidget::showContextMenu(const QPoint &pos)
 }
 
 
+void AppIconWidget::addItemToFavorites()
+{
+    FavoritesCore::addToFavorites(item);
+}
+
+
 void AppIconWidget::run()
 {
     item->launch();
@@ -65,7 +74,7 @@ void AppIconWidget::run()
 
 void AppIconWidget::runInNewTab()
 {
-    // TODO
+    sendRequestToUi(QString("RunContainer"), QVariantList() << item->exec());
 }
 
 
@@ -80,6 +89,8 @@ void AppIconWidget::createActions()
                       QApplication::translate("AppIconWidget", "Run application in new tab"),
                       this, SLOT(runInNewTab()));
     m_menu->addAction(QIcon::fromTheme(QString("emblem-favorites")),
+                      FavoritesCore::hasApplication(item) ?
+                      QApplication::translate("AppIconWidget", "Remove from favorites") :
                       QApplication::translate("AppIconWidget", "Add to favorites"),
-                      this, SLOT(runInNewTab()));
+                      this, SLOT(addItemToFavorites()));
 }

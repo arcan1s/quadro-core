@@ -22,6 +22,7 @@
 #include <QAction>
 
 #include "appiconwidget.h"
+#include "mainwindow.h"
 #include "quadrowidget.h"
 
 
