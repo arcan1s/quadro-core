@@ -73,7 +73,7 @@ QStringList PluginCore::activePlugins()
 QStringList PluginCore::desktopPaths()
 {
     QStringList locations;
-    QStringList defaultLocations = QStandardPaths::standardLocations(QStandardPaths::DataLocation);
+    QStringList defaultLocations = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation);
     for (int i=0; i<defaultLocations.count(); i++)
         locations.append(QString("%1/%2/%3").arg(defaultLocations[i]).arg(HOME_PATH).arg(PLUGIN_PATH));
 

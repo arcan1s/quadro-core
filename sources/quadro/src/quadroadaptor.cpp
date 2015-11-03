@@ -47,3 +47,21 @@ QuadroAdaptor::~QuadroAdaptor()
 {
     qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
 }
+
+
+/**
+ * @fn UpdateFavorites
+ */
+void QuadroAdaptor::UpdateFavorites() const
+{
+    m_core->favorites()->initApplications();
+}
+
+
+/**
+ * @fn UpdateRecent
+ */
+void QuadroAdaptor::UpdateRecent() const
+{
+    m_core->recently()->initApplications();
+}

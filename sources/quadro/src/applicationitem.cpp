@@ -447,8 +447,12 @@ ApplicationItem *ApplicationItem::fromDesktop(const QString _desktopPath, QObjec
 
     ApplicationItem *item = new ApplicationItem(_parent, QString());
     settings.beginGroup(QString("Desktop Entry"));
-    foreach (const QString key, settings.childKeys())
-        item->setProperty(key.toUtf8().constData(), settings.value(key));
+    foreach (const QString key, settings.childKeys()) {
+        // HACK avoid commas in fields
+        QVariant orig = settings.value(key);
+        QVariant value = orig.type() == QVariant::StringList ? orig.toStringList().join(QString(", ")) : orig;
+        item->setProperty(key.toUtf8().constData(), value);
+    }
 
     // update localized fields
     // locale keys, modifier (@mod) is ignored
@@ -462,7 +466,10 @@ ApplicationItem *ApplicationItem::fromDesktop(const QString _desktopPath, QObjec
             QString propName = QString("%1[%2]").arg(prop).arg(loc);
             if (!settings.contains(propName))
                 continue;
-            item->setProperty(prop.toUtf8().constData(), settings.value(propName));
+            // HACK avoid commas in fields
+            QVariant orig = settings.value(propName);
+            QVariant value = orig.type() == QVariant::StringList ? orig.toStringList().join(QString(", ")) : orig;
+            item->setProperty(prop.toUtf8().constData(), value);
             break;
         }
     }
@@ -538,7 +545,7 @@ bool ApplicationItem::startsWith(const QString _substr) const
 /**
  * @fn launch
  */
-void ApplicationItem::launch(const QVariantHash args) const
+bool ApplicationItem::launch(const QVariantHash args) const
 {
     qCDebug(LOG_LIB) << "Program arguments" << args;
 
@@ -551,15 +558,17 @@ void ApplicationItem::launch(const QVariantHash args) const
         }
         if ((m_tryExec.isEmpty())
             || (p.exitCode() == 0)) {
-            run(args);
+            return run(args);
         } else {
             qCWarning(LOG_LIB) << "Ignore launch";
         }
     } else if (m_type == QString("Link")) {
-        QDesktopServices::openUrl(QUrl(m_url));
+        return QDesktopServices::openUrl(QUrl(m_url));
     } else if (m_type == QString("Directory")) {
-        QDesktopServices::openUrl(QUrl(QString("file://%1").arg(m_path)));
+        return QDesktopServices::openUrl(QUrl(QString("file://%1").arg(m_path)));
     }
+
+    return false;
 }
 
 
@@ -583,18 +592,19 @@ QString ApplicationItem::saveDesktop(const QString _desktopPath) const
                                     << QString("TryExec") << QString("Exec")
                                     << QString("Path") << QString("Terminal")
                                     << QString("URL"));
-    QStringList knownListProperties(QStringList() << QString("Comment")
+    QStringList knownListProperties(QStringList() << QString("Categories")
                                         << QString("Keywords") << QString("MimeType"));
 
     settings.beginGroup(QString("Desktop Entry"));
     foreach (const QString prop, knownProperties) {
         QVariant value = property(prop.toUtf8().constData());
-        if (!value.isNull())
+        if (!value.isNull() && !value.toString().isEmpty())
             settings.setValue(prop, value.toString());
     }
     foreach (const QString prop, knownListProperties) {
         QVariant value = property(prop.toUtf8().constData());
-        if (!value.isNull())
+        qDebug() << value;
+        if (!value.isNull() && !value.toStringList().isEmpty())
             settings.setValue(prop, value.toStringList().join(QChar(';')));
     }
     settings.endGroup();
@@ -621,12 +631,13 @@ bool ApplicationItem::removeDesktop(const QString _desktopPath) const
 /**
  * @fn run
  */
-void ApplicationItem::run(const QVariantHash args) const
+bool ApplicationItem::run(const QVariantHash args) const
 {
     qCDebug(LOG_LIB) << "Program arguments" << args;
 
     // build cmd
-    QString cmd = m_exec;
+    QString cmd;
+    QStringList cmdArgs = m_exec.split(QChar(' '), QString::SkipEmptyParts);
     // replace keys according to
     // http://standards.freedesktop.org/desktop-entry-spec/latest/ar01s06.html
     QStringList keys(QStringList() << QString("%f") << QString("%F")
@@ -634,22 +645,28 @@ void ApplicationItem::run(const QVariantHash args) const
                          << QString("%D") << QString("%n") << QString("%N")
                          << QString("%i") << QString("%c") << QString("%k")
                          << QString("%V") << QString("%m"));
+    for (int i=0; i<cmdArgs.count(); i++) {
         foreach (const QString key, keys)
-            cmd.replace(key, args[key].type() == QVariant::StringList
-                             ? args[key].toStringList().join(QChar(' '))
-                             : args[key].toString());
-    // end
-    cmd.replace(QString("%%"), QString("%"));
+            cmdArgs[i].replace(key, args[key].type() == QVariant::StringList
+                                    ? args[key].toStringList().join(QChar(' '))
+                                    : args[key].toString());
+        // end
+        cmdArgs[i].replace(QString("%%"), QString("%"));
+    }
 
     // prepend $TERM if any
     if (m_terminal) {
         QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
         QString term = env.value(QString("TERM"));
-        if (term.isEmpty())
+        if (term.isEmpty()) {
             qCWarning(LOG_LIB) << "Could not get $TERM variable, ignoring";
-        else
-            cmd = QString("%1 %2").arg(cmd);
+            cmd = cmdArgs.takeFirst();
+        } else {
+            cmd = term;
+        }
+    } else {
+        cmd = cmdArgs.takeFirst();
     }
 
-    QProcess::startDetached(cmd, QStringList(), m_path);
+    return QProcess::startDetached(cmd, cmdArgs, m_path.isEmpty() ? QString("/") : m_path);
 }

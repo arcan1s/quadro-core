@@ -77,7 +77,7 @@ QMap<QString, ApplicationItem *> RecentlyCore::applicationsBySubstr(const QStrin
  */
 QString RecentlyCore::desktopPath()
 {
-    QString homePath = QString("%1/%2").arg(QStandardPaths::writableLocation(QStandardPaths::DataLocation))
+    QString homePath = QString("%1/%2").arg(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation))
                                        .arg(HOME_PATH);
 
     return QString("%1/%2").arg(homePath).arg(RECENT_PATH);
@@ -85,27 +85,39 @@ QString RecentlyCore::desktopPath()
 
 
 /**
- * @fn addItemByName
+ * @fn addItem
  */
-ApplicationItem *RecentlyCore::addItemByName(const QString _name)
+ApplicationItem *RecentlyCore::addItem(ApplicationItem *_item)
+{
+    qCDebug(LOG_LIB) << "Item name" << _item->name();
+
+    rotate();
+    QDateTime modification = QDateTime::currentDateTime();
+
+    _item->setComment(modification.toString(Qt::ISODate));
+    _item->setIcon(QString("emblem-favorites"));
+
+    if (_item->saveDesktop(desktopPath()).isEmpty()) {
+        qCCritical(LOG_LIB) << "Could not save" << _item->desktopName();
+        return nullptr;
+    }
+    initApplications();
+
+    return _item;
+}
+
+
+/**
+ * @fn addItem
+ */
+ApplicationItem *RecentlyCore::addItem(const QString _name)
 {
     qCDebug(LOG_LIB) << "Item name" << _name;
 
-    rotate();
-
-    QDateTime modification = QDateTime::currentDateTime();
     ApplicationItem *item = new ApplicationItem(this, _name);
     item->setExec(_name);
-    item->setComment(modification.toString(Qt::ISODate));
-    item->setIcon(QString("emblem-favorites"));
-    if (item->saveDesktop(desktopPath()).isEmpty()) {
-        qCCritical(LOG_LIB) << "Could not save" << item->desktopName();
-        return nullptr;
-    }
 
-    initApplications();
-
-    return item;
+    return addItem(item);
 }
 
 

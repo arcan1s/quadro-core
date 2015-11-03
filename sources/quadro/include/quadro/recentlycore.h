@@ -65,11 +65,17 @@ public:
 
 public slots:
     /**
-     * @brief add item to recent run by its name
-     * @param _name          pointer to recent item run
+     * @brief add item to recent run
+     * @param _item          pointer to recent item run
      * @return pointer to created ApplicationItem
      */
-    ApplicationItem *addItemByName(const QString _name);
+    ApplicationItem *addItem(ApplicationItem *_item);
+    /**
+     * @brief add item to recent run by its name
+     * @param _name          recent application name
+     * @return pointer to created ApplicationItem
+     */
+    ApplicationItem *addItem(const QString _name);
     /**
      * @brief init application using given paths
      */

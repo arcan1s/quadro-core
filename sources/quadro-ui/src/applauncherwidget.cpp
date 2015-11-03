@@ -20,8 +20,10 @@
 #include "ui_applauncherwidget.h"
 
 #include <QAction>
+#include <QMessageBox>
 
 #include "appiconwidget.h"
+#include "dbusoperation.h"
 #include "mainwindow.h"
 #include "quadrowidget.h"
 
@@ -29,8 +31,8 @@
 AppLauncher::AppLauncher(QWidget *parent, LauncherCore *appLauncher,
                          RecentlyCore *recentLauncher, const QVariantHash settings)
     : QMainWindow(parent),
-      launcher(appLauncher),
-      recent(recentLauncher),
+      m_launcher(appLauncher),
+      m_recent(recentLauncher),
       configuration(settings)
 {
     qCDebug(LOG_UI) << __PRETTY_FUNCTION__;
@@ -47,8 +49,8 @@ AppLauncher::~AppLauncher()
 {
     qCDebug(LOG_UI) << __PRETTY_FUNCTION__;
 
-    categoryButtons.clear();
-    categoryWidgets.clear();
+    m_categoryButtons.clear();
+    m_categoryWidgets.clear();
     delete ui;
 }
 
@@ -71,30 +73,31 @@ void AppLauncher::changeCategory(const int index)
 
 void AppLauncher::changeCategoryByAction(QAction *action)
 {
-    int index = -1;
-    for (int i=0; i<categoryButtons.count(); i++) {
-        if (categoryButtons.at(i) != action) continue;
-        index = i;
-        break;
-    }
-
-    return changeCategory(index);
+    return changeCategory(m_categoryButtons.indexOf(action));
 }
 
 
 void AppLauncher::runApplication()
 {
-    // TODO implement mainwindow hidding (DBus?)
+    m_recent->addItem(static_cast<AppIconWidget *>(sender())->associatedItem());
 }
 
 
 void AppLauncher::runCustomApplication()
 {
     QString exec = ui->lineEdit->text();
-    ApplicationItem *item = recent->addItemByName(exec);
+    ui->lineEdit->clear();
 
-    // TODO error checking
-    item->launch();
+    ApplicationItem *item = new ApplicationItem(this, exec);
+    item->setExec(exec);
+
+    if (item->launch())
+        m_recent->addItem(item);
+    else
+        QMessageBox::critical(this, QApplication::translate("AppLauncher", "Error"),
+                              QApplication::translate("AppLauncher", "Could not run application %1").arg(exec));
+
+    sendRequestToUi(QString("Hide"));
 }
 
 
@@ -104,7 +107,7 @@ void AppLauncher::showSearchResults(const QString search)
 
     // clear
     QLayoutItem *item;
-    while ((item = categoryWidgets.last()->widget()->layout()->takeAt(0))) {
+    while ((item = m_categoryWidgets.last()->widget()->layout()->takeAt(0))) {
         delete item->widget();
         delete item;
     }
@@ -112,11 +115,11 @@ void AppLauncher::showSearchResults(const QString search)
     // return if none to do here
     if (search.isEmpty()) return ui->stackedWidget->setCurrentIndex(0);
     // add items
-    QMap<QString, ApplicationItem *> apps = recent->applicationsBySubstr(search);
-    QMap<QString, ApplicationItem *> launcherApps = launcher->applicationsBySubstr(search);
+    QMap<QString, ApplicationItem *> apps = m_recent->applicationsBySubstr(search);
+    QMap<QString, ApplicationItem *> launcherApps = m_launcher->applicationsBySubstr(search);
     foreach (ApplicationItem *app, apps.values() + launcherApps.values()) {
-        QWidget *wItem = new AppIconWidget(app, itemSize(), categoryWidgets.last()->widget());
-        categoryWidgets.last()->widget()->layout()->addWidget(wItem);
+        QWidget *wItem = new AppIconWidget(app, itemSize(), m_categoryWidgets.last()->widget());
+        m_categoryWidgets.last()->widget()->layout()->addWidget(wItem);
         connect(wItem, SIGNAL(widgetPressed()), this, SLOT(runApplication()));
     }
 
@@ -135,17 +138,17 @@ void AppLauncher::createActions()
 
 void AppLauncher::createObjects()
 {
-    QStringList categories = launcher->availableCategories();
+    QStringList categories = m_launcher->availableCategories();
     foreach (const QString cat, categories) {
-        categoryButtons.append(ui->toolBar->addAction(cat));
-        categoryWidgets.append(new QuadroWidget(this, itemSize().width()));
-        ui->stackedWidget->addWidget(categoryWidgets.last());
-        initCategory(cat, categoryWidgets.last()->widget());
+        m_categoryButtons.append(ui->toolBar->addAction(cat));
+        m_categoryWidgets.append(new QuadroWidget(this, itemSize().width()));
+        ui->stackedWidget->addWidget(m_categoryWidgets.last());
+        initCategory(cat, m_categoryWidgets.last()->widget());
     }
 
     // search widget
-    categoryWidgets.append(new QuadroWidget(this, itemSize().width()));
-    ui->stackedWidget->addWidget(categoryWidgets.last());
+    m_categoryWidgets.append(new QuadroWidget(this, itemSize().width()));
+    ui->stackedWidget->addWidget(m_categoryWidgets.last());
 }
 
 
@@ -153,7 +156,7 @@ void AppLauncher::initCategory(const QString category, QWidget *widget)
 {
     qCDebug(LOG_UI) << "Category" << category;
 
-    QMap<QString, ApplicationItem *> apps = launcher->applicationsByCategory(category);
+    QMap<QString, ApplicationItem *> apps = m_launcher->applicationsByCategory(category);
     foreach (ApplicationItem *app, apps.values()) {
         QWidget *wItem = new AppIconWidget(app, itemSize(), widget);
         widget->layout()->addWidget(wItem);

@@ -128,7 +128,7 @@ bool FavoritesCore::check(ApplicationItem *_item)
  */
 QString FavoritesCore::desktopPath()
 {
-    QString homePath = QString("%1/%2").arg(QStandardPaths::writableLocation(QStandardPaths::DataLocation))
+    QString homePath = QString("%1/%2").arg(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation))
                                        .arg(HOME_PATH);
 
     return QString("%1/%2").arg(homePath).arg(FAVORITES_PATH);

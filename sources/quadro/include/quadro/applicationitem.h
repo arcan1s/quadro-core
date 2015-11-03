@@ -291,7 +291,7 @@ public slots:
     /**
      * @brief launch the application
      */
-    void launch(const QVariantHash args = QVariantHash()) const;
+    bool launch(const QVariantHash args = QVariantHash()) const;
     /**
      * @brief write settings to desktop file
      * @param _desktopPath   full path to desktop file
@@ -309,7 +309,7 @@ private slots:
     /**
      * @brief run application
      */
-    void run(const QVariantHash args = QVariantHash()) const;
+    bool run(const QVariantHash args = QVariantHash()) const;
 
 private:
     // main
@@ -361,7 +361,7 @@ private:
     /**
      * @brief application working directory
      */
-    QString m_path = QString("/");
+    QString m_path = QString();
     /**
      * @brief url for link application type
      */

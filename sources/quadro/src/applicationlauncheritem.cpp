@@ -42,7 +42,7 @@ ApplicationLauncherItem::ApplicationLauncherItem(QWidget *parent, const QString 
 {
     qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
 
-    m_process = new QProcess(this);
+    m_process = new QProcess(nullptr);
     connect(m_process, SIGNAL(started()), this, SLOT(updateWidgets()));
     connect(m_process, SIGNAL(finished(int, QProcess::ExitStatus)),
             this, SLOT(finished(int, QProcess::ExitStatus)));
@@ -57,7 +57,8 @@ ApplicationLauncherItem::~ApplicationLauncherItem()
     qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
 
     m_widgets.clear();
-    delete m_process;
+    m_process->kill();
+    m_process->deleteLater();
 }
 
 

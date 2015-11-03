@@ -38,13 +38,18 @@ public:
 public slots:
     void showContextMenu(const QPoint &pos);
 
+protected:
+    void mousePressEvent(QMouseEvent *event);
+
 private slots:
     void addItemToFavorites();
+    void editApplication();
+    void hideApplication();
     void run();
     void runInNewTab();
 
 private:
-    ApplicationItem *item = nullptr;
+    ApplicationItem *m_item = nullptr;
     QMenu *m_menu = nullptr;
     // methods
     void createActions();

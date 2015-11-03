@@ -38,7 +38,7 @@ class AppLauncher : public QMainWindow
 public:
     explicit AppLauncher(QWidget *parent, LauncherCore *appLauncher,
                          RecentlyCore *recentLauncher,
-                         QVariantHash settings = QVariantHash());
+                         const QVariantHash settings = QVariantHash());
     virtual ~AppLauncher();
     inline QSize itemSize();
 
@@ -53,15 +53,15 @@ private slots:
 
 private:
     // ui
-    QList<QAction *> categoryButtons;
-    QList<QuadroWidget *> categoryWidgets;
+    QList<QAction *> m_categoryButtons;
+    QList<QuadroWidget *> m_categoryWidgets;
     Ui::AppLauncher *ui = nullptr;
     // backend
     void createActions();
     void createObjects();
     void initCategory(const QString category, QWidget *widget);
-    LauncherCore *launcher = nullptr;
-    RecentlyCore *recent = nullptr;
+    LauncherCore *m_launcher = nullptr;
+    RecentlyCore *m_recent = nullptr;
     // configuration
     QVariantHash configuration;
 };

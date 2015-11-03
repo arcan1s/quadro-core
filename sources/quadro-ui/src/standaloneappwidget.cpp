@@ -36,9 +36,8 @@ StandaloneApp::StandaloneApp(QWidget *parent, const QString exec, const int inde
 
     createObjects();
 
-    connect(application, SIGNAL(ready()), this, SLOT(paintWidget()));
-    application->startApplication();
-
+    connect(m_application, SIGNAL(ready()), this, SLOT(paintWidget()));
+    m_application->startApplication();
 }
 
 
@@ -52,7 +51,7 @@ StandaloneApp::~StandaloneApp()
 
 void StandaloneApp::paintWidget()
 {
-    QList<QWidget *> widgets = application->widgets();
+    QList<QWidget *> widgets = m_application->widgets();
     foreach (QWidget *widget, widgets) {
         QMdiSubWindow *subWindow = ui->mdiArea->addSubWindow(widget);
         subWindow->setAttribute(Qt::WA_DeleteOnClose);
@@ -75,5 +74,5 @@ void StandaloneApp::subWindowDestroyed()
 
 void StandaloneApp::createObjects()
 {
-    application = new ApplicationLauncherItem(this, m_exec);
+    m_application = new ApplicationLauncherItem(this, m_exec);
 }

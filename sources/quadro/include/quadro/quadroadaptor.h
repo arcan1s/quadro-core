@@ -53,6 +53,14 @@ public:
     virtual ~QuadroAdaptor();
 
 public slots:
+    /**
+     * @brief update favorites applications list
+     */
+    void UpdateFavorites() const;
+    /**
+     * @brief update recently run applications
+     */
+    void UpdateRecent() const;
 
 signals:
 

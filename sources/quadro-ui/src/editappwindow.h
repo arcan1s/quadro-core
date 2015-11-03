@@ -16,48 +16,42 @@
  ***************************************************************************/
 
 
-#ifndef STANDALONEAPPWIDGET_H
-#define STANDALONEAPPWIDGET_H
+#ifndef EDITAPPWINDOW_H
+#define EDITAPPWINDOW_H
 
-#include <QMainWindow>
-#include <QToolButton>
+#include <QDialog>
 
 #include <quadro/quadro.h>
 
 
 namespace Ui {
-class StandaloneApp;
+class EditAppWindow;
 }
 
-class StandaloneApp : public QMainWindow
+class EditAppWindow : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit StandaloneApp(QWidget *parent, const QString exec, const int index = 0,
-                           const QVariantHash settings = QVariantHash());
-    virtual ~StandaloneApp();
+    explicit EditAppWindow(QWidget *parent, ApplicationItem *item);
+    virtual ~EditAppWindow();
 
 public slots:
-    void paintWidget();
-
-signals:
-    void destroyWindow(const int index);
+    void saveDesktop();
+    void showWindow();
 
 private slots:
-    void subWindowDestroyed();
+    void addCategory();
+    void selectExec();
+    void selectPath();
+    void updateIcon(const QString text);
 
 private:
     // ui
-    Ui::StandaloneApp *ui = nullptr;
+    Ui::EditAppWindow *ui = nullptr;
     // backend
-    void createObjects();
-    ApplicationLauncherItem *m_application = nullptr;
-    // configuration
-    QVariantHash configuration;
-    QString m_exec;
-    int m_index;
+    ApplicationItem *m_item = nullptr;
 };
 
 
-#endif /* STANDALONEAPPWIDGET_H */
+#endif /* EDITAPPWINDOW_H */
