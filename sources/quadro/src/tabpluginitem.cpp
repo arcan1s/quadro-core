@@ -25,6 +25,8 @@
 
 #include "quadro/quadro.h"
 
+#include <QDBusConnection>
+#include <QDBusMessage>
 #include <QSettings>
 
 
@@ -34,13 +36,11 @@
 /**
  * @fn TabPluginItem
  */
-TabPluginItem::TabPluginItem(QObject *parent)
-    : QObject(parent)
-{
-    qCDebug(LOG_PL) << __PRETTY_FUNCTION__;
-
-    init();
-}
+//TabPluginItem::TabPluginItem(QWidget *parent)
+//    : QMainWindow(parent)
+//{
+//    qCDebug(LOG_PL) << __PRETTY_FUNCTION__;
+//}
 
 
 /**
@@ -49,93 +49,58 @@ TabPluginItem::TabPluginItem(QObject *parent)
 TabPluginItem::~TabPluginItem()
 {
     qCDebug(LOG_PL) << __PRETTY_FUNCTION__;
+
+    QDBusConnection::sessionBus().unregisterObject(QString("/%1").arg(m_name));
+    QDBusConnection::sessionBus().unregisterService(DBUS_PLUGIN_SERVICE);
 }
 
 
 /**
  * @fn api
  */
-int TabPluginItem::api()
+int TabPluginItem::api() const
 {
     return m_api;
 }
 
 
 /**
- * @fn background
- */
-QString TabPluginItem::background()
-{
-    return m_background;
-}
-
-
-/**
  * @fn comment
  */
-QString TabPluginItem::comment()
+QString TabPluginItem::comment() const
 {
     return m_comment;
 }
 
 
 /**
- * @fn configuration
+ * @fn core
  */
-QVariantHash TabPluginItem::configuration()
+QuadroCore *TabPluginItem::core()
 {
-    QVariantHash pluginSettings;
-    pluginSettings[QString("Comment")] = comment();
-
-    return pluginSettings;
-}
-
-
-/**
- * @fn htmlImage
- */
-QString TabPluginItem::htmlImage()
-{
-    // TODO
-//     PluginItem::ImageType type = defineImageType(background());
-    QImage pluginImage;
-    QString image;
-
-//     switch (type) {
-//     case ImageType::COLOR:
-//         pluginImage.fill(background());
-//         image = convertImage(pluginImage);
-//         break;
-//     case ImageType::PATH:
-//         image = convertImage(pluginImage);
-//         break;
-//     case ImageType::HASH:
-//         image = background();
-//         break;
-//     case ImageType::NONE:
-//     default:
-//         break;
-//     }
-
-    return image;
+    return m_core;
 }
 
 
 /**
  * @fn name
  */
-QString TabPluginItem::name()
+QString TabPluginItem::name() const
 {
     return m_name;
 }
 
 
 /**
- * @fn ui
+ * @fn setApi
  */
-QWidget *TabPluginItem::ui()
+void TabPluginItem::setApi(int _api)
 {
-    return m_ui;
+    qCDebug(LOG_PL) << "API version" << _api;
+    if (_api < 1) _api = 1;
+    if (_api > TAB_PLUGIN_API) _api = TAB_PLUGIN_API;
+
+    m_api = _api;
 }
 
 
@@ -151,100 +116,6 @@ void TabPluginItem::setComment(const QString _comment)
 
 
 /**
- * @fn readDesktop
- */
-void TabPluginItem::readDesktop(const QString _desktopPath)
-{
-    qCDebug(LOG_PL) << "Path" << _desktopPath;
-
-    QSettings settings(_desktopPath, QSettings::IniFormat);
-    settings.setIniCodec("UTF-8");
-
-    settings.beginGroup(QString("Quadro tabplugin"));
-    setApi(settings.value(QString("API"), m_api).toInt());
-    setComment(settings.value(QString("Comment"), m_comment).toString());
-    setName(settings.value(QString("Name"), m_name).toString());
-    settings.endGroup();
-}
-
-
-/**
- * @fn readSettings
- */
-void TabPluginItem::readSettings(const QString _desktopPath)
-{
-    qCDebug(LOG_PL) << "Path" << _desktopPath;
-
-    QSettings settings(_desktopPath, QSettings::IniFormat);
-    settings.setIniCodec("UTF-8");
-
-    settings.beginGroup(name());
-
-    settings.beginGroup(QString("Core"));
-    setComment(settings.value(QString("Comment"), m_comment).toString());
-    settings.endGroup();
-
-    settings.beginGroup(QString("UI"));
-    settings.endGroup();
-
-    settings.endGroup();
-}
-
-
-/**
- * @fn saveSettings
- */
-bool TabPluginItem::saveSettings(const QString _desktopPath)
-{
-    qCDebug(LOG_PL) << "Path" << _desktopPath;
-
-    QVariantHash config = configuration();
-    QSettings settings(_desktopPath, QSettings::IniFormat);
-    settings.setIniCodec("UTF-8");
-
-    settings.beginGroup(name());
-
-    settings.beginGroup(QString("Core"));
-    settings.setValue(QString("Comment"), config[QString("Comment")]);
-    settings.endGroup();
-
-    settings.beginGroup(QString("UI"));
-    settings.endGroup();
-
-    settings.endGroup();
-
-    settings.sync();
-
-    return settings.status() == QSettings::NoError;
-}
-
-
-/**
- * @fn setApi
- */
-void TabPluginItem::setApi(int _api)
-{
-    qCDebug(LOG_PL) << "API version" << _api;
-    if (_api < 1) _api = 1;
-    if (_api > PLUGIN_API) _api = PLUGIN_API;
-
-    m_api = _api;
-}
-
-
-/**
- * @fn setBackground
- */
-void TabPluginItem::setBackground(QString _background)
-{
-    qCDebug(LOG_PL) << "Background" << _background;
-    if (_background.isEmpty()) _background = QString("#ffffffff");
-
-    m_background = _background;
-}
-
-
-/**
  * @fn setName
  */
 void TabPluginItem::setName(const QString _name)
@@ -252,4 +123,68 @@ void TabPluginItem::setName(const QString _name)
     qCDebug(LOG_PL) << "Name" << _name;
 
     m_name = _name;
+}
+
+
+/**
+ * @fn appConfiguration
+ */
+QVariantHash TabPluginItem::appConfiguration() const
+{
+    return m_appConfiguration;
+}
+
+
+/**
+ * @fn preinit
+ */
+void TabPluginItem::preinit(QuadroCore *_core, const QVariantHash _settings)
+{
+    qCDebug(LOG_PL) << "Application settings" << _settings;
+
+    m_core = _core;
+    m_appConfiguration = _settings;
+    createDBusSession();
+}
+
+
+/**
+ * @fn readDesktop
+ */
+QVariantHash TabPluginItem::readDesktop(const QString _desktopPath)
+{
+    qCDebug(LOG_PL) << "Path" << _desktopPath;
+
+    QVariantHash pluginData;
+    QSettings settings(_desktopPath, QSettings::IniFormat);
+    settings.setIniCodec("UTF-8");
+    if (!settings.childGroups().contains(QString("Quadro tabplugin")))
+        return pluginData;
+
+    settings.beginGroup(QString("Quadro tabplugin"));
+    pluginData[QString("API")] = settings.value(QString("API"), TAB_PLUGIN_API);
+    pluginData[QString("Comment")] = settings.value(QString("Comment"), QString(""));
+    pluginData[QString("Name")] = settings.value(QString("Name"), QString("none"));
+    settings.endGroup();
+
+    return pluginData;
+}
+
+
+/**
+ * @fn createDBusSession
+ */
+void TabPluginItem::createDBusSession()
+{
+    QDBusConnection bus = QDBusConnection::sessionBus();
+    if (!bus.registerService(DBUS_PLUGIN_SERVICE)) {
+        qCWarning(LOG_UI) << "Could not register service";
+        qCWarning(LOG_UI) << bus.lastError().message();
+    }
+    if (!bus.registerObject(QString("/%1").arg(m_name),
+                            new TabPluginAdaptor(this),
+                            QDBusConnection::ExportAllContents)) {
+        qCWarning(LOG_UI) << "Could not register library object";
+        qCWarning(LOG_UI) << bus.lastError().message();
+    }
 }

@@ -33,6 +33,7 @@
 class FavoritesCore;
 class FileManagerCore;
 class LauncherCore;
+class PluginCore;
 class RecentlyCore;
 
 /**
@@ -69,6 +70,11 @@ public:
      */
     LauncherCore *launcher();
     /**
+     * @brief plugin core object
+     * @return pointer to plugin core object
+     */
+    PluginCore *plugin();
+    /**
      * @brief recently core object
      * @return pointer to recently core object
      */
@@ -91,6 +97,10 @@ private:
      * @brief launcher core object
      */
     LauncherCore *m_launcher = nullptr;
+    /**
+     * @brief plugin core object
+     */
+    PluginCore *m_plugin = nullptr;
     /**
      * @brief recently core object
      */

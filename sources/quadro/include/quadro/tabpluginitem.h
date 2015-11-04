@@ -26,116 +26,127 @@
 #ifndef TABPLUGINITEM_H
 #define TABPLUGINITEM_H
 
+#include <QMainWindow>
 #include <QtPlugin>
-#include <QWidget>
+#include "quadrocore.h"
 
+
+class QuadroCore;
 
 /**
  * @brief The TabPluginItem class provides core part of plugin run in different tab
  */
-class TabPluginItem : public QObject
+class TabPluginItem : public QMainWindow
 {
     Q_OBJECT
-    // core properties
-    Q_PROPERTY(int api READ api WRITE setApi)
-    Q_PROPERTY(QString comment READ comment WRITE setComment)
-    Q_PROPERTY(QString name READ name WRITE setName)
-    // ui properties
-    Q_PROPERTY(QString background READ background WRITE setBackground)
-    Q_PROPERTY(QString htmlImage READ htmlImage)
+//    // core properties
+//    Q_PROPERTY(int api READ api WRITE setApi)
+//    Q_PROPERTY(QString comment READ comment WRITE setComment)
+//    Q_PROPERTY(QuadroCore * core READ core)
+//    Q_PROPERTY(QString name READ name WRITE setName)
 
 public:
     /**
      * @brief TabPluginItem class constructor
      * @param parent         pointer to parent item
      */
-    explicit TabPluginItem(QObject *parent);
+//    explicit TabPluginItem(QWidget *parent);
     /**
      * @brief TabPluginItem class destructor
      */
     virtual ~TabPluginItem();
+    /**
+     * @brief read plugin information from desktop file
+     * @param _desktopPath   full path to desktop file
+     */
+    static QVariantHash readDesktop(const QString _desktopPath);
     // get methods
     /**
      * @brief plugin API version
      * @return API version
      */
-    int api();
-    /**
-     * @brief plugin background
-     * @return background
-     */
-    QString background();
+    int api() const;
     /**
      * @brief plugin comment
      * @return comment
      */
-    QString comment();
+    QString comment() const;
     /**
-     * @brief plugin current settings which will be applied on next start
-     * @return configuration map
+     * @brief core object
+     * @return pointer to core object
      */
-    QVariantHash configuration();
-    /**
-     * @brief plugin UI image. It fills from background()
-     * @return valid HTML image as text
-     */
-    QString htmlImage();
+    QuadroCore *core();
     /**
      * @brief plugin name
      * @return name
      */
-    QString name();
-    /**
-     * @brief plugin ui
-     * @return pointer to QWidget part of the ui.
-     */
-    QWidget *ui();
+    QString name() const;
     // set methods
     /**
-     * @brief set plugin background
-     * @param _background    background. May be color in valid format or path to
-     *                       image. Default is #ffffffff
+     * @brief set API version
+     * @param _api           plugin API version
      */
-    void setBackground(QString _background = QString("#ffffffff"));
+    void setApi(int _api = 1);
     /**
      * @brief set plugin comment
      * @param _comment       comment
      */
     void setComment(const QString _comment);
+    /**
+     * @brief set plugin name
+     * @param _name          plugin name
+     */
+    void setName(const QString _name);
+    // settings
+    /**
+     * @brief application settings
+     * @return configuration map
+     */
+    QVariantHash appConfiguration() const;
+    /**
+     * @brief init the plugin components
+     * @remark this method will be called before TabPluginItem::init()
+     * @param _core          pointer to core object
+     * @param _settings      application settings
+     */
+    virtual void preinit(QuadroCore *_core, const QVariantHash _settings = QVariantHash());
 
 public slots:
     /**
+     * @brief init the plugin
+     */
+    virtual void init() = 0;
+    /**
      * @brief quit from plugin
      */
-    virtual void quit() {};
-    /**
-     * @brief read plugin information from desktop file
-     * @param _desktopPath   full path to desktop file
-     */
-    void readDesktop(const QString _desktopPath);
+    virtual void quit() = 0;
     /**
      * @brief read plugin settings from configuration file
      * @param _desktopPath   full path to settings file
      */
-    void readSettings(const QString _desktopPath);
+    virtual void readSettings(const QString _desktopPath) = 0;
     /**
      * @brief save plugin settings to configuration file
      * @param _desktopPath   full path to settings file
      * @return true if settings has been saved successfully
      * @return false if there was an error while settings sync
      */
-    bool saveSettings(const QString _desktopPath);
+    virtual bool saveSettings(const QString _desktopPath) = 0;
 
 private:
+    /**
+     * @brief core object
+     */
+    QuadroCore *m_core = nullptr;
     // properties
     /**
      * @brief plugin API version. Default is 1
      */
     int m_api = 1;
     /**
-     * @brief plugin background. May be color or path to image. Default is empty
+     * @brief application settings
      */
-    QString m_background = QString();
+    QVariantHash m_appConfiguration;
     /**
      * @brief plugin comment. Default is empty
      */
@@ -144,29 +155,14 @@ private:
      * @brief plugin name. Default is "none"
      */
     QString m_name = QString("none");
-    /**
-     * @brief has the plugin UI or not. Default is false
-     */
-    QWidget *m_ui = nullptr;
     // methods
     /**
-     * @brief init the plugin. May be implemented by derivative class
+     * @brief create DBus session
      */
-    virtual void init() {};
-    // private set methods
-    /**
-     * @brief set API version
-     * @param _api           plugin API version
-     */
-    void setApi(int _api = 1);
-    /**
-     * @brief set plugin name
-     * @param _name          plugin name
-     */
-    void setName(const QString _name);
+    void createDBusSession();
 };
 
-Q_DECLARE_INTERFACE(TabPluginItem, "org.quadro.plugin")
+Q_DECLARE_INTERFACE(TabPluginItem, "core.quadro.tabplugin")
 
 
-#endif /* PLUGINITEM_H */
+#endif /* TABPLUGINITEM_H */

@@ -46,6 +46,8 @@ QuadroCore::QuadroCore(QObject *parent, const QVariantHash configuration)
     m_filemanager = new FileManagerCore(this);
     m_launcher = new LauncherCore(this);
     m_launcher->initApplications();
+    m_plugin = new PluginCore(this);
+    m_plugin->initPlugins();
     m_recently = new RecentlyCore(this, m_configuration[QString("RecentItemsCount")].toInt());
     m_recently->initApplications();
 
@@ -66,6 +68,7 @@ QuadroCore::~QuadroCore()
     delete m_favorites;
     delete m_filemanager;
     delete m_launcher;
+    delete m_plugin;
     delete m_recently;
 }
 
@@ -94,6 +97,15 @@ FileManagerCore *QuadroCore::filemanager()
 LauncherCore *QuadroCore::launcher()
 {
     return m_launcher;
+}
+
+
+/**
+ * @fn plugin
+ */
+PluginCore *QuadroCore::plugin()
+{
+    return m_plugin;
 }
 
 

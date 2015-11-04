@@ -15,34 +15,98 @@
  *   along with quadro. If not, see http://www.gnu.org/licenses/           *
  ***************************************************************************/
 /**
- * @file quadro.h
- * Header of quadro library
+ * @file tabpluginadaptor.cpp
+ * Source code of quadro library
  * @author Evgeniy Alekseev
  * @copyright GPLv3
  * @bug https://github.com/arcan1s/quadro-core/issues
  */
 
 
-#ifndef QUADRO_H
-#define QUADRO_H
+#include "quadro/quadro.h"
 
-#include "config.h"
 
-#include "abstractappaggregator.h"
-#include "applicationitem.h"
-#include "applicationlauncheritem.h"
-#include "favoritescore.h"
-#include "filemanagercore.h"
-#include "launchercore.h"
-#include "pluginadaptor.h"
-#include "plugincore.h"
-#include "pluginitem.h"
-#include "quadroadaptor.h"
-#include "quadrocore.h"
-#include "quadrodebug.h"
-#include "recentlycore.h"
-#include "tabpluginadaptor.h"
-#include "tabpluginitem.h"
-#include "x11adaptor.h"
+/**
+ * @class TabPluginAdaptor
+ */
+/**
+ * @fn TabPluginAdaptor
+ */
+TabPluginAdaptor::TabPluginAdaptor(TabPluginItem *plugin)
+    : QDBusAbstractAdaptor(plugin),
+      m_plugin(plugin)
+{
+    qCDebug(LOG_PL) << __PRETTY_FUNCTION__;
+}
 
-#endif /* QUADRO_H */
+
+/**
+ * @fn ~TabPluginAdaptor
+ */
+TabPluginAdaptor::~TabPluginAdaptor()
+{
+    qCDebug(LOG_PL) << __PRETTY_FUNCTION__;
+}
+
+
+/**
+ * @fn Ping
+ */
+bool TabPluginAdaptor::Ping()
+{
+    return true;
+}
+
+
+/**
+ * @fn Api
+ */
+int TabPluginAdaptor::Api()
+{
+    return m_plugin->api();
+}
+
+
+/**
+ * @fn Comment
+ */
+QString TabPluginAdaptor::Comment()
+{
+    return m_plugin->comment();
+}
+
+
+/**
+ * @fn Name
+ */
+QString TabPluginAdaptor::Name()
+{
+    return m_plugin->name();
+}
+
+
+/**
+ * @fn ReadSettings
+ */
+void TabPluginAdaptor::ReadSettings(const QString desktopPath)
+{
+    return m_plugin->readSettings(desktopPath);
+}
+
+
+/**
+ * @fn SaveSettings
+ */
+bool TabPluginAdaptor::SaveSettings(const QString desktopPath)
+{
+    return m_plugin->saveSettings(desktopPath);
+}
+
+
+/**
+ * @fn Update
+ */
+void TabPluginAdaptor::Update()
+{
+    return m_plugin->init();
+}

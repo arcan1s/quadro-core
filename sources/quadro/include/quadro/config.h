@@ -91,5 +91,10 @@
  * current plugin API
  */
 #define PLUGIN_API 1
+/**
+ * @def TAB_PLUGIN_API
+ * current tab plugin API
+ */
+#define TAB_PLUGIN_API 1
 
 #endif /* CONFIG_H */

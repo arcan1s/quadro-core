@@ -12,7 +12,7 @@ include_directories (${SUBPROJECT_INCLUDE_DIR}
                      ${Qt_INCLUDE}
                      ${X11_INCLUDE})
 
-qt5_wrap_cpp (MOC_SOURCES ${HEADERS})
+# qt5_wrap_cpp (MOC_SOURCES ${HEADERS})
 
 add_library (${SUBPROJECT} SHARED ${SOURCES} ${HEADERS} ${MOC_SOURCES})
 target_link_libraries (${SUBPROJECT} ${Qt_LIBRARIES} ${X11_LIBRARIES})

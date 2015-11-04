@@ -15,7 +15,7 @@
  *   along with quadro. If not, see http://www.gnu.org/licenses/           *
  ***************************************************************************/
 /**
- * @file plugincore.h
+ * @file tabpluginadaptor.h
  * Header of quadro library
  * @author Evgeniy Alekseev
  * @copyright GPLv3
@@ -23,80 +23,83 @@
  */
 
 
-#ifndef PLUGINCORE_H
-#define PLUGINCORE_H
+#ifndef TABPLUGINADAPTOR_H
+#define TABPLUGINADAPTOR_H
 
-#include <QHash>
+#include <QDBusAbstractAdaptor>
 #include <QObject>
-#include <QStringList>
+
+#include "config.h"
 #include "tabpluginitem.h"
 
 
-class PluginItem;
 class TabPluginItem;
 
 /**
- * @brief The PluginCore class provides plugin backend
+ * @brief The PluginAdaptor class provides plugin DBus adaptor
  */
-class PluginCore : public QObject
+class TabPluginAdaptor : public QDBusAbstractAdaptor
 {
     Q_OBJECT
-    Q_PROPERTY(QStringList desktopPaths READ desktopPaths)
+    Q_CLASSINFO("D-Bus Interface", DBUS_PLUGIN_INTERFACE)
 
 public:
     /**
-     * @brief PluginCore class constructor
-     * @param parent         pointer to parent item
+     * @brief PluginAdaptor class constructor
+     * @param plugin         pointer to plugin item
      */
-    explicit PluginCore(QObject *parent);
+    explicit TabPluginAdaptor(TabPluginItem *plugin);
     /**
-     * @brief PluginCore class destructor
+     * @brief PluginAdaptor class destructor
      */
-    virtual ~PluginCore();
-    /**
-     * @brief path to plugin desktop files
-     * @return full paths to plugin desktop files
-     */
-    static QStringList desktopPaths();
-    /**
-     * @brief find plugin
-     * @param _plugin        plugin name
-     * @return pointer to plugin or nullptr
-     */
-    PluginItem *plugin(const QString _plugin);
-    /**
-     * @brief find tab plugin
-     * @param _plugin        plugin name
-     * @return pointer to tab plugin or nullptr
-     */
-    TabPluginItem *tabPlugin(const QString _plugin);
+    virtual ~TabPluginAdaptor();
 
 public slots:
     /**
-     * @brief init plugins from default paths
+     * @brief ping interface
+     * @return true if interface is active
      */
-    void initPlugins();
+    bool Ping();
+    // public method interface
+    /**
+     * @brief plugin API version
+     * @return API version
+     */
+    int Api();
+    /**
+     * @brief plugin comment
+     * @return comment
+     */
+    QString Comment();
+    /**
+     * @brief plugin name
+     * @return name
+     */
+    QString Name();
+    /**
+     * @brief read plugin settings from configuration file
+     * @param desktopPath    full path to settings file
+     */
+    void ReadSettings(const QString desktopPath);
+    /**
+     * @brief save plugin settings to configuration file
+     * @param desktopPath    full path to settings file
+     * @return true if settings has been saved successfully
+     * @return false if there was an error while settings sync
+     */
+    bool SaveSettings(const QString desktopPath);
+    /**
+     * @brief update data. May be called to force update
+     */
+    void Update();
 
 private:
+    // properties
     /**
-     * @brief list of plugins
+     * @brief pointer to the plugin
      */
-    QHash<QString, PluginItem *> m_plugins;
-    /**
-     * @brief list of tab plugins
-     */
-    QHash<QString, TabPluginItem *> m_tabPlugins;
-    /**
-     * @brief return plugins from default paths
-     * @return map of generated PluginItem
-     */
-    QHash<QString, PluginItem *> getPlugins();
-    /**
-     * @brief return plugins from default paths
-     * @return map of generated TabPluginItem
-     */
-    QHash<QString, TabPluginItem *> getTabPlugins();
+    TabPluginItem *m_plugin = nullptr;
 };
 
 
-#endif /* PLUGINCORE_H */
+#endif /* TABPLUGINADAPTOR_H */

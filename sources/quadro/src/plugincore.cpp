@@ -27,7 +27,6 @@
 
 #include <QDir>
 #include <QPluginLoader>
-#include <QSettings>
 #include <QStandardPaths>
 
 
@@ -50,20 +49,7 @@ PluginCore::PluginCore(QObject *parent)
 PluginCore::~PluginCore()
 {
     m_plugins.clear();
-}
-
-
-/**
- * @fn activePlugins
- */
-QStringList PluginCore::activePlugins()
-{
-    QString fileName = QFileInfo(QDir(desktopPaths()[0]), QString("index.conf")).filePath();
-    qCInfo(LOG_LIB) << "Configuration file" << fileName;
-    QSettings settings(fileName, QSettings::IniFormat);
-    settings.setIniCodec("UTF-8");
-
-    return settings.value(QString("Plugins")).toStringList();
+    m_tabPlugins.clear();
 }
 
 
@@ -74,19 +60,32 @@ QStringList PluginCore::desktopPaths()
 {
     QStringList locations;
     QStringList defaultLocations = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation);
-    for (int i=0; i<defaultLocations.count(); i++)
-        locations.append(QString("%1/%2/%3").arg(defaultLocations[i]).arg(HOME_PATH).arg(PLUGIN_PATH));
+    foreach (const QString loc, defaultLocations)
+        locations.append(QString("%1/%2/%3").arg(loc).arg(HOME_PATH).arg(PLUGIN_PATH));
 
     return locations;
 }
 
 
 /**
- * @fn plugins
+ * @fn plugin
  */
-QMap<QString, PluginItem *> PluginCore::plugins()
+PluginItem *PluginCore::plugin(const QString _plugin)
 {
-    return m_plugins;
+    qCDebug(LOG_LIB) << "Plugin name" << _plugin;
+
+    return m_plugins.value(_plugin, nullptr);
+}
+
+
+/**
+ * @fn tabPlugin
+ */
+TabPluginItem *PluginCore::tabPlugin(const QString _plugin)
+{
+    qCDebug(LOG_LIB) << "Plugin name" << _plugin;
+
+    return m_tabPlugins.value(_plugin, nullptr);
 }
 
 
@@ -97,72 +96,22 @@ void PluginCore::initPlugins()
 {
     // start cleanup
     m_plugins.clear();
+    m_tabPlugins.clear();
 
     m_plugins = getPlugins();
-}
-
-
-/**
- * @fn runPlugins
- */
-void PluginCore::runPlugins(const QStringList _plugins)
-{
-    qCDebug(LOG_LIB) << "Plugins" << _plugins;
-
-    for (int i=0; i<_plugins.count(); i++) {
-        if (!m_plugins.contains(_plugins[i])) {
-            qCWarning(LOG_LIB) << "Could not find plugin" << _plugins[i];
-            continue;
-        }
-        m_plugins[_plugins[i]]->createSession();
-        m_plugins[_plugins[i]]->startTimer();
-    }
-}
-
-
-/**
- * @fn saveActivePlugins
- */
-void PluginCore::saveActivePlugins(const QStringList _plugins)
-{
-    qCDebug(LOG_LIB) << "Plugins" << _plugins;
-
-    QString fileName = QFileInfo(QDir(desktopPaths()[0]), QString("index.conf")).filePath();
-    qCInfo(LOG_LIB) << "Configuration file" << fileName;
-    QSettings settings(fileName, QSettings::IniFormat);
-    settings.setIniCodec("UTF-8");
-
-    settings.setValue(QString("Plugins"), _plugins);
-
-    settings.sync();
-}
-
-
-/**
- * @fn stopPlugin
- */
-void PluginCore::stopPlugin(const QString _plugin)
-{
-    qCDebug(LOG_LIB) << "Plugin" << _plugin;
-    if (!m_plugins.contains(_plugin)) {
-        qCWarning(LOG_LIB) << "Could not find plugin" << _plugin;
-        return;
-    }
-
-    m_plugins[_plugin]->stopTimer();
-    m_plugins[_plugin]->removeSession();
+    m_tabPlugins = getTabPlugins();
 }
 
 
 /**
  * @fn getPlugins
  */
-QMap<QString, PluginItem *> PluginCore::getPlugins()
+QHash<QString, PluginItem *> PluginCore::getPlugins()
 {
     QStringList filter("*.desktop");
     QStringList locations = desktopPaths();
     qCInfo(LOG_LIB) << "Paths" << locations;
-    QMap<QString, PluginItem *> items;
+    QHash<QString, PluginItem *> items;
 
     foreach(const QString loc, locations) {
         QStringList entries = QDir(loc).entryList(filter, QDir::Files);
@@ -180,6 +129,54 @@ QMap<QString, PluginItem *> PluginCore::getPlugins()
                 items[desktop] = dynamic_cast<PluginItem *>(plugin);
             } else {
                 qCWarning(LOG_LIB) << "Could not load the library for" << desktop;
+                qCWarning(LOG_LIB) << "Error" << loader.errorString();
+                continue;
+            }
+        }
+    }
+
+    return items;
+}
+
+
+/**
+ * @fn getTabPlugins
+ */
+QHash<QString, TabPluginItem *> PluginCore::getTabPlugins()
+{
+    QStringList filter("*.desktop");
+    QStringList locations = desktopPaths();
+    qCInfo(LOG_LIB) << "Paths" << locations;
+    QHash<QString, TabPluginItem *> items;
+
+    foreach(const QString loc, locations) {
+        QStringList entries = QDir(loc).entryList(filter, QDir::Files);
+        foreach (const QString entry, entries) {
+            QString fileName = QFileInfo(QDir(loc), entry).absoluteFilePath();
+            qCInfo(LOG_LIB) << "Desktop" << fileName;
+            // check settings
+            QVariantHash metadata = TabPluginItem::readDesktop(fileName);
+            if (!metadata.contains(QString("Name")))
+                continue;
+            // init
+            QString name = metadata[QString("Name")].toString();
+            QString libraryName = QString("%1/lib%2.so").arg(loc).arg(name);
+            QPluginLoader loader(libraryName, this);
+            // load plugin
+            QObject *plugin = loader.instance();
+            if (plugin) {
+                qCInfo(LOG_LIB) << "Loading" << libraryName;
+                try {
+                    items[name] = dynamic_cast<TabPluginItem *>(plugin);
+                } catch (std::bad_cast &e) {
+                    qCCritical(LOG_LIB) << "Could not cast" << name << e.what();
+                    continue;
+                }
+                items[name]->setApi(metadata[QString("API")].toInt());
+                items[name]->setComment(metadata[QString("Comment")].toString());
+                items[name]->setName(metadata[QString("Name")].toString());
+            } else {
+                qCWarning(LOG_LIB) << "Could not load the library for" << name;
                 qCWarning(LOG_LIB) << "Error" << loader.errorString();
                 continue;
             }
