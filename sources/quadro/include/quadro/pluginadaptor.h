@@ -45,9 +45,10 @@ class PluginAdaptor : public QDBusAbstractAdaptor
 public:
     /**
      * @brief PluginAdaptor class constructor
+     * @param parent         pointer to parent object
      * @param plugin         pointer to plugin item
      */
-    explicit PluginAdaptor(PluginItem *plugin);
+    explicit PluginAdaptor(QObject *parent, PluginItem *plugin);
     /**
      * @brief PluginAdaptor class destructor
      */
@@ -71,52 +72,15 @@ public slots:
      */
     QString Background();
     /**
-     * @brief plugin comment
-     * @return comment
-     */
-    QString Comment();
-    /**
-     * @brief plugin current settings which will be applied on next start
-     * @return configuration list in format KEY=VALUE
-     */
-    QStringList Configuration();
-    /**
      * @brief plugin data in text
      * @return data
      */
     QString Data();
     /**
-     * @brief has plugin UI or not
-     * @return true if it has one
-     * @return false it it hasn't UI
-     */
-    bool HasUi();
-    /**
-     * @brief plugin UI height
-     * @return height in UI grids
-     */
-    int Height();
-    /**
-     * @brief plugin UI image. It fills from background()
-     * @return QImage object
-     */
-    QString HtmlImage();
-    /**
      * @brief plugin name
      * @return name
      */
     QString Name();
-    /**
-     * @brief plugin events timer
-     * @return plugin timer in milliseconds. May be more than MINIMAL_TIMER or
-     * less than 0 in case of skiping automatic update
-     */
-    int Timer();
-    /**
-     * @brief plugin UI width
-     * @return width in UI grids
-     */
-    int Width();
     // public slots interface
     /**
      * @brief called if plugin has been clicked
@@ -126,11 +90,6 @@ public slots:
      * @brief close the plugin
      */
     void Close();
-    /**
-     * @brief read plugin information from desktop file
-     * @param desktopPath    full path to desktop file
-     */
-    void ReadDesktop(const QString desktopPath);
     /**
      * @brief read plugin settings from configuration file
      * @param desktopPath    full path to settings file
@@ -144,28 +103,9 @@ public slots:
      */
     bool SaveSettings(const QString desktopPath);
     /**
-     * @brief start plugin timer
-     * @param start          true if timer should be started, false in other way
-     */
-    void Start(const bool start = true);
-    /**
      * @brief update data. May be called to force update
      */
     void Update();
-    /**
-     * @brief method which will be called on data update
-     * @param data           updated data
-     * @remark dirty hack to allow signal call from external class since in Qt4
-     * signals are private
-     */
-    void UpdatesReceived(const QString data);
-
-signals:
-    /**
-     * @brief send if data has been updated
-     * @param data           updated data
-     */
-    void Updated(QString data);
 
 private:
     // properties

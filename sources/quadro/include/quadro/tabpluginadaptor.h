@@ -30,7 +30,6 @@
 #include <QObject>
 
 #include "config.h"
-#include "tabpluginitem.h"
 
 
 class TabPluginItem;
@@ -46,9 +45,10 @@ class TabPluginAdaptor : public QDBusAbstractAdaptor
 public:
     /**
      * @brief PluginAdaptor class constructor
+     * @param parent         pointer to parent object
      * @param plugin         pointer to plugin item
      */
-    explicit TabPluginAdaptor(TabPluginItem *plugin);
+    explicit TabPluginAdaptor(QObject *parent, TabPluginItem *plugin);
     /**
      * @brief PluginAdaptor class destructor
      */
@@ -66,11 +66,6 @@ public slots:
      * @return API version
      */
     int Api();
-    /**
-     * @brief plugin comment
-     * @return comment
-     */
-    QString Comment();
     /**
      * @brief plugin name
      * @return name

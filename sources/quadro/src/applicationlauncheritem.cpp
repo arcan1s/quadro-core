@@ -26,6 +26,7 @@
 #include "quadro/quadro.h"
 
 #include <QHash>
+#include <QTimer>
 #include <QWindow>
 
 

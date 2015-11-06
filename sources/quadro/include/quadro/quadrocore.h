@@ -27,7 +27,7 @@
 #define QUADROCORE_H
 
 #include <QObject>
-#include "recentlycore.h"
+#include <QVariant>
 
 
 class FavoritesCore;

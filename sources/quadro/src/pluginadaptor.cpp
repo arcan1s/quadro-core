@@ -32,8 +32,8 @@
 /**
  * @fn PluginAdaptor
  */
-PluginAdaptor::PluginAdaptor(PluginItem *plugin)
-    : QDBusAbstractAdaptor(plugin),
+PluginAdaptor::PluginAdaptor(QObject *parent, PluginItem *plugin)
+    : QDBusAbstractAdaptor(parent),
       m_plugin(plugin)
 {
     qCDebug(LOG_PL) << __PRETTY_FUNCTION__;
@@ -77,63 +77,11 @@ QString PluginAdaptor::Background()
 
 
 /**
- * @fn Comment
- */
-QString PluginAdaptor::Comment()
-{
-    return m_plugin->comment();
-}
-
-
-/**
- * @fn Configuration
- */
-QStringList PluginAdaptor::Configuration()
-{
-    QVariantHash configMap = m_plugin->configuration();
-    QStringList output;
-    foreach (const QString key, configMap.keys()) {
-        QString value = configMap[key].toString();
-        output.append(QString("%1=%2").arg(key).arg(value));
-    }
-
-    return output;
-}
-
-
-/**
  * @fn Data
  */
 QString PluginAdaptor::Data()
 {
     return m_plugin->data();
-}
-
-
-/**
- * @fn HasUi
- */
-bool PluginAdaptor::HasUi()
-{
-    return m_plugin->hasUi();
-}
-
-
-/**
- * @fn Height
- */
-int PluginAdaptor::Height()
-{
-    return m_plugin->height();
-}
-
-
-/**
- * @fn HtmlImage
- */
-QString PluginAdaptor::HtmlImage()
-{
-    return m_plugin->htmlImage();
 }
 
 
@@ -147,29 +95,11 @@ QString PluginAdaptor::Name()
 
 
 /**
- * @fn Timer
- */
-int PluginAdaptor::Timer()
-{
-    return m_plugin->timer();
-}
-
-
-/**
- * @fn Width
- */
-int PluginAdaptor::Width()
-{
-    return m_plugin->width();
-}
-
-
-/**
  * @fn Action
  */
 void PluginAdaptor::Action()
 {
-    return m_plugin->actionRequired();
+    return m_plugin->action();
 }
 
 
@@ -179,15 +109,6 @@ void PluginAdaptor::Action()
 void PluginAdaptor::Close()
 {
     return m_plugin->quit();
-}
-
-
-/**
- * @fn ReadDesktop
- */
-void PluginAdaptor::ReadDesktop(const QString desktopPath)
-{
-    return m_plugin->readDesktop(desktopPath);
 }
 
 
@@ -210,30 +131,9 @@ bool PluginAdaptor::SaveSettings(const QString desktopPath)
 
 
 /**
- * @fn Start
- */
-void PluginAdaptor::Start(const bool start)
-{
-    if (start)
-        return m_plugin->startTimer();
-    else
-        return m_plugin->stopTimer();
-}
-
-
-/**
  * @fn Update
  */
 void PluginAdaptor::Update()
 {
-    return m_plugin->updateData();
-}
-
-
-/**
- * @fn UpdatesReceived
- */
-void PluginAdaptor::UpdatesReceived(const QString data)
-{
-    emit(Updated(data));
+    return m_plugin->update();
 }

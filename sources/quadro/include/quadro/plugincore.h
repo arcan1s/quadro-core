@@ -26,10 +26,14 @@
 #ifndef PLUGINCORE_H
 #define PLUGINCORE_H
 
-#include <QHash>
+#include <QDBusConnection>
+#include <QDBusMessage>
+#include <QDir>
 #include <QObject>
-#include <QStringList>
-#include "tabpluginitem.h"
+#include <QPluginLoader>
+
+#include "config.h"
+#include "quadrodebug.h"
 
 
 class PluginItem;
@@ -59,6 +63,14 @@ public:
      */
     static QStringList desktopPaths();
     /**
+     * @brief read plugin settings
+     * @param _filePath      path to desktop file
+     * @param _group         group for search
+     * @return hash map with parameters
+     */
+    static QVariantHash pluginMetadata(const QString _filePath, const QString _group);
+    // plugin methods
+    /**
      * @brief find plugin
      * @param _plugin        plugin name
      * @return pointer to plugin or nullptr
@@ -87,15 +99,76 @@ private:
      */
     QHash<QString, TabPluginItem *> m_tabPlugins;
     /**
-     * @brief return plugins from default paths
-     * @return map of generated PluginItem
+     * @brief create DBus session for specified plugin
+     * @tparam T             plugin class depending on the type of plugin
+     * @tparam Adaptor       DBus adaptor for the specified type of plugin
+     * @param _name          plugin name
+     * @param _plugin        pointer to plugin object
      */
-    QHash<QString, PluginItem *> getPlugins();
+    template<class T, class Adaptor> void createPluginDBusSession(const QString _name, T *_plugin)
+    {
+        qCDebug(LOG_LIB) << "Plugin name for DBus session" << _name;
+
+        QDBusConnection bus = QDBusConnection::sessionBus();
+        if (!bus.registerService(DBUS_PLUGIN_SERVICE)) {
+            qCWarning(LOG_UI) << "Could not register service";
+            qCWarning(LOG_UI) << bus.lastError().message();
+        }
+        if (!bus.registerObject(QString("/%1").arg(_name),
+                                new Adaptor(this, _plugin),
+                                QDBusConnection::ExportAllContents)) {
+            qCWarning(LOG_UI) << "Could not register library object";
+            qCWarning(LOG_UI) << bus.lastError().message();
+        }
+    };
     /**
      * @brief return plugins from default paths
-     * @return map of generated TabPluginItem
+     * @tparam T             plugin class depending on the type of plugin
+     * @tparam Adaptor       DBus adaptor for the specified type of plugin
+     * @param _group         plugin group in settings
+     * @return map of generated plugin objects
      */
-    QHash<QString, TabPluginItem *> getTabPlugins();
+    template<class T, class Adaptor> QHash<QString, T *> getPlugins(const QString _group)
+    {
+        QStringList filter("*.desktop");
+        QStringList locations = desktopPaths();
+        qCInfo(LOG_LIB) << "Paths" << locations;
+        QHash<QString, T *> items;
+
+        foreach(const QString loc, locations) {
+            QStringList entries = QDir(loc).entryList(filter, QDir::Files);
+            foreach (const QString entry, entries) {
+                QString fileName = QFileInfo(QDir(loc), entry).absoluteFilePath();
+                qCInfo(LOG_LIB) << "Desktop" << fileName;
+                // check settings
+                QVariantHash metadata = pluginMetadata(fileName, _group);
+                if (!metadata.contains(QString("Name")))
+                    continue;
+                // init
+                QString name = metadata[QString("Name")].toString();
+                QString libraryName = QString("%1/lib%2.so").arg(loc).arg(name);
+                QPluginLoader loader(libraryName, this);
+                qCInfo(LOG_LIB) << "Loading" << libraryName;
+                // load plugin
+                QObject *plugin = loader.instance();
+                if (loader.isLoaded()) {
+                    T *item = qobject_cast<T *>(plugin);
+                    if (!item) {
+                        qCCritical(LOG_LIB) << "Could not cast plugin";
+                        continue;
+                    }
+                    items[name] = item;
+                    createPluginDBusSession<T, Adaptor>(name, item);
+                } else {
+                    qCCritical(LOG_LIB) << "Could not load the library for" << name;
+                    qCCritical(LOG_LIB) << "Error" << loader.errorString();
+                    continue;
+                }
+            }
+        }
+
+        return items;
+    };
 };
 
 

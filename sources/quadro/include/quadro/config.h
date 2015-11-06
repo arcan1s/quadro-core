@@ -92,9 +92,19 @@
  */
 #define PLUGIN_API 1
 /**
+ * @def PLUGIN_INTERFACE
+ * plugin interface name
+ */
+#define PLUGIN_INTERFACE "core.quadro.plugin"
+/**
  * @def TAB_PLUGIN_API
  * current tab plugin API
  */
 #define TAB_PLUGIN_API 1
+/**
+ * @def TAB_PLUGIN_INTERFACE
+ * tab plugin interface name
+ */
+#define TAB_PLUGIN_INTERFACE "core.quadro.tabplugin"
 
 #endif /* CONFIG_H */

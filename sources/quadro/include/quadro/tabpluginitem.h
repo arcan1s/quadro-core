@@ -26,9 +26,9 @@
 #ifndef TABPLUGINITEM_H
 #define TABPLUGINITEM_H
 
-#include <QMainWindow>
 #include <QtPlugin>
-#include "quadrocore.h"
+
+#include "config.h"
 
 
 class QuadroCore;
@@ -36,82 +36,30 @@ class QuadroCore;
 /**
  * @brief The TabPluginItem class provides core part of plugin run in different tab
  */
-class TabPluginItem : public QMainWindow
+class TabPluginItem
 {
-    Q_OBJECT
-//    // core properties
-//    Q_PROPERTY(int api READ api WRITE setApi)
-//    Q_PROPERTY(QString comment READ comment WRITE setComment)
-//    Q_PROPERTY(QuadroCore * core READ core)
-//    Q_PROPERTY(QString name READ name WRITE setName)
-
 public:
-    /**
-     * @brief TabPluginItem class constructor
-     * @param parent         pointer to parent item
-     */
-//    explicit TabPluginItem(QWidget *parent);
     /**
      * @brief TabPluginItem class destructor
      */
-    virtual ~TabPluginItem();
-    /**
-     * @brief read plugin information from desktop file
-     * @param _desktopPath   full path to desktop file
-     */
-    static QVariantHash readDesktop(const QString _desktopPath);
+    virtual ~TabPluginItem() {};
     // get methods
     /**
      * @brief plugin API version
      * @return API version
      */
-    int api() const;
+    virtual int api() const = 0;
     /**
-     * @brief plugin comment
-     * @return comment
-     */
-    QString comment() const;
-    /**
-     * @brief core object
-     * @return pointer to core object
-     */
-    QuadroCore *core();
-    /**
-     * @brief plugin name
+     * @brief plugin name which will be shown in tab
      * @return name
      */
-    QString name() const;
-    // set methods
+    virtual QString name() const = 0;
     /**
-     * @brief set API version
-     * @param _api           plugin API version
+     * @brief plugin ui object
+     * @return pointer to QWidget object
      */
-    void setApi(int _api = 1);
-    /**
-     * @brief set plugin comment
-     * @param _comment       comment
-     */
-    void setComment(const QString _comment);
-    /**
-     * @brief set plugin name
-     * @param _name          plugin name
-     */
-    void setName(const QString _name);
-    // settings
-    /**
-     * @brief application settings
-     * @return configuration map
-     */
-    QVariantHash appConfiguration() const;
-    /**
-     * @brief init the plugin components
-     * @remark this method will be called before TabPluginItem::init()
-     * @param _core          pointer to core object
-     * @param _settings      application settings
-     */
-    virtual void preinit(QuadroCore *_core, const QVariantHash _settings = QVariantHash());
-
-public slots:
+    virtual QWidget *widget() = 0;
+    // main methods
     /**
      * @brief init the plugin
      */
@@ -132,37 +80,16 @@ public slots:
      * @return false if there was an error while settings sync
      */
     virtual bool saveSettings(const QString _desktopPath) = 0;
-
-private:
     /**
-     * @brief core object
+     * @brief additional method which will be called to pass required args
+     * @remark this method will be called before TabPluginItem::init()
+     * @param _core          pointer to core object
+     * @param _settings      application settings
      */
-    QuadroCore *m_core = nullptr;
-    // properties
-    /**
-     * @brief plugin API version. Default is 1
-     */
-    int m_api = 1;
-    /**
-     * @brief application settings
-     */
-    QVariantHash m_appConfiguration;
-    /**
-     * @brief plugin comment. Default is empty
-     */
-    QString m_comment = QString();
-    /**
-     * @brief plugin name. Default is "none"
-     */
-    QString m_name = QString("none");
-    // methods
-    /**
-     * @brief create DBus session
-     */
-    void createDBusSession();
+    virtual void setArgs(QuadroCore *_core, const QVariantHash _settings = QVariantHash()) = 0;
 };
 
-Q_DECLARE_INTERFACE(TabPluginItem, "core.quadro.tabplugin")
+Q_DECLARE_INTERFACE(TabPluginItem, TAB_PLUGIN_INTERFACE)
 
 
 #endif /* TABPLUGINITEM_H */

@@ -32,8 +32,8 @@
 /**
  * @fn TabPluginAdaptor
  */
-TabPluginAdaptor::TabPluginAdaptor(TabPluginItem *plugin)
-    : QDBusAbstractAdaptor(plugin),
+TabPluginAdaptor::TabPluginAdaptor(QObject *parent, TabPluginItem *plugin)
+    : QDBusAbstractAdaptor(parent),
       m_plugin(plugin)
 {
     qCDebug(LOG_PL) << __PRETTY_FUNCTION__;
@@ -64,15 +64,6 @@ bool TabPluginAdaptor::Ping()
 int TabPluginAdaptor::Api()
 {
     return m_plugin->api();
-}
-
-
-/**
- * @fn Comment
- */
-QString TabPluginAdaptor::Comment()
-{
-    return m_plugin->comment();
 }
 
 
