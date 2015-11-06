@@ -1,0 +1,11 @@
+file (GLOB LANGUAGES ${SUBPROJECT_TRANSLATION_DIR}/*.ts)
+
+foreach (LANGUAGE ${LANGUAGES})
+    set (TS ${LANGUAGE})
+    string (REPLACE ".ts" ".qm" QM ${TS})
+    set (TRANSLATIONS ${TRANSLATIONS} ${TS})
+    set (TRANSLATIONS_BINARY ${TRANSLATIONS_BINARY} ${QM})
+    add_custom_command (OUTPUT ${QM} COMMAND ${Qt5_LRELEASE_EXECUTABLE} ${TS} MAIN_DEPENDENCY ${TS})
+endforeach ()
+add_custom_target (translations COMMAND ${Qt5_LUPDATE_EXECUTABLE} ${HEADERS} ${SOURCES} ${UI_HEADERS} -ts ${TRANSLATIONS})
+add_custom_command (TARGET translations COMMAND ${Qt5_LRELEASE_EXECUTABLE} ${TRANSLATIONS})

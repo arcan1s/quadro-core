@@ -1,19 +1,15 @@
 # set project name
-set (SUBPROJECT ${PROJECT_NAME})
+set (SUBPROJECT "quadro")
 message (STATUS "Subproject ${SUBPROJECT}")
 
-# set directories
-set (SUBPROJECT_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
-set (SUBPROJECT_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
+add_subdirectory (src)
+file (GLOB SUBPROJECT_DESKTOP *.desktop)
+# build man
+file (GLOB SUBPROJECT_MAN_IN *.1)
+file (RELATIVE_PATH SUBPROJECT_MAN ${CMAKE_SOURCE_DIR} ${SUBPROJECT_MAN_IN})
+configure_file (${SUBPROJECT_MAN_IN} ${CMAKE_CURRENT_BINARY_DIR}/${SUBPROJECT_MAN})
 
-# additional targets
-set (TARGETS "")
-set (HEADERS "")
-
-add_subdirectory (${SUBPROJECT_SOURCE_DIR})
-# headers
-install (DIRECTORY ${SUBPROJECT_INCLUDE_DIR}/ DESTINATION include/)
-# documentation
-if (BUILD_DOCS)
-    include (docs.cmake)
-endif ()
+install (FILES ${SUBPROJECT_DESKTOP} DESTINATION share/applications/)
+install (FILES ${CMAKE_CURRENT_BINARY_DIR}/${SUBPROJECT_MAN} DESTINATION share/man/man1/)
+install (FILES bash-completions DESTINATION share/bash-completion/completions/ RENAME ${SUBPROJECT})
+install (FILES zsh-completions DESTINATION share/zsh/site-functions/ RENAME _${SUBPROJECT})
