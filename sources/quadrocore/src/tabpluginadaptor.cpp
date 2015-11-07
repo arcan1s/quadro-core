@@ -23,7 +23,7 @@
  */
 
 
-#include "quadro/quadro.h"
+#include "quadrocore/quadro.h"
 
 
 /**
@@ -55,15 +55,6 @@ TabPluginAdaptor::~TabPluginAdaptor()
 bool TabPluginAdaptor::Ping()
 {
     return true;
-}
-
-
-/**
- * @fn Api
- */
-int TabPluginAdaptor::Api()
-{
-    return m_plugin->api();
 }
 
 

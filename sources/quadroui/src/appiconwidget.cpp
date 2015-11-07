@@ -30,7 +30,7 @@
 #include <QMouseEvent>
 #include <QStandardPaths>
 
-#include <quadro/quadro.h>
+#include <quadrocore/quadro.h>
 
 
 /**

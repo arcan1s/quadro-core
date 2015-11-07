@@ -23,7 +23,7 @@
 #include <QApplication>
 #include <QMainWindow>
 
-#include "quadro/quadro.h"
+#include <quadrocore/quadro.h>
 
 
 class SettingsWindow;

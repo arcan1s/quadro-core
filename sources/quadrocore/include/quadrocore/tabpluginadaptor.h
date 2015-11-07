@@ -62,11 +62,6 @@ public slots:
     bool Ping();
     // public method interface
     /**
-     * @brief plugin API version
-     * @return API version
-     */
-    int Api();
-    /**
      * @brief plugin name
      * @return name
      */

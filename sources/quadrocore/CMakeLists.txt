@@ -2,14 +2,11 @@
 set (SUBPROJECT "quadrocore")
 message (STATUS "Subproject ${SUBPROJECT}")
 
-add_subdirectory (src)
+include("adds.cmake")
+add_subdirectory ("src")
 # headers
-install (DIRECTORY include/${PROJECT_NAME} DESTINATION include/)
-# additional files
-install (FILES "QuadroConfig.cmake" DESTINATION lib/cmake/Quadro)
-install (FILES "QuadroMacros.cmake" DESTINATION lib/cmake/Quadro)
-install (FILES "QuadroLibraries.cmake" DESTINATION lib/cmake/Quadro)
+install (DIRECTORY "include/${SUBPROJECT}" DESTINATION "${INCLUDE_INSTALL_DIR}")
 # documentation
 if (BUILD_DOCS)
-    include (docs.cmake)
+    include ("docs.cmake")
 endif ()

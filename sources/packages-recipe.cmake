@@ -1,9 +1,9 @@
 # generators
 if (BUILD_DEB_PACKAGE)
-    set(CPACK_GENERATOR ${CPACK_GENERATOR} "DEB")
+    set(CPACK_GENERATOR "${CPACK_GENERATOR}" "DEB")
 endif ()
 if (BUILD_RPM_PACKAGE)
-    set(CPACK_GENERATOR ${CPACK_GENERATOR} "RPM")
+    set(CPACK_GENERATOR "${CPACK_GENERATOR}" "RPM")
 endif ()
 
 # build properties

@@ -22,13 +22,13 @@
 # @bug https://github.com/arcan1s/quadro-core/issues
 ##
 
+
 ##
 # @brief additional macros for quadro core
+##
+
+##
 # @fn quadro_install_plugin root [name] [libraries]
-##
-
-
-##
 # @brief build and install plugin
 # @param PLUGIN_ROOT         plugin root directory
 # @param PLUGIN_NAME         plugin name (optional). Will be assigned from path
@@ -37,33 +37,33 @@
 #
 ##
 macro(quadro_install_plugin PLUGIN_ROOT)
-    set(PLUGIN_NAME ${ARGV1})
+    set(PLUGIN_NAME "${ARGV1}")
     if (NOT PLUGIN_NAME)
-        set(PLUGIN_NAME ${PLUGIN_ROOT})
+        set(PLUGIN_NAME "${PLUGIN_ROOT}")
     endif()
-    set(ADDS_LIBRARIES ${ARGV2})
+    set(ADDS_LIBRARIES "${ARGV2}")
     message (STATUS "Plugin ${PLUGIN_NAME}")
     # get sources
-    file (GLOB_RECURSE PLUGIN_SOURCES ${PLUGIN_ROOT}/*.cpp)
-    file (GLOB_RECURSE PLUGIN_HEADERS ${PLUGIN_ROOT}/*.h)
-    file (GLOB_RECURSE PLUGIN_FORMS ${PLUGIN_ROOT}/*.ui)
-    qt5_wrap_cpp (PLUGIN_MOC_SOURCES ${PLUGIN_HEADERS})
+    file (GLOB_RECURSE PLUGIN_SOURCES "${PLUGIN_ROOT}/*.cpp")
+    file (GLOB_RECURSE PLUGIN_HEADERS "${PLUGIN_ROOT}/*.h")
+    file (GLOB_RECURSE PLUGIN_FORMS "${PLUGIN_ROOT}/*.ui")
+    qt5_wrap_cpp (PLUGIN_MOC_SOURCES "${PLUGIN_HEADERS}")
     if (${PLUGIN_FORMS})
-        qt5_wrap_ui (PLUGIN_UI_HEADERS ${PLUGIN_FORMS})
+        qt5_wrap_ui (PLUGIN_UI_HEADERS "${PLUGIN_FORMS}")
     endif()
 
     # include directories
-    include_directories (${CMAKE_CURRENT_BINARY_DIR}
-                         ${Qt_INCLUDE}
-                         ${QUADRO_INCLUDE_DIRS})
+    include_directories ("${CMAKE_CURRENT_BINARY_DIR}"
+                         "${Qt_INCLUDE}"
+                         "${QUADRO_INCLUDE_DIRS}")
 
     # build
-    add_library (${PLUGIN_NAME} MODULE ${PLUGIN_SOURCES} ${PLUGIN_HEADERS}
-            ${PLUGIN_MOC_SOURCES} ${PLUGIN_UI_HEADERS})
-    target_link_libraries (${PLUGIN_NAME} ${QUADRO_LIBRARIES} ${Qt_LIBRARIES} ${ADDS_LIBRARIES})
+    add_library ("${PLUGIN_NAME}" MODULE "${PLUGIN_SOURCES}" "${PLUGIN_HEADERS}"
+            "${PLUGIN_MOC_SOURCES}" "${PLUGIN_UI_HEADERS}")
+    target_link_libraries ("${PLUGIN_NAME}" "${QUADRO_LIBRARIES}" "${Qt_LIBRARIES}" "${ADDS_LIBRARIES}")
 
     # install
-    install (TARGETS ${PLUGIN_NAME} DESTINATION ${QUADRO_PLUGIN_ROOT})
-    install (FILES ${PLUGIN_ROOT}/${PLUGIN_NAME}.desktop DESTINATION ${QUADRO_PLUGIN_ROOT}
-            RENAME core.quadro.${PLUGIN_NAME}.desktop)
+    install (TARGETS "${PLUGIN_NAME}" DESTINATION "${QUADRO_PLUGIN_ROOT}")
+    install (FILES "${PLUGIN_ROOT}/${PLUGIN_NAME}.desktop" DESTINATION "${QUADRO_PLUGIN_ROOT}"
+            RENAME "core.quadro.${PLUGIN_NAME}.desktop")
 endmacro()

@@ -6,6 +6,6 @@ exec_program(
         RETURN_VALUE GIT_RETURN
 )
 
-if (${GIT_RETURN} EQUAL "0")
+if ("${GIT_RETURN}" EQUAL "0")
     set(PROJECT_COMMIT_SHA "${COMMIT_SHA}")
 endif ()

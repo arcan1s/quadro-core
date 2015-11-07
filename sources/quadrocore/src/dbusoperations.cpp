@@ -16,7 +16,7 @@
  ***************************************************************************/
 
 
-#include "quadro/quadro.h"
+#include "quadrocore/quadro.h"
 
 #include <QDBusConnection>
 #include <QDBusMessage>

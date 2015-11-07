@@ -45,11 +45,6 @@ public:
     virtual ~TabPluginInterface() {};
     // get methods
     /**
-     * @brief plugin API version
-     * @return API version
-     */
-    virtual int api() const = 0;
-    /**
      * @brief plugin name which will be shown in tab
      * @return name
      */

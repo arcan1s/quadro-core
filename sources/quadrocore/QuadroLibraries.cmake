@@ -22,21 +22,29 @@
 # @bug https://github.com/arcan1s/quadro-core/issues
 ##
 
-##
-# @brief additional libraries for quadro components
-##
-
 
 ##
-# @brief common Qt components
+# @brief Quadro common libraries
 ##
+
 find_package(Qt5 5.4.0 REQUIRED COMPONENTS Core DBus Widgets)
+##
+# @brief add Qt definitions
+##
 add_definitions(
         ${Qt5Core_DEFINITIONS} ${Qt5DBus_DEFINITIONS} ${Qt5Widgets_DEFINITIONS}
 )
+##
+# @def Qt_INCLUDE
+# Qt include paths
+##
 set(Qt_INCLUDE
-        ${Qt5Core_INCLUDE_DIRS} ${Qt5DBus_INCLUDE_DIRS} ${Qt5Widgets_INCLUDE_DIRS}
+        "${Qt5Core_INCLUDE_DIRS}" "${Qt5DBus_INCLUDE_DIRS}" "${Qt5Widgets_INCLUDE_DIRS}"
 )
+##
+# @def Qt_LIBRARIES
+# Qt libraries
+##
 set(Qt_LIBRARIES
-        ${Qt5Core_LIBRARIES} ${Qt5DBus_LIBRARIES} ${Qt5Widgets_LIBRARIES}
+        "${Qt5Core_LIBRARIES}" "${Qt5DBus_LIBRARIES}" "${Qt5Widgets_LIBRARIES}"
 )

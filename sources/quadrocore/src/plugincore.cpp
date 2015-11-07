@@ -22,7 +22,7 @@
  * @bug https://github.com/arcan1s/quadro-core/issues
  */
 
-#include "quadro/quadro.h"
+#include "quadrocore/quadro.h"
 
 #include <QDir>
 #include <QSettings>

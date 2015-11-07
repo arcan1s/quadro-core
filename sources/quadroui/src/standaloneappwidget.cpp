@@ -28,7 +28,7 @@
 
 #include <QMdiSubWindow>
 
-#include <quadro/quadro.h>
+#include <quadrocore/quadro.h>
 
 
 /**

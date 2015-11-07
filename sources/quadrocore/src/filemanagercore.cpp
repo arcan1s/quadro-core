@@ -23,7 +23,7 @@
  */
 
 
-#include "quadro/quadro.h"
+#include "quadrocore/quadro.h"
 
 #include <QDesktopServices>
 #include <QDir>

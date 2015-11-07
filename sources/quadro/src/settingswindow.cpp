@@ -24,8 +24,9 @@
 
 #include <language/language.h>
 
+#include <quadrocore/quadrodebug.h>
+
 #include "mainwindow.h"
-#include "quadro/quadrodebug.h"
 #include "version.h"
 
 

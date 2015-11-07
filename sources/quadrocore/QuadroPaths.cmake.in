@@ -15,7 +15,7 @@
 #   along with quadro. If not, see http://www.gnu.org/licenses/           #
 ###########################################################################
 ##
-# @file QuadroConfig.cmake
+# @file QuadroPaths.cmake
 # Additional file of quadro library
 # @author Evgeniy Alekseev
 # @copyright GPLv3
@@ -24,41 +24,46 @@
 
 
 ##
-# @brief try to find quadro libraries
+# @brief Quadro common paths
 ##
 
 ##
-# @def QUADRO_DEFINITIONS
-# optional cmake definitions
+# @def BIN_INSTALL_DIR
+# installation directory for executables
 ##
-set(QUADRO_DEFINITIONS "")
+set(BIN_INSTALL_DIR "@BIN_INSTALL_DIR@")
 ##
-# @def QUADRO_INCLUDE_DIRS
-# path to root include directory
+# @def DATA_INSTALL_DIR
+# installation directory for data
 ##
-find_path(QUADROCORE_INCLUDE_DIR "quadrocore/quadro.h" PATH_SUFFIXES "quadro")
-find_path(QUADROUI_INCLUDE_DIR "quadroui/quadroui.h" PATH_SUFFIXES "quadro")
-set(QUADRO_INCLUDE_DIRS "${QUADROCORE_INCLUDE_DIR}" "${QUADROUI_INCLUDE_DIR}")
+set(DATA_INSTALL_DIR "@DATA_INSTALL_DIR@")
 ##
-# @def QUADRO_LIBRARIES
-# quadro library name
+# @def INCLUDE_INSTALL_DIR
+# installation directory for headers
 ##
-find_library(QUADROCORE_LIBRARY NAMES "quadrocore" "libquadrocore"
-        PATH_SUFFIXES "quadro")
-find_library(QUADROUI_LIBRARY NAMES "quadroui" "libquadroui"
-        PATH_SUFFIXES "quadro")
-set(QUADRO_LIBRARIES "${QUADROCORE_LIBRARY}" "${QUADROUI_LIBRARY}")
+set(INCLUDE_INSTALL_DIR "@INCLUDE_INSTALL_DIR@")
 ##
-# @def QUADRO_FOUND
-# boolean, true if library has been found
+# @def LIB_INSTALL_DIR
+# installation directory for libraries
 ##
-include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(Quadro DEFAULT_MSG
-        QUADRO_LIBRARIES QUADRO_INCLUDE_DIRS)
-
+set(LIB_INSTALL_DIR "@LIB_INSTALL_DIR@")
 ##
-# @brief additional defined macros
+# @def QUADRO_ROOT
+# quadro root directory
 ##
-include("${CMAKE_CURRENT_LIST_DIR}/QuadroPaths.cmake")
-include("${CMAKE_CURRENT_LIST_DIR}/QuadroLibraries.cmake")
-include("${CMAKE_CURRENT_LIST_DIR}/QuadroMacros.cmake")
+set(QUADRO_ROOT "${DATA_INSTALL_DIR}/quadro")
+##
+# @def QUADRO_FAVORITES_ROOT
+# quadro favorites root directory
+##
+set(QUADRO_FAVORITES_ROOT "${QUADRO_ROOT}/favorites")
+##
+# @def QUADRO_PLUGIN_ROOT
+# quadro plugins root directory
+##
+set(QUADRO_PLUGIN_ROOT "${QUADRO_ROOT}/plugins")
+##
+# @def QUADRO_RECENT_ROOT
+# quadro recent root directory
+##
+set(QUADRO_RECENT_ROOT "${QUADRO_ROOT}/recent")

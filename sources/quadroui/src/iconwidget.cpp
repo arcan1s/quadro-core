@@ -33,7 +33,7 @@
 #include <QStyleOption>
 #include <QVBoxLayout>
 
-#include <quadro/quadro.h>
+#include <quadrocore/quadro.h>
 
 
 /**

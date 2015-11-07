@@ -31,7 +31,7 @@
 #include <QStyleOption>
 
 #include <flowlayout/flowlayout.h>
-#include <quadro/quadro.h>
+#include <quadrocore/quadro.h>
 
 
 /**

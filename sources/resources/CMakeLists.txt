@@ -1,5 +1,5 @@
 # set project name
-set (SUBPROJECT quadro-resources)
+set (SUBPROJECT "quadro-resources")
 message (STATUS "Subproject ${SUBPROJECT}")
 
-install (FILES icon.png DESTINATION share/pixmaps RENAME quadro.png)
+install (FILES "icon.png" DESTINATION "${DATA_INSTALL_DIR}/pixmaps" RENAME "quadro.png")

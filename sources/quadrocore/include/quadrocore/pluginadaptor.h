@@ -15,7 +15,7 @@
  *   along with quadro. If not, see http://www.gnu.org/licenses/           *
  ***************************************************************************/
 /**
- * @file plugininterface.h
+ * @file pluginadaptor.h
  * Header of quadro library
  * @author Evgeniy Alekseev
  * @copyright GPLv3
@@ -23,77 +23,92 @@
  */
 
 
-#ifndef PLUGININTERFACE_H
-#define PLUGININTERFACE_H
+#ifndef PLUGINADAPTOR_H
+#define PLUGINADAPTOR_H
 
-#include <QtPlugin>
+#include <QDBusAbstractAdaptor>
+#include <QObject>
 
 #include "config.h"
 
 
+class PluginInterface;
+
 /**
- * @brief The PluginInterface class provides plugin core part
+ * @brief The PluginAdaptor class provides plugin DBus adaptor
  */
-class PluginInterface
+class PluginAdaptor : public QDBusAbstractAdaptor
 {
+    Q_OBJECT
+    Q_CLASSINFO("D-Bus Interface", DBUS_PLUGIN_INTERFACE)
+
 public:
     /**
-     * @brief PluginInterface class destructor
+     * @brief PluginAdaptor class constructor
+     * @param parent         pointer to parent object
+     * @param plugin         pointer to plugin item
      */
-    virtual ~PluginInterface();
-    // get methods
+    explicit PluginAdaptor(QObject *parent, PluginInterface *plugin);
     /**
-     * @brief plugin API version
-     * @return API version
+     * @brief PluginAdaptor class destructor
      */
-    virtual int api() const = 0;
+    virtual ~PluginAdaptor();
+
+public slots:
+    /**
+     * @brief ping interface
+     * @return true if interface is active
+     */
+    bool Ping();
+    // public method interface
     /**
      * @brief plugin background
      * @return background
      */
-    virtual QString background() const = 0;
+    QString Background();
     /**
      * @brief plugin data in text
      * @return data
      */
-    virtual QString data() const = 0;
+    QString Data();
     /**
      * @brief plugin name
      * @return name
      */
-    virtual QString name() const = 0;
-    // main methods
+    QString Name();
+    // public slots interface
     /**
-     * @brief method which will be called when plugin is activated
+     * @brief called if plugin has been clicked
      */
-    virtual void action() const = 0;
+    void Action();
     /**
-     * @brief init the plugin
+     * @brief close the plugin
      */
-    virtual void init() = 0;
-    /**
-     * @brief quit from plugin
-     */
-    virtual void quit() = 0;
+    void Close();
     /**
      * @brief read plugin settings from configuration file
-     * @param _desktopPath   full path to settings file
+     * @param desktopPath    full path to settings file
      */
-    virtual void readSettings(const QString _desktopPath) = 0;
+    void ReadSettings(const QString desktopPath);
     /**
      * @brief save plugin settings to configuration file
-     * @param _desktopPath   full path to settings file
+     * @param desktopPath    full path to settings file
      * @return true if settings has been saved successfully
      * @return false if there was an error while settings sync
      */
-    virtual bool saveSettings(const QString _desktopPath) = 0;
+    bool SaveSettings(const QString desktopPath);
     /**
-     * @brief update data
+     * @brief update data. May be called to force update
      */
-    virtual void update() = 0;
+    void Update();
+
+private:
+    // properties
+    /**
+     * @brief pointer to the plugin
+     */
+    PluginInterface *m_plugin = nullptr;
 };
 
-Q_DECLARE_INTERFACE(PluginInterface, PLUGIN_INTERFACE)
 
-
-#endif /* PLUGININTERFACE_H */
+#endif /* PLUGINADAPTOR_H */

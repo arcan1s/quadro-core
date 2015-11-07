@@ -20,8 +20,9 @@
 
 #include <unistd.h>
 
+#include <quadrocore/quadrodebug.h>
+
 #include "mainwindow.h"
-#include "quadro/quadrodebug.h"
 
 
 QuadroUiAdaptor::QuadroUiAdaptor(MainWindow *parent)

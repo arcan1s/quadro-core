@@ -20,7 +20,7 @@
 
 #include <QIcon>
 
-#include <quadro/quadro.h>
+#include <quadrocore/quadro.h>
 
 
 /**
