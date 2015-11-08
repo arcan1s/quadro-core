@@ -54,6 +54,10 @@ public:
 
 public slots:
     /**
+     * @brief update application list
+     */
+    void UpdateApplications() const;
+    /**
      * @brief update favorites applications list
      */
     void UpdateFavorites() const;

@@ -257,6 +257,12 @@ public:
      */
     QString desktopName() const;
     /**
+     * @brief build command line from exec using arguments
+     * @param _args          command line arguments
+     * @return command line with arguments
+     */
+    QStringList generateExec(const QVariantHash _args) const;
+    /**
      * @brief read application information from desktop file
      * @param _desktopPath   full path to desktop file
      * @param _parent        pointer to parent item
@@ -290,8 +296,9 @@ public:
 public slots:
     /**
      * @brief launch the application
+     * @param _args          command line arguments
      */
-    bool launch(const QVariantHash args = QVariantHash()) const;
+    bool launch(const QVariantHash _args = QVariantHash()) const;
     /**
      * @brief write settings to desktop file
      * @param _desktopPath   full path to desktop file
@@ -308,8 +315,9 @@ public slots:
 private slots:
     /**
      * @brief run application
+     * @param _args          command line arguments
      */
-    bool run(const QVariantHash args = QVariantHash()) const;
+    bool run(const QVariantHash _args) const;
 
 private:
     // main

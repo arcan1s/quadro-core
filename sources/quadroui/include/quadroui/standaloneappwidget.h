@@ -30,33 +30,33 @@
 #include <QToolButton>
 
 
-class ApplicationLauncherItem;
+class StandaloneApplicationItem;
 
 namespace Ui {
-class StandaloneApp;
+class StandaloneAppWidget;
 }
 
 /**
- * @brief The StandaloneApp class provides standalone application UI representation
+ * @brief The StandaloneAppWidget class provides standalone application UI representation
  */
-class StandaloneApp : public QMainWindow
+class StandaloneAppWidget : public QMainWindow
 {
     Q_OBJECT
 
 public:
     /**
-     * @brief StandaloneApp class constructor
+     * @brief StandaloneAppWidget class constructor
      * @param parent         pointer to parent object
      * @param exec           application executable
      * @param index          tab index
      * @param settings       application settings
      */
-    explicit StandaloneApp(QWidget *parent, const QString exec, const int index,
-                           const QVariantHash settings = QVariantHash());
+    explicit StandaloneAppWidget(QWidget *parent, const QStringList exec,
+                                 const int index, const QVariantHash settings = QVariantHash());
     /**
-     * @brief StandaloneApp class destructor
+     * @brief StandaloneAppWidget class destructor
      */
-    virtual ~StandaloneApp();
+    virtual ~StandaloneAppWidget();
 
 public slots:
     /**
@@ -82,16 +82,16 @@ private:
     /**
      * @brief pointer to UI object
      */
-    Ui::StandaloneApp *ui = nullptr;
+    Ui::StandaloneAppWidget *ui = nullptr;
     // backend
     /**
      * @brief additional method to create objects
      */
     void createObjects();
     /**
-     * @brief generated ApplicationLauncherItem object
+     * @brief generated StandaloneApplicationItem object
      */
-    ApplicationLauncherItem *m_application = nullptr;
+    StandaloneApplicationItem *m_application = nullptr;
     // configuration
     /**
      * @brief application configuration
@@ -100,7 +100,7 @@ private:
     /**
      * @brief application executable
      */
-    QString m_exec;
+    QStringList m_exec;
     /**
      * @brief tab index
      */

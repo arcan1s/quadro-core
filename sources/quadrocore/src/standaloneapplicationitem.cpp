@@ -31,12 +31,12 @@
 
 
 /**
- * @class ApplicationLauncherItem
+ * @class StandaloneApplicationItem
  */
 /**
- * @fn ApplicationLauncherItem
+ * @fn StandaloneApplicationItem
  */
-ApplicationLauncherItem::ApplicationLauncherItem(QWidget *parent, const QString cmd)
+StandaloneApplicationItem::StandaloneApplicationItem(QWidget *parent, const QStringList cmd)
     : QObject(parent),
       m_command(cmd),
       m_parent(parent)
@@ -51,9 +51,9 @@ ApplicationLauncherItem::ApplicationLauncherItem(QWidget *parent, const QString 
 
 
 /**
- * @fn ~ApplicationLauncherItem
+ * @fn ~StandaloneApplicationItem
  */
-ApplicationLauncherItem::~ApplicationLauncherItem()
+StandaloneApplicationItem::~StandaloneApplicationItem()
 {
     qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
 
@@ -66,7 +66,7 @@ ApplicationLauncherItem::~ApplicationLauncherItem()
 /**
  * @fn command
  */
-QString ApplicationLauncherItem::command() const
+QStringList StandaloneApplicationItem::command() const
 {
     return m_command;
 }
@@ -75,7 +75,7 @@ QString ApplicationLauncherItem::command() const
 /**
  * @fn processId
  */
-Q_PID ApplicationLauncherItem::processId() const
+Q_PID StandaloneApplicationItem::processId() const
 {
     if (m_process == nullptr) return 0;
 
@@ -86,7 +86,7 @@ Q_PID ApplicationLauncherItem::processId() const
 /**
  * @fn processState
  */
-QProcess::ProcessState ApplicationLauncherItem::processState() const
+QProcess::ProcessState StandaloneApplicationItem::processState() const
 {
     if (m_process == nullptr) return QProcess::NotRunning;
 
@@ -97,7 +97,7 @@ QProcess::ProcessState ApplicationLauncherItem::processState() const
 /**
  * @fn widget
  */
-QList<QWidget *> ApplicationLauncherItem::widgets()
+QList<QWidget *> StandaloneApplicationItem::widgets()
 {
     return m_widgets;
 }
@@ -106,19 +106,21 @@ QList<QWidget *> ApplicationLauncherItem::widgets()
 /**
  * @fn startApplication
  */
-void ApplicationLauncherItem::startApplication()
+void StandaloneApplicationItem::startApplication()
 {
     if (m_process == nullptr) return;
 
-    //run process and find its wid
-    m_process->start(m_command);
+    QStringList cmdArgs = m_command;
+    QString cmd = cmdArgs.takeFirst();
+
+    m_process->start(cmd, cmdArgs);
 }
 
 
 /**
  * @fn stopApplication
  */
-void ApplicationLauncherItem::stopApplication()
+void StandaloneApplicationItem::stopApplication()
 {
     if (m_process == nullptr) return;
 
@@ -129,7 +131,7 @@ void ApplicationLauncherItem::stopApplication()
 /**
  * @fn updateWidgets
  */
-void ApplicationLauncherItem::updateWidgets()
+void StandaloneApplicationItem::updateWidgets()
 {
     if (processId() == 0) {
         qCCritical(LOG_LIB) << "Cound not get PID";
@@ -155,7 +157,7 @@ void ApplicationLauncherItem::updateWidgets()
 /**
  * @fn finished
  */
-void ApplicationLauncherItem::finished(const int exitCode,
+void StandaloneApplicationItem::finished(const int exitCode,
                                        const QProcess::ExitStatus exitStatus)
 {
     qCDebug(LOG_LIB) << "Exit code" << exitCode;

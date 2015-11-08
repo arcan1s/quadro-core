@@ -437,6 +437,44 @@ QString ApplicationItem::desktopName() const
 
 
 /**
+ * @fn generateExec
+ */
+QStringList ApplicationItem::generateExec(const QVariantHash _args) const
+{
+    qCDebug(LOG_LIB) << "Program arguments" << _args;
+
+    QStringList cmdArgs = m_exec.split(QChar(' '), QString::SkipEmptyParts);
+    // replace keys according to
+    // http://standards.freedesktop.org/desktop-entry-spec/latest/ar01s06.html
+    QStringList keys(QStringList() << QString("%f") << QString("%F")
+                     << QString("%u") << QString("%U") << QString("%d")
+                     << QString("%D") << QString("%n") << QString("%N")
+                     << QString("%i") << QString("%c") << QString("%k")
+                     << QString("%V") << QString("%m"));
+    for (int i=0; i<cmdArgs.count(); i++) {
+        foreach (const QString key, keys)
+            cmdArgs[i].replace(key, _args[key].type() == QVariant::StringList
+                                    ? _args[key].toStringList().join(QChar(' '))
+                                    : _args[key].toString());
+        // end
+        cmdArgs[i].replace(QString("%%"), QString("%"));
+    }
+
+    // prepend $TERM if any
+    if (m_terminal) {
+        QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+        QString term = env.value(QString("TERM"));
+        if (term.isEmpty())
+            qCWarning(LOG_LIB) << "Could not get $TERM variable, ignoring";
+        else
+            cmdArgs.prepend(term);
+    }
+
+    return cmdArgs;
+}
+
+
+/**
  * @fn fromDesktop
  */
 ApplicationItem *ApplicationItem::fromDesktop(const QString _desktopPath, QObject *_parent)
@@ -545,9 +583,9 @@ bool ApplicationItem::startsWith(const QString _substr) const
 /**
  * @fn launch
  */
-bool ApplicationItem::launch(const QVariantHash args) const
+bool ApplicationItem::launch(const QVariantHash _args) const
 {
-    qCDebug(LOG_LIB) << "Program arguments" << args;
+    qCDebug(LOG_LIB) << "Program arguments" << _args;
 
     if (m_type == QString("Application")) {
         QProcess p;
@@ -558,7 +596,7 @@ bool ApplicationItem::launch(const QVariantHash args) const
         }
         if ((m_tryExec.isEmpty())
             || (p.exitCode() == 0)) {
-            return run(args);
+            return run(_args);
         } else {
             qCWarning(LOG_LIB) << "Ignore launch";
         }
@@ -631,42 +669,13 @@ bool ApplicationItem::removeDesktop(const QString _desktopPath) const
 /**
  * @fn run
  */
-bool ApplicationItem::run(const QVariantHash args) const
+bool ApplicationItem::run(const QVariantHash _args) const
 {
-    qCDebug(LOG_LIB) << "Program arguments" << args;
+    qCDebug(LOG_LIB) << "Program arguments" << _args;
 
     // build cmd
-    QString cmd;
-    QStringList cmdArgs = m_exec.split(QChar(' '), QString::SkipEmptyParts);
-    // replace keys according to
-    // http://standards.freedesktop.org/desktop-entry-spec/latest/ar01s06.html
-    QStringList keys(QStringList() << QString("%f") << QString("%F")
-                         << QString("%u") << QString("%U") << QString("%d")
-                         << QString("%D") << QString("%n") << QString("%N")
-                         << QString("%i") << QString("%c") << QString("%k")
-                         << QString("%V") << QString("%m"));
-    for (int i=0; i<cmdArgs.count(); i++) {
-        foreach (const QString key, keys)
-            cmdArgs[i].replace(key, args[key].type() == QVariant::StringList
-                                    ? args[key].toStringList().join(QChar(' '))
-                                    : args[key].toString());
-        // end
-        cmdArgs[i].replace(QString("%%"), QString("%"));
-    }
-
-    // prepend $TERM if any
-    if (m_terminal) {
-        QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-        QString term = env.value(QString("TERM"));
-        if (term.isEmpty()) {
-            qCWarning(LOG_LIB) << "Could not get $TERM variable, ignoring";
-            cmd = cmdArgs.takeFirst();
-        } else {
-            cmd = term;
-        }
-    } else {
-        cmd = cmdArgs.takeFirst();
-    }
+    QStringList cmdArgs = generateExec(_args);
+    QString cmd = cmdArgs.takeFirst();
 
     return QProcess::startDetached(cmd, cmdArgs, m_path.isEmpty() ? QString("/") : m_path);
 }

@@ -30,7 +30,6 @@
 
 #include "abstractappaggregator.h"
 #include "applicationitem.h"
-#include "applicationlauncheritem.h"
 #include "dbusoperations.h"
 #include "favoritescore.h"
 #include "filemanagercore.h"
@@ -42,6 +41,7 @@
 #include "quadrocore.h"
 #include "quadrodebug.h"
 #include "recentlycore.h"
+#include "standaloneapplicationitem.h"
 #include "tabpluginadaptor.h"
 #include "tabplugininterface.h"
 #include "x11adaptor.h"

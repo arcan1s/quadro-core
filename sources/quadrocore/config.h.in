@@ -86,15 +86,22 @@
  * minimal available time for plugin update
  */
 #define MINIMAL_TIMER 333
+
+// plugin interfaces
+/**
+ * @def DESKTOP_INTERFACE
+ * desktop plugin interface name
+ */
+#define DESKTOP_INTERFACE "core.quadro.desktopplugin/@PROJECT_VERSION@"
 /**
  * @def PLUGIN_INTERFACE
  * plugin interface name
  */
-#define PLUGIN_INTERFACE "core.quadro.plugin/1.0"
+#define PLUGIN_INTERFACE "core.quadro.plugin/@PROJECT_VERSION@"
 /**
  * @def TAB_PLUGIN_INTERFACE
  * tab plugin interface name
  */
-#define TAB_PLUGIN_INTERFACE "core.quadro.tabplugin/1.0"
+#define TAB_PLUGIN_INTERFACE "core.quadro.tabplugin/@PROJECT_VERSION@"
 
 #endif /* CONFIG_H */

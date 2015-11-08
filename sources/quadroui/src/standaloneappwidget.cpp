@@ -32,13 +32,13 @@
 
 
 /**
- * @class StandaloneApp
+ * @class StandaloneAppWidget
  */
 /**
- * @fn StandaloneApp
+ * @fn StandaloneAppWidget
  */
-StandaloneApp::StandaloneApp(QWidget *parent, const QString exec, const int index,
-                             const QVariantHash settings)
+StandaloneAppWidget::StandaloneAppWidget(QWidget *parent, const QStringList exec,
+                                         const int index, const QVariantHash settings)
     : QMainWindow(parent),
       m_configuration(settings),
       m_exec(exec),
@@ -46,7 +46,7 @@ StandaloneApp::StandaloneApp(QWidget *parent, const QString exec, const int inde
 {
     qCDebug(LOG_UI) << __PRETTY_FUNCTION__;
 
-    ui = new Ui::StandaloneApp;
+    ui = new Ui::StandaloneAppWidget;
     ui->setupUi(this);
 
     createObjects();
@@ -57,9 +57,9 @@ StandaloneApp::StandaloneApp(QWidget *parent, const QString exec, const int inde
 
 
 /**
- * @fn ~StandaloneApp
+ * @fn ~StandaloneAppWidget
  */
-StandaloneApp::~StandaloneApp()
+StandaloneAppWidget::~StandaloneAppWidget()
 {
     qCDebug(LOG_UI) << __PRETTY_FUNCTION__;
 
@@ -70,7 +70,7 @@ StandaloneApp::~StandaloneApp()
 /**
  * @fn paintWidget
  */
-void StandaloneApp::paintWidget()
+void StandaloneAppWidget::paintWidget()
 {
     QList<QWidget *> widgets = m_application->widgets();
     foreach (QWidget *widget, widgets) {
@@ -87,7 +87,7 @@ void StandaloneApp::paintWidget()
 /**
  * @fn subWindowDestroyed
  */
-void StandaloneApp::subWindowDestroyed()
+void StandaloneAppWidget::subWindowDestroyed()
 {
     if (ui->mdiArea->subWindowList().isEmpty()) {
         qCInfo(LOG_UI) << "No windows remain, close tab";
@@ -99,7 +99,7 @@ void StandaloneApp::subWindowDestroyed()
 /**
  * @fn createObjects
  */
-void StandaloneApp::createObjects()
+void StandaloneAppWidget::createObjects()
 {
-    m_application = new ApplicationLauncherItem(this, m_exec);
+    m_application = new StandaloneApplicationItem(this, m_exec);
 }

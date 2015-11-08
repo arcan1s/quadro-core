@@ -41,7 +41,7 @@ public slots:
     void Close() const;
     void Hide() const;
     void Restore() const;
-    void RunContainer(const QString exec, const QString name = QString()) const;
+    void RunContainer(const QStringList exec, const QString name = QString()) const;
     QStringList UIDs() const;
 
 private:

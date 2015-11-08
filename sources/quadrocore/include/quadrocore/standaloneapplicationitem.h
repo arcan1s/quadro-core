@@ -15,7 +15,7 @@
  *   along with quadro. If not, see http://www.gnu.org/licenses/           *
  ***************************************************************************/
 /**
- * @file applicationlauncheritem.h
+ * @file standaloneapplicationitem.h
  * Header of quadro library
  * @author Evgeniy Alekseev
  * @copyright GPLv3
@@ -23,42 +23,42 @@
  */
 
 
-#ifndef APPLICATIONLAUNCHERITEM_H
-#define APPLICATIONLAUNCHERITEM_H
+#ifndef STANDALONEAPPLICATIONITEM_H
+#define STANDALONEAPPLICATIONITEM_H
 
 #include <QProcess>
 #include <QWidget>
 
 
 /**
- * @brief The ApplicationLauncherItem class provides methods to control internal
+ * @brief The StandaloneApplicationItem class provides methods to control internal
  * applications
  */
-class ApplicationLauncherItem : public QObject
+class StandaloneApplicationItem : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString command READ command)
+    Q_PROPERTY(QStringList command READ command)
     Q_PROPERTY(Q_PID pid READ processId)
     Q_PROPERTY(QProcess::ProcessState state READ processState)
 
 public:
     /**
-     * @brief ApplicationLauncherItem class constructor
+     * @brief StandaloneApplicationItem class constructor
      * @param parent         pointer to parent item (widget in which it will be
      *                       run)
      * @param cmd            path to command which should be run
      */
-    explicit ApplicationLauncherItem(QWidget *parent, const QString cmd);
+    explicit StandaloneApplicationItem(QWidget *parent, const QStringList cmd);
     /**
-     * @brief ApplicationLauncherItem class destructor
+     * @brief StandaloneApplicationItem class destructor
      */
-    virtual ~ApplicationLauncherItem();
+    virtual ~StandaloneApplicationItem();
     // get methods
     /**
      * @brief command which is under control
      * @return path to command
      */
-    QString command() const;
+    QStringList command() const;
     /**
      * @brief PID of the child process
      * @return QProcess::processId()
@@ -107,7 +107,7 @@ private:
     /**
      * @brief command line
      */
-    QString m_command;
+    QStringList m_command;
     /**
      * @brief pointer to the parent widget
      */
@@ -123,4 +123,4 @@ private:
 };
 
 
-#endif /* APPLICATIONLAUNCHERITEM_H */
+#endif /* STANDALONEAPPLICATIONITEM_H */

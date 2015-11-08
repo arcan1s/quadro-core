@@ -131,12 +131,12 @@ void MainWindow::updateConfiguration(const QVariantHash args)
 }
 
 
-void MainWindow::createContainer(const QString exec, const QString name)
+void MainWindow::createContainer(const QStringList exec, const QString name)
 {
     qCDebug(LOG_UI) << "Executable" << exec;
     qCDebug(LOG_UI) << "Name" << name;
 
-    StandaloneApp *app = new StandaloneApp(this, exec,
+    StandaloneAppWidget *app = new StandaloneAppWidget(this, exec,
                                            ui->stackedWidget->count(), configuration);
     connect(app, SIGNAL(destroyWindow(const int)), this, SLOT(removeContainer(const int)));
 

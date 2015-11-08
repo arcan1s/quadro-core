@@ -49,7 +49,7 @@ public slots:
     void showSettingsWindow();
     void updateConfiguration(const QVariantHash args = QVariantHash());
     // container settings
-    void createContainer(const QString exec, const QString name);
+    void createContainer(const QStringList exec, const QString name);
     void removeContainer(const int index);
 
 signals:

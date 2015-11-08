@@ -72,7 +72,7 @@ void QuadroUiAdaptor::Restore() const
 }
 
 
-void QuadroUiAdaptor::RunContainer(const QString exec, const QString name) const
+void QuadroUiAdaptor::RunContainer(const QStringList exec, const QString name) const
 {
     qCDebug(LOG_DBUS) << "Run container with" << exec << name;
 

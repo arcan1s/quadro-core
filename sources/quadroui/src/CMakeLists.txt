@@ -9,6 +9,7 @@ set (SUBPROJECT_RESOURCES "${PROJECT_RESOURCE_DIR}/${SUBPROJECT}.qrc")
 include_directories ("${PROJECT_CORELIBRARY_DIR}/include"
                      "${PROJECT_UILIBRARY_DIR}/include"
                      "${CMAKE_CURRENT_BINARY_DIR}"
+                     "${CMAKE_BINARY_DIR}"
                      "${PROJECT_TRDPARTY_DIR}"
                      "${Qt_INCLUDE}")
 

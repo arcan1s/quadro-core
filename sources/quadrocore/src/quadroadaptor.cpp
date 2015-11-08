@@ -50,6 +50,15 @@ QuadroAdaptor::~QuadroAdaptor()
 
 
 /**
+ * @fn UpdateApplications
+ */
+void QuadroAdaptor::UpdateApplications() const
+{
+    m_core->launcher()->initApplications();
+}
+
+
+/**
  * @fn UpdateFavorites
  */
 void QuadroAdaptor::UpdateFavorites() const

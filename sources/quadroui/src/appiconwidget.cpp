@@ -25,6 +25,8 @@
 
 #include "quadroui/quadroui.h"
 
+#include <QFileDialog>
+#include <QInputDialog>
 #include <QMenu>
 #include <QMessageBox>
 #include <QMouseEvent>
@@ -98,7 +100,7 @@ void AppIconWidget::mousePressEvent(QMouseEvent *_event)
         emit(runInNewTab());
     }
 
-    QWidget::mousePressEvent(_event);
+    IconWidget::mousePressEvent(_event);
 }
 
 
@@ -130,6 +132,7 @@ void AppIconWidget::hideApplication()
 {
     m_item->setNoDisplay(true);
     m_item->saveDesktop(QStandardPaths::writableLocation(QStandardPaths::ApplicationsLocation));
+    DBusOperations::sendRequestToLibrary(QString("UpdateApplications"));
 }
 
 
@@ -138,11 +141,10 @@ void AppIconWidget::hideApplication()
  */
 void AppIconWidget::run()
 {
-    if (m_item->launch())
+    if (m_item->launch(m_args))
         DBusOperations::sendRequestToUi(QString("Hide"));
     else
-        QMessageBox::critical(this, tr("Error"),
-                              tr("Error"),
+        QMessageBox::critical(this, tr("Error"), tr("Error"),
                               tr("Could not run application %1").arg(m_item->exec()));
 }
 
@@ -152,8 +154,52 @@ void AppIconWidget::run()
  */
 void AppIconWidget::runInNewTab()
 {
-    DBusOperations::sendRequestToUi(QString("RunContainer"), QVariantList() << m_item->exec()
+    DBusOperations::sendRequestToUi(QString("RunContainer"), QVariantList() << m_item->generateExec(m_args)
         << m_item->name());
+}
+
+
+/**
+ * @fn setFiles
+ */
+void AppIconWidget::setFiles()
+{
+    QStringList files = QFileDialog::getOpenFileNames(this, tr("Select files"));
+    if (files.isEmpty())
+        return;
+
+    m_args.clear();
+    QStringList argsFiles;
+    QStringList argsUrls;
+
+    foreach(const QString file, files) {
+        m_args[QString("%f")] = file;
+        argsFiles.append(file);
+        m_args[QString("%u")] = QString("file://%1").arg(file);
+        argsUrls.append(QString("file://%1").arg(file));
+    }
+    m_args[QString("%F")]= argsFiles;
+    m_args[QString("%U")]= argsUrls;
+}
+
+
+/**
+ * @fn setUrls
+ */
+void AppIconWidget::setUrls()
+{
+    QStringList urls = QInputDialog::getMultiLineText(this, tr("Select URLs"), tr("URLs")).split(QChar('\n'));
+    if (urls.isEmpty())
+        return;
+
+    m_args.clear();
+    QStringList argsUrls;
+
+    foreach(const QString url, urls) {
+        m_args[QString("%u")] = url;
+        argsUrls.append(url);
+    }
+    m_args[QString("%U")]= argsUrls;
 }
 
 
@@ -175,6 +221,10 @@ void AppIconWidget::createActions()
                       tr("Remove from favorites") :
                       tr("Add to favorites"),
                       this, SLOT(addItemToFavorites()));
+    m_menu->addSeparator();
+
+    m_menu->addAction(tr("Select files"), this, SLOT(setFiles()));
+    m_menu->addAction(tr("Select URLs"), this, SLOT(setUrls()));
     m_menu->addSeparator();
 
     m_menu->addAction(tr("Edit"), this, SLOT(editApplication()));

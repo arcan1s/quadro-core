@@ -93,6 +93,14 @@ private slots:
      * @brief run associated application in new tab
      */
     void runInNewTab();
+    /**
+     * @brief set files
+     */
+    void setFiles();
+    /**
+     * @brief set urls
+     */
+    void setUrls();
 
 private:
     /**
@@ -103,6 +111,10 @@ private:
      * @brief contextual menu
      */
     QMenu *m_menu = nullptr;
+    /**
+     * @brief command line arguments
+     */
+    QVariantHash m_args;
     // methods
     /**
      * @brief object create actions
