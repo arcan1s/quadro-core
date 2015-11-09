@@ -59,6 +59,33 @@
 #define DBUS_UI_OBJECT_PATH "/ui"
 
 // path configuration
+// common paths
+/**
+ * @def BIN_INSTALL_DIR
+ * installation directory for executables
+ */
+#define BIN_INSTALL_DIR "@BIN_INSTALL_DIR@"
+/**
+ * @def DATA_INSTALL_DIR
+ * installation directory for data
+ */
+#define DATA_INSTALL_DIR "@DATA_INSTALL_DIR@"
+/**
+ * @def INCLUDE_INSTALL_DIR
+ * installation directory for headers
+ */
+#define INCLUDE_INSTALL_DIR "@INCLUDE_INSTALL_DIR@"
+/**
+ * @def LIB_INSTALL_DIR
+ * installation directory for libraries
+ */
+#define LIB_INSTALL_DIR "@LIB_INSTALL_DIR@"
+/**
+ * @def ROOT_INSTALL_DIR
+ * the same as CMAKE_INSTALL_PREFIX
+ */
+#define ROOT_INSTALL_DIR "@CMAKE_INSTALL_PREFIX@"
+// application specific
 /**
  * @def FAVORITES_PATH
  * path to favorites inside @ref HOME_PATH

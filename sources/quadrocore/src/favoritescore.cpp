@@ -148,6 +148,15 @@ bool FavoritesCore::hasApplication(ApplicationItem *_item)
 
 
 /**
+ * @fn order
+ */
+QStringList FavoritesCore::order() const
+{
+    return m_order;
+}
+
+
+/**
  * @fn changeApplicationState
  */
 void FavoritesCore::changeApplicationState(const QString _name, const bool _up)

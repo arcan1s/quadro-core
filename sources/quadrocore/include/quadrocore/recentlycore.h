@@ -62,6 +62,11 @@ public:
      * @return full path to desktop files
      */
     static QString desktopPath();
+    /**
+     * @brief get recently run applications
+     * @return application names
+     */
+    QStringList recent() const;
 
 public slots:
     /**

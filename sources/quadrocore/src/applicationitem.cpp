@@ -641,7 +641,6 @@ QString ApplicationItem::saveDesktop(const QString _desktopPath) const
     }
     foreach (const QString prop, knownListProperties) {
         QVariant value = property(prop.toUtf8().constData());
-        qDebug() << value;
         if (!value.isNull() && !value.toStringList().isEmpty())
             settings.setValue(prop, value.toStringList().join(QChar(';')));
     }

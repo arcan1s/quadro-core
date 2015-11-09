@@ -49,6 +49,18 @@ QuadroAdaptor::~QuadroAdaptor()
 }
 
 
+QStringList QuadroAdaptor::Favorites() const
+{
+    return m_core->favorites()->order();
+}
+
+
+QStringList QuadroAdaptor::Recent() const
+{
+    return m_core->recently()->recent();
+}
+
+
 /**
  * @fn UpdateApplications
  */

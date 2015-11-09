@@ -45,6 +45,12 @@ public:
     virtual ~TabPluginInterface() {};
     // get methods
     /**
+     * @brief pointer to configuration widget. If returning pointer will not be
+     * nullptr the additional configuration page will be created
+     * @return pointer to configuration widget
+     */
+    virtual QWidget *configWidget() = 0;
+    /**
      * @brief plugin name which will be shown in tab
      * @return name
      */

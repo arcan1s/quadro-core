@@ -15,7 +15,7 @@
  *   along with quadro. If not, see http://www.gnu.org/licenses/           *
  ***************************************************************************/
 /**
- * @file quadro.h
+ * @file desktopinterface.h
  * Header of quadro library
  * @author Evgeniy Alekseev
  * @copyright GPLv3
@@ -23,27 +23,39 @@
  */
 
 
-#ifndef QUADRO_H
-#define QUADRO_H
+#ifndef DESKTOPINTERFACE_H
+#define DESKTOPINTERFACE_H
+
+#include <QHash>
+#include <QtPlugin>
 
 #include "config.h"
 
-#include "abstractappaggregator.h"
-#include "applicationitem.h"
-#include "dbusoperations.h"
-#include "desktopinterface.h"
-#include "favoritescore.h"
-#include "filemanagercore.h"
-#include "launchercore.h"
-#include "pluginadaptor.h"
-#include "plugincore.h"
-#include "plugininterface.h"
-#include "quadroadaptor.h"
-#include "quadrocore.h"
-#include "quadrodebug.h"
-#include "recentlycore.h"
-#include "standaloneapplicationitem.h"
-#include "tabpluginadaptor.h"
-#include "tabplugininterface.h"
 
-#endif /* QUADRO_H */
+/**
+ * @brief The DesktopInterface class provides adaptor to WM
+ */
+class DesktopInterface
+{
+public:
+    /**
+     * @brief DesktopInterface class destructor
+     */
+    virtual ~DesktopInterface() {};
+    /**
+     * @brief get WIds by given PID
+     * @param _pid           PID
+     * @return list of WIds
+     */
+    virtual QList<unsigned long long> getWindowByPid(const long long _pid) = 0;
+    /**
+     * @brief get active windows
+     * @return map of windows keys of which are Q_PIDs
+     */
+    virtual QHash<long long, unsigned long long> getWindowsList() = 0;
+};
+
+Q_DECLARE_INTERFACE(DesktopInterface, DESKTOP_INTERFACE)
+
+
+#endif /* DESKTOPINTERFACE_H */

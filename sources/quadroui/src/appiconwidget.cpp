@@ -208,6 +208,8 @@ void AppIconWidget::setUrls()
  */
 void AppIconWidget::createActions()
 {
+    bool isFavorites = DBusOperations::sendRequestToLibrary(
+        QString("Favorites"))[0].toStringList().contains(m_item->name());
     m_menu = new QMenu(this);
 
     m_menu->addAction(QIcon::fromTheme(QString("system-run")),
@@ -217,7 +219,7 @@ void AppIconWidget::createActions()
                       tr("Run application in new tab"),
                       this, SLOT(runInNewTab()));
     m_menu->addAction(QIcon::fromTheme(QString("emblem-favorites")),
-                      FavoritesCore::hasApplication(m_item) ?
+                      isFavorites ?
                       tr("Remove from favorites") :
                       tr("Add to favorites"),
                       this, SLOT(addItemToFavorites()));

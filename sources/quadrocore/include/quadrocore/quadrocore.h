@@ -55,6 +55,14 @@ public:
      */
     virtual ~QuadroCore();
     /**
+     * @brief get WIds by given PID
+     * @remark since C++ doesn't allow static pure methods...
+     * @param _pid           PID
+     * @param _ok            plugin loading status
+     * @return list of WIds
+     */
+    static QList<unsigned long long> getWindowByPid(const long long _pid, bool *_ok);
+    /**
      * @brief favorites core object
      * @return pointer to favorites core object
      */

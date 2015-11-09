@@ -93,6 +93,11 @@ public:
      * @return true if application is in favorites otherwise returns false
      */
     static bool hasApplication(ApplicationItem *_item);
+    /**
+     * @brief application order
+     * @return list of applications by name
+     */
+    QStringList order() const;
 
 public slots:
     /**

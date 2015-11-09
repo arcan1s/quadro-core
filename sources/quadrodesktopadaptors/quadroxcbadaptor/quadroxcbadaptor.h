@@ -15,7 +15,7 @@
  *   along with quadro. If not, see http://www.gnu.org/licenses/           *
  ***************************************************************************/
 /**
- * @file x11adaptor.h
+ * @file quadroxcbadaptor.h
  * Header of quadro library
  * @author Evgeniy Alekseev
  * @copyright GPLv3
@@ -23,51 +23,45 @@
  */
 
 
-#ifndef X11ADAPTOR_H
-#define X11ADAPTOR_H
+#ifndef QUADROXCBADAPTOR_H
+#define QUADROXCBADAPTOR_H
 
-#include <QHash>
-#include <QObject>
+#include <quadrocore/quadro.h>
 
 #ifndef MAX_PROPERTY_VALUE_LEN
 #define MAX_PROPERTY_VALUE_LEN 4096
 #endif /* MAX_PROPERTY_VALUE_LEN */
 
+
 typedef unsigned long Window;
 typedef unsigned long Atom;
 
-
 /**
- * @brief The X11Adaptor class provides adaptor to the common X11 calls
+ * @brief The QuadroXCBAdaptor class provides adaptor to the common X11 calls
  * @remark this class is adapted from wmctrl https://sites.google.com/site/tstyblo/wmctrl
  */
-class X11Adaptor : public QObject
+class QuadroXCBAdaptor : public QObject, DesktopInterface
 {
     Q_OBJECT
+    Q_PLUGIN_METADATA(IID "core.quadro.xcbadaptor/1.0")
+    Q_INTERFACES(DesktopInterface)
 
 public:
     /**
-     * @brief X11Adaptor class constructor
-     * @param parent         pointer to parent item
-     */
-    explicit X11Adaptor(QObject *parent);
-    /**
      * @brief X11Adaptor class destructor
      */
-    virtual ~X11Adaptor();
+    virtual ~QuadroXCBAdaptor();
     /**
      * @brief get WIds by given PID
      * @param _pid           PID
      * @return list of WIds
      */
-    static QList<unsigned long long> getWindowByPid(const long long _pid);
+    QList<unsigned long long> getWindowByPid(const long long _pid);
     /**
      * @brief get active windows
      * @return map of windows keys of which are Q_PIDs
      */
     QHash<long long, unsigned long long> getWindowsList();
-
-public slots:
 
 private:
     /**
@@ -89,4 +83,4 @@ private:
 };
 
 
-#endif /* X11ADAPTOR_H */
+#endif /* QUADROXCBADAPTOR_H */

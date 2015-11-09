@@ -23,10 +23,11 @@
  */
 
 
+#include "quadrocore/quadro.h"
+
+#include <QGuiApplication>
 #include <QDBusConnection>
 #include <QDBusMessage>
-
-#include "quadrocore/quadro.h"
 
 
 /**
@@ -70,6 +71,47 @@ QuadroCore::~QuadroCore()
     delete m_launcher;
     delete m_plugin;
     delete m_recently;
+}
+
+
+QList<unsigned long long> QuadroCore::getWindowByPid(const long long _pid, bool *_ok)
+{
+    qCDebug(LOG_LIB) << "Search for PID" << _pid;
+
+    QList<unsigned long long> ids;
+    QGuiApplication *app = qobject_cast<QGuiApplication *>(qApp);
+    if (!app) {
+        qCCritical(LOG_LIB) << "Could not get access to application";
+        *_ok = false;
+        return ids;
+    }
+    QString platform = app->platformName();
+    qCInfo(LOG_LIB) << "Found platform" << platform;
+
+    QString libraryName = QString("%1/%2/libquadro%3adaptor.so")
+        .arg(ROOT_INSTALL_DIR).arg(LIB_INSTALL_DIR).arg(platform);
+    QPluginLoader loader(libraryName);
+    qCInfo(LOG_LIB) << "Loading" << libraryName;
+    // load plugin
+    QObject *plugin = loader.instance();
+    if (loader.isLoaded()) {
+        DesktopInterface *item = qobject_cast<DesktopInterface *>(plugin);
+        if (!item) {
+            qCCritical(LOG_LIB) << "Could not cast plugin";
+            *_ok = false;
+            return ids;
+        }
+        ids = item->getWindowByPid(_pid);
+        delete item;
+    } else {
+        qCCritical(LOG_LIB) << "Could not load the library for platform" << platform;
+        qCCritical(LOG_LIB) << "Error" << loader.errorString();
+        *_ok = false;
+        return ids;
+    }
+
+    *_ok = true;
+    return ids;
 }
 
 

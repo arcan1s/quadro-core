@@ -138,7 +138,10 @@ void StandaloneApplicationItem::updateWidgets()
         return;
     }
 
-    QList<WId> windows = X11Adaptor::getWindowByPid(processId());
+    bool ok;
+    QList<WId> windows = QuadroCore::getWindowByPid(processId(), &ok);
+    if (!ok)
+        return;
     if (windows.isEmpty()) {
         qCCritical(LOG_LIB) << "Could not find window for PID" << processId();
         return QTimer::singleShot(333, this, SLOT(updateWidgets()));

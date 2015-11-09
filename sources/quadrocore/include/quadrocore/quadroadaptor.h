@@ -54,6 +54,14 @@ public:
 
 public slots:
     /**
+     * @brief favorites applications list
+     */
+    QStringList Favorites() const;
+    /**
+     * @brief recent applications list
+     */
+    QStringList Recent() const;
+    /**
      * @brief update application list
      */
     void UpdateApplications() const;

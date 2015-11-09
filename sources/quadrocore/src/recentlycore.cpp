@@ -85,6 +85,19 @@ QString RecentlyCore::desktopPath()
 
 
 /**
+ * @fn recent
+ */
+QStringList RecentlyCore::recent() const
+{
+    QStringList apps;
+    foreach (const ApplicationItem *item, applications())
+        apps.append(item->name());
+
+    return apps;
+}
+
+
+/**
  * @fn addItem
  */
 ApplicationItem *RecentlyCore::addItem(ApplicationItem *_item)

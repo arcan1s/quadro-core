@@ -1,0 +1,6 @@
+if (ENABLE_WAYLAND_SUPPORT)
+    add_subdirectory("quadrowaylandadaptor")
+endif()
+if (ENABLE_XCB_SUPPORT)
+    add_subdirectory("quadroxcbadaptor")
+endif()

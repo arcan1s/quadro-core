@@ -48,6 +48,12 @@ public:
      */
     virtual QString background() const = 0;
     /**
+     * @brief pointer to configuration widget. If returning pointer will not be
+     * nullptr the additional configuration page will be created
+     * @return pointer to configuration widget
+     */
+    virtual QWidget *configWidget() = 0;
+    /**
      * @brief plugin data in text
      * @return data
      */

@@ -15,7 +15,7 @@
  *   along with quadro. If not, see http://www.gnu.org/licenses/           *
  ***************************************************************************/
 /**
- * @file x11adaptor.cpp
+ * @file quadroxcbadaptor.cpp
  * Source code of quadro library
  * @author Evgeniy Alekseev
  * @copyright GPLv3
@@ -23,32 +23,23 @@
  */
 
 
-#include "quadrocore/quadro.h"
+#include "quadroxcbadaptor.h"
 
 #include <QX11Info>
 
 #include <X11/Xatom.h>
 #include <X11/Xlib.h>
 
+#include <quadrocore/quadro.h>
 
 
 /**
- * @class X11Adaptor
+ * @class QuadroXCBAdaptor
  */
 /**
- * @fn X11Adaptor
+ * @fn ~QuadroXCBAdaptor
  */
-X11Adaptor::X11Adaptor(QObject *parent)
-    : QObject(parent)
-{
-    qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
-}
-
-
-/**
- * @fn ~X11Adaptor
- */
-X11Adaptor::~X11Adaptor()
+QuadroXCBAdaptor::~QuadroXCBAdaptor()
 {
     qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
 }
@@ -57,25 +48,21 @@ X11Adaptor::~X11Adaptor()
 /**
  * @fn getWindowByPid
  */
-QList<unsigned long long> X11Adaptor::getWindowByPid(const long long _pid)
+QList<unsigned long long> QuadroXCBAdaptor::getWindowByPid(const long long _pid)
 {
     if (QX11Info::display() == nullptr) {
         qCCritical(LOG_LIB) << "Could not connect to display";
         return QList<unsigned long long>();
     }
 
-    X11Adaptor *instance = new X11Adaptor(nullptr);
-    QHash<long long, unsigned long long> windows = instance->getWindowsList();
-    delete instance;
-
-    return windows.values(_pid);
+    return getWindowsList().values(_pid);
 }
 
 
 /**
  * @fn getWindowsList
  */
-QHash<long long, unsigned long long> X11Adaptor::getWindowsList()
+QHash<long long, unsigned long long> QuadroXCBAdaptor::getWindowsList()
 {
     QHash<long long, unsigned long long> windows;
 
@@ -88,7 +75,7 @@ QHash<long long, unsigned long long> X11Adaptor::getWindowsList()
 
     for (int i=0; i<clientListSize / sizeof(Window); i++) {
         long long *pid = reinterpret_cast<long long *>(getPropery(clientList[i], XA_CARDINAL,
-                                                       "_NET_WM_PID", nullptr));
+                                                                  "_NET_WM_PID", nullptr));
         windows.insertMulti(*pid, clientList[i]);
     }
 
@@ -96,7 +83,7 @@ QHash<long long, unsigned long long> X11Adaptor::getWindowsList()
 }
 
 
-Window *X11Adaptor::getClientList(unsigned long *size) const
+Window *QuadroXCBAdaptor::getClientList(unsigned long *size) const
 {
     qCDebug(LOG_LIB) << "Size" << size;
 
@@ -114,7 +101,7 @@ Window *X11Adaptor::getClientList(unsigned long *size) const
 }
 
 
-char *X11Adaptor::getPropery(const Window _win, const Atom _xaPropType,
+char *QuadroXCBAdaptor::getPropery(const Window _win, const Atom _xaPropType,
                              const char *_property, unsigned long *size) const
 {
     qCDebug(LOG_LIB) << "Property" << _property;

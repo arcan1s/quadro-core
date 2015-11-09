@@ -32,6 +32,8 @@ set(LIB_INSTALL_DIR "lib" CACHE STRING "Installation directory for libraries")
 # components
 option(BUILD_DEB_PACKAGE "Build deb package" OFF)
 option(BUILD_RPM_PACKAGE "Build rpm package" OFF)
+option(ENABLE_WAYLAND_SUPPORT "Build wayland plugin" ON)
+option(ENABLE_XCB_SUPPORT "Build X11 plugin" ON)
 # install options
 option (BUILD_DOCS "Build Doxygen documentation" OFF)
 option (BUILD_TESTING "Build unit tests" OFF)
@@ -80,6 +82,7 @@ configure_file ("${CMAKE_SOURCE_DIR}/version.h.in" "${CMAKE_CURRENT_BINARY_DIR}/
 add_subdirectory ("${PROJECT_RESOURCE_DIR}")
 add_subdirectory ("quadrocore")
 add_subdirectory ("quadroui")
+add_subdirectory ("quadrodesktopadaptors")
 add_subdirectory ("quadro")
 if (BUILD_TESTING)
     enable_testing ()
