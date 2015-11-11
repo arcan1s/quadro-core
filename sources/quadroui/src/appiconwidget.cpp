@@ -142,7 +142,7 @@ void AppIconWidget::hideApplication()
 void AppIconWidget::run()
 {
     if (m_item->launch(m_args))
-        DBusOperations::sendRequestToUi(QString("Hide"));
+        emit(applicationIsRunning());
     else
         QMessageBox::critical(this, tr("Error"), tr("Error"),
                               tr("Could not run application %1").arg(m_item->exec()));
@@ -154,8 +154,7 @@ void AppIconWidget::run()
  */
 void AppIconWidget::runInNewTab()
 {
-    DBusOperations::sendRequestToUi(QString("RunContainer"), QVariantList() << m_item->generateExec(m_args)
-        << m_item->name());
+    emit(standaloneApplicaitonRequested(m_item->generateExec(m_args), m_item->name()));
 }
 
 

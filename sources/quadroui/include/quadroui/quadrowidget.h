@@ -54,6 +54,10 @@ public:
      * @brief QuadroWidget class destructor
      */
     virtual ~QuadroWidget();
+    /**
+     * @brief clear widget
+     */
+    void clearLayout();
     // override default method
     /**
      * @brief pointer to UI object

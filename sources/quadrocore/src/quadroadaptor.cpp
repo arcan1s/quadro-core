@@ -25,6 +25,8 @@
 
 #include "quadrocore/quadro.h"
 
+#include <QMimeType>
+
 
 /**
  * @class QuadroAdaptor
@@ -36,7 +38,7 @@ QuadroAdaptor::QuadroAdaptor(QuadroCore *core)
     : QDBusAbstractAdaptor(core),
       m_core(core)
 {
-    qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
+    qCDebug(LOG_DBUS) << __PRETTY_FUNCTION__;
 }
 
 
@@ -45,16 +47,44 @@ QuadroAdaptor::QuadroAdaptor(QuadroCore *core)
  */
 QuadroAdaptor::~QuadroAdaptor()
 {
-    qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
+    qCDebug(LOG_DBUS) << __PRETTY_FUNCTION__;
 }
 
 
+/**
+ * @fn Favorites
+ */
 QStringList QuadroAdaptor::Favorites() const
 {
     return m_core->favorites()->order();
 }
 
 
+/**
+ * @fn Icon
+ */
+QString QuadroAdaptor::Icon(const QString _file) const
+{
+    qCDebug(LOG_DBUS) << "File name" << _file;
+
+    return m_core->filemanager()->iconNameByFileName(_file);
+}
+
+
+/**
+ * @fn MIME
+ */
+QString QuadroAdaptor::MIME(const QString _file) const
+{
+    qCDebug(LOG_DBUS) << "File name" << _file;
+
+    return m_core->filemanager()->mimeByFileName(_file).name();
+}
+
+
+/**
+ * @fn Recent
+ */
 QStringList QuadroAdaptor::Recent() const
 {
     return m_core->recently()->recent();

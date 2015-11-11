@@ -55,10 +55,24 @@ public:
 public slots:
     /**
      * @brief favorites applications list
+     * @return list of applicaiton from FavoritesCore
      */
     QStringList Favorites() const;
     /**
+     * @brief get icon by file path
+     * @param _file          absolute file path
+     * @return icon name of the specified file
+     */
+    QString Icon(const QString _file) const;
+    /**
+     * @brief get mime name by file path
+     * @param _file          absolute file path
+     * @return mime name of the specified file
+     */
+    QString MIME(const QString _file) const;
+    /**
      * @brief recent applications list
+     * @return list of applicaiton from RecentlyCore
      */
     QStringList Recent() const;
     /**

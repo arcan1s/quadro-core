@@ -31,25 +31,25 @@
 # @fn quadro_install_plugin root [name] [libraries]
 # @brief build and install plugin
 # @param PLUGIN_ROOT         plugin root directory
-# @param PLUGIN_NAME         plugin name (optional). Will be assigned from path
+# @param PLUGIN              plugin name (optional). Will be assigned from path
 #                            if empty
 # @param ADDS_LIBRARIES      additional libraries (optional)
 #
 ##
 macro(quadro_install_plugin PLUGIN_ROOT)
-    set(PLUGIN_NAME "${ARGV1}")
-    if (NOT PLUGIN_NAME)
-        set(PLUGIN_NAME "${PLUGIN_ROOT}")
+    set(PLUGIN "${ARGV1}")
+    if (NOT PLUGIN)
+        set(PLUGIN "${PLUGIN_ROOT}")
     endif()
     set(ADDS_LIBRARIES "${ARGV2}")
-    message (STATUS "Plugin ${PLUGIN_NAME}")
+    message (STATUS "Plugin ${PLUGIN}")
     # get sources
-    file (GLOB_RECURSE PLUGIN_SOURCES "${PLUGIN_ROOT}/*.cpp")
-    file (GLOB_RECURSE PLUGIN_HEADERS "${PLUGIN_ROOT}/*.h")
-    file (GLOB_RECURSE PLUGIN_FORMS "${PLUGIN_ROOT}/*.ui")
-    qt5_wrap_cpp (PLUGIN_MOC_SOURCES "${PLUGIN_HEADERS}")
-    if (${PLUGIN_FORMS})
-        qt5_wrap_ui (PLUGIN_UI_HEADERS "${PLUGIN_FORMS}")
+    file (GLOB_RECURSE ${PLUGIN}_SOURCES "${PLUGIN_ROOT}/*.cpp")
+    file (GLOB_RECURSE ${PLUGIN}_HEADERS "${PLUGIN_ROOT}/*.h")
+    file (GLOB_RECURSE ${PLUGIN}_FORMS "${PLUGIN_ROOT}/*.ui")
+    qt5_wrap_cpp (${PLUGIN}_MOC_SOURCES "${${PLUGIN}_HEADERS}")
+    if (${${PLUGIN}_FORMS})
+        qt5_wrap_ui (${PLUGIN}_UI_HEADERS "${${PLUGIN}_FORMS}")
     endif()
 
     # include directories
@@ -58,12 +58,12 @@ macro(quadro_install_plugin PLUGIN_ROOT)
                          "${QUADRO_INCLUDE_DIRS}")
 
     # build
-    add_library ("${PLUGIN_NAME}" MODULE "${PLUGIN_SOURCES}" "${PLUGIN_HEADERS}"
-            "${PLUGIN_MOC_SOURCES}" "${PLUGIN_UI_HEADERS}")
-    target_link_libraries ("${PLUGIN_NAME}" "${QUADRO_LIBRARIES}" "${Qt_LIBRARIES}" "${ADDS_LIBRARIES}")
+    add_library ("${PLUGIN}" MODULE "${${PLUGIN}_SOURCES}" "${${PLUGIN}_HEADERS}"
+            "${${PLUGIN}_MOC_SOURCES}" "${${PLUGIN}_UI_HEADERS}")
+    target_link_libraries ("${PLUGIN}" "${QUADRO_LIBRARIES}" "${Qt_LIBRARIES}" "${ADDS_LIBRARIES}")
 
     # install
-    install (TARGETS "${PLUGIN_NAME}" DESTINATION "${QUADRO_PLUGIN_ROOT}")
-    install (FILES "${PLUGIN_ROOT}/${PLUGIN_NAME}.desktop" DESTINATION "${QUADRO_PLUGIN_ROOT}"
-            RENAME "core.quadro.${PLUGIN_NAME}.desktop")
+    install (TARGETS "${PLUGIN}" DESTINATION "${QUADRO_PLUGIN_ROOT}")
+    install (FILES "${PLUGIN_ROOT}/${PLUGIN}.desktop" DESTINATION "${QUADRO_PLUGIN_ROOT}"
+            RENAME "core.quadro.${PLUGIN}.desktop")
 endmacro()

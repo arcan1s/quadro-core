@@ -69,6 +69,19 @@ QuadroWidget::~QuadroWidget()
 
 
 /**
+ * @fn clearLayout
+ */
+void QuadroWidget::clearLayout()
+{
+    QLayoutItem *item;
+    while ((item = m_widget->layout()->takeAt(0))) {
+        item->widget()->deleteLater();
+        delete item;
+    }
+}
+
+
+/**
  * @fn widget
  */
 QWidget *QuadroWidget::widget()

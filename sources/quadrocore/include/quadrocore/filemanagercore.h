@@ -61,11 +61,25 @@ public:
                                    const bool _hidden = false,
                                    const QStringList _filter = QStringList()) const;
     /**
+     * @brief find entries by substring
+     * @param _directory     parent directory
+     * @param _substr        substring for name
+     * @param _hidden        show hidden files or not
+     */
+    QFileInfoList entriesBySubstr(const QString _directory, const QString _substr,
+                                  const bool _hidden = false) const;
+    /**
      * @brief get icon by file name
      * @param _file          path to file
      * @return QIcon of the file
      */
     QIcon iconByFileName(const QString _file) const;
+    /**
+     * @brief get icon name by file name
+     * @param _file          path to file
+     * @return icon name
+     */
+    QString iconNameByFileName(const QString _file) const;
     /**
      * @brief get mime type of given file
      * @param _file          path to file

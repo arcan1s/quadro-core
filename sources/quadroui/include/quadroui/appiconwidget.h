@@ -65,6 +65,19 @@ public slots:
      */
     void showContextMenu(const QPoint &_pos);
 
+signals:
+    /**
+     * @brief the signal emitted when application has been successfully run
+     */
+    void applicationIsRunning();
+    /**
+     * @brief the signal emitted when the new applicaiton show be run as a
+     * standalone
+     * @param _exec          executable name
+     * @param _name          applicaiton name
+     */
+    void standaloneApplicaitonRequested(const QStringList _exec, const QString _name);
+
 protected:
     /**
      * @brief method which will be called on mouse event
