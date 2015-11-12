@@ -15,7 +15,7 @@
  *   along with quadro. If not, see http://www.gnu.org/licenses/           *
  ***************************************************************************/
 /**
- * @file quadroui.h
+ * @file fileinfoextension.h
  * Header of quadro library
  * @author Evgeniy Alekseev
  * @copyright GPLv3
@@ -23,15 +23,64 @@
  */
 
 
-#ifndef QUADROUI_H
-#define QUADROUI_H
+#ifndef FILEINFOEXTENSION_H
+#define FILEINFOEXTENSION_H
 
-#include "appiconwidget.h"
-#include "editappwindow.h"
-#include "fileiconwidget.h"
-#include "fileinfowindow.h"
-#include "iconwidget.h"
-#include "quadrowidget.h"
-#include "standaloneappwidget.h"
+#include <QFileInfo>
 
-#endif /* QUADROUI_H */
+
+/**
+ * @brief The FileInfoExtension class provides extensions to default QFileInfo
+ * class
+ */
+class FileInfoExtension : public QFileInfo
+{
+public:
+    /**
+     * @brief FileInfoExtension class constructor
+     * @param base           original QFileInfo item
+     */
+    FileInfoExtension(QFileInfo base);
+    /**
+     * @brief FileManager class destructor
+     */
+    virtual ~FileInfoExtension();
+    /**
+     * @brief child directories count
+     * @return count of child directories
+     */
+    long childDirectories() const;
+    /**
+     * @brief child files count
+     * @return count of child files
+     */
+    long childFiles() const;
+    /**
+     * @brief total child size
+     * @return total size including child items in bytes
+     */
+    long long totalSize() const;
+
+private:
+    // properties
+    /**
+     * @brief child directories count
+     */
+    long m_childDirectories = 0;
+    /**
+     * @brief child files count
+     */
+    long m_childFiles = 0;
+    /**
+     * @brief total content size in bytes including child directories
+     */
+    long long m_totalSize = 0;
+    // methods
+    /**
+     * @brief init main metadata
+     */
+    void initMetadata();
+};
+
+
+#endif /* FILEINFOEXTENSION_H */

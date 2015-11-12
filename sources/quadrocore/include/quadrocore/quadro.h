@@ -33,6 +33,7 @@
 #include "dbusoperations.h"
 #include "desktopinterface.h"
 #include "favoritescore.h"
+#include "fileinfoextension.h"
 #include "filemanagercore.h"
 #include "launchercore.h"
 #include "pluginadaptor.h"

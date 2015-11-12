@@ -15,7 +15,7 @@
  *   along with quadro. If not, see http://www.gnu.org/licenses/           *
  ***************************************************************************/
 /**
- * @file quadroui.h
+ * @file fileinfowindow.h
  * Header of quadro library
  * @author Evgeniy Alekseev
  * @copyright GPLv3
@@ -23,15 +23,65 @@
  */
 
 
-#ifndef QUADROUI_H
-#define QUADROUI_H
+#ifndef FILEINFOWINDOW_H
+#define FILEINFOWINDOW_H
 
-#include "appiconwidget.h"
-#include "editappwindow.h"
-#include "fileiconwidget.h"
-#include "fileinfowindow.h"
-#include "iconwidget.h"
-#include "quadrowidget.h"
-#include "standaloneappwidget.h"
+#include <QDialog>
 
-#endif /* QUADROUI_H */
+#include <quadrocore/fileinfoextension.h>
+
+
+namespace Ui {
+class FileInfoWindow;
+}
+
+/**
+ * @brief The FileInfoWindow class provides dialog to show entry data
+ */
+class FileInfoWindow : public QDialog
+{
+    Q_OBJECT
+
+public:
+    /**
+     * @brief FileInfoWindow class constructor
+     * @param parent         pointer to parent object
+     * @param item           object information
+     */
+    explicit FileInfoWindow(QWidget *parent, QFileInfo item);
+    /**
+     * @brief FileInfoWindow class destructor
+     */
+    virtual ~FileInfoWindow();
+
+public slots:
+    /**
+     * @brief method which will be called to show window
+     */
+    void showWindow();
+
+private:
+    // ui
+    /**
+     * @brief pointer to ui object
+     */
+    Ui::FileInfoWindow *ui = nullptr;
+    // backend
+    /**
+     * @brief object information
+     */
+    FileInfoExtension m_item;
+    // methods
+    /**
+     * @brief get icon using main DBus interface
+     * @return icon object
+     */
+    QIcon getIcon() const;
+    /**
+     * @brief get MIME name using main DBus interface
+     */
+    QString getMime() const;
+};
+
+
+#endif /* FileInfoWindow */
