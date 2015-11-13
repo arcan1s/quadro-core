@@ -119,16 +119,16 @@
  * @def DESKTOP_INTERFACE
  * desktop plugin interface name
  */
-#define DESKTOP_INTERFACE "core.quadro.desktopplugin/@PROJECT_VERSION@"
+#define DESKTOP_INTERFACE "core.quadro.desktopplugin/@PROJECT_VERSION_MAJOR@.@PROJECT_VERSION_MINOR@"
 /**
  * @def PLUGIN_INTERFACE
  * plugin interface name
  */
-#define PLUGIN_INTERFACE "core.quadro.plugin/@PROJECT_VERSION@"
+#define PLUGIN_INTERFACE "core.quadro.plugin/@PROJECT_VERSION_MAJOR@.@PROJECT_VERSION_MINOR@"
 /**
  * @def TAB_PLUGIN_INTERFACE
  * tab plugin interface name
  */
-#define TAB_PLUGIN_INTERFACE "core.quadro.tabplugin/@PROJECT_VERSION@"
+#define TAB_PLUGIN_INTERFACE "core.quadro.tabplugin/@PROJECT_VERSION_MAJOR@.@PROJECT_VERSION_MINOR@"
 
 #endif /* CONFIG_H */

@@ -39,16 +39,6 @@
     "category}][%{function}] %{message}"
 #endif /* LOG_FORMAT */
 
-/**
- * @def qCInfo
- * required by older Qt versions
- * @remark required because Info log level doesn't log properly
- */
-#ifdef qCInfo
-#undef qCInfo
-#endif /* qCInfo */
-#define qCInfo qCDebug
-
 
 /**
  * @brief DBus logging category

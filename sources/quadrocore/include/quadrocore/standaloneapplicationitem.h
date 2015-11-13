@@ -91,6 +91,10 @@ public slots:
 
 signals:
     /**
+     * @brief signal which is emitted when application closed
+     */
+    void close();
+    /**
      * @brief signal which is emitted when widgets are initialized
      */
     void ready();

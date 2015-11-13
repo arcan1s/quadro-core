@@ -47,7 +47,7 @@ PluginCore::PluginCore(QObject *parent)
  */
 PluginCore::~PluginCore()
 {
-    foreach (const QString name, m_plugins.keys() + m_tabPlugins.keys())
+    for (auto name : m_plugins.keys() + m_tabPlugins.keys())
         QDBusConnection::sessionBus().unregisterObject(QString("/%1").arg(name));
     QDBusConnection::sessionBus().unregisterService(DBUS_PLUGIN_SERVICE);
 
@@ -63,7 +63,7 @@ QStringList PluginCore::desktopPaths()
 {
     QStringList locations;
     QStringList defaultLocations = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation);
-    foreach (const QString loc, defaultLocations)
+    for (auto loc : defaultLocations)
         locations.append(QString("%1/%2/%3").arg(loc).arg(HOME_PATH).arg(PLUGIN_PATH));
 
     return locations;

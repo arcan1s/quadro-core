@@ -63,7 +63,7 @@ QMap<QString, ApplicationItem *> RecentlyCore::applicationsBySubstr(const QStrin
     qCDebug(LOG_LIB) << "Substring" << _substr;
 
     QMap<QString, ApplicationItem *> apps;
-    foreach (const QString app, applications().keys()) {
+    for (auto app : applications().keys()) {
         if (!applications()[app]->startsWith(_substr)) continue;
         apps[app] = applications()[app];
     }
@@ -90,7 +90,7 @@ QString RecentlyCore::desktopPath()
 QStringList RecentlyCore::recent() const
 {
     QStringList apps;
-    foreach (const ApplicationItem *item, applications())
+    for (auto item : applications())
         apps.append(item->name());
 
     return apps;
@@ -144,7 +144,7 @@ void RecentlyCore::initApplications()
     m_modifications.clear();
 
     QMap<QString, ApplicationItem *> desktops = getApplicationsFromDesktops();
-    foreach (const QString desktop, desktops.keys())
+    for (auto desktop : desktops.keys())
         addApplication(desktops[desktop]);
 
     // cleanup
@@ -204,7 +204,7 @@ QMap<QString, ApplicationItem *> RecentlyCore::getApplicationsFromDesktops()
     QMap<QString, ApplicationItem *> items;
 
     QStringList entries = QDir(desktopPath()).entryList(filter, QDir::Files);
-    foreach (const QString entry, entries) {
+    for (auto entry : entries) {
         QString desktop = QFileInfo(QDir(desktopPath()), entry).filePath();
         qCInfo(LOG_LIB) << ":" << "Desktop" << desktop;
         ApplicationItem *item = ApplicationItem::fromDesktop(desktop, this);
@@ -228,7 +228,7 @@ void RecentlyCore::rotate()
 
     QString lastKey;
     QDateTime lastTime = QDateTime::currentDateTime();
-    foreach (const QString app, m_modifications.keys()) {
+    for (auto app : m_modifications.keys()) {
         if (m_modifications[app] >= lastTime) continue;
         lastKey = app;
         lastTime = m_modifications[app];

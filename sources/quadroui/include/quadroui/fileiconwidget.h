@@ -31,6 +31,8 @@
 #include "iconwidget.h"
 
 
+class QMenu;
+
 /**
  * @brief The FileIconWidget class provides file UI representation
  */
@@ -58,7 +60,7 @@ public slots:
      * @brief method which will be called on context menu request
      * @param _pos           current mouse position
      */
-    void showContextMenu(const QPoint &_pos) {};
+    void showContextMenu(const QPoint &_pos);
 
 signals:
     /**
@@ -66,12 +68,53 @@ signals:
      * @param _info          associated QFileInfo object
      */
     void openFile(const QFileInfo _info) const;
+    /**
+     * @brief signal which will be emitted when opening directory in the new
+     * tab will be requested
+     * @param _info          associated QFileInfo object
+     */
+    void openDirInNewTab(const QFileInfo _info) const;
+
+protected:
+    /**
+     * @brief method which will be called on key press event
+     * @param _pressedKey    pointer to pressed key
+     */
+    void keyPressEvent(QKeyEvent *_pressedKey);
+    /**
+     * @brief method which will be called on mouse event
+     * @param _event         pointer to mouse event
+     */
+    void mousePressEvent(QMouseEvent *_event);
+
+private slots:
+    /**
+     * @brief additional slot to handle open requests
+     */
+    void openInNewTabRequested() const;
+    /**
+     * @brief additional slot to handle open requests
+     */
+    void openRequested() const;
+    /**
+     * @brief slot which will be called on entry properties request
+     */
+    void showProperties();
 
 private:
     /**
      * @brief associated QFileInfo object
      */
     QFileInfo m_info;
+    /**
+     * @brief contextual menu
+     */
+    QMenu *m_menu = nullptr;
+    // methods
+    /**
+     * @brief object create actions
+     */
+    void createActions();
 };
 
 

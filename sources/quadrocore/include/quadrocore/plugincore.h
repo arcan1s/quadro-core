@@ -135,9 +135,9 @@ private:
         qCInfo(LOG_LIB) << "Paths" << locations;
         QHash<QString, T *> items;
 
-        foreach(const QString loc, locations) {
+        for (auto loc : locations) {
             QStringList entries = QDir(loc).entryList(filter, QDir::Files);
-            foreach (const QString entry, entries) {
+            for (auto entry : entries) {
                 QString fileName = QFileInfo(QDir(loc), entry).absoluteFilePath();
                 qCInfo(LOG_LIB) << "Desktop" << fileName;
                 // check settings

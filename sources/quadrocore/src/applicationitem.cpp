@@ -452,7 +452,7 @@ QStringList ApplicationItem::generateExec(const QVariantHash _args) const
                      << QString("%i") << QString("%c") << QString("%k")
                      << QString("%V") << QString("%m"));
     for (int i=0; i<cmdArgs.count(); i++) {
-        foreach (const QString key, keys)
+        for (auto key : keys)
             cmdArgs[i].replace(key, _args[key].type() == QVariant::StringList
                                     ? _args[key].toStringList().join(QChar(' '))
                                     : _args[key].toString());
@@ -485,7 +485,7 @@ ApplicationItem *ApplicationItem::fromDesktop(const QString _desktopPath, QObjec
 
     ApplicationItem *item = new ApplicationItem(_parent, QString());
     settings.beginGroup(QString("Desktop Entry"));
-    foreach (const QString key, settings.childKeys()) {
+    for (auto key : settings.childKeys()) {
         // HACK avoid commas in fields
         QVariant orig = settings.value(key);
         QVariant value = orig.type() == QVariant::StringList ? orig.toStringList().join(QString(", ")) : orig;
@@ -499,8 +499,8 @@ ApplicationItem *ApplicationItem::fromDesktop(const QString _desktopPath, QObjec
     // properties which may be localised
     QStringList props(QStringList() << QString("Name") << QString("GenericName")
                           << QString("Icon") << QString("Comment"));
-    foreach (const QString prop, props) {
-        foreach (const QString loc, locales) {
+    for (auto prop : props) {
+        for (auto loc : locales) {
             QString propName = QString("%1[%2]").arg(prop).arg(loc);
             if (!settings.contains(propName))
                 continue;
@@ -515,10 +515,10 @@ ApplicationItem *ApplicationItem::fromDesktop(const QString _desktopPath, QObjec
     // workaround for lists
     props = QStringList() << QString("Categories") << QString("Keywords")
         << QString("MimeType");
-    foreach (const QString prop, props) {
+    for (auto prop : props) {
         QStringList values;
         /// try localized keys
-        foreach (const QString loc, locales) {
+        for (auto loc : locales) {
             QString propName = QString("%1[%2]").arg(prop).arg(loc);
             if (!settings.contains(propName))
                 continue;
@@ -634,12 +634,12 @@ QString ApplicationItem::saveDesktop(const QString _desktopPath) const
                                         << QString("Keywords") << QString("MimeType"));
 
     settings.beginGroup(QString("Desktop Entry"));
-    foreach (const QString prop, knownProperties) {
+    for (auto prop : knownProperties) {
         QVariant value = property(prop.toUtf8().constData());
         if (!value.isNull() && !value.toString().isEmpty())
             settings.setValue(prop, value.toString());
     }
-    foreach (const QString prop, knownListProperties) {
+    for (auto prop : knownListProperties) {
         QVariant value = property(prop.toUtf8().constData());
         if (!value.isNull() && !value.toStringList().isEmpty())
             settings.setValue(prop, value.toStringList().join(QChar(';')));

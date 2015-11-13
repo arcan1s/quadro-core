@@ -72,7 +72,7 @@ QMap<QString, ApplicationItem *> AbstractAppAggregator::applicationsByCategory(c
         return apps;
     }
 
-    foreach (const QString app, m_applications.keys()) {
+    for (auto app : m_applications.keys()) {
         QStringList categories = m_applications[app]->categories();
         if (!categories.contains(_category)) continue;
         apps[app] = m_applications[app];
@@ -90,7 +90,7 @@ QMap<QString, ApplicationItem *> AbstractAppAggregator::applicationsBySubstr(con
     qCDebug(LOG_LIB) << "Substring" << _substr;
 
     QMap<QString, ApplicationItem *> apps;
-    foreach (const QString app, m_applications.keys()) {
+    for (auto app : m_applications.keys()) {
         if (!m_applications[app]->hasSubstring(_substr)) continue;
         apps[app] = m_applications[app];
     }
@@ -162,6 +162,6 @@ void AbstractAppAggregator::removeApplication(ApplicationItem *_item)
 {
     QStringList keys = m_applications.keys(_item);
 
-    foreach (const QString app, keys)
+    for (auto app : keys)
         m_applications.remove(app);
 }

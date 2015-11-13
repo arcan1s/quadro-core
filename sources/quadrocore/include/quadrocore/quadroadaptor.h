@@ -65,6 +65,11 @@ public slots:
      */
     QString Icon(const QString _file) const;
     /**
+     * @brief check if there is a known plugin for this platform
+     * @return true if DesktopInterface has been initialized
+     */
+    bool IsKnownPlatform() const;
+    /**
      * @brief get mime name by file path
      * @param _file          absolute file path
      * @return mime name of the specified file
@@ -72,7 +77,7 @@ public slots:
     QString MIME(const QString _file) const;
     /**
      * @brief recent applications list
-     * @return list of applicaiton from RecentlyCore
+     * @return list of application from RecentlyCore
      */
     QStringList Recent() const;
     /**
@@ -87,6 +92,13 @@ public slots:
      * @brief update recently run applications
      */
     void UpdateRecent() const;
+    /**
+     * @brief get WIds by given PID
+     * @remark since C++ doesn't allow static pure methods...
+     * @param _pid           PID
+     * @return list of WIds as QString reresentation
+     */
+    QStringList WIdForPID(const long long _pid);
 
 signals:
 

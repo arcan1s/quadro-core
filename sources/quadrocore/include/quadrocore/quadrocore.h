@@ -30,6 +30,7 @@
 #include <QVariant>
 
 
+class DesktopInterface;
 class FavoritesCore;
 class FileManagerCore;
 class LauncherCore;
@@ -55,14 +56,6 @@ public:
      */
     virtual ~QuadroCore();
     /**
-     * @brief get WIds by given PID
-     * @remark since C++ doesn't allow static pure methods...
-     * @param _pid           PID
-     * @param _ok            plugin loading status
-     * @return list of WIds
-     */
-    static QList<unsigned long long> getWindowByPid(const long long _pid, bool *_ok);
-    /**
      * @brief favorites core object
      * @return pointer to favorites core object
      */
@@ -77,6 +70,11 @@ public:
      * @return pointer to launcher core object
      */
     LauncherCore *launcher();
+    /**
+     * @brief platform plugin object
+     * @return pointer to DesktopInterface or nullptr if no objects found
+     */
+    DesktopInterface *platformPlugin();
     /**
      * @brief plugin core object
      * @return pointer to plugin core object
@@ -94,6 +92,10 @@ private:
      */
     void createDBusSession();
     /**
+     * @brief init platform depended plugin
+     */
+    void initPlatformPlugin();
+    /**
      * @brief favorites core object
      */
     FavoritesCore *m_favorites = nullptr;
@@ -105,6 +107,10 @@ private:
      * @brief launcher core object
      */
     LauncherCore *m_launcher = nullptr;
+    /**
+     * @brief platform plugin object
+     */
+    DesktopInterface *m_platformPlugin = nullptr;
     /**
      * @brief plugin core object
      */

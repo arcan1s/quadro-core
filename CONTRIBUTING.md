@@ -20,10 +20,10 @@ for more details. To avoid manual labor there is automatic cmake target named
       forward class declaration instead. Exception is base class header declaration.
     * In a`*.cpp` file header declaration should have the following order separated
       by a new line in the alphabet order:
-        1. Class header.
-        2. KDE specific headers.
-        3. Qt specific headers.
-        4. Third party headers.
+        1. Class headers (including UI ones).
+        2. Qt specific headers.
+        3. Third party headers.
+        4. Project library headers.
         5. Project headers.
     * Any header should have [include guard](https://en.wikipedia.org/wiki/Include_guard)
       named as `CLASSNAMECAPS_H`
@@ -36,14 +36,15 @@ for more details. To avoid manual labor there is automatic cmake target named
   ```
 
 * `Q_PROPERTY` macro is allowed and recommended for QObject based classes.
-* Qt macros (e.g. `signals`, `slots`, `Q_OBJECT`, etc) are allowed.
+* Qt macros (e.g. `signals`, `slots`, `Q_OBJECT`, etc) are allowed. In other hand
+  `Q_FOREACH` (`foreach`) is not allowed, use `for (auto foo : bar)` instead.
 * Current project standard is **C++11**.
 * Do not use C-like code:
-    * C-like style iteration if possible. Use `Q_FOREACH` (`foreach`) and
+    * C-like style iteration if possible. Use `for (auto foo : bar)` and
       `std::for_each` instead if possible. It is also recommended to use iterators.
     * C-like casts, use `const_cast`, `static_cast`, `dymanic_Cast` instead. Using
       of `reinterpret_cast` is not recommended. It is highly recommended to use
-      `dynamic_Cast` with the exception catching. It is also possible to use
+      `dynamic_cast` with the exception catching. It is also possible to use
       `qvariant_cast` if required. Exception is class constructors, e.g.:
 
       ```
@@ -61,11 +62,11 @@ for more details. To avoid manual labor there is automatic cmake target named
   configure some items during build time.
 * Build should not require any additional system variable declaration/changing.
 * Any line should not end with space.
-* Do not hesitate move public methods to private one if possible.
+* Do not hesitate move public methods to private ones if possible.
 * Do not hesitate use `const` modifier. In other hand `volatile` modifier is not
   recommended.
 * New lines rules:
-    * One line after license header.
+    * One line after license header or doxygen file declaration if any.
     * One line between header group declaration (see above).
     * Two lines after header declaration and before declaration at the end of a
       file.
@@ -75,14 +76,17 @@ for more details. To avoid manual labor there is automatic cmake target named
     * One line after `qCDebug()` information (see below).
     * One line inside a method to improve code reading.
 * Each destructor should be virtual.
-* Class constructor should have default arguments. Use `QObject *parent` property
-  for QObject based classes.
+* Use `QObject *parent` property for QObject based classes.
 * QObject based classes constructors should have explicit modifier.
 * Create one file (source and header) per class.
 * `else if` construction is allowed and recommended.
 * 'true ? foo : bar' construction is allowed and recommended for one-line assignment.
-* any global pointer should be assign to `nullptr` after deletion and before
+* Any global pointer should be assign to `nullptr` after deletion and before
   initialization. Exception: if object is deleted into class destructor.
+* `QObject::deleteLater()` method is allowed if required.
+* If a method variable is optional a method should have default argument.
+* Any cmake variable should be in double quotes. Exceptions are lists.
+* Code generation is allowed, but is not recommended.
 
 Comments
 --------
@@ -104,9 +108,9 @@ Development
 * Officially the latest libraries versions should be used. In addition it is
   possible to add workarounds for all versions (usually by using preprocessor
   directives); in this case patches should be placed to `patches` directory.
-* Build should not contain any warning.
-* Try to minimize message in Release build with logging disabled. It is highly
-  recommended to fix KDE/Qt specific warning if possible
+* Build should not contain any warning. Exception: calls of deprecated methods.
+* Try to minimize messages in Release build with logging disabled. It is highly
+  recommended to fix system specific warnings if possible
 * It is highly recommended to use submodules for third party libraries if possible.
 * The main branch is **development**. Changes in this branch may be merged to the
   master one only if it is a 'stable' build.
@@ -120,10 +124,13 @@ Development
   #endif /* BUILD_FUTURE */
   ```
 
-* Any project specific build variable should be mentioned inside `version.h` as
-  well.
+* Any project specific build variable should be mentioned inside `version.h` and
+  `quadrocore/config.h` as well.
 * Recommended compiler is `clang`.
-* Any library method and/or variable should be described in `doxygen` notaion.
+* Any library method and/or variable should be described in `doxygen` notation.
+* Deprecated method should be marked as `Q_DECL_DEPRECATED`. They will be dropped
+  in **the second minor** release.
+* Plugin interfaces should not be changed inside one minor version.
 
 HIG
 ---
@@ -140,19 +147,28 @@ Logging
 -------
 
 For logging please use [QLoggingCategory](http://doc.qt.io/qt-5/qloggingcategory.html).
-Available categories should be declared in `awdebug.*` files. The following log
-levels should be used:
+Available categories should be declared in `quadrocore/quadrodebug.h` file. The
+following log levels should be used:
 
 * **debug** (`qCDebug()`) - method arguments information.
 * **info** (`qCInfo()`) - additional information inside methods.
 * **warning** (`qCWarning()`) - not critical information, which may be caused by
   mistakes in configuration for example.
-* **critical** (`qCCritical()`) - a critical error. After this error program will
-  be terminated.
+* **critical** (`qCCritical()`) - a critical error. After this message application
+  termination is allowed, but not recommended.
 
 The empty log string (e.g. `qCDebug();`) is not allowed because the method names
 will be stripped by compiler with `Release` build type. To log class constructor
-and destructor use `__PRETTY_FUNCTION__` macro.
+and destructor use `__PRETTY_FUNCTION__` macro. The following logging categories
+are currently available:
+
+* `LOG_DBUS` - DBus related messages. This logging category should only be used
+  in `DBusOperations` namespace and adaptor classes.
+* `LOG_LIB` - core library related messages.
+* `LOG_PL` - plugin related messages. This logging category should only be used
+  in plugins and their library interfaces.
+* `LOG_UI` - main UI related messages.
+* `LOG_UILIB` - UI library relaged messages.
 
 Testing
 -------
@@ -165,6 +181,8 @@ Testing
 * It is recommended to create addition test if possible.
 * Addition test functions should be declated and used only inside `BUILD_TESTING`
   definition.
+* It is highly recommend to create test methods for each library calls. Also test
+  abnormal application behaviour as well.
 
 Tools
 -----
@@ -198,7 +216,7 @@ Tools
       : QObject(parent)
       , m_var(var)
   {
-      qCDebug(LOG_AW) << __PRETTY_FUNCTION__;
+      qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
       // some code below if any
   }
   ```
@@ -216,7 +234,7 @@ Tools
         {
             // error checking if required
             m_prop = _prop
-        }
+        };
   private:
         // declare with default value
         bool m_prop = false;
@@ -231,7 +249,7 @@ Tools
   /**
    * @file fooclass.h
    * Header of quadro library
-   * @author Vasya Pupkin
+   * @author Vasya Pupkin and Petya Zalupkin
    * @copyright GPLv3
    * @bug https://github.com/arcan1s/quadro-core/issues
    */
@@ -265,6 +283,9 @@ Tools
    * @bug https://github.com/arcan1s/quadro-core/issues
    */
 
+  /**
+   * @class FooClass
+   */
   /**
    * @fn FooClass
    */

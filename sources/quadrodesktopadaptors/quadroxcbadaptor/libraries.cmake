@@ -12,9 +12,3 @@ set(Qt_XCB_LIBRARIES
 
 # x11
 find_package(X11)
-set(X11_XCB_INCLUDE
-        "${X11_INCLUDE_DIR}"
-)
-set(X11_XCB_LIBRARIES
-        "${X11_LIBRARIES}"
-)

@@ -72,6 +72,15 @@ QString QuadroAdaptor::Icon(const QString _file) const
 
 
 /**
+ * @fn IsKnownPlatform
+ */
+bool QuadroAdaptor::IsKnownPlatform() const
+{
+    return m_core->platformPlugin() != nullptr;
+}
+
+
+/**
  * @fn MIME
  */
 QString QuadroAdaptor::MIME(const QString _file) const
@@ -115,4 +124,23 @@ void QuadroAdaptor::UpdateFavorites() const
 void QuadroAdaptor::UpdateRecent() const
 {
     m_core->recently()->initApplications();
+}
+
+
+/**
+ * @fn WIdForPID
+ */
+QStringList QuadroAdaptor::WIdForPID(const long long _pid)
+{
+    qCDebug(LOG_DBUS) << "Search for PID" << _pid;
+
+    if (!IsKnownPlatform())
+        return QStringList();
+
+    QList<unsigned long long> wIds = m_core->platformPlugin()->getWindowByPid(_pid);
+    QStringList output;
+    for (auto id : wIds)
+        output.append(QString::number(id));
+
+    return output;
 }

@@ -41,10 +41,12 @@
  * @fn QuadroWidget
  */
 QuadroWidget::QuadroWidget(QWidget *parent, const float grid,
+                           const QString widgetTitle,
                            const Qt::ScrollBarPolicy hPolicy,
                            const Qt::ScrollBarPolicy vPolicy)
     : QScrollArea(parent)
     , m_grid(grid)
+    , m_title(widgetTitle)
 {
     qCDebug(LOG_UI) << __PRETTY_FUNCTION__;
 
@@ -78,6 +80,15 @@ void QuadroWidget::clearLayout()
         item->widget()->deleteLater();
         delete item;
     }
+}
+
+
+/**
+ * @fn title
+ */
+QString QuadroWidget::title() const
+{
+    return m_title;
 }
 
 

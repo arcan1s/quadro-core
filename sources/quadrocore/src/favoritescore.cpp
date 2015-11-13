@@ -226,7 +226,7 @@ QMap<QString, ApplicationItem *> FavoritesCore::getApplicationsFromDesktops()
     QMap<QString, ApplicationItem *> items;
 
     QStringList entries = QDir(desktopPath()).entryList(filter, QDir::Files);
-    foreach (const QString entry, entries) {
+    for (auto entry : entries) {
         QString desktop = QFileInfo(QDir(desktopPath()), entry).filePath();
         qCInfo(LOG_LIB) << "Desktop" << desktop;
         ApplicationItem *item = ApplicationItem::fromDesktop(desktop, this);

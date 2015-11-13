@@ -88,7 +88,7 @@ void LauncherCore::initApplications()
     m_applicationsFromPaths.clear();
 
     QMap<QString, ApplicationItem *> desktops = getApplicationsFromDesktops();
-    foreach (const QString item, desktops.keys()) {
+    for (auto item : desktops.keys()) {
         if (!desktops[item]->shouldBeShown()) continue;
         addApplication(desktops[item]);
     }
@@ -109,7 +109,7 @@ QMap<QString, ApplicationItem *> LauncherCore::getApplicationsFromDesktops()
     // append from subdirectories
     for (int i=desktopPaths.count()-1; i>=0; i--) {
         QStringList entries = QDir(desktopPaths.at(i)).entryList(QDir::Dirs | QDir::NoDotAndDotDot);
-        foreach (const QString entry, entries)
+        for (auto entry : entries)
             desktopPaths.append(QString("%1/%2").arg(desktopPaths.at(i)).arg(entry));
     }
     // show
@@ -118,7 +118,7 @@ QMap<QString, ApplicationItem *> LauncherCore::getApplicationsFromDesktops()
 
     for (int i=desktopPaths.count()-1; i>=0; i--) {
         QStringList entries = QDir(desktopPaths.at(i)).entryList(filter, QDir::Files);
-        foreach (const QString entry, entries) {
+        for (auto entry : entries) {
             QString desktop = QFileInfo(QDir(desktopPaths.at(i)), entry).filePath();
             qCInfo(LOG_LIB) << "Desktop" << desktop;
             ApplicationItem *item = ApplicationItem::fromDesktop(desktop, this);
@@ -141,9 +141,9 @@ QMap<QString, ApplicationItem *> LauncherCore::getApplicationsFromPaths()
     qCInfo(LOG_LIB) << "Paths" << paths;
     QMap<QString, ApplicationItem *> items;
 
-    foreach (const QString path, paths) {
+    for (auto path : paths) {
         QStringList entries = QDir(path).entryList(QDir::Files);
-        foreach (const QString entry, entries) {
+        for (auto entry : entries) {
             QString executable = QFileInfo(QDir(path), entry).filePath();
             if (!QFileInfo(executable).isExecutable()) continue;
             qCInfo(LOG_LIB) << "Executable" << executable;

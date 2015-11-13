@@ -171,7 +171,7 @@ void AppIconWidget::setFiles()
     QStringList argsFiles;
     QStringList argsUrls;
 
-    foreach(const QString file, files) {
+    for (auto file : files) {
         m_args[QString("%f")] = file;
         argsFiles.append(file);
         m_args[QString("%u")] = QString("file://%1").arg(file);
@@ -194,7 +194,7 @@ void AppIconWidget::setUrls()
     m_args.clear();
     QStringList argsUrls;
 
-    foreach(const QString url, urls) {
+    for (auto url : urls) {
         m_args[QString("%u")] = url;
         argsUrls.append(url);
     }
@@ -208,7 +208,7 @@ void AppIconWidget::setUrls()
 void AppIconWidget::createActions()
 {
     bool isFavorites = DBusOperations::sendRequestToLibrary(
-        QString("Favorites"))[0].toStringList().contains(m_item->name());
+        QString("Favorites")).at(0).toStringList().contains(m_item->name());
     m_menu = new QMenu(this);
 
     m_menu->addAction(QIcon::fromTheme(QString("system-run")),

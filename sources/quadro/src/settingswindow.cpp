@@ -71,9 +71,9 @@ QVariantHash SettingsWindow::getSettings(QString fileName)
     config[QString("RecentItemsCount")] = settings.value(QString("RecentItemsCount"), 20);
     config[QString("ShowHidden")] = settings.value(QString("ShowHidden"), false);
     config[QString("Tabs")] = settings.value(QString("Tabs"), QStringList() <<
-                                             QString("quadrofavorites") <<
+                                             QString("favorites") <<
                                              QString("applauncher") <<
-                                             QString("quadrofilemanager"));
+                                             QString("filemanager"));
     settings.endGroup();
 
     for (int i=0; i<config.keys().count(); i++)
@@ -177,7 +177,7 @@ QVariantHash SettingsWindow::readSettings()
     // TODO tab settings
     config[QString("Tabs")] = tabs;
 
-    foreach (const QString key, config.keys())
+    for (auto key : config.keys())
         qCInfo(LOG_UI) << key << config[key];
 
     return config;
@@ -193,6 +193,6 @@ void SettingsWindow::setSettings(const QVariantHash config)
         // TODO tab settings
     }
 
-    foreach (const QString key, config.keys())
+    for (auto key : config.keys())
         qCInfo(LOG_UI) << key << config[key];
 }

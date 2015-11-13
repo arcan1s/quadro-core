@@ -25,7 +25,7 @@
 
 #include "quadrocore/quadro.h"
 
-#include <QHash>
+#include <QDBusArgument>
 #include <QTimer>
 #include <QWindow>
 
@@ -138,20 +138,35 @@ void StandaloneApplicationItem::updateWidgets()
         return;
     }
 
-    bool ok;
-    QList<WId> windows = QuadroCore::getWindowByPid(processId(), &ok);
-    if (!ok)
+    // check if there is a known plugin
+    QVariantList check = DBusOperations::sendRequestToLibrary(QString("IsKnownPlatform"));
+    if ((check.isEmpty())
+        || (!check.at(0).toBool())) {
+        qCCritical(LOG_LIB) << "No known platform found";
         return;
+    }
+
+    // get window list
+    QVariantList resp = DBusOperations::sendRequestToLibrary(
+        QString("WIdForPID"), QVariantList() << processId());
+    if (resp.isEmpty()) {
+        qCCritical(LOG_LIB) << "Received empty response object";
+        return;
+    }
+
+    QList<WId> windows;
+    for (auto strId : resp.at(0).toStringList())
+        windows.append(strId.toInt());
     if (windows.isEmpty()) {
-        qCCritical(LOG_LIB) << "Could not find window for PID" << processId();
+        qCWarning(LOG_LIB) << "Could not find window for PID" << processId();
         return QTimer::singleShot(333, this, SLOT(updateWidgets()));
     }
     qCInfo(LOG_UI) << "Found WIds" << windows << "for PID" << processId();
 
     // init widget
     m_widgets.clear();
-    foreach (WId id, windows)
-        m_widgets.append(QWidget::createWindowContainer(QWindow::fromWinId(id), m_parent));
+    for (auto wid : windows)
+        m_widgets.append(QWidget::createWindowContainer(QWindow::fromWinId(wid), m_parent));
 
     return emit(ready());
 }
@@ -167,4 +182,5 @@ void StandaloneApplicationItem::finished(const int exitCode,
     qCDebug(LOG_LIB) << "Exit status" << exitStatus;
 
     m_widgets.clear();
+    return emit(close());
 }

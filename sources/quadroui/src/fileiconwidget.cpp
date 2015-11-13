@@ -19,6 +19,8 @@
 #include "quadroui/quadroui.h"
 
 #include <QIcon>
+#include <QKeyEvent>
+#include <QMenu>
 
 #include <quadrocore/quadro.h>
 
@@ -38,10 +40,9 @@ FileIconWidget::FileIconWidget(const QFileInfo info, const QIcon icon,
 
     setIcon(icon);
     setText(m_info.fileName());
+    createActions();
 
-    connect(this, &IconWidget::widgetPressed, [this]() {
-        emit(openFile(m_info));
-    });
+    connect(this, SIGNAL(widgetPressed()), this, SLOT(openRequested()));
 }
 
 
@@ -51,4 +52,89 @@ FileIconWidget::FileIconWidget(const QFileInfo info, const QIcon icon,
 FileIconWidget::~FileIconWidget()
 {
     qCDebug(LOG_UI) << __PRETTY_FUNCTION__;
+
+    delete m_menu;
+}
+
+
+/**
+ * @fn showContextMenu
+ */
+void FileIconWidget::showContextMenu(const QPoint &_pos)
+{
+    m_menu->popup(mapToGlobal(_pos));
+}
+
+
+/**
+ * @fn keyPressEvent
+ */
+void FileIconWidget::keyPressEvent(QKeyEvent *_pressedKey)
+{
+    if (_pressedKey->key() == Qt::Key_Space)
+        showProperties();
+
+    return IconWidget::keyPressEvent(_pressedKey);
+}
+
+
+/**
+ * @fn mousePressEvent
+ */
+void FileIconWidget::mousePressEvent(QMouseEvent *_event)
+{
+    if (_event->button() == Qt::MiddleButton) {
+        emit(openInNewTabRequested());
+    }
+
+    IconWidget::mousePressEvent(_event);
+}
+
+
+/**
+ * @fn openInNewTabRequested
+ */
+void FileIconWidget::openInNewTabRequested() const
+{
+    emit(openDirInNewTab(m_info));
+}
+
+
+/**
+ * @fn openRequested
+ */
+void FileIconWidget::openRequested() const
+{
+    emit(openFile(m_info));
+}
+
+
+/**
+ * @fn showProperties
+ */
+void FileIconWidget::showProperties()
+{
+    FileInfoWindow *infoWindow = new FileInfoWindow(this, m_info);
+
+    return infoWindow->showWindow();
+}
+
+
+/**
+ * @fn createActions
+ */
+void FileIconWidget::createActions()
+{
+    m_menu = new QMenu(this);
+
+    m_menu->addAction(QIcon::fromTheme(m_info.isDir() ? QString("document-open-folder")
+                                                      : QString("document-open")),
+                      tr("Open"), this, SLOT(openRequested()));
+    if (m_info.isDir())
+        m_menu->addAction(QIcon::fromTheme(QString("document-open-folder")),
+                          tr("Open in new tab"), this, SLOT(openInNewTabRequested()));
+    m_menu->addSeparator();
+
+    m_menu->addAction(QIcon::fromTheme(QString("document-properties")),
+                      tr("Properties"), this, SLOT(showProperties()));
 }

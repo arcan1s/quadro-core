@@ -44,7 +44,7 @@ MainWindow::MainWindow(QWidget *parent, const QVariantHash args,
 {
     qSetMessagePattern(LOG_FORMAT);
     qCDebug(LOG_UI) << __PRETTY_FUNCTION__;
-        foreach (const QString metadata, getBuildData())
+        for (auto metadata : getBuildData())
             qCDebug(LOG_UI) << metadata;
 
     setWindowIcon(QIcon(":icon"));
@@ -184,8 +184,7 @@ void MainWindow::clearTabs()
 
 void MainWindow::initTabs()
 {
-    QStringList tabs = configuration[QString("Tabs")].toStringList();
-    foreach (const QString tab, tabs) {
+    for (auto tab : configuration[QString("Tabs")].toStringList()) {
         TabPluginInterface *item = m_core->plugin()->tabPlugin(tab);
         if (item == nullptr) {
             qCWarning(LOG_UI) << "Could not find tab" << tab;
