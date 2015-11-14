@@ -50,8 +50,6 @@ RecentlyCore::RecentlyCore(QObject *parent, const int recentItems)
 RecentlyCore::~RecentlyCore()
 {
     qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
-
-    m_modifications.clear();
 }
 
 
@@ -116,7 +114,8 @@ ApplicationItem *RecentlyCore::addItem(ApplicationItem *_item)
     }
     initApplications();
 
-    return _item;
+    _item->deleteLater();
+    return applications()[_item->name()];
 }
 
 
@@ -181,7 +180,6 @@ void RecentlyCore::touchItem(const QString _name)
 {
     qCDebug(LOG_LIB) << "Item" << _name;
 
-    // TODO rewrite to use Comment field
     if (!hasApplication(_name)) {
         qCCritical(LOG_LIB) << "Invalid item" << _name;
         return;
@@ -191,7 +189,9 @@ void RecentlyCore::touchItem(const QString _name)
     applications()[_name]->setComment(modification.toString(Qt::ISODate));
 
     applications()[_name]->saveDesktop(desktopPath());
-    m_modifications[_name] = modification;
+    // update order
+    int index = m_modifications.indexOf(_name);
+    m_modifications.move(index, m_modifications.count() - 1);
 }
 
 
@@ -203,13 +203,13 @@ QMap<QString, ApplicationItem *> RecentlyCore::getApplicationsFromDesktops()
     QStringList filter("*.desktop");
     QMap<QString, ApplicationItem *> items;
 
-    QStringList entries = QDir(desktopPath()).entryList(filter, QDir::Files);
+    QStringList entries = QDir(desktopPath()).entryList(filter, QDir::Files, QDir::Time);
     for (auto entry : entries) {
         QString desktop = QFileInfo(QDir(desktopPath()), entry).filePath();
         qCInfo(LOG_LIB) << ":" << "Desktop" << desktop;
         ApplicationItem *item = ApplicationItem::fromDesktop(desktop, this);
         items[item->name()] = item;
-        m_modifications[item->name()] = QFileInfo(QDir(desktopPath()), entry).lastModified();
+        m_modifications.append(item->name());
     }
 
     return items;
@@ -226,17 +226,5 @@ void RecentlyCore::rotate()
         return;
     }
 
-    QString lastKey;
-    QDateTime lastTime = QDateTime::currentDateTime();
-    for (auto app : m_modifications.keys()) {
-        if (m_modifications[app] >= lastTime) continue;
-        lastKey = app;
-        lastTime = m_modifications[app];
-    }
-    if (lastKey.isEmpty()) {
-        qCCritical(LOG_LIB) << "Could not find item to rotate, WTF?";
-        return;
-    }
-
-    removeItemByName(lastKey);
+    return removeItemByName(m_modifications.first());
 }

@@ -588,14 +588,8 @@ bool ApplicationItem::launch(const QVariantHash _args) const
     qCDebug(LOG_LIB) << "Program arguments" << _args;
 
     if (m_type == QString("Application")) {
-        QProcess p;
-        // check first if any
-        if (!m_tryExec.isEmpty()) {
-            p.start(m_tryExec);
-            p.waitForFinished(-1);
-        }
         if ((m_tryExec.isEmpty())
-            || (p.exitCode() == 0)) {
+            || (!QStandardPaths::findExecutable(m_tryExec).isEmpty())) {
             return run(_args);
         } else {
             qCWarning(LOG_LIB) << "Ignore launch";

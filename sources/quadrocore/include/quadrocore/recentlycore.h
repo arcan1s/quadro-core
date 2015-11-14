@@ -98,11 +98,11 @@ public slots:
 
 private:
     /**
-     * @brief application modification times
+     * @brief list of loaded applications sorted by modification times
      */
-    QMap<QString, QDateTime> m_modifications;
+    QStringList m_modifications;
     /**
-     * @brief recent items count
+     * @brief max recent items count
      */
     int m_recentItems;
     /**
