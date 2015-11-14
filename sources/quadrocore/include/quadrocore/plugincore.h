@@ -58,10 +58,22 @@ public:
      */
     virtual ~PluginCore();
     /**
+     * @brief generate configuration path for given file name in the writable
+     * locations. This method will return path even if the file does not exist
+     * @return absolute path to configuration file
+     */
+    static QString configurationPath(const QString _fileName);
+    /**
      * @brief path to plugin desktop files
      * @return full paths to plugin desktop files
      */
     static QStringList desktopPaths();
+    /**
+     * @brief load plugin. This method calls Interface::init() method and marks
+     * plugin as loaded
+     * @param _plugin        plugin name
+     */
+    void loadPlugin(const QString _plugin);
     /**
      * @brief read plugin settings
      * @param _filePath      path to desktop file
@@ -69,6 +81,12 @@ public:
      * @return hash map with parameters
      */
     static QVariantHash pluginMetadata(const QString _filePath, const QString _group);
+    /**
+     * @brief unload plugin. This method calls Interface::quit() method and remove
+     * the plugin from loaded list
+     * @param _plugin        plugin name
+     */
+    void unloadPlugin(const QString _plugin);
     // plugin methods
     /**
      * @brief find plugin
@@ -90,6 +108,10 @@ public slots:
     void initPlugins();
 
 private:
+    /**
+     * @brief loaded plugins
+     */
+    QStringList m_loadedPlugins;
     /**
      * @brief list of plugins
      */

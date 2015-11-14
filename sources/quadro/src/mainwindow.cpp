@@ -105,19 +105,19 @@ void MainWindow::updateConfiguration(const QVariantHash args)
 {
     deleteObjects();
     // update configuration
-    configPath = QStandardPaths::locate(QStandardPaths::ConfigLocation,
-                                        QString("quadro.conf"));
-    qCInfo(LOG_UI) << "Load configuration from" << configPath;
-    settingsWindow = new SettingsWindow(this, configPath);
+    m_configPath = QStandardPaths::locate(QStandardPaths::ConfigLocation,
+                                          QString("quadro.conf"));
+    qCInfo(LOG_UI) << "Load configuration from" << m_configPath;
+    settingsWindow = new SettingsWindow(this, m_configPath);
     if (args[QString("default")].toBool())
         settingsWindow->setDefault();
-    configuration = settingsWindow->getSettings();
+    m_configuration = settingsWindow->getSettings();
     delete settingsWindow;
     settingsWindow = nullptr;
 
     // update translation
     qApp->removeTranslator(translator);
-    QString language = Language::defineLanguage(configPath, args[QString("options")].toString());
+    QString language = Language::defineLanguage(m_configPath, args[QString("options")].toString());
     qCInfo(LOG_UI) << "Language is" << language;
     qtTranslator->load(QString("qt_%1").arg(language), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
     qApp->installTranslator(qtTranslator);
@@ -137,7 +137,7 @@ void MainWindow::createContainer(const QStringList exec, const QString name)
     qCDebug(LOG_UI) << "Name" << name;
 
     StandaloneAppWidget *app = new StandaloneAppWidget(this, exec,
-                                           ui->stackedWidget->count(), configuration);
+                                           ui->stackedWidget->count(), m_configuration);
     connect(app, SIGNAL(destroyWindow(const int)), this, SLOT(removeContainer(const int)));
 
     ui->stackedWidget->addWidget(app);
@@ -177,20 +177,25 @@ void MainWindow::clearTabs()
     while (ui->stackedWidget->count() > 0) {
         QWidget *widget = ui->stackedWidget->widget(0);
         ui->stackedWidget->removeWidget(widget);
-        widget->deleteLater();
     }
+    for (auto tab : m_configuration[QString("Tabs")].toStringList())
+        m_core->plugin()->unloadPlugin(tab);
 }
 
 
 void MainWindow::initTabs()
 {
-    for (auto tab : configuration[QString("Tabs")].toStringList()) {
+    QStringList tabs = m_configuration[QString("Tabs")].toStringList();
+
+    for (auto tab : tabs) {
         TabPluginInterface *item = m_core->plugin()->tabPlugin(tab);
         if (item == nullptr) {
             qCWarning(LOG_UI) << "Could not find tab" << tab;
         } else {
-            item->setArgs(m_core, configuration);
-            item->init();
+            item->setArgs(m_core, m_configuration);
+            item->readSettings(m_core->plugin()->configurationPath(
+                QString("%1.tab-%2.conf").arg(tab).arg(tabs.indexOf(tab))));
+            m_core->plugin()->loadPlugin(tab);
             ui->stackedWidget->addWidget(item->widget());
             tabActions.append(ui->toolBar->addAction(item->name()));
         }
@@ -233,26 +238,26 @@ void MainWindow::createDBusSession()
 void MainWindow::createObjects()
 {
     // backend
-    m_core = new QuadroCore(this, configuration);
+    m_core = new QuadroCore(this, m_configuration);
     createDBusSession();
 
     // frontend
     ui->retranslateUi(this);
     initTabs();
-    settingsWindow = new SettingsWindow(this, configPath);
+    settingsWindow = new SettingsWindow(this, m_configPath);
 }
 
 
 void MainWindow::deleteObjects()
 {
-    // backend
-    delete m_core;
-    m_core = nullptr;
-
     // frontend
     delete settingsWindow;
     settingsWindow = nullptr;
     clearTabs();
+
+    // backend
+    delete m_core;
+    m_core = nullptr;
 
     QDBusConnection::sessionBus().unregisterObject(DBUS_UI_OBJECT_PATH);
     QDBusConnection::sessionBus().unregisterService(DBUS_SERVICE);

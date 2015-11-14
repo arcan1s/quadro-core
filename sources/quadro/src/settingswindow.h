@@ -56,7 +56,7 @@ private slots:
     void saveSettings();
 
 private:
-    QString file;
+    QString m_file;
     Ui::SettingsWindow *ui;
     void createActions();
     QVariantHash readSettings();

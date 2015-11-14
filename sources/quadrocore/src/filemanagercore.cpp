@@ -141,7 +141,7 @@ QMimeType FileManagerCore::mimeByFileName(const QString _file) const
 
 
 /**
- * @fn
+ * @fn openFile
  */
 bool FileManagerCore::openFile(const QFileInfo _file) const
 {

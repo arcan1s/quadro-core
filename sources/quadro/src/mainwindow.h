@@ -73,14 +73,14 @@ private:
     void createDBusSession();
     void createObjects();
     void deleteObjects();
-    QString configPath;
+    QString m_configPath;
     // library
     QuadroCore *m_core = nullptr;
     // translators
     QTranslator *qtTranslator = nullptr;
     QTranslator *translator = nullptr;
     // configuration
-    QVariantHash configuration;
+    QVariantHash m_configuration;
 };
 
 

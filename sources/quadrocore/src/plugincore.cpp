@@ -51,8 +51,25 @@ PluginCore::~PluginCore()
         QDBusConnection::sessionBus().unregisterObject(QString("/%1").arg(name));
     QDBusConnection::sessionBus().unregisterService(DBUS_PLUGIN_SERVICE);
 
+    // send quit() method
+    for (auto plugin : m_loadedPlugins)
+        unloadPlugin(plugin);
+
     m_plugins.clear();
     m_tabPlugins.clear();
+}
+
+
+/**
+ * @fn configurationPath
+ */
+QString PluginCore::configurationPath(const QString _fileName)
+{
+    qCDebug(LOG_LIB) << "Looking for" << _fileName;
+
+    QString root = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
+
+    return QString("%1/%2/%3/%4").arg(root).arg(HOME_PATH).arg(PLUGIN_PATH).arg(_fileName);
 }
 
 
@@ -70,6 +87,28 @@ QStringList PluginCore::desktopPaths()
 }
 
 
+/**
+ * @fn loadPlugin
+ */
+void PluginCore::loadPlugin(const QString _plugin)
+{
+    qCDebug(LOG_LIB) << "Loading plugin" << _plugin;
+
+    if (m_plugins.contains(_plugin)) {
+        m_plugins[_plugin]->init();
+        m_loadedPlugins.append(_plugin);
+    } else if (m_tabPlugins.contains(_plugin)) {
+        m_tabPlugins[_plugin]->init();
+        m_loadedPlugins.append(_plugin);
+    } else {
+        qCWarning(LOG_LIB) << "Could not load" << _plugin << "because it was not found";
+    }
+}
+
+
+/**
+ * @fn pluginMetadata
+ */
 QVariantHash PluginCore::pluginMetadata(const QString _filePath, const QString _group)
 {
     qCDebug(LOG_LIB) << "File path" << _filePath;
@@ -86,6 +125,25 @@ QVariantHash PluginCore::pluginMetadata(const QString _filePath, const QString _
     settings.endGroup();
 
     return pluginData;
+}
+
+
+/**
+ * @fn unloadPlugin
+ */
+void PluginCore::unloadPlugin(const QString _plugin)
+{
+    qCDebug(LOG_LIB) << "Disabling plugin" << _plugin;
+
+    if (m_plugins.contains(_plugin)) {
+        m_plugins[_plugin]->quit();
+        m_loadedPlugins.removeAll(_plugin);
+    } else if (m_tabPlugins.contains(_plugin)) {
+        m_tabPlugins[_plugin]->quit();
+        m_loadedPlugins.removeAll(_plugin);
+    } else {
+        qCWarning(LOG_LIB) << "Could not disable" << _plugin << "because it was not found";
+    }
 }
 
 

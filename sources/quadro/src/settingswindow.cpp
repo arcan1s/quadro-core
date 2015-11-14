@@ -32,7 +32,7 @@
 
 SettingsWindow::SettingsWindow(QWidget *parent, const QString configFile)
     : QMainWindow(parent),
-      file(configFile),
+      m_file(configFile),
       ui(new Ui::SettingsWindow)
 {
     qCDebug(LOG_UI) << __PRETTY_FUNCTION__;
@@ -59,7 +59,8 @@ QVariantHash SettingsWindow::getDefault()
 
 QVariantHash SettingsWindow::getSettings(QString fileName)
 {
-    if (fileName.isEmpty()) fileName = file;
+    if (fileName.isEmpty())
+        fileName = m_file;
 
     QVariantHash config;
     QSettings settings(fileName, QSettings::IniFormat);
@@ -142,7 +143,7 @@ void SettingsWindow::changePage(QTreeWidgetItem *current, QTreeWidgetItem *previ
 void SettingsWindow::saveSettings()
 {
     QVariantHash config = readSettings();
-    QSettings settings(file, QSettings::IniFormat);
+    QSettings settings(m_file, QSettings::IniFormat);
 
     settings.beginGroup(QString("Global"));
     settings.setValue(QString("GridSize"), config[QString("GridSize")]);

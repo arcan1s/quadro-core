@@ -22,6 +22,9 @@
 #include <QDBusMessage>
 
 
+/**
+ * @fn sendRequest
+ */
 QVariantList DBusOperations::sendRequest(const QString _service, const QString _path,
                                          const QString _interface,
                                          const QString _cmd,
@@ -44,6 +47,9 @@ QVariantList DBusOperations::sendRequest(const QString _service, const QString _
 }
 
 
+/**
+ * @fn sendRequestToLibrary
+ */
 QVariantList DBusOperations::sendRequestToLibrary(const QString _cmd, const QVariantList _args)
 {
     qCDebug(LOG_DBUS) << "Command" << _cmd << "with args" << _args;
@@ -53,6 +59,9 @@ QVariantList DBusOperations::sendRequestToLibrary(const QString _cmd, const QVar
 }
 
 
+/**
+ * @fn sendRequestToPlugin
+ */
 QVariantList DBusOperations::sendRequestToPlugin(const QString _plugin,
                                                  const QString _cmd,
                                                  const QVariantList _args)
@@ -65,6 +74,9 @@ QVariantList DBusOperations::sendRequestToPlugin(const QString _plugin,
 }
 
 
+/**
+ * @fn sendRequestToUi
+ */
 QVariantList DBusOperations::sendRequestToUi(const QString _cmd, const QVariantList _args)
 {
     qCDebug(LOG_DBUS) << "Command" << _cmd << "with args" << _args;
