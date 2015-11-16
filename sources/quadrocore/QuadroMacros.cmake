@@ -48,9 +48,9 @@ macro(quadro_install_plugin PLUGIN_ROOT)
     file (GLOB_RECURSE ${PLUGIN}_HEADERS "${PLUGIN_ROOT}/*.h")
     file (GLOB_RECURSE ${PLUGIN}_FORMS "${PLUGIN_ROOT}/*.ui")
     qt5_wrap_cpp (${PLUGIN}_MOC_SOURCES "${${PLUGIN}_HEADERS}")
-    if (${${PLUGIN}_FORMS})
+    if (${PLUGIN}_FORMS)
         qt5_wrap_ui (${PLUGIN}_UI_HEADERS "${${PLUGIN}_FORMS}")
-    endif()
+    endif(${PLUGIN}_FORMS)
 
     # include directories
     include_directories ("${CMAKE_CURRENT_BINARY_DIR}"
