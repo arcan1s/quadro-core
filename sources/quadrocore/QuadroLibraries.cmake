@@ -27,12 +27,13 @@
 # @brief Quadro common libraries
 ##
 
-find_package(Qt5 5.4.0 REQUIRED COMPONENTS Core DBus Widgets)
+find_package(Qt5 5.4.0 REQUIRED COMPONENTS Core DBus LinguistTools Widgets)
 ##
 # @brief add Qt definitions
 ##
 add_definitions(
-        ${Qt5Core_DEFINITIONS} ${Qt5DBus_DEFINITIONS} ${Qt5Widgets_DEFINITIONS}
+        ${Qt5Core_DEFINITIONS} ${Qt5DBus_DEFINITIONS} ${Qt5LinguistTools_DEFINITIONS}
+        ${Qt5Widgets_DEFINITIONS}
 )
 ##
 # @def Qt_INCLUDE

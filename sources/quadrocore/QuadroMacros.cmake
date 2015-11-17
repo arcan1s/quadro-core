@@ -46,11 +46,18 @@ macro(quadro_install_plugin PLUGIN_ROOT)
     # get sources
     file (GLOB_RECURSE ${PLUGIN}_SOURCES "${PLUGIN_ROOT}/*.cpp")
     file (GLOB_RECURSE ${PLUGIN}_HEADERS "${PLUGIN_ROOT}/*.h")
-    file (GLOB_RECURSE ${PLUGIN}_FORMS "${PLUGIN_ROOT}/*.ui")
     qt5_wrap_cpp (${PLUGIN}_MOC_SOURCES "${${PLUGIN}_HEADERS}")
+    # forms if any
+    file (GLOB_RECURSE ${PLUGIN}_FORMS "${PLUGIN_ROOT}/*.ui")
     if (${PLUGIN}_FORMS)
         qt5_wrap_ui (${PLUGIN}_UI_HEADERS "${${PLUGIN}_FORMS}")
     endif(${PLUGIN}_FORMS)
+    # translations if any
+    file (GLOB_RECURSE ${PLUGIN}_TS "${PLUGIN_ROOT}/*.ts")
+    if (${PLUGIN}_TS)
+        qt5_create_translation (${PLUGIN}_QM ${${PLUGIN}_SOURCES}
+                ${${PLUGIN}_HEADERS} ${${PLUGIN}_UI_HEADERS} ${${PLUGIN}_TS})
+    endif (${PLUGIN}_TS)
 
     # include directories
     include_directories ("${CMAKE_CURRENT_BINARY_DIR}"
@@ -59,7 +66,7 @@ macro(quadro_install_plugin PLUGIN_ROOT)
 
     # build
     add_library ("${PLUGIN}" MODULE "${${PLUGIN}_SOURCES}" "${${PLUGIN}_HEADERS}"
-            "${${PLUGIN}_MOC_SOURCES}" "${${PLUGIN}_UI_HEADERS}")
+            "${${PLUGIN}_MOC_SOURCES}" "${${PLUGIN}_UI_HEADERS}" "${${PLUGIN}_QM}")
     target_link_libraries ("${PLUGIN}" "${QUADRO_LIBRARIES}" "${Qt_LIBRARIES}" "${ADDS_LIBRARIES}")
 
     # install

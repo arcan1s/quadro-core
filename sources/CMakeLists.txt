@@ -70,6 +70,7 @@ set(PROJECT_RESOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/resources")
 include("libraries.cmake")
 include("clang-format.cmake")
 include("cppcheck.cmake")
+include("translation.cmake")
 
 # libraries configuration
 set(PROJECT_CORELIBRARY "quadrocore")
@@ -90,4 +91,3 @@ if (BUILD_TESTING)
 endif ()
 
 include("packages-recipe.cmake")
-#include("translation.cmake")
