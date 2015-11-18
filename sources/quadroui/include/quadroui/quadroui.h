@@ -31,6 +31,7 @@
 #include "fileiconwidget.h"
 #include "fileinfowindow.h"
 #include "iconwidget.h"
+#include "pluginwidget.h"
 #include "quadrowidget.h"
 #include "standaloneappwidget.h"
 

@@ -92,6 +92,10 @@ public:
      * @brief update data
      */
     virtual void update() = 0;
+    /**
+     * @brief current update interval in milliseconds
+     */
+    virtual int updateInterval() const = 0;
 };
 
 Q_DECLARE_INTERFACE(PluginInterface, PLUGIN_INTERFACE)
