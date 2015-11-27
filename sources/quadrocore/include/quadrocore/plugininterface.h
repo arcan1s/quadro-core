@@ -73,21 +73,26 @@ public:
      */
     virtual void init() = 0;
     /**
+     * @brief minimal size
+     * @return minimal size in application grids
+     */
+    virtual QSize minimalSize() = 0;
+    /**
      * @brief quit from plugin
      */
     virtual void quit() = 0;
     /**
      * @brief read plugin settings from configuration file
-     * @param _desktopPath   full path to settings file
+     * @param _configPath    full path to settings file
      */
-    virtual void readSettings(const QString _desktopPath) = 0;
+    virtual void readSettings(const QString _configPath) = 0;
     /**
      * @brief save plugin settings to configuration file
-     * @param _desktopPath   full path to settings file
+     * @param _configPath    full path to settings file
      * @return true if settings has been saved successfully
      * @return false if there was an error while settings sync
      */
-    virtual bool saveSettings(const QString _desktopPath) = 0;
+    virtual bool saveSettings(const QString _configPath) = 0;
     /**
      * @brief update data
      */
