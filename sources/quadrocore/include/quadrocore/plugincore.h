@@ -85,8 +85,9 @@ public:
      * @brief unload plugin. This method calls Interface::quit() method and remove
      * the plugin from loaded list
      * @param _plugin        plugin name
+     * @param _configPath    full path to configuration file
      */
-    void unloadPlugin(const QString _plugin);
+    void unloadPlugin(const QString _plugin, const QString _configPath);
     // plugin methods
     /**
      * @brief find plugin

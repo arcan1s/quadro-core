@@ -59,25 +59,34 @@ public slots:
      * @brief ping interface
      * @return true if interface is active
      */
-    bool Ping();
+    bool Ping() const;
     // public method interface
     /**
      * @brief plugin name
      * @return name
      */
-    QString Name();
+    QString Name() const;
+    /**
+     * @brief init plugin
+     */
+    void Init();
+    /**
+     * @brief close the plugin
+     * @param configPath     full path to settings file
+     */
+    void Quit(const QString configPath);
     /**
      * @brief read plugin settings from configuration file
-     * @param desktopPath    full path to settings file
+     * @param configPath     full path to settings file
      */
-    void ReadSettings(const QString desktopPath);
+    void ReadSettings(const QString configPath);
     /**
      * @brief save plugin settings to configuration file
-     * @param desktopPath    full path to settings file
+     * @param configPath     full path to settings file
      * @return true if settings has been saved successfully
      * @return false if there was an error while settings sync
      */
-    bool SaveSettings(const QString desktopPath);
+    bool SaveSettings(const QString configPath);
     /**
      * @brief update data. May be called to force update
      */

@@ -67,8 +67,9 @@ public:
     virtual void init() = 0;
     /**
      * @brief quit from plugin
+     * @param _configPath    full path to settings file
      */
-    virtual void quit() = 0;
+    virtual void quit(const QString _configPath) = 0;
     /**
      * @brief read plugin settings from configuration file
      * @param _configPath    full path to settings file

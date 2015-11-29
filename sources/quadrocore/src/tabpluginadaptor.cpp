@@ -36,7 +36,7 @@ TabPluginAdaptor::TabPluginAdaptor(QObject *parent, TabPluginInterface *plugin)
     : QDBusAbstractAdaptor(parent),
       m_plugin(plugin)
 {
-    qCDebug(LOG_PL) << __PRETTY_FUNCTION__;
+    qCDebug(LOG_DBUS) << __PRETTY_FUNCTION__;
 }
 
 
@@ -45,14 +45,14 @@ TabPluginAdaptor::TabPluginAdaptor(QObject *parent, TabPluginInterface *plugin)
  */
 TabPluginAdaptor::~TabPluginAdaptor()
 {
-    qCDebug(LOG_PL) << __PRETTY_FUNCTION__;
+    qCDebug(LOG_DBUS) << __PRETTY_FUNCTION__;
 }
 
 
 /**
  * @fn Ping
  */
-bool TabPluginAdaptor::Ping()
+bool TabPluginAdaptor::Ping() const
 {
     return true;
 }
@@ -61,27 +61,51 @@ bool TabPluginAdaptor::Ping()
 /**
  * @fn Name
  */
-QString TabPluginAdaptor::Name()
+QString TabPluginAdaptor::Name() const
 {
     return m_plugin->name();
 }
 
 
 /**
+ * @fn Init
+ */
+void TabPluginAdaptor::Init()
+{
+    return m_plugin->init();
+}
+
+
+/**
+ * @fn Quit
+ */
+void TabPluginAdaptor::Quit(const QString configPath)
+{
+    qCDebug(LOG_DBUS) << "Configuration file" << configPath;
+
+    return m_plugin->quit(configPath);
+}
+
+
+/**
  * @fn ReadSettings
  */
-void TabPluginAdaptor::ReadSettings(const QString desktopPath)
+void TabPluginAdaptor::ReadSettings(const QString configPath)
 {
-    return m_plugin->readSettings(desktopPath);
+    qCDebug(LOG_DBUS) << "Configuration file" << configPath;
+
+    return m_plugin->readSettings(configPath);
 }
 
 
 /**
  * @fn SaveSettings
  */
-bool TabPluginAdaptor::SaveSettings(const QString desktopPath)
+bool TabPluginAdaptor::SaveSettings(const QString configPath)
 {
-    return m_plugin->saveSettings(desktopPath);
+    qCDebug(LOG_DBUS) << "Configuration file" << configPath;
+
+    return m_plugin->saveSettings(configPath);
 }
 
 

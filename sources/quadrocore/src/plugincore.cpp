@@ -51,10 +51,6 @@ PluginCore::~PluginCore()
         QDBusConnection::sessionBus().unregisterObject(QString("/%1").arg(name));
     QDBusConnection::sessionBus().unregisterService(DBUS_PLUGIN_SERVICE);
 
-    // send quit() method
-    for (auto plugin : m_loadedPlugins)
-        unloadPlugin(plugin);
-
     m_plugins.clear();
     m_tabPlugins.clear();
 }
@@ -131,15 +127,15 @@ QVariantHash PluginCore::pluginMetadata(const QString _filePath, const QString _
 /**
  * @fn unloadPlugin
  */
-void PluginCore::unloadPlugin(const QString _plugin)
+void PluginCore::unloadPlugin(const QString _plugin, const QString _configPath)
 {
-    qCDebug(LOG_LIB) << "Disabling plugin" << _plugin;
+    qCDebug(LOG_LIB) << "Disabling plugin" << _plugin << "with configuration" << _configPath;
 
     if (m_plugins.contains(_plugin)) {
-        m_plugins[_plugin]->quit();
+        m_plugins[_plugin]->quit(_configPath);
         m_loadedPlugins.removeAll(_plugin);
     } else if (m_tabPlugins.contains(_plugin)) {
-        m_tabPlugins[_plugin]->quit();
+        m_tabPlugins[_plugin]->quit(_configPath);
         m_loadedPlugins.removeAll(_plugin);
     } else {
         qCWarning(LOG_LIB) << "Could not disable" << _plugin << "because it was not found";

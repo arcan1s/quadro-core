@@ -36,7 +36,7 @@ PluginAdaptor::PluginAdaptor(QObject *parent, PluginInterface *plugin)
     : QDBusAbstractAdaptor(parent),
       m_plugin(plugin)
 {
-    qCDebug(LOG_PL) << __PRETTY_FUNCTION__;
+    qCDebug(LOG_DBUS) << __PRETTY_FUNCTION__;
 }
 
 
@@ -45,14 +45,14 @@ PluginAdaptor::PluginAdaptor(QObject *parent, PluginInterface *plugin)
  */
 PluginAdaptor::~PluginAdaptor()
 {
-    qCDebug(LOG_PL) << __PRETTY_FUNCTION__;
+    qCDebug(LOG_DBUS) << __PRETTY_FUNCTION__;
 }
 
 
 /**
  * @fn Ping
  */
-bool PluginAdaptor::Ping()
+bool PluginAdaptor::Ping() const
 {
     return true;
 }
@@ -61,7 +61,7 @@ bool PluginAdaptor::Ping()
 /**
  * @fn Background
  */
-QString PluginAdaptor::Background()
+QString PluginAdaptor::Background() const
 {
     return m_plugin->background();
 }
@@ -70,7 +70,7 @@ QString PluginAdaptor::Background()
 /**
  * @fn Data
  */
-QString PluginAdaptor::Data()
+QString PluginAdaptor::Data() const
 {
     return m_plugin->data();
 }
@@ -79,7 +79,7 @@ QString PluginAdaptor::Data()
 /**
  * @fn Name
  */
-QString PluginAdaptor::Name()
+QString PluginAdaptor::Name() const
 {
     return m_plugin->name();
 }
@@ -95,29 +95,54 @@ void PluginAdaptor::Action()
 
 
 /**
- * @fn Close
+ * @fn Init
  */
-void PluginAdaptor::Close()
+void PluginAdaptor::Init()
 {
-    return m_plugin->quit();
+    return m_plugin->init();
+}
+
+
+/**
+ * @fn MinimalSize
+ */
+QStringList PluginAdaptor::MinimalSize() const
+{
+    return QStringList() << QString::number(m_plugin->minimalSize().width())
+           << QString::number(m_plugin->minimalSize().height());
+}
+
+
+/**
+ * @fn Quit
+ */
+void PluginAdaptor::Quit(const QString configPath)
+{
+    qCDebug(LOG_DBUS) << "Configuration file" << configPath;
+
+    return m_plugin->quit(configPath);
 }
 
 
 /**
  * @fn ReadSettings
  */
-void PluginAdaptor::ReadSettings(const QString desktopPath)
+void PluginAdaptor::ReadSettings(const QString configPath)
 {
-    return m_plugin->readSettings(desktopPath);
+    qCDebug(LOG_DBUS) << "Configuration file" << configPath;
+
+    return m_plugin->readSettings(configPath);
 }
 
 
 /**
  * @fn SaveSettings
  */
-bool PluginAdaptor::SaveSettings(const QString desktopPath)
+bool PluginAdaptor::SaveSettings(const QString configPath)
 {
-    return m_plugin->saveSettings(desktopPath);
+    qCDebug(LOG_DBUS) << "Configuration file" << configPath;
+
+    return m_plugin->saveSettings(configPath);
 }
 
 
@@ -127,4 +152,13 @@ bool PluginAdaptor::SaveSettings(const QString desktopPath)
 void PluginAdaptor::Update()
 {
     return m_plugin->update();
+}
+
+
+/**
+ * @fn UpdateInterval
+ */
+int PluginAdaptor::UpdateInterval() const
+{
+    return m_plugin->updateInterval();
 }

@@ -169,6 +169,7 @@ void MainWindow::changeTabByAction(QAction *action)
 
 void MainWindow::clearTabs()
 {
+    QStringList tabs = m_configuration[QString("Tabs")].toStringList();
     disconnect(ui->toolBar, SIGNAL(actionTriggered(QAction *)),
                this, SLOT(changeTabByAction(QAction *)));
 
@@ -178,8 +179,9 @@ void MainWindow::clearTabs()
         QWidget *widget = ui->stackedWidget->widget(0);
         ui->stackedWidget->removeWidget(widget);
     }
-    for (auto tab : m_configuration[QString("Tabs")].toStringList())
-        m_core->plugin()->unloadPlugin(tab);
+    for (auto tab : tabs)
+        m_core->plugin()->unloadPlugin(tab, m_core->plugin()->configurationPath(
+            QString("%1.tab-%2.conf").arg(tab).arg(tabs.indexOf(tab))));
 }
 
 
