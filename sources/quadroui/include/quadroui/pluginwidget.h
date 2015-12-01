@@ -28,8 +28,6 @@
 
 #include <QSize>
 #include <QWidget>
-#include <quadrocore/plugincore.h>
-#include <quadrocore/plugininterface.h>
 
 
 class PluginInterface;

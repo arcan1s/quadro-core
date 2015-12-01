@@ -49,7 +49,7 @@ public:
      * @param hPolicy        horizontal scroll bar policy
      * @param vPolicy        vertical scroll bar policy
      */
-    explicit QuadroWidget(QWidget *parent, const float grid = 150.0,
+    explicit QuadroWidget(QWidget *parent, const float grid,
                           const QString widgetTitle = QString("none"),
                           const Qt::ScrollBarPolicy hPolicy = Qt::ScrollBarAlwaysOff,
                           const Qt::ScrollBarPolicy vPolicy = Qt::ScrollBarAsNeeded);

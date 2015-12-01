@@ -15,7 +15,7 @@
  *   along with quadro. If not, see http://www.gnu.org/licenses/           *
  ***************************************************************************/
 /**
- * @file quadroui.h
+ * @file plugincontainer.h
  * Header of quadro library
  * @author Evgeniy Alekseev
  * @copyright GPLv3
@@ -23,17 +23,47 @@
  */
 
 
-#ifndef QUADROUI_H
-#define QUADROUI_H
+#ifndef PLUGINCONTAINER_H
+#define PLUGINCONTAINER_H
 
-#include "appiconwidget.h"
-#include "editappwindow.h"
-#include "fileiconwidget.h"
-#include "fileinfowindow.h"
-#include "iconwidget.h"
-#include "plugincontainer.h"
-#include "pluginwidget.h"
+#include <QSize>
+
 #include "quadrowidget.h"
-#include "standaloneappwidget.h"
 
-#endif /* QUADROUI_H */
+
+class PluginInterface;
+
+/**
+ * @brief The PluginContainer class provides generic UI container for plugins
+ */
+class PluginContainer : public QuadroWidget
+{
+    Q_OBJECT
+
+public:
+    /**
+     * @brief PluginContainer class constructor
+     * @param parent         pointer to parent object
+     * @param grid           grid size
+     * @param widgetTitle    widget title
+     * @param hPolicy        horizontal scroll bar policy
+     * @param vPolicy        vertical scroll bar policy
+     */
+    explicit PluginContainer(QWidget *parent, const float grid,
+                             const QString widgetTitle = QString("none"),
+                             const Qt::ScrollBarPolicy hPolicy = Qt::ScrollBarAlwaysOff,
+                             const Qt::ScrollBarPolicy vPolicy = Qt::ScrollBarAsNeeded);
+    /**
+     * @brief PluginContainer class destructor
+     */
+    virtual ~PluginContainer();
+    /**
+     * @brief add plugin to the position
+     * @param _interface     pointer to plugin interface
+     * @param _size          plugin size
+     */
+    void addPlugin(PluginInterface *_interface, const QSize _size);
+};
+
+
+#endif /* PLUGINCONTAINER_H */

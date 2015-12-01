@@ -40,7 +40,7 @@ public:
     /**
      * @brief PluginInterface class destructor
      */
-    virtual ~PluginInterface();
+    virtual ~PluginInterface() {};
     // get methods
     /**
      * @brief plugin background

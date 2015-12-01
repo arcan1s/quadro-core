@@ -15,25 +15,54 @@
  *   along with quadro. If not, see http://www.gnu.org/licenses/           *
  ***************************************************************************/
 /**
- * @file quadroui.h
- * Header of quadro library
+ * @file plugincontainer.cpp
+ * Source code of quadro library
  * @author Evgeniy Alekseev
  * @copyright GPLv3
  * @bug https://github.com/arcan1s/quadro-core/issues
  */
 
 
-#ifndef QUADROUI_H
-#define QUADROUI_H
+#include "quadroui/quadroui.h"
 
-#include "appiconwidget.h"
-#include "editappwindow.h"
-#include "fileiconwidget.h"
-#include "fileinfowindow.h"
-#include "iconwidget.h"
-#include "plugincontainer.h"
-#include "pluginwidget.h"
-#include "quadrowidget.h"
-#include "standaloneappwidget.h"
+#include <QLayout>
 
-#endif /* QUADROUI_H */
+#include <quadrocore/quadro.h>
+
+
+/**
+ * @class PluginContainer
+ */
+/**
+ * @fn PluginContainer
+ */
+PluginContainer::PluginContainer(QWidget *parent, const float grid,
+                                 const QString widgetTitle,
+                                 const Qt::ScrollBarPolicy hPolicy,
+                                 const Qt::ScrollBarPolicy vPolicy)
+    : QuadroWidget(parent, grid, widgetTitle, hPolicy, vPolicy)
+{
+    qCDebug(LOG_UILIB) << __PRETTY_FUNCTION__;
+}
+
+
+/**
+ * @fn ~PluginContainer
+ */
+PluginContainer::~PluginContainer()
+{
+    qCDebug(LOG_UILIB) << __PRETTY_FUNCTION__;
+
+    clearLayout();
+}
+
+
+/**
+ * @fn addPlugin
+ */
+void PluginContainer::addPlugin(PluginInterface *_interface, const QSize _size)
+{
+    qCDebug(LOG_UILIB) << "Add plugin" << _interface->name() << "to position" << layout()->count();
+
+    layout()->addWidget(new PluginWidget(_interface, _size, this));
+}
