@@ -15,7 +15,7 @@
  *   along with quadro. If not, see http://www.gnu.org/licenses/           *
  ***************************************************************************/
 /**
- * @file plugininterface.h
+ * @file quadroplugininterface.h
  * Header of quadro library
  * @author Evgeniy Alekseev
  * @copyright GPLv3
@@ -23,31 +23,25 @@
  */
 
 
-#ifndef PLUGININTERFACE_H
-#define PLUGININTERFACE_H
+#ifndef QUADROPLUGININTERFACE_H
+#define QUADROPLUGININTERFACE_H
 
-#include <QtPlugin>
+#include <QWidget>
 
-#include "config.h"
-#include "quadroplugininterface.h"
 
+class QuadroCore;
 
 /**
- * @brief The PluginInterface class provides plugin core part
+ * @brief The QuadroPluginInterface class provides generic plugin interfaces
  */
-class PluginInterface : public QuadroPluginInterface
+class QuadroPluginInterface
 {
 public:
     /**
-     * @brief PluginInterface class destructor
+     * @brief QuadroPluginInterface class destructor
      */
-    virtual ~PluginInterface() {};
+    virtual ~QuadroPluginInterface() {};
     // get methods
-    /**
-     * @brief plugin background
-     * @return background
-     */
-    virtual QString background() const = 0;
     /**
      * @brief pointer to configuration widget. If returning pointer will not be
      * nullptr the additional configuration page will be created
@@ -55,29 +49,15 @@ public:
      */
     virtual QWidget *configWidget() = 0;
     /**
-     * @brief plugin data in text
-     * @return data
-     */
-    virtual QString data() const = 0;
-    /**
      * @brief plugin name
      * @return name
      */
     virtual QString name() const = 0;
     // main methods
     /**
-     * @brief method which will be called when plugin is activated
-     */
-    virtual void action() const = 0;
-    /**
      * @brief init the plugin
      */
     virtual void init() = 0;
-    /**
-     * @brief minimal size
-     * @return minimal size in application grids
-     */
-    virtual QSize minimalSize() const = 0;
     /**
      * @brief quit from plugin
      * @param _configPath    full path to settings file
@@ -97,22 +77,12 @@ public:
     virtual bool saveSettings(const QString _configPath) = 0;
     /**
      * @brief additional method which will be called to pass required args
-     * @remark this method will be called before PluginInterface::init()
+     * @remark this method will be called before QuadroPluginInterface::init()
      * @param _core          pointer to core object
      * @param _settings      application settings
      */
     virtual void setArgs(QuadroCore *_core, const QVariantHash _settings) = 0;
-    /**
-     * @brief update data
-     */
-    virtual void update() = 0;
-    /**
-     * @brief current update interval in milliseconds
-     */
-    virtual int updateInterval() const = 0;
 };
 
-Q_DECLARE_INTERFACE(PluginInterface, PLUGIN_INTERFACE)
 
-
-#endif /* PLUGININTERFACE_H */
+#endif /* QUADROPLUGININTERFACE_H */

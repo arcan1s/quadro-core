@@ -29,14 +29,13 @@
 #include <QtPlugin>
 
 #include "config.h"
+#include "quadroplugininterface.h"
 
-
-class QuadroCore;
 
 /**
  * @brief The TabPluginInterface class provides core part of plugin run in own tab
  */
-class TabPluginInterface
+class TabPluginInterface : public QuadroPluginInterface
 {
 public:
     /**
@@ -84,11 +83,11 @@ public:
     virtual bool saveSettings(const QString _configPath) = 0;
     /**
      * @brief additional method which will be called to pass required args
-     * @remark this method will be called before TabPluginItem::init()
+     * @remark this method will be called before TabPluginInterface::init()
      * @param _core          pointer to core object
      * @param _settings      application settings
      */
-    virtual void setArgs(QuadroCore *_core, const QVariantHash _settings = QVariantHash()) = 0;
+    virtual void setArgs(QuadroCore *_core, const QVariantHash _settings) = 0;
 };
 
 Q_DECLARE_INTERFACE(TabPluginInterface, TAB_PLUGIN_INTERFACE)
