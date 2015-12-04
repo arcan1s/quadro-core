@@ -28,7 +28,6 @@
 
 #include <QDBusConnection>
 #include <QDBusMessage>
-#include <QDir>
 #include <QObject>
 #include <QPluginLoader>
 
@@ -69,38 +68,39 @@ public:
      */
     static QStringList desktopPaths();
     /**
-     * @brief load plugin. This method calls Interface::init() method and marks
-     * plugin as loaded
+     * @brief load plugin by name
      * @param _plugin        plugin name
+     * @return unique index of loaded plugin or -1 if no plugin has been loaded
      */
-    void loadPlugin(const QString _plugin);
+    int loadPlugin(const QString _plugin);
     /**
      * @brief read plugin settings
      * @param _filePath      path to desktop file
-     * @param _group         group for search
      * @return hash map with parameters
      */
-    static QVariantHash pluginMetadata(const QString _filePath, const QString _group);
+    static QVariantHash pluginMetadata(const QString _filePath);
     /**
      * @brief unload plugin. This method calls Interface::quit() method and remove
      * the plugin from loaded list
      * @param _plugin        plugin name
+     * @param _index         plugin index
      * @param _configPath    full path to configuration file
+     * @return status of plugin unloading
      */
-    void unloadPlugin(const QString _plugin, const QString _configPath);
+    bool unloadPlugin(const QString _plugin, const int _index, const QString _configPath);
     // plugin methods
     /**
      * @brief find plugin
-     * @param _plugin        plugin name
+     * @param _index         plugin index
      * @return pointer to plugin or nullptr
      */
-    PluginInterface *plugin(const QString _plugin);
+    PluginInterface *plugin(const int _index);
     /**
      * @brief find tab plugin
-     * @param _plugin        plugin name
+     * @param _index         plugin index
      * @return pointer to tab plugin or nullptr
      */
-    TabPluginInterface *tabPlugin(const QString _plugin);
+    TabPluginInterface *tabPlugin(const int _index);
 
 public slots:
     /**
@@ -110,87 +110,68 @@ public slots:
 
 private:
     /**
-     * @brief loaded plugins
+     * @brief all available plugins with metadata
      */
-    QStringList m_loadedPlugins;
+    QVariantHash m_allPlugins;
     /**
      * @brief list of plugins
      */
-    QHash<QString, PluginInterface *> m_plugins;
+    QHash<int, PluginInterface *> m_plugins;
     /**
      * @brief list of tab plugins
      */
-    QHash<QString, TabPluginInterface *> m_tabPlugins;
+    QHash<int, TabPluginInterface *> m_tabPlugins;
+    /**
+     * @brief init plugin from default paths
+     * @tparam T             plugin class depending on the type of plugin
+     * @param _name          plugin name
+     * @param _location      plugin location
+     * @return plugin objects
+     */
+    template<class T> T *createPlugin(const QString _name, const QString _location)
+    {
+        QString libraryName = QString("%1/lib%2.so").arg(_location).arg(_name);
+        QPluginLoader loader(libraryName, this);
+        qCInfo(LOG_LIB) << "Loading" << libraryName;
+        // load plugin
+        QObject *plugin = loader.instance();
+        T *item = nullptr;
+        if (loader.isLoaded()) {
+            item = qobject_cast<T *>(plugin);
+            if (!item) {
+                qCCritical(LOG_LIB) << "Could not cast plugin";
+            }
+        } else {
+            qCCritical(LOG_LIB) << "Could not load the library for" << _name;
+            qCCritical(LOG_LIB) << "Error" << loader.errorString();
+        }
+
+        return item;
+    };
     /**
      * @brief create DBus session for specified plugin
      * @tparam T             plugin class depending on the type of plugin
      * @tparam Adaptor       DBus adaptor for the specified type of plugin
      * @param _name          plugin name
+     * @param _index         plugin index
      * @param _plugin        pointer to plugin object
      */
-    template<class T, class Adaptor> void createPluginDBusSession(const QString _name, T *_plugin)
+    template<class T, class Adaptor> void createPluginDBusSession(const QString _name, const int _index,
+                                                                  T *_plugin)
     {
         qCDebug(LOG_LIB) << "Plugin name for DBus session" << _name;
 
         QDBusConnection bus = QDBusConnection::sessionBus();
         if (!bus.registerService(DBUS_PLUGIN_SERVICE)) {
-            qCWarning(LOG_UI) << "Could not register service";
-            qCWarning(LOG_UI) << bus.lastError().message();
+            qCWarning(LOG_LIB) << "Could not register service";
+            qCWarning(LOG_LIB) << bus.lastError().message();
         }
-        if (!bus.registerObject(QString("/%1").arg(_name),
+        if (!bus.registerObject(QString("/%1/%2").arg(_name).arg(_index),
                                 new Adaptor(this, _plugin),
                                 QDBusConnection::ExportAllContents)) {
-            qCWarning(LOG_UI) << "Could not register library object";
-            qCWarning(LOG_UI) << bus.lastError().message();
+            qCWarning(LOG_LIB) << "Could not register library object";
+            qCWarning(LOG_LIB) << bus.lastError().message();
         }
-    };
-    /**
-     * @brief return plugins from default paths
-     * @tparam T             plugin class depending on the type of plugin
-     * @tparam Adaptor       DBus adaptor for the specified type of plugin
-     * @param _group         plugin group in settings
-     * @return map of generated plugin objects
-     */
-    template<class T, class Adaptor> QHash<QString, T *> getPlugins(const QString _group)
-    {
-        QStringList filter("*.desktop");
-        QStringList locations = desktopPaths();
-        qCInfo(LOG_LIB) << "Paths" << locations;
-        QHash<QString, T *> items;
-
-        for (auto loc : locations) {
-            QStringList entries = QDir(loc).entryList(filter, QDir::Files);
-            for (auto entry : entries) {
-                QString fileName = QFileInfo(QDir(loc), entry).absoluteFilePath();
-                qCInfo(LOG_LIB) << "Desktop" << fileName;
-                // check settings
-                QVariantHash metadata = pluginMetadata(fileName, _group);
-                if (!metadata.contains(QString("Name")))
-                    continue;
-                // init
-                QString name = metadata[QString("Name")].toString();
-                QString libraryName = QString("%1/lib%2.so").arg(loc).arg(name);
-                QPluginLoader loader(libraryName, this);
-                qCInfo(LOG_LIB) << "Loading" << libraryName;
-                // load plugin
-                QObject *plugin = loader.instance();
-                if (loader.isLoaded()) {
-                    T *item = qobject_cast<T *>(plugin);
-                    if (!item) {
-                        qCCritical(LOG_LIB) << "Could not cast plugin";
-                        continue;
-                    }
-                    items[name] = item;
-                    createPluginDBusSession<T, Adaptor>(name, item);
-                } else {
-                    qCCritical(LOG_LIB) << "Could not load the library for" << name;
-                    qCCritical(LOG_LIB) << "Error" << loader.errorString();
-                    continue;
-                }
-            }
-        }
-
-        return items;
     };
 };
 

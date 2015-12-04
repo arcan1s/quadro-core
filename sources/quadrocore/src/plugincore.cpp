@@ -47,8 +47,6 @@ PluginCore::PluginCore(QObject *parent)
  */
 PluginCore::~PluginCore()
 {
-    for (auto name : m_plugins.keys() + m_tabPlugins.keys())
-        QDBusConnection::sessionBus().unregisterObject(QString("/%1").arg(name));
     QDBusConnection::sessionBus().unregisterService(DBUS_PLUGIN_SERVICE);
 
     m_plugins.clear();
@@ -86,38 +84,75 @@ QStringList PluginCore::desktopPaths()
 /**
  * @fn loadPlugin
  */
-void PluginCore::loadPlugin(const QString _plugin)
+int PluginCore::loadPlugin(const QString _plugin)
 {
     qCDebug(LOG_LIB) << "Loading plugin" << _plugin;
 
-    if (m_plugins.contains(_plugin)) {
-        m_plugins[_plugin]->init();
-        m_loadedPlugins.append(_plugin);
-    } else if (m_tabPlugins.contains(_plugin)) {
-        m_tabPlugins[_plugin]->init();
-        m_loadedPlugins.append(_plugin);
-    } else {
+    int index = -1;
+    if (!m_allPlugins.contains(_plugin)) {
         qCWarning(LOG_LIB) << "Could not load" << _plugin << "because it was not found";
+        return index;
     }
+
+    QString type = m_allPlugins[_plugin].toHash()[QString("Group")].toString();
+    QString location = m_allPlugins[_plugin].toHash()[QString("Location")].toString();
+    if (type == QString("plugin")) {
+        PluginInterface *item = createPlugin<PluginInterface>(_plugin, location);
+        if (item == nullptr)
+            return index;
+        // get possible index
+        index = m_plugins.count();
+        while (m_plugins.contains(index))
+            index++;
+        // add item to index and create interface
+        m_plugins[index] = item;
+        createPluginDBusSession<PluginInterface, PluginAdaptor>(_plugin, index, item);
+    } else if (type == QString("tabplugin")) {
+        TabPluginInterface *item = createPlugin<TabPluginInterface>(_plugin, location);
+        if (item == nullptr)
+            return index;
+        // get possible index
+        index = m_tabPlugins.count();
+        while (m_tabPlugins.contains(index))
+            index++;
+        // add item to index and create interface
+        m_tabPlugins[index] = item;
+        createPluginDBusSession<TabPluginInterface, TabPluginAdaptor>(_plugin, index, item);
+    } else {
+        qCWarning(LOG_LIB) << "Invalid plugin type" << type;
+    }
+
+    return index;
 }
 
 
 /**
  * @fn pluginMetadata
  */
-QVariantHash PluginCore::pluginMetadata(const QString _filePath, const QString _group)
+QVariantHash PluginCore::pluginMetadata(const QString _filePath)
 {
     qCDebug(LOG_LIB) << "File path" << _filePath;
 
     QVariantHash pluginData;
     QSettings settings(_filePath, QSettings::IniFormat);
     settings.setIniCodec("UTF-8");
-    if (!settings.childGroups().contains(_group))
+    QString group;
+    QString configGroup;
+    if (settings.childGroups().contains(QString("Quadro plugin"))) {
+        group = QString("plugin");
+        configGroup = QString("Quadro plugin");
+    } else if (settings.childGroups().contains(QString("Quadro tabplugin"))) {
+        group = QString("tabplugin");
+        configGroup = QString("Quadro tabplugin");
+    } else {
         return pluginData;
+    }
 
-    settings.beginGroup(_group);
+    settings.beginGroup(configGroup);
     pluginData[QString("Comment")] = settings.value(QString("Comment"), QString(""));
     pluginData[QString("Name")] = settings.value(QString("Name"), QString("none"));
+    pluginData[QString("Group")] = group;
+    pluginData[QString("Location")] = QFileInfo(_filePath).absolutePath();
     settings.endGroup();
 
     return pluginData;
@@ -127,41 +162,72 @@ QVariantHash PluginCore::pluginMetadata(const QString _filePath, const QString _
 /**
  * @fn unloadPlugin
  */
-void PluginCore::unloadPlugin(const QString _plugin, const QString _configPath)
+bool PluginCore::unloadPlugin(const QString _plugin, const int _index, const QString _configPath)
 {
-    qCDebug(LOG_LIB) << "Disabling plugin" << _plugin << "with configuration" << _configPath;
+    qCDebug(LOG_LIB) << "Disabling plugin" << _plugin << "with index" << _index
+                     << "using configuration" << _configPath;
 
-    if (m_plugins.contains(_plugin)) {
-        m_plugins[_plugin]->quit(_configPath);
-        m_loadedPlugins.removeAll(_plugin);
-    } else if (m_tabPlugins.contains(_plugin)) {
-        m_tabPlugins[_plugin]->quit(_configPath);
-        m_loadedPlugins.removeAll(_plugin);
+    QString type = m_allPlugins[_plugin].toHash()[QString("Group")].toString();
+    if (type == QString("plugin")) {
+        if (!m_plugins.contains(_index)) {
+            qCWarning(LOG_LIB) << "Invalid index" << _index;
+            return false;
+        }
+        // send quit signal to plugin
+        m_plugins[_index]->quit(_configPath);
+        // delete interface
+        QDBusConnection::sessionBus().unregisterObject(QString("/%1/%2").arg(_plugin).arg(_index));
+        // remove from index
+        m_plugins.remove(_index);
+    } else if (type == QString("tabplugin")) {
+        if (!m_tabPlugins.contains(_index)) {
+            qCWarning(LOG_LIB) << "Invalid index" << _index;
+            return false;
+        }
+        // send quit signal to plugin
+        m_tabPlugins[_index]->quit(_configPath);
+        // delete interface
+        QDBusConnection::sessionBus().unregisterObject(QString("/%1/%2").arg(_plugin).arg(_index));
+        // remove from index
+        m_tabPlugins.remove(_index);
     } else {
-        qCWarning(LOG_LIB) << "Could not disable" << _plugin << "because it was not found";
+        qCWarning(LOG_LIB) << "Invalid plugin type" << type;
+        return false;
     }
+
+    return true;
 }
 
 
 /**
  * @fn plugin
  */
-PluginInterface *PluginCore::plugin(const QString _plugin)
+PluginInterface *PluginCore::plugin(const int _index)
 {
-    qCDebug(LOG_LIB) << "Plugin name" << _plugin;
+    qCDebug(LOG_LIB) << "Plugin index" << _index;
 
-    return m_plugins.value(_plugin, nullptr);
+    if (!m_plugins.contains(_index)) {
+        qCWarning(LOG_LIB) << "Invalid index" << _index;
+        return nullptr;
+    }
+
+    return m_plugins[_index];
 }
 
 
 /**
  * @fn tabPlugin
  */
-TabPluginInterface *PluginCore::tabPlugin(const QString _plugin)
+TabPluginInterface *PluginCore::tabPlugin(const int _index)
 {
-    qCDebug(LOG_LIB) << "Plugin name" << _plugin;
+    qCDebug(LOG_LIB) << "Plugin index" << _index;
 
-    return m_tabPlugins.value(_plugin, nullptr);
+    if (!m_tabPlugins.contains(_index)) {
+        qCWarning(LOG_LIB) << "Invalid index" << _index;
+        return nullptr;
+    }
+
+    return m_tabPlugins[_index];
 }
 
 
@@ -171,9 +237,24 @@ TabPluginInterface *PluginCore::tabPlugin(const QString _plugin)
 void PluginCore::initPlugins()
 {
     // start cleanup
+    m_allPlugins.clear();
     m_plugins.clear();
     m_tabPlugins.clear();
 
-    m_plugins = getPlugins<PluginInterface, PluginAdaptor>(QString("Quadro plugin"));
-    m_tabPlugins = getPlugins<TabPluginInterface, TabPluginAdaptor>(QString("Quadro tabplugin"));
+    QStringList filter("*.desktop");
+    QStringList locations = desktopPaths();
+    qCInfo(LOG_LIB) << "Paths" << locations;
+
+    for (auto loc : locations) {
+        QStringList entries = QDir(loc).entryList(filter, QDir::Files);
+        for (auto entry : entries) {
+            QString fileName = QFileInfo(QDir(loc), entry).absoluteFilePath();
+            qCInfo(LOG_LIB) << "Desktop" << fileName;
+            // check settings
+            QVariantHash metadata = pluginMetadata(fileName);
+            if (!metadata.contains(QString("Name")))
+                continue;
+            m_allPlugins[metadata[QString("Name")].toString()] = metadata;
+        }
+    }
 }

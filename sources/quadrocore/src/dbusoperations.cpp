@@ -63,13 +63,14 @@ QVariantList DBusOperations::sendRequestToLibrary(const QString _cmd, const QVar
  * @fn sendRequestToPlugin
  */
 QVariantList DBusOperations::sendRequestToPlugin(const QString _plugin,
+                                                 const int _index,
                                                  const QString _cmd,
                                                  const QVariantList _args)
 {
-    qCDebug(LOG_DBUS) << "Plugin name" << _plugin;
+    qCDebug(LOG_DBUS) << "Plugin name" << _plugin << "with index" << _index;
     qCDebug(LOG_DBUS) << "Command" << _cmd << "with args" << _args;
 
-    return sendRequest(QString(DBUS_PLUGIN_SERVICE), QString("/%1").arg(_plugin),
+    return sendRequest(QString(DBUS_PLUGIN_SERVICE), QString("/%1/%2").arg(_plugin).arg(_index),
                        QString(DBUS_PLUGIN_INTERFACE), _cmd, _args);
 }
 

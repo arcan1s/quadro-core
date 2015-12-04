@@ -81,6 +81,7 @@ private:
     QTranslator *translator = nullptr;
     // configuration
     QVariantHash m_configuration;
+    QList<QVariantHash> m_plugins;
 };
 
 
