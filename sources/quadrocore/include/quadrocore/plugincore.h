@@ -36,7 +36,10 @@
 
 
 class PluginInterface;
+class PluginRepresentation;
 class TabPluginInterface;
+class QuadroCore;
+class QuadroPluginInterface;
 
 /**
  * @brief The PluginCore class provides plugin backend
@@ -51,7 +54,7 @@ public:
      * @brief PluginCore class constructor
      * @param parent         pointer to parent item
      */
-    explicit PluginCore(QObject *parent);
+    explicit PluginCore(QuadroCore *parent);
     /**
      * @brief PluginCore class destructor
      */
@@ -68,26 +71,27 @@ public:
      */
     static QStringList desktopPaths();
     /**
+     * @brief pass parameter to plugin and init it
+     * @param _index         plugin index
+     * @param _configuration general configuration dictionary
+     * @param _configPath    plugin specific configuration file name
+     */
+    void initPlugin(const int _index, const QVariantHash _configuration,
+                    const QString _configPath);
+    /**
      * @brief load plugin by name
      * @param _plugin        plugin name
      * @return unique index of loaded plugin or -1 if no plugin has been loaded
      */
     int loadPlugin(const QString _plugin);
     /**
-     * @brief read plugin settings
-     * @param _filePath      path to desktop file
-     * @return hash map with parameters
-     */
-    static QVariantHash pluginMetadata(const QString _filePath);
-    /**
      * @brief unload plugin. This method calls Interface::quit() method and remove
      * the plugin from loaded list
-     * @param _plugin        plugin name
      * @param _index         plugin index
      * @param _configPath    full path to configuration file
      * @return status of plugin unloading
      */
-    bool unloadPlugin(const QString _plugin, const int _index, const QString _configPath);
+    bool unloadPlugin(const int _index, const QString _configPath);
     // plugin methods
     /**
      * @brief find plugin
@@ -112,15 +116,11 @@ private:
     /**
      * @brief all available plugins with metadata
      */
-    QVariantHash m_allPlugins;
+    QHash<QString, PluginRepresentation *> m_allPlugins;
     /**
      * @brief list of plugins
      */
-    QHash<int, PluginInterface *> m_plugins;
-    /**
-     * @brief list of tab plugins
-     */
-    QHash<int, TabPluginInterface *> m_tabPlugins;
+    QHash<int, QuadroPluginInterface *> m_plugins;
     /**
      * @brief init plugin from default paths
      * @tparam T             plugin class depending on the type of plugin
@@ -130,6 +130,8 @@ private:
      */
     template<class T> T *createPlugin(const QString _name, const QString _location)
     {
+        qCDebug(LOG_LIB) << "Create plugin" << _name << "from" << _location;
+
         QString libraryName = QString("%1/lib%2.so").arg(_location).arg(_name);
         QPluginLoader loader(libraryName, this);
         qCInfo(LOG_LIB) << "Loading" << libraryName;
@@ -159,7 +161,7 @@ private:
     template<class T, class Adaptor> void createPluginDBusSession(const QString _name, const int _index,
                                                                   T *_plugin)
     {
-        qCDebug(LOG_LIB) << "Plugin name for DBus session" << _name;
+        qCDebug(LOG_LIB) << "Plugin name for DBus session" << _name << _index;
 
         QDBusConnection bus = QDBusConnection::sessionBus();
         if (!bus.registerService(DBUS_PLUGIN_SERVICE)) {
@@ -172,6 +174,33 @@ private:
             qCWarning(LOG_LIB) << "Could not register library object";
             qCWarning(LOG_LIB) << bus.lastError().message();
         }
+    };
+    /**
+     * @brief generate plugin index
+     * @param _plugin        pointer to plugin item
+     * @return generated plugin index
+     */
+    int generateIndex(QuadroPluginInterface *_plugin);
+    /**
+     * @brief create plugin, its dbus service and register it
+     * @tparam T             plugin class depending on the type of plugin
+     * @tparam Adaptor       DBus adaptor for the specified type of plugin
+     * @param _name          plugin name
+     * @param _location      plugin location
+     * @return plugin registered index
+     */
+    template<class T, class Adaptor> int registerPlugin(const QString _name, const QString _location)
+    {
+        qCDebug(LOG_LIB) << "Register plugin" << _name << "from" << _location;
+
+        int index = -1;
+        T *item = createPlugin<T>(_name, _location);
+        if (item == nullptr)
+            return index;
+        index = generateIndex(item);
+        createPluginDBusSession<T, Adaptor>(_name, index, item);
+
+        return index;
     };
 };
 

@@ -184,7 +184,7 @@ void MainWindow::clearTabs()
         QString tab = plugin[QString("Plugin")].toString();
         QString config = m_core->plugin()->configurationPath(
             QString("%1.tab-%2.conf").arg(tab).arg(tabs.indexOf(tab)));
-        m_core->plugin()->unloadPlugin(tab, index, config);
+        m_core->plugin()->unloadPlugin(index, config);
     }
 }
 
@@ -198,11 +198,9 @@ void MainWindow::initTabs()
         if (index == -1) {
             qCWarning(LOG_UI) << "Could not find tab" << tab;
         } else {
+            m_core->plugin()->initPlugin(index, m_configuration,
+                                         QString("%1.tab-%2.conf").arg(tab).arg(tabs.indexOf(tab)));
             TabPluginInterface *item = m_core->plugin()->tabPlugin(index);
-            item->setArgs(m_core, m_configuration);
-            item->readSettings(m_core->plugin()->configurationPath(
-                QString("%1.tab-%2.conf").arg(tab).arg(tabs.indexOf(tab))));
-            item->init();
             ui->stackedWidget->addWidget(item->widget());
             tabActions.append(ui->toolBar->addAction(item->name()));
             // generate metadata

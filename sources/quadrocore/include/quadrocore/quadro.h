@@ -39,6 +39,7 @@
 #include "pluginadaptor.h"
 #include "plugincore.h"
 #include "plugininterface.h"
+#include "pluginrepresentation.h"
 #include "quadroadaptor.h"
 #include "quadrocore.h"
 #include "quadrodebug.h"
