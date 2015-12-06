@@ -26,10 +26,7 @@
 #ifndef TABPLUGINADAPTOR_H
 #define TABPLUGINADAPTOR_H
 
-#include <QDBusAbstractAdaptor>
-#include <QObject>
-
-#include "config.h"
+#include "quadropluginadaptor.h"
 
 
 class TabPluginInterface;
@@ -37,7 +34,7 @@ class TabPluginInterface;
 /**
  * @brief The PluginAdaptor class provides plugin DBus adaptor
  */
-class TabPluginAdaptor : public QDBusAbstractAdaptor
+class TabPluginAdaptor : public QuadroPluginAdaptor
 {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", DBUS_PLUGIN_INTERFACE)
@@ -55,38 +52,7 @@ public:
     virtual ~TabPluginAdaptor();
 
 public slots:
-    /**
-     * @brief ping interface
-     * @return true if interface is active
-     */
-    bool Ping() const;
     // public method interface
-    /**
-     * @brief plugin name
-     * @return name
-     */
-    QString Name() const;
-    /**
-     * @brief init plugin
-     */
-    void Init();
-    /**
-     * @brief close the plugin
-     * @param configPath     full path to settings file
-     */
-    void Quit(const QString configPath);
-    /**
-     * @brief read plugin settings from configuration file
-     * @param configPath     full path to settings file
-     */
-    void ReadSettings(const QString configPath);
-    /**
-     * @brief save plugin settings to configuration file
-     * @param configPath     full path to settings file
-     * @return true if settings has been saved successfully
-     * @return false if there was an error while settings sync
-     */
-    bool SaveSettings(const QString configPath);
     /**
      * @brief update data. May be called to force update
      */

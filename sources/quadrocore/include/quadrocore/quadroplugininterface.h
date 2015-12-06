@@ -26,10 +26,13 @@
 #ifndef QUADROPLUGININTERFACE_H
 #define QUADROPLUGININTERFACE_H
 
-#include <QWidget>
+#include <QtPlugin>
+
+#include "config.h"
 
 
 class QuadroCore;
+class QWidget;
 
 /**
  * @brief The QuadroPluginInterface class provides generic plugin interfaces
@@ -83,6 +86,8 @@ public:
      */
     virtual void setArgs(QuadroCore *_core, const QVariantHash _settings) = 0;
 };
+
+Q_DECLARE_INTERFACE(QuadroPluginInterface, GENERIC_PLUGIN_INTERFACE)
 
 
 #endif /* QUADROPLUGININTERFACE_H */

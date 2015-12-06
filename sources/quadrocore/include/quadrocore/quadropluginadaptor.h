@@ -15,7 +15,7 @@
  *   along with quadro. If not, see http://www.gnu.org/licenses/           *
  ***************************************************************************/
 /**
- * @file tabplugininterface.h
+ * @file quadropluginadaptor.h
  * Header of quadro library
  * @author Evgeniy Alekseev
  * @copyright GPLv3
@@ -23,71 +23,78 @@
  */
 
 
-#ifndef TABPLUGININTERFACE_H
-#define TABPLUGININTERFACE_H
+#ifndef QUADROPLUGINADAPTOR_H
+#define QUADROPLUGINADAPTOR_H
 
-#include "quadroplugininterface.h"
+#include <QDBusAbstractAdaptor>
+#include <QObject>
 
+#include "config.h"
+
+
+class QuadroPluginInterface;
 
 /**
- * @brief The TabPluginInterface class provides core part of plugin run in own tab
+ * @brief The QuadroPluginAdaptor class provides plugin DBus adaptor
  */
-class TabPluginInterface : public QuadroPluginInterface
+class QuadroPluginAdaptor : public QDBusAbstractAdaptor
 {
+    Q_OBJECT
+    Q_CLASSINFO("D-Bus Interface", DBUS_PLUGIN_INTERFACE)
+
 public:
     /**
-     * @brief TabPluginInterface class destructor
+     * @brief QuadroPluginAdaptor class constructor
+     * @param parent         pointer to parent object
+     * @param plugin         pointer to plugin item
      */
-    virtual ~TabPluginInterface() {};
-    // get methods
+    explicit QuadroPluginAdaptor(QObject *parent, QuadroPluginInterface *plugin);
     /**
-     * @brief pointer to configuration widget. If returning pointer will not be
-     * nullptr the additional configuration page will be created
-     * @return pointer to configuration widget
+     * @brief QuadroPluginAdaptor class destructor
      */
-    virtual QWidget *configWidget() = 0;
+    virtual ~QuadroPluginAdaptor();
+
+public slots:
     /**
-     * @brief plugin name which will be shown in tab
+     * @brief ping interface
+     * @return true if interface is active
+     */
+    bool Ping() const;
+    // public method interface
+    /**
+     * @brief plugin name
      * @return name
      */
-    virtual QString name() const = 0;
+    QString Name() const;
     /**
-     * @brief plugin ui object
-     * @return pointer to QWidget object
+     * @brief init plugin
      */
-    virtual QWidget *widget() = 0;
-    // main methods
+    void Init();
     /**
-     * @brief init the plugin
+     * @brief close the plugin
+     * @param configPath     full path to settings file
      */
-    virtual void init() = 0;
-    /**
-     * @brief quit from plugin
-     * @param _configPath    full path to settings file
-     */
-    virtual void quit(const QString _configPath) = 0;
+    void Quit(const QString configPath);
     /**
      * @brief read plugin settings from configuration file
-     * @param _configPath    full path to settings file
+     * @param configPath     full path to settings file
      */
-    virtual void readSettings(const QString _configPath) = 0;
+    void ReadSettings(const QString configPath);
     /**
      * @brief save plugin settings to configuration file
-     * @param _configPath    full path to settings file
+     * @param configPath     full path to settings file
      * @return true if settings has been saved successfully
      * @return false if there was an error while settings sync
      */
-    virtual bool saveSettings(const QString _configPath) = 0;
+    bool SaveSettings(const QString configPath);
+
+private:
+    // properties
     /**
-     * @brief additional method which will be called to pass required args
-     * @remark this method will be called before TabPluginInterface::init()
-     * @param _core          pointer to core object
-     * @param _settings      application settings
+     * @brief pointer to the plugin
      */
-    virtual void setArgs(QuadroCore *_core, const QVariantHash _settings) = 0;
+    QuadroPluginInterface *m_plugin = nullptr;
 };
 
-Q_DECLARE_INTERFACE(TabPluginInterface, TAB_PLUGIN_INTERFACE)
 
-
-#endif /* TABPLUGININTERFACE_H */
+#endif /* QuadroPLUGINADAPTOR_H */

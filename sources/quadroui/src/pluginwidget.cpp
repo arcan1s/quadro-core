@@ -117,7 +117,8 @@ void PluginWidget::updateRequired()
 void PluginWidget::initPluginActions()
 {
     m_timer = new QTimer(this);
-    m_timer->setInterval(m_interface->updateInterval());
+    m_timer->setInterval(m_interface->updateInterval() >= MINIMAL_TIMER
+                         ? m_interface->updateInterval() : MINIMAL_TIMER);
     m_timer->setSingleShot(false);
     if (m_interface->updateInterval() != 0)
         m_timer->start();

@@ -43,6 +43,7 @@
 #include "quadroadaptor.h"
 #include "quadrocore.h"
 #include "quadrodebug.h"
+#include "quadropluginadaptor.h"
 #include "quadroplugininterface.h"
 #include "recentlycore.h"
 #include "standaloneapplicationitem.h"

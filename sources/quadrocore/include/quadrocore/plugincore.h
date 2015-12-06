@@ -33,11 +33,10 @@
 
 #include "config.h"
 #include "quadrodebug.h"
+#include "pluginrepresentation.h"
 
 
-class PluginInterface;
 class PluginRepresentation;
-class TabPluginInterface;
 class QuadroCore;
 class QuadroPluginInterface;
 
@@ -79,6 +78,11 @@ public:
     void initPlugin(const int _index, const QVariantHash _configuration,
                     const QString _configPath);
     /**
+     * @brief get list of all known plugins in their representations
+     * @return list of PluginRepresentation objects
+     */
+    QHash<QString, PluginRepresentation *> knownPlugins() const;
+    /**
      * @brief load plugin by name
      * @param _plugin        plugin name
      * @return unique index of loaded plugin or -1 if no plugin has been loaded
@@ -94,17 +98,29 @@ public:
     bool unloadPlugin(const int _index, const QString _configPath);
     // plugin methods
     /**
-     * @brief find plugin
+     * @brief find initialized plugin by index
+     * @tparam T             plugin class
      * @param _index         plugin index
-     * @return pointer to plugin or nullptr
+     * @return pointer to plugin or nullptr in case if cast is not possible
      */
-    PluginInterface *plugin(const int _index);
-    /**
-     * @brief find tab plugin
-     * @param _index         plugin index
-     * @return pointer to tab plugin or nullptr
-     */
-    TabPluginInterface *tabPlugin(const int _index);
+    template<class T> T *plugin(const int _index)
+    {
+        qCDebug(LOG_LIB) << "Plugin index" << _index;
+
+        if (!m_plugins.contains(_index)) {
+            qCWarning(LOG_LIB) << "Invalid index" << _index;
+            return nullptr;
+        }
+        T *item = nullptr;
+        try {
+            item = dynamic_cast<T *>(m_plugins[_index]);
+        } catch (std::bad_cast &bc) {
+            qCWarning(LOG_LIB) << "Could not cast index" << _index <<
+                               "to requested interface" << bc.what();
+        }
+
+        return item;
+    };
 
 public slots:
     /**

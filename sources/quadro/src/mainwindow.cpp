@@ -200,7 +200,7 @@ void MainWindow::initTabs()
         } else {
             m_core->plugin()->initPlugin(index, m_configuration,
                                          QString("%1.tab-%2.conf").arg(tab).arg(tabs.indexOf(tab)));
-            TabPluginInterface *item = m_core->plugin()->tabPlugin(index);
+            auto item = m_core->plugin()->plugin<TabPluginInterface>(index);
             ui->stackedWidget->addWidget(item->widget());
             tabActions.append(ui->toolBar->addAction(item->name()));
             // generate metadata

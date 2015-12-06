@@ -25,7 +25,6 @@
 #include "quadrocore/quadro.h"
 
 #include <QDir>
-#include <QSettings>
 #include <QStandardPaths>
 
 
@@ -99,6 +98,15 @@ void PluginCore::initPlugin(const int _index, const QVariantHash _configuration,
 
 
 /**
+ * @fn knownPlugins
+ */
+QHash<QString, PluginRepresentation *> PluginCore::knownPlugins() const
+{
+    return m_allPlugins;
+}
+
+
+/**
  * @fn loadPlugin
  */
 int PluginCore::loadPlugin(const QString _plugin)
@@ -117,6 +125,8 @@ int PluginCore::loadPlugin(const QString _plugin)
         index = registerPlugin<PluginInterface, PluginAdaptor>(_plugin, location);
     else if (type == QString("tabplugin"))
         index = registerPlugin<TabPluginInterface, TabPluginAdaptor>(_plugin, location);
+    else if (type == QString("genericplugin"))
+        index = registerPlugin<QuadroPluginInterface, QuadroPluginAdaptor>(_plugin, location);
     else
         qCWarning(LOG_LIB) << "Invalid plugin type" << type;
 
@@ -146,52 +156,6 @@ bool PluginCore::unloadPlugin(const int _index, const QString _configPath)
 
 
 /**
- * @fn plugin
- */
-PluginInterface *PluginCore::plugin(const int _index)
-{
-    qCDebug(LOG_LIB) << "Plugin index" << _index;
-
-    if (!m_plugins.contains(_index)) {
-        qCWarning(LOG_LIB) << "Invalid index" << _index;
-        return nullptr;
-    }
-    PluginInterface *item = nullptr;
-    try {
-        item = dynamic_cast<PluginInterface *>(m_plugins[_index]);
-    } catch (std::bad_cast &bc) {
-        qCWarning(LOG_LIB) << "Could not cast index" << _index <<
-                           "to PluginInterface" << bc.what();
-    }
-
-    return item;
-}
-
-
-/**
- * @fn tabPlugin
- */
-TabPluginInterface *PluginCore::tabPlugin(const int _index)
-{
-    qCDebug(LOG_LIB) << "Plugin index" << _index;
-
-    if (!m_plugins.contains(_index)) {
-        qCWarning(LOG_LIB) << "Invalid index" << _index;
-        return nullptr;
-    }
-    TabPluginInterface *item = nullptr;
-    try {
-        item = dynamic_cast<TabPluginInterface *>(m_plugins[_index]);
-    } catch (std::bad_cast &bc) {
-        qCWarning(LOG_LIB) << "Could not cast index" << _index <<
-                           "to PluginInterface" << bc.what();
-    }
-
-    return item;
-}
-
-
-/**
  * @fn initPlugins
  */
 void PluginCore::initPlugins()
@@ -210,7 +174,7 @@ void PluginCore::initPlugins()
             QString fileName = QFileInfo(QDir(loc), entry).absoluteFilePath();
             qCInfo(LOG_LIB) << "Desktop" << fileName;
             // check settings
-            PluginRepresentation *repr = PluginRepresentation::fromFile(fileName);
+            auto repr = PluginRepresentation::fromFile(fileName);
             if ((repr == nullptr)
                 || (m_allPlugins.contains(repr->name())))
                 continue;

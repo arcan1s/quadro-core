@@ -121,6 +121,11 @@
  */
 #define DESKTOP_INTERFACE "core.quadro.desktopplugin/@PROJECT_VERSION_MAJOR@.@PROJECT_VERSION_MINOR@"
 /**
+ * @def GENERIC_PLUGIN_INTERFACE
+ * generic plugin interface name
+ */
+#define GENERIC_PLUGIN_INTERFACE "core.quadro.genericplugin/@PROJECT_VERSION_MAJOR@.@PROJECT_VERSION_MINOR@"
+/**
  * @def PLUGIN_INTERFACE
  * plugin interface name
  */

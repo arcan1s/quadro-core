@@ -73,6 +73,9 @@ PluginRepresentation *PluginRepresentation::fromFile(const QString _filePath,
     } else if (settings.childGroups().contains(QString("Quadro tabplugin"))) {
         group = QString("tabplugin");
         configGroup = QString("Quadro tabplugin");
+    } else if (settings.childGroups().contains(QString("Quadro genericplugin"))) {
+        group = QString("genericplugin");
+        configGroup = QString("Quadro genericplugin");
     } else {
         qCWarning(LOG_LIB) << "No known group found";
         return nullptr;
@@ -81,7 +84,6 @@ PluginRepresentation *PluginRepresentation::fromFile(const QString _filePath,
     settings.beginGroup(configGroup);
     QString comment = settings.value(QString("Comment"), QString("")).toString();
     QString name = settings.value(QString("Name"), QString("none")).toString();
-    QString location = QFileInfo(_filePath).absolutePath();
     settings.endGroup();
 
     return new PluginRepresentation(comment, group,

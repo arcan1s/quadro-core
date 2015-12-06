@@ -21,7 +21,7 @@
 
 #include <QDBusAbstractAdaptor>
 
-#include <quadrocore/config.h>
+#include "config.h"
 
 
 class MainWindow;

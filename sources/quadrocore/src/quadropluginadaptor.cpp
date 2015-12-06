@@ -15,7 +15,7 @@
  *   along with quadro. If not, see http://www.gnu.org/licenses/           *
  ***************************************************************************/
 /**
- * @file tabpluginadaptor.cpp
+ * @file quadropluginadaptor.cpp
  * Source code of quadro library
  * @author Evgeniy Alekseev
  * @copyright GPLv3
@@ -27,13 +27,13 @@
 
 
 /**
- * @class TabPluginAdaptor
+ * @class QuadroPluginAdaptor
  */
 /**
- * @fn TabPluginAdaptor
+ * @fn QuadroPluginAdaptor
  */
-TabPluginAdaptor::TabPluginAdaptor(QObject *parent, TabPluginInterface *plugin)
-    : QuadroPluginAdaptor(parent, plugin),
+QuadroPluginAdaptor::QuadroPluginAdaptor(QObject *parent, QuadroPluginInterface *plugin)
+    : QDBusAbstractAdaptor(parent),
       m_plugin(plugin)
 {
     qCDebug(LOG_DBUS) << __PRETTY_FUNCTION__;
@@ -41,18 +41,69 @@ TabPluginAdaptor::TabPluginAdaptor(QObject *parent, TabPluginInterface *plugin)
 
 
 /**
- * @fn ~TabPluginAdaptor
+ * @fn ~QuadroPluginAdaptor
  */
-TabPluginAdaptor::~TabPluginAdaptor()
+QuadroPluginAdaptor::~QuadroPluginAdaptor()
 {
     qCDebug(LOG_DBUS) << __PRETTY_FUNCTION__;
 }
 
 
 /**
- * @fn Update
+ * @fn Ping
  */
-void TabPluginAdaptor::Update()
+bool QuadroPluginAdaptor::Ping() const
+{
+    return true;
+}
+
+
+/**
+ * @fn Name
+ */
+QString QuadroPluginAdaptor::Name() const
+{
+    return m_plugin->name();
+}
+
+
+/**
+ * @fn Init
+ */
+void QuadroPluginAdaptor::Init()
 {
     return m_plugin->init();
+}
+
+
+/**
+ * @fn Quit
+ */
+void QuadroPluginAdaptor::Quit(const QString configPath)
+{
+    qCDebug(LOG_DBUS) << "Configuration file" << configPath;
+
+    return m_plugin->quit(configPath);
+}
+
+
+/**
+ * @fn ReadSettings
+ */
+void QuadroPluginAdaptor::ReadSettings(const QString configPath)
+{
+    qCDebug(LOG_DBUS) << "Configuration file" << configPath;
+
+    return m_plugin->readSettings(configPath);
+}
+
+
+/**
+ * @fn SaveSettings
+ */
+bool QuadroPluginAdaptor::SaveSettings(const QString configPath)
+{
+    qCDebug(LOG_DBUS) << "Configuration file" << configPath;
+
+    return m_plugin->saveSettings(configPath);
 }
