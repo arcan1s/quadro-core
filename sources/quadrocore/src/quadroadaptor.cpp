@@ -63,11 +63,11 @@ QStringList QuadroAdaptor::Favorites() const
 /**
  * @fn Icon
  */
-QString QuadroAdaptor::Icon(const QString _file) const
+QString QuadroAdaptor::Icon(const QString file) const
 {
-    qCDebug(LOG_DBUS) << "File name" << _file;
+    qCDebug(LOG_DBUS) << "File name" << file;
 
-    return m_core->filemanager()->iconNameByFileName(_file);
+    return m_core->filemanager()->iconNameByFileName(file);
 }
 
 
@@ -83,11 +83,11 @@ bool QuadroAdaptor::IsKnownPlatform() const
 /**
  * @fn MIME
  */
-QString QuadroAdaptor::MIME(const QString _file) const
+QString QuadroAdaptor::MIME(const QString file) const
 {
-    qCDebug(LOG_DBUS) << "File name" << _file;
+    qCDebug(LOG_DBUS) << "File name" << file;
 
-    return m_core->filemanager()->mimeByFileName(_file).name();
+    return m_core->filemanager()->mimeByFileName(file).name();
 }
 
 
@@ -130,14 +130,14 @@ void QuadroAdaptor::UpdateRecent() const
 /**
  * @fn WIdForPID
  */
-QStringList QuadroAdaptor::WIdForPID(const long long _pid)
+QStringList QuadroAdaptor::WIdForPID(const long long pid)
 {
-    qCDebug(LOG_DBUS) << "Search for PID" << _pid;
+    qCDebug(LOG_DBUS) << "Search for PID" << pid;
 
     if (!IsKnownPlatform())
         return QStringList();
 
-    QList<unsigned long long> wIds = m_core->platformPlugin()->getWindowByPid(_pid);
+    QList<unsigned long long> wIds = m_core->platformPlugin()->getWindowByPid(pid);
     QStringList output;
     for (auto id : wIds)
         output.append(QString::number(id));

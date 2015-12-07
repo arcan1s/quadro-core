@@ -15,7 +15,7 @@
  *   along with quadro. If not, see http://www.gnu.org/licenses/           *
  ***************************************************************************/
 /**
- * @file pluginadaptor.h
+ * @file searchbar.h
  * Header of quadro library
  * @author Evgeniy Alekseev
  * @copyright GPLv3
@@ -23,74 +23,51 @@
  */
 
 
-#ifndef PLUGINADAPTOR_H
-#define PLUGINADAPTOR_H
+#ifndef SEARCHBAR_H
+#define SEARCHBAR_H
 
-#include <QDBusVariant>
+#include <QLineEdit>
 
-#include "quadropluginadaptor.h"
-
-
-class PluginInterface;
 
 /**
- * @brief The PluginAdaptor class provides plugin DBus adaptor
+ * @brief The SearchBar class provides search line for plugins
  */
-class PluginAdaptor : public QuadroPluginAdaptor
+class SearchBar : public QLineEdit
 {
     Q_OBJECT
-    Q_CLASSINFO("D-Bus Interface", DBUS_PLUGIN_INTERFACE)
 
 public:
     /**
-     * @brief PluginAdaptor class constructor
+     * @brief SearchBar class constructor
      * @param parent         pointer to parent object
-     * @param plugin         pointer to plugin item
      */
-    explicit PluginAdaptor(QObject *parent, PluginInterface *plugin);
+    explicit SearchBar(QWidget *parent);
     /**
-     * @brief PluginAdaptor class destructor
+     * @brief SearchBar class destructor
      */
-    virtual ~PluginAdaptor();
+    virtual ~SearchBar();
+    /**
+     * @brief method which should be called to pass key press event
+     * @param _event         pointer to event object
+     */
+    void keyPressed(QKeyEvent *_event);
 
-public slots:
-    // public method interface
+protected:
     /**
-     * @brief plugin background
-     * @return background
+     * @brief method which will be called on key press event
+     * @param _pressedKey    pointer to pressed key
      */
-    QString Background() const;
-    /**
-     * @brief plugin data in text
-     * @return data
-     */
-    QString Data() const;
-    /**
-     * @brief called if plugin has been clicked
-     */
-    Q_NOREPLY void Action();
-    /**
-     * @brief get plugin minimal size
-     * @return list of minimal size in format [width, height]
-     */
-    QDBusVariant MinimalSize() const;
-    /**
-     * @brief update data. May be called to force update
-     */
-    Q_NOREPLY void Update();
-    /**
-     * @brief plugin update interval
-     * @return update interval in milliseconds
-     */
-    int UpdateInterval() const;
+    void keyPressEvent(QKeyEvent *_pressedKey);
 
 private:
-    // properties
     /**
-     * @brief pointer to the plugin
+     * @brief pass text to line
+     * @remark this method should not get any modifiers as input
+     * @param _text          generated text
+     * @param _mods          pressed key modifiers
      */
-    PluginInterface *m_plugin = nullptr;
+    void updateText(const QString _text, Qt::KeyboardModifiers _mods);
 };
 
 
-#endif /* PLUGINADAPTOR_H */
+#endif /* SEARCHBAR_H */

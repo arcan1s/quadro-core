@@ -69,12 +69,12 @@ public slots:
     /**
      * @brief init plugin
      */
-    void Init();
+    Q_NOREPLY void Init();
     /**
      * @brief close the plugin
      * @param configPath     full path to settings file
      */
-    void Quit(const QString configPath);
+    Q_NOREPLY void Quit(const QString configPath);
     /**
      * @brief read plugin settings from configuration file
      * @param configPath     full path to settings file

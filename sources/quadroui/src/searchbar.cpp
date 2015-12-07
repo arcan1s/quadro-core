@@ -15,7 +15,7 @@
  *   along with quadro. If not, see http://www.gnu.org/licenses/           *
  ***************************************************************************/
 /**
- * @file pluginadaptor.cpp
+ * @file searchbar.cpp
  * Source code of quadro library
  * @author Evgeniy Alekseev
  * @copyright GPLv3
@@ -23,81 +23,79 @@
  */
 
 
-#include "quadrocore/quadro.h"
+#include "quadroui/quadroui.h"
+
+#include <QKeyEvent>
+
+#include <quadrocore/quadrodebug.h>
 
 
 /**
- * @class PluginAdaptor
+ * @class SearchBar
  */
 /**
- * @fn PluginAdaptor
+ * @fn SearchBar
  */
-PluginAdaptor::PluginAdaptor(QObject *parent, PluginInterface *plugin)
-    : QuadroPluginAdaptor(parent, plugin),
-      m_plugin(plugin)
+SearchBar::SearchBar(QWidget *parent)
+    : QLineEdit(parent)
 {
-    qCDebug(LOG_DBUS) << __PRETTY_FUNCTION__;
+    qCDebug(LOG_UILIB) << __PRETTY_FUNCTION__;
+
+    setAlignment(Qt::AlignCenter);
+    setContextMenuPolicy(Qt::NoContextMenu);
+    setFocusPolicy(Qt::NoFocus);
+    setReadOnly(true);
 }
 
 
 /**
- * @fn ~PluginAdaptor
+ * @fn ~SearchBar
  */
-PluginAdaptor::~PluginAdaptor()
+SearchBar::~SearchBar()
 {
-    qCDebug(LOG_DBUS) << __PRETTY_FUNCTION__;
+    qCDebug(LOG_UILIB) << __PRETTY_FUNCTION__;
 }
 
 
 /**
- * @fn Background
+ * @fn keyPressed
  */
-QString PluginAdaptor::Background() const
-{
-    return m_plugin->background();
+void SearchBar::keyPressed(QKeyEvent *_event) {
+    if (_event->key() == Qt::Key_Backspace) {
+        backspace();
+    } else if ((_event->key() == Qt::Key_Return)
+               || (_event->key() == Qt::Key_Enter)) {
+        emit(returnPressed());
+    } else if (_event->key() == Qt::Key_Delete) {
+        clear();
+    } else {
+        updateText(_event->text(), _event->modifiers());
+    }
 }
 
 
 /**
- * @fn Data
+ * @fn keyPressEvent
  */
-QString PluginAdaptor::Data() const
+void SearchBar::keyPressEvent(QKeyEvent *_pressedKey)
 {
-    return m_plugin->data();
+    keyPressed(_pressedKey);
+
+    return QLineEdit::keyPressEvent(_pressedKey);
 }
 
 
 /**
- * @fn Action
+ * @fn updateText
  */
-void PluginAdaptor::Action()
+void SearchBar::updateText(const QString _text, Qt::KeyboardModifiers _mods)
 {
-    return m_plugin->action();
-}
+    qCDebug(LOG_UILIB) << "Received text" << _text;
+    if ((_mods != Qt::NoModifier)
+        && (_mods != Qt::ShiftModifier)) {
+        qCInfo(LOG_UILIB) << "Skip due to modifiers enabled";
+        return;
+    }
 
-
-/**
- * @fn MinimalSize
- */
-QDBusVariant PluginAdaptor::MinimalSize() const
-{
-    return QDBusVariant(QVariant(m_plugin->minimalSize()));
-}
-
-
-/**
- * @fn Update
- */
-void PluginAdaptor::Update()
-{
-    return m_plugin->update();
-}
-
-
-/**
- * @fn UpdateInterval
- */
-int PluginAdaptor::UpdateInterval() const
-{
-    return m_plugin->updateInterval();
+    return setText(text() + _text.toLower());
 }

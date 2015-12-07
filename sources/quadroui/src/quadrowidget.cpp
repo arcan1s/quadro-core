@@ -80,6 +80,8 @@ void QuadroWidget::clearLayout()
         item->widget()->deleteLater();
         delete item;
     }
+
+    setFocus();
 }
 
 

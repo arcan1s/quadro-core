@@ -56,7 +56,7 @@ public slots:
     /**
      * @brief update data. May be called to force update
      */
-    void Update();
+    Q_NOREPLY void Update();
 
 private:
     // properties

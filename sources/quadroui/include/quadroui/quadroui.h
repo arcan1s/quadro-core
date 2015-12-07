@@ -34,6 +34,7 @@
 #include "plugincontainer.h"
 #include "pluginwidget.h"
 #include "quadrowidget.h"
+#include "searchbar.h"
 #include "standaloneappwidget.h"
 
 #endif /* QUADROUI_H */
