@@ -101,9 +101,18 @@ void QuadroPluginAdaptor::ReadSettings(const QString configPath)
 /**
  * @fn SaveSettings
  */
-bool QuadroPluginAdaptor::SaveSettings(const QString configPath)
+void QuadroPluginAdaptor::SaveSettings()
+{
+    return m_plugin->saveSettings();
+}
+
+
+/**
+ * @fn WriteSettings
+ */
+bool QuadroPluginAdaptor::WriteSettings(const QString configPath) const
 {
     qCDebug(LOG_DBUS) << "Configuration file" << configPath;
 
-    return m_plugin->saveSettings(configPath);
+    return m_plugin->writeSettings(configPath);
 }

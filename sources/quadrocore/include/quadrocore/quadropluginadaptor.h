@@ -81,12 +81,16 @@ public slots:
      */
     void ReadSettings(const QString configPath);
     /**
+     * @brief save settings from configuration UI
+     */
+    void SaveSettings();
+    /**
      * @brief save plugin settings to configuration file
      * @param configPath     full path to settings file
      * @return true if settings has been saved successfully
      * @return false if there was an error while settings sync
      */
-    bool SaveSettings(const QString configPath);
+    bool WriteSettings(const QString configPath) const;
 
 private:
     // properties

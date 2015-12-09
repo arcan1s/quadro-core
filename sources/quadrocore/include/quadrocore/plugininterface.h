@@ -49,59 +49,20 @@ public:
      */
     virtual QString background() const = 0;
     /**
-     * @brief pointer to configuration widget. If returning pointer will not be
-     * nullptr the additional configuration page will be created
-     * @return pointer to configuration widget
-     */
-    virtual QWidget *configWidget() = 0;
-    /**
      * @brief plugin data in text
      * @return data
      */
     virtual QString data() const = 0;
-    /**
-     * @brief plugin name
-     * @return name
-     */
-    virtual QString name() const = 0;
     // main methods
     /**
      * @brief method which will be called when plugin is activated
      */
     virtual void action() const = 0;
     /**
-     * @brief init the plugin
-     */
-    virtual void init() = 0;
-    /**
      * @brief minimal size
      * @return minimal size in application grids
      */
     virtual QSize minimalSize() const = 0;
-    /**
-     * @brief quit from plugin
-     * @param _configPath    full path to settings file
-     */
-    virtual void quit(const QString _configPath) = 0;
-    /**
-     * @brief read plugin settings from configuration file
-     * @param _configPath    full path to settings file
-     */
-    virtual void readSettings(const QString _configPath) = 0;
-    /**
-     * @brief save plugin settings to configuration file
-     * @param _configPath    full path to settings file
-     * @return true if settings has been saved successfully
-     * @return false if there was an error while settings sync
-     */
-    virtual bool saveSettings(const QString _configPath) = 0;
-    /**
-     * @brief additional method which will be called to pass required args
-     * @remark this method will be called before PluginInterface::init()
-     * @param _core          pointer to core object
-     * @param _settings      application settings
-     */
-    virtual void setArgs(QuadroCore *_core, const QVariantHash _settings) = 0;
     /**
      * @brief update data
      */
