@@ -170,21 +170,19 @@ private:
      * @brief create DBus session for specified plugin
      * @tparam T             plugin class depending on the type of plugin
      * @tparam Adaptor       DBus adaptor for the specified type of plugin
-     * @param _name          plugin name
      * @param _index         plugin index
      * @param _plugin        pointer to plugin object
      */
-    template<class T, class Adaptor> void createPluginDBusSession(const QString _name, const int _index,
-                                                                  T *_plugin)
+    template<class T, class Adaptor> void createPluginDBusSession(const int _index, T *_plugin)
     {
-        qCDebug(LOG_LIB) << "Plugin name for DBus session" << _name << _index;
+        qCDebug(LOG_LIB) << "Plugin name for DBus session" << _index;
 
         QDBusConnection bus = QDBusConnection::sessionBus();
         if (!bus.registerService(DBUS_PLUGIN_SERVICE)) {
             qCWarning(LOG_LIB) << "Could not register service";
             qCWarning(LOG_LIB) << bus.lastError().message();
         }
-        if (!bus.registerObject(QString("/%1/%2").arg(_name).arg(_index),
+        if (!bus.registerObject(QString("/%1").arg(_index),
                                 new Adaptor(this, _plugin),
                                 QDBusConnection::ExportAllContents)) {
             qCWarning(LOG_LIB) << "Could not register library object";
@@ -214,7 +212,7 @@ private:
         if (item == nullptr)
             return index;
         index = generateIndex(item);
-        createPluginDBusSession<T, Adaptor>(_name, index, item);
+        createPluginDBusSession<T, Adaptor>(index, item);
 
         return index;
     };

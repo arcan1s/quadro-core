@@ -22,8 +22,6 @@
 #include <QPushButton>
 #include <QSettings>
 
-#include <language/language.h>
-
 #include <quadrocore/quadrodebug.h>
 
 #include "mainwindow.h"
@@ -38,7 +36,6 @@ SettingsWindow::SettingsWindow(QWidget *parent, const QString configFile)
     qCDebug(LOG_UI) << __PRETTY_FUNCTION__;
 
     ui->setupUi(this);
-    addLanguages();
     createActions();
 }
 
@@ -65,10 +62,8 @@ QVariantHash SettingsWindow::getSettings(QString fileName)
     QVariantHash config;
     QSettings settings(fileName, QSettings::IniFormat);
 
-    config[QString("Language")] = Language::defineLanguage(fileName, QString(""));
     settings.beginGroup(QString("Global"));
     config[QString("GridSize")] = settings.value(QString("GridSize"), 150.0);
-    config[QString("Language")] = settings.value(QString("Language"), config[QString("Language")]);
     config[QString("RecentItemsCount")] = settings.value(QString("RecentItemsCount"), 20);
     config[QString("ShowHidden")] = settings.value(QString("ShowHidden"), false);
     config[QString("Tabs")] = settings.value(QString("Tabs"), QStringList() <<
@@ -121,13 +116,6 @@ void SettingsWindow::keyPressEvent(QKeyEvent *pressedKey)
 }
 
 
-void SettingsWindow::addLanguages()
-{
-    ui->comboBox_language->clear();
-    ui->comboBox_language->addItems(Language::getAvailableLanguages());
-}
-
-
 void SettingsWindow::changePage(QTreeWidgetItem *current, QTreeWidgetItem *previous)
 {
     Q_UNUSED(previous);
@@ -147,7 +135,6 @@ void SettingsWindow::saveSettings()
 
     settings.beginGroup(QString("Global"));
     settings.setValue(QString("GridSize"), config[QString("GridSize")]);
-    settings.setValue(QString("Language"), config[QString("Language")]);
     settings.setValue(QString("RecentItemsCount"), config[QString("RecentItemsCount")]);
     settings.setValue(QString("ShowHidden"), config[QString("ShowHidden")]);
     settings.setValue(QString("Tabs"), config[QString("Tabs")]);
@@ -173,7 +160,6 @@ QVariantHash SettingsWindow::readSettings()
     QVariantHash config;
 
     // main tab
-    config[QString("Language")] = ui->comboBox_language->currentText();
     QStringList tabs;
     // TODO tab settings
     config[QString("Tabs")] = tabs;
@@ -188,8 +174,6 @@ QVariantHash SettingsWindow::readSettings()
 void SettingsWindow::setSettings(const QVariantHash config)
 {
     // main tab
-    int index = ui->comboBox_language->findText(config[QString("Language")].toString());
-    ui->comboBox_language->setCurrentIndex(index);
     for (int i=0; i<config[QString("Tabs")].toStringList().count(); i++) {
         // TODO tab settings
     }

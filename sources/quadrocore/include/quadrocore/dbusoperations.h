@@ -57,14 +57,12 @@ namespace DBusOperations
                                       const QVariantList _args = QVariantList());
     /**
      * @brief DBus request to plugin
-     * @param _plugin        plugin name
      * @param _index         plugin index
      * @param _cmd           command which will be sent to DBus
      * @param _args          command arguments if any
      * @return DBusOperations::sendRequest()
      */
-    QVariantList sendRequestToPlugin(const QString _plugin, const int _index,
-                                     const QString _cmd,
+    QVariantList sendRequestToPlugin(const int _index, const QString _cmd,
                                      const QVariantList _args = QVariantList());
     /**
      * @brief DBus request to ui

@@ -51,7 +51,6 @@ protected:
     void keyPressEvent(QKeyEvent *pressedKey);
 
 private slots:
-    void addLanguages();
     void changePage(QTreeWidgetItem *current, QTreeWidgetItem *previous);
     void saveSettings();
 

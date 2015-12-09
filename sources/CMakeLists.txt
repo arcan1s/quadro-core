@@ -34,6 +34,7 @@ option(BUILD_DEB_PACKAGE "Build deb package" OFF)
 option(BUILD_RPM_PACKAGE "Build rpm package" OFF)
 option(ENABLE_WAYLAND_SUPPORT "Build wayland plugin" ON)
 option(ENABLE_XCB_SUPPORT "Build X11 plugin" ON)
+option(UPDATE_TRANSLATIONS "Update source translations" ON)
 # install options
 option (BUILD_DOCS "Build Doxygen documentation" OFF)
 option (BUILD_TESTING "Build unit tests" OFF)

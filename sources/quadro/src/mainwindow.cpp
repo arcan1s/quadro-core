@@ -27,8 +27,6 @@
 #include <QUrl>
 #include <QWindow>
 
-#include <language/language.h>
-
 #include <quadroui/quadroui.h>
 
 #include "settingswindow.h"
@@ -36,11 +34,8 @@
 #include "version.h"
 
 
-MainWindow::MainWindow(QWidget *parent, const QVariantHash args,
-                       QTranslator *qtAppTranslator, QTranslator *appTranslator)
-    : QMainWindow(parent),
-      qtTranslator(qtAppTranslator),
-      translator(appTranslator)
+MainWindow::MainWindow(QWidget *parent, const QVariantHash args)
+    : QMainWindow(parent)
 {
     qSetMessagePattern(LOG_FORMAT);
     qCDebug(LOG_UI) << __PRETTY_FUNCTION__;
@@ -114,15 +109,6 @@ void MainWindow::updateConfiguration(const QVariantHash args)
     m_configuration = settingsWindow->getSettings();
     delete settingsWindow;
     settingsWindow = nullptr;
-
-    // update translation
-    qApp->removeTranslator(translator);
-    QString language = Language::defineLanguage(m_configPath, args[QString("options")].toString());
-    qCInfo(LOG_UI) << "Language is" << language;
-    qtTranslator->load(QString("qt_%1").arg(language), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
-    qApp->installTranslator(qtTranslator);
-    translator->load(QString(":/translations/%1").arg(language));
-    qApp->installTranslator(translator);
 
     createObjects();
     createActions();

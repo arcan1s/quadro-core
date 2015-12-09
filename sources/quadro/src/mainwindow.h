@@ -38,9 +38,7 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent,
-                        const QVariantHash args = QVariantHash(),
-                        QTranslator *qtAppTranslator = nullptr,
-                        QTranslator *appTranslator = nullptr);
+                        const QVariantHash args = QVariantHash());
     virtual ~MainWindow();
 
 public slots:
@@ -76,9 +74,6 @@ private:
     QString m_configPath;
     // library
     QuadroCore *m_core = nullptr;
-    // translators
-    QTranslator *qtTranslator = nullptr;
-    QTranslator *translator = nullptr;
     // configuration
     QVariantHash m_configuration;
     QList<QVariantHash> m_plugins;

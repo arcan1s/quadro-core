@@ -26,8 +26,6 @@
 #include <iostream>
 #include <unistd.h>
 
-#include <language/language.h>
-
 #include "mainwindow.h"
 #include "messages.h"
 #include "version.h"
@@ -71,13 +69,14 @@ int main(int argc, char *argv[])
     QApplication::setQuitOnLastWindowClosed(false);
 
     // reread translations according to flags
-    QString language = Language::defineLanguage(args[QString("config")].toString(),
-            args[QString("options")].toString());
     QTranslator qtTranslator;
-    qtTranslator.load(QString("qt_%1").arg(language), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+    qtTranslator.load(QString("qt_%1").arg(QLocale::system().name()),
+                      QLibraryInfo::location(QLibraryInfo::TranslationsPath));
     a.installTranslator(&qtTranslator);
     QTranslator translator;
-    translator.load(QString(":/translations/%1").arg(language));
+    translator.load(QString("core-quadro_%1").arg(QLocale::system().name()),
+                    QString("%1/%2/%3/%4").arg(ROOT_INSTALL_DIR).arg(DATA_INSTALL_DIR)
+                        .arg(HOME_PATH).arg(TRANSLATION_PATH));
     a.installTranslator(&translator);
 
     // running
@@ -104,6 +103,6 @@ int main(int argc, char *argv[])
         existingSessionOperation(QString("Restore"));
         return 0;
     }
-    MainWindow w(0, args, &qtTranslator, &translator);
+    MainWindow w(0, args);
     return a.exec();
 }

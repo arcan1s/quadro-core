@@ -8,4 +8,12 @@ foreach (SOURCE_FILE ${ALL_SOURCE_FILES})
 endforeach ()
 file(GLOB_RECURSE ALL_UI_HEADERS "${CMAKE_CURRENT_BINARY_DIR}/*.h")
 
-qt5_create_translation (PROJECT_QM ${ALL_SOURCE_FILES} ${ALL_UI_HEADERS} ${PROJECT_TS})
+if (UPDATE_TRANSLATIONS)
+    qt5_create_translation (PROJECT_QM ${ALL_SOURCE_FILES} ${ALL_UI_HEADERS}
+            ${PROJECT_TS})
+else ()
+    qt5_add_translation(PROJECT_QM ${PROJECT_TS})
+endif ()
+
+add_custom_target (translations DEPENDS ${PROJECT_QM})
+install(FILES ${PROJECT_QM} DESTINATION ${DATA_INSTALL_DIR}/quadro/translations)

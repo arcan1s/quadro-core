@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1">
+<TS version="2.1" language="ru_RU">
 <context>
     <name>AppIconWidget</name>
     <message>
@@ -64,20 +64,20 @@
 <context>
     <name>EditAppWindow</name>
     <message>
-        <location filename="../../quadroui/src/editappwindow.cpp" line="123"/>
         <location filename="../../../build/quadroui/src/ui_editappwindow.h" line="294"/>
+        <location filename="../../quadroui/src/editappwindow.cpp" line="123"/>
         <source>Executable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../quadroui/src/editappwindow.cpp" line="138"/>
         <location filename="../../../build/quadroui/src/ui_editappwindow.h" line="295"/>
+        <location filename="../../quadroui/src/editappwindow.cpp" line="138"/>
         <source>Categories</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../quadroui/src/editappwindow.cpp" line="172"/>
         <location filename="../../../build/quadroui/src/ui_editappwindow.h" line="296"/>
+        <location filename="../../quadroui/src/editappwindow.cpp" line="172"/>
         <source>Working directory</source>
         <translation type="unfinished"></translation>
     </message>
@@ -260,7 +260,7 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../quadro/src/main.cpp" line="102"/>
+        <location filename="../../quadro/src/main.cpp" line="101"/>
         <source>Restore existing session.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -338,7 +338,7 @@
     <message>
         <location filename="../../quadro/src/messages.cpp" line="117"/>
         <source>License</source>
-        <translation type="unfinished"></translation>
+        <translation>Лицензия</translation>
     </message>
     <message>
         <location filename="../../../build/quadro/src/ui_mainwindow.h" line="138"/>
@@ -368,7 +368,7 @@
     <message>
         <location filename="../../../build/quadro/src/ui_mainwindow.h" line="147"/>
         <source>&amp;About</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;О программе</translation>
     </message>
     <message>
         <location filename="../../../build/quadro/src/ui_mainwindow.h" line="149"/>

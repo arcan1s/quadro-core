@@ -106,6 +106,11 @@
  * path to recent items inside @ref HOME_PATH
  */
 #define RECENT_PATH "recent"
+/**
+ * @def TRANSLATION_PATH
+ * path to translation (qm) files
+ */
+#define TRANSLATION_PATH "translations"
 
 // plugin configuration
 /**

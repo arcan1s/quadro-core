@@ -1,9 +1,6 @@
 [submodule "sources/3rdparty/tasks"]
 	path = sources/3rdparty/tasks
 	url = https://github.com/mhogomchungu/tasks.git
-[submodule "sources/3rdparty/language"]
-	path = sources/3rdparty/language
-	url = https://github.com/arcan1s/qtadds-language.git
 [submodule "sources/3rdparty/task"]
 	path = sources/3rdparty/task
 	url = https://github.com/arcan1s/qtadds-taskadds-qprocess.git
