@@ -73,7 +73,7 @@ QHash<long long, unsigned long long> QuadroXCBAdaptor::getWindowsList()
         return windows;
     }
 
-    for (int i=0; i<clientListSize / sizeof(Window); i++) {
+    for (unsigned int i=0; i<clientListSize / sizeof(Window); i++) {
         long long *pid = reinterpret_cast<long long *>(getPropery(clientList[i], XA_CARDINAL,
                                                                   "_NET_WM_PID", nullptr));
         windows.insertMulti(*pid, clientList[i]);

@@ -26,10 +26,13 @@
 #ifndef PLUGINCORE_H
 #define PLUGINCORE_H
 
+#include <QApplication>
 #include <QDBusConnection>
 #include <QDBusMessage>
-#include <QObject>
 #include <QPluginLoader>
+#include <QTranslator>
+
+#include <typeinfo>
 
 #include "config.h"
 #include "quadrodebug.h"
@@ -207,12 +210,24 @@ private:
     {
         qCDebug(LOG_LIB) << "Register plugin" << _name << "from" << _location;
 
+        // initialization
         int index = -1;
         T *item = createPlugin<T>(_name, _location);
         if (item == nullptr)
             return index;
         index = generateIndex(item);
+        // main DBus session
         createPluginDBusSession<T, Adaptor>(index, item);
+        // load plugin translations
+        QTranslator pluginTranslator;
+        qCDebug(LOG_LIB) << "Loading plugin" << _name << "specific translation" <<
+                pluginTranslator.load(QString("core-quadro-%1_%2").arg(_name)
+                                          .arg(QLocale::system().name()),
+                                      QString("%1/%2/%3/%4").arg(ROOT_INSTALL_DIR)
+                                          .arg(DATA_INSTALL_DIR).arg(HOME_PATH)
+                                          .arg(TRANSLATION_PATH));
+        qCDebug(LOG_LIB) << "Install translator for" << _name <<
+                         qApp->installTranslator(&pluginTranslator);
 
         return index;
     };

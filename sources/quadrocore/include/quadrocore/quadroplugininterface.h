@@ -39,6 +39,8 @@ class QWidget;
  */
 class QuadroPluginInterface
 {
+    Q_DECLARE_TR_FUNCTIONS(QuadroPluginInterface)
+
 public:
     /**
      * @brief QuadroPluginInterface class destructor

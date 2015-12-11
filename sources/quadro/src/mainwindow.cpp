@@ -237,7 +237,6 @@ void MainWindow::createObjects()
     createDBusSession();
 
     // frontend
-    ui->retranslateUi(this);
     initTabs();
     settingsWindow = new SettingsWindow(this, m_configPath);
 }

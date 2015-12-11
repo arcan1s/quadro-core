@@ -15,5 +15,5 @@ else ()
     qt5_add_translation(PROJECT_QM ${PROJECT_TS})
 endif ()
 
-add_custom_target (translations DEPENDS ${PROJECT_QM})
-install(FILES ${PROJECT_QM} DESTINATION ${DATA_INSTALL_DIR}/quadro/translations)
+add_custom_target (translations ALL DEPENDS ${PROJECT_QM})
+install(FILES ${PROJECT_QM} DESTINATION "${DATA_INSTALL_DIR}/quadro/translations")

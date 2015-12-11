@@ -216,15 +216,10 @@ void QuadroWidget::resetFocus()
  */
 void QuadroWidget::createActions()
 {
-    QShortcut *shortcut;
-    shortcut = new QShortcut(QKeySequence(Qt::Key_Down), this,
-                             SLOT(moveFocusDown()));
-    shortcut = new QShortcut(QKeySequence(Qt::Key_Left), this,
-                             SLOT(moveFocusLeft()));
-    shortcut = new QShortcut(QKeySequence(Qt::Key_Right), this,
-                             SLOT(moveFocusRight()));
-    shortcut = new QShortcut(QKeySequence(Qt::Key_Up), this,
-                             SLOT(moveFocusUp()));
+    new QShortcut(QKeySequence(Qt::Key_Down), this, SLOT(moveFocusDown()));
+    new QShortcut(QKeySequence(Qt::Key_Left), this, SLOT(moveFocusLeft()));
+    new QShortcut(QKeySequence(Qt::Key_Right), this, SLOT(moveFocusRight()));
+    new QShortcut(QKeySequence(Qt::Key_Up), this, SLOT(moveFocusUp()));
 }
 
 

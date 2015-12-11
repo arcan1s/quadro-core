@@ -28,6 +28,7 @@
 
 #include <QMainWindow>
 #include <QToolButton>
+#include <QVariant>
 
 
 class StandaloneApplicationItem;

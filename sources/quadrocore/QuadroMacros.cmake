@@ -53,10 +53,16 @@ macro(quadro_install_plugin PLUGIN_ROOT)
         qt5_wrap_ui (${PLUGIN}_UI_HEADERS "${${PLUGIN}_FORMS}")
     endif(${PLUGIN}_FORMS)
     # translations if any
-    file (GLOB_RECURSE ${PLUGIN}_TS "${PLUGIN_ROOT}/*.ts")
+    file (GLOB_RECURSE ${PLUGIN}_TS "${PLUGIN_ROOT}/core-quadro-${PLUGIN}_*.ts")
     if (${PLUGIN}_TS)
-        qt5_create_translation (${PLUGIN}_QM ${${PLUGIN}_SOURCES}
-                ${${PLUGIN}_HEADERS} ${${PLUGIN}_UI_HEADERS} ${${PLUGIN}_TS})
+        if (UPDATE_TRANSLATIONS)
+            qt5_create_translation (${PLUGIN}_QM ${${PLUGIN}_SOURCES}
+                    ${${PLUGIN}_HEADERS} ${${PLUGIN}_UI_HEADERS} ${${PLUGIN}_TS})
+        else ()
+            qt5_add_translation (${PLUGIN}_QM ${${PLUGIN}_TS})
+        endif (UPDATE_TRANSLATIONS)
+        add_custom_target ("${PLUGIN}-translations" ALL DEPENDS ${${PLUGIN}_QM})
+        install(FILES ${${PLUGIN}_QM} DESTINATION "${DATA_INSTALL_DIR}/quadro/translations")
     endif (${PLUGIN}_TS)
 
     # include directories
@@ -66,7 +72,7 @@ macro(quadro_install_plugin PLUGIN_ROOT)
 
     # build
     add_library ("${PLUGIN}" MODULE "${${PLUGIN}_SOURCES}" "${${PLUGIN}_HEADERS}"
-            "${${PLUGIN}_MOC_SOURCES}" "${${PLUGIN}_UI_HEADERS}" "${${PLUGIN}_QM}")
+            "${${PLUGIN}_MOC_SOURCES}" "${${PLUGIN}_UI_HEADERS}")
     target_link_libraries ("${PLUGIN}" "${QUADRO_LIBRARIES}" "${Qt_LIBRARIES}" "${ADDS_LIBRARIES}")
 
     # install

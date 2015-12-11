@@ -70,14 +70,16 @@ int main(int argc, char *argv[])
 
     // reread translations according to flags
     QTranslator qtTranslator;
-    qtTranslator.load(QString("qt_%1").arg(QLocale::system().name()),
-                      QLibraryInfo::location(QLibraryInfo::TranslationsPath));
-    a.installTranslator(&qtTranslator);
+    qCDebug(LOG_UI) << "Loading Qt specific translation" <<
+            qtTranslator.load(QString("qt_%1").arg(QLocale::system().name()),
+                              QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+    qCDebug(LOG_UI) << "Install Qt translator" << a.installTranslator(&qtTranslator);
     QTranslator translator;
-    translator.load(QString("core-quadro_%1").arg(QLocale::system().name()),
-                    QString("%1/%2/%3/%4").arg(ROOT_INSTALL_DIR).arg(DATA_INSTALL_DIR)
-                        .arg(HOME_PATH).arg(TRANSLATION_PATH));
-    a.installTranslator(&translator);
+    qCDebug(LOG_UI) << "Loading application specific translation" <<
+            translator.load(QString("core-quadro_%1").arg(QLocale::system().name()),
+                            QString("%1/%2/%3/%4").arg(ROOT_INSTALL_DIR).arg(DATA_INSTALL_DIR)
+                                .arg(HOME_PATH).arg(TRANSLATION_PATH));
+    qCDebug(LOG_UI) << "Install applicaiton translator" << a.installTranslator(&translator);
 
     // running
     if (args[QString("error")].toBool()) {
