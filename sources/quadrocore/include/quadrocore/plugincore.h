@@ -219,7 +219,7 @@ private:
         // main DBus session
         createPluginDBusSession<T, Adaptor>(index, item);
         // load plugin translations
-        QTranslator pluginTranslator;
+        static QTranslator pluginTranslator;
         qCDebug(LOG_LIB) << "Loading plugin" << _name << "specific translation" <<
                 pluginTranslator.load(QString("core-quadro-%1_%2").arg(_name)
                                           .arg(QLocale::system().name()),

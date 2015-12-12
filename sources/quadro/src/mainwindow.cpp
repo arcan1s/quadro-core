@@ -238,6 +238,7 @@ void MainWindow::createObjects()
 
     // frontend
     initTabs();
+    ui->retranslateUi(this);
     settingsWindow = new SettingsWindow(this, m_configPath);
 }
 

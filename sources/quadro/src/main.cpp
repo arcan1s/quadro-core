@@ -69,12 +69,12 @@ int main(int argc, char *argv[])
     QApplication::setQuitOnLastWindowClosed(false);
 
     // reread translations according to flags
-    QTranslator qtTranslator;
+    static QTranslator qtTranslator;
     qCDebug(LOG_UI) << "Loading Qt specific translation" <<
             qtTranslator.load(QString("qt_%1").arg(QLocale::system().name()),
                               QLibraryInfo::location(QLibraryInfo::TranslationsPath));
     qCDebug(LOG_UI) << "Install Qt translator" << a.installTranslator(&qtTranslator);
-    QTranslator translator;
+    static QTranslator translator;
     qCDebug(LOG_UI) << "Loading application specific translation" <<
             translator.load(QString("core-quadro_%1").arg(QLocale::system().name()),
                             QString("%1/%2/%3/%4").arg(ROOT_INSTALL_DIR).arg(DATA_INSTALL_DIR)

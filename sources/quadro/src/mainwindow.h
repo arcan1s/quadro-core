@@ -37,8 +37,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent,
-                        const QVariantHash args = QVariantHash());
+    explicit MainWindow(QWidget *parent, const QVariantHash args);
     virtual ~MainWindow();
 
 public slots:

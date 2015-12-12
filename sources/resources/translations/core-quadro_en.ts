@@ -64,18 +64,66 @@
 <context>
     <name>EditAppWindow</name>
     <message>
+        <location filename="../../quadroui/src/editappwindow.ui" line="14"/>
+        <location filename="../../../build/quadroui/src/ui_editappwindow.h" line="288"/>
+        <source>Edit application</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadroui/src/editappwindow.ui" line="34"/>
+        <location filename="../../../build/quadroui/src/ui_editappwindow.h" line="289"/>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadroui/src/editappwindow.ui" line="63"/>
+        <location filename="../../../build/quadroui/src/ui_editappwindow.h" line="290"/>
+        <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadroui/src/editappwindow.ui" line="92"/>
+        <location filename="../../../build/quadroui/src/ui_editappwindow.h" line="291"/>
+        <source>Comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadroui/src/editappwindow.ui" line="121"/>
+        <location filename="../../../build/quadroui/src/ui_editappwindow.h" line="292"/>
+        <source>Icon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadroui/src/editappwindow.ui" line="169"/>
         <location filename="../../quadroui/src/editappwindow.cpp" line="123"/>
+        <location filename="../../../build/quadroui/src/ui_editappwindow.h" line="294"/>
         <source>Executable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../quadroui/src/editappwindow.ui" line="217"/>
         <location filename="../../quadroui/src/editappwindow.cpp" line="138"/>
+        <location filename="../../../build/quadroui/src/ui_editappwindow.h" line="295"/>
         <source>Categories</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../quadroui/src/editappwindow.ui" line="265"/>
         <location filename="../../quadroui/src/editappwindow.cpp" line="172"/>
+        <location filename="../../../build/quadroui/src/ui_editappwindow.h" line="296"/>
         <source>Working directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadroui/src/editappwindow.ui" line="319"/>
+        <location filename="../../../build/quadroui/src/ui_editappwindow.h" line="297"/>
+        <source>Hidden</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadroui/src/editappwindow.ui" line="346"/>
+        <location filename="../../../build/quadroui/src/ui_editappwindow.h" line="298"/>
+        <source>Use terminal</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -143,6 +191,96 @@
         <location filename="../../quadroui/src/fileinfowindow.cpp" line="115"/>
         <location filename="../../quadroui/src/fileinfowindow.cpp" line="122"/>
         <source>no rights</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadroui/src/fileinfowindow.ui" line="14"/>
+        <location filename="../../../build/quadroui/src/ui_fileinfowindow.h" line="400"/>
+        <source>Properties</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadroui/src/fileinfowindow.ui" line="24"/>
+        <location filename="../../../build/quadroui/src/ui_fileinfowindow.h" line="407"/>
+        <source>General</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadroui/src/fileinfowindow.ui" line="77"/>
+        <location filename="../../../build/quadroui/src/ui_fileinfowindow.h" line="401"/>
+        <source>Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadroui/src/fileinfowindow.ui" line="106"/>
+        <location filename="../../../build/quadroui/src/ui_fileinfowindow.h" line="402"/>
+        <source>Path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadroui/src/fileinfowindow.ui" line="135"/>
+        <location filename="../../../build/quadroui/src/ui_fileinfowindow.h" line="403"/>
+        <source>Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadroui/src/fileinfowindow.ui" line="171"/>
+        <location filename="../../../build/quadroui/src/ui_fileinfowindow.h" line="404"/>
+        <source>Created</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadroui/src/fileinfowindow.ui" line="200"/>
+        <location filename="../../../build/quadroui/src/ui_fileinfowindow.h" line="405"/>
+        <source>Last modified</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadroui/src/fileinfowindow.ui" line="229"/>
+        <location filename="../../../build/quadroui/src/ui_fileinfowindow.h" line="406"/>
+        <source>Last read</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadroui/src/fileinfowindow.ui" line="258"/>
+        <location filename="../../quadroui/src/fileinfowindow.ui" line="331"/>
+        <location filename="../../../build/quadroui/src/ui_fileinfowindow.h" line="411"/>
+        <location filename="../../../build/quadroui/src/ui_fileinfowindow.h" line="416"/>
+        <source>Rights</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadroui/src/fileinfowindow.ui" line="264"/>
+        <location filename="../../../build/quadroui/src/ui_fileinfowindow.h" line="408"/>
+        <source>Owner and group</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadroui/src/fileinfowindow.ui" line="284"/>
+        <location filename="../../quadroui/src/fileinfowindow.ui" line="351"/>
+        <location filename="../../../build/quadroui/src/ui_fileinfowindow.h" line="409"/>
+        <location filename="../../../build/quadroui/src/ui_fileinfowindow.h" line="412"/>
+        <source>Owner</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadroui/src/fileinfowindow.ui" line="313"/>
+        <location filename="../../quadroui/src/fileinfowindow.ui" line="380"/>
+        <location filename="../../../build/quadroui/src/ui_fileinfowindow.h" line="410"/>
+        <location filename="../../../build/quadroui/src/ui_fileinfowindow.h" line="413"/>
+        <source>Group</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadroui/src/fileinfowindow.ui" line="409"/>
+        <location filename="../../../build/quadroui/src/ui_fileinfowindow.h" line="414"/>
+        <source>World</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadroui/src/fileinfowindow.ui" line="442"/>
+        <location filename="../../../build/quadroui/src/ui_fileinfowindow.h" line="415"/>
+        <source>Executable</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -227,6 +365,105 @@
     <message>
         <location filename="../../quadro/src/messages.cpp" line="117"/>
         <source>License</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadro/src/mainwindow.ui" line="29"/>
+        <location filename="../../../build/quadro/src/ui_mainwindow.h" line="155"/>
+        <source>Toolbar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadro/src/mainwindow.ui" line="68"/>
+        <location filename="../../../build/quadro/src/ui_mainwindow.h" line="138"/>
+        <source>&amp;DBus API</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadro/src/mainwindow.ui" line="71"/>
+        <location filename="../../../build/quadro/src/ui_mainwindow.h" line="140"/>
+        <source>Show DBus API</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadro/src/mainwindow.ui" line="76"/>
+        <location filename="../../../build/quadro/src/ui_mainwindow.h" line="142"/>
+        <source>&amp;Library</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadro/src/mainwindow.ui" line="79"/>
+        <location filename="../../../build/quadro/src/ui_mainwindow.h" line="144"/>
+        <source>Show library docs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadro/src/mainwindow.ui" line="88"/>
+        <location filename="../../../build/quadro/src/ui_mainwindow.h" line="146"/>
+        <source>&amp;Report a bug</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadro/src/mainwindow.ui" line="97"/>
+        <location filename="../../../build/quadro/src/ui_mainwindow.h" line="147"/>
+        <source>&amp;About</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadro/src/mainwindow.ui" line="100"/>
+        <location filename="../../../build/quadro/src/ui_mainwindow.h" line="149"/>
+        <source>About this application</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadro/src/mainwindow.ui" line="109"/>
+        <location filename="../../../build/quadro/src/ui_mainwindow.h" line="151"/>
+        <source>&amp;Quit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadro/src/mainwindow.ui" line="112"/>
+        <location filename="../../../build/quadro/src/ui_mainwindow.h" line="152"/>
+        <source>Ctrl+Q</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadro/src/mainwindow.ui" line="121"/>
+        <location filename="../../../build/quadro/src/ui_mainwindow.h" line="153"/>
+        <source>&amp;Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadro/src/mainwindow.ui" line="124"/>
+        <location filename="../../../build/quadro/src/ui_mainwindow.h" line="154"/>
+        <source>Ctrl+S</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SettingsWindow</name>
+    <message>
+        <location filename="../../quadro/src/settingswindow.ui" line="14"/>
+        <location filename="../../../build/quadro/src/ui_settingswindow.h" line="168"/>
+        <source>Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadro/src/settingswindow.ui" line="62"/>
+        <location filename="../../../build/quadro/src/ui_settingswindow.h" line="173"/>
+        <source>General</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadro/src/settingswindow.ui" line="114"/>
+        <location filename="../../../build/quadro/src/ui_settingswindow.h" line="176"/>
+        <source>Language</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadro/src/settingswindow.ui" line="130"/>
+        <location filename="../../../build/quadro/src/ui_settingswindow.h" line="178"/>
+        <source>Select a language</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
