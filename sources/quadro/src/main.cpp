@@ -68,18 +68,22 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     QApplication::setQuitOnLastWindowClosed(false);
 
-    // reread translations according to flags
+    // qt specific
+    bool trStatus;
     static QTranslator qtTranslator;
-    qCDebug(LOG_UI) << "Loading Qt specific translation" <<
-            qtTranslator.load(QString("qt_%1").arg(QLocale::system().name()),
-                              QLibraryInfo::location(QLibraryInfo::TranslationsPath));
-    qCDebug(LOG_UI) << "Install Qt translator" << a.installTranslator(&qtTranslator);
+    trStatus = qtTranslator.load(QString("qt_%1").arg(QLocale::system().name()),
+                                 QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+    qCDebug(LOG_UI) << "Loading Qt specific translation" << trStatus;
+    trStatus = a.installTranslator(&qtTranslator);
+    qCDebug(LOG_UI) << "Install Qt translator" << trStatus;
+    // application specific
     static QTranslator translator;
-    qCDebug(LOG_UI) << "Loading application specific translation" <<
-            translator.load(QString("core-quadro_%1").arg(QLocale::system().name()),
-                            QString("%1/%2/%3/%4").arg(ROOT_INSTALL_DIR).arg(DATA_INSTALL_DIR)
-                                .arg(HOME_PATH).arg(TRANSLATION_PATH));
-    qCDebug(LOG_UI) << "Install applicaiton translator" << a.installTranslator(&translator);
+    trStatus = translator.load(QString("core-quadro_%1").arg(QLocale::system().name()),
+                               QString("%1/%2/%3/%4").arg(ROOT_INSTALL_DIR).arg(DATA_INSTALL_DIR)
+                                   .arg(HOME_PATH).arg(TRANSLATION_PATH));
+    qCDebug(LOG_UI) << "Loading application specific translation" << trStatus;
+    trStatus = a.installTranslator(&translator);
+    qCDebug(LOG_UI) << "Install application translator" << trStatus;
 
     // running
     if (args[QString("error")].toBool()) {

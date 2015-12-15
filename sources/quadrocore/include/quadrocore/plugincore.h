@@ -218,16 +218,17 @@ private:
         index = generateIndex(item);
         // main DBus session
         createPluginDBusSession<T, Adaptor>(index, item);
-        // load plugin translations
+        // load plugin
+        bool trStatus;
         static QTranslator pluginTranslator;
-        qCDebug(LOG_LIB) << "Loading plugin" << _name << "specific translation" <<
-                pluginTranslator.load(QString("core-quadro-%1_%2").arg(_name)
-                                          .arg(QLocale::system().name()),
-                                      QString("%1/%2/%3/%4").arg(ROOT_INSTALL_DIR)
-                                          .arg(DATA_INSTALL_DIR).arg(HOME_PATH)
-                                          .arg(TRANSLATION_PATH));
-        qCDebug(LOG_LIB) << "Install translator for" << _name <<
-                         qApp->installTranslator(&pluginTranslator);
+        trStatus = pluginTranslator.load(QString("core-quadro-%1_%2").arg(_name)
+                                             .arg(QLocale::system().name()),
+                                         QString("%1/%2/%3/%4").arg(ROOT_INSTALL_DIR)
+                                             .arg(DATA_INSTALL_DIR).arg(HOME_PATH)
+                                             .arg(TRANSLATION_PATH));
+        qCDebug(LOG_LIB) << "Loading plugin" << _name << "specific translation" << trStatus;
+        trStatus = qApp->installTranslator(&pluginTranslator);
+        qCDebug(LOG_LIB) << "Install translator for" << _name << trStatus;
 
         return index;
     };
