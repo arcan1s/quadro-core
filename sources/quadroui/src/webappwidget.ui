@@ -16,11 +16,10 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QWebView" name="webView"/>
+     <widget class="QWebEngineView" name="webView" native="true"/>
     </item>
    </layout>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="toolBar">
    <property name="windowTitle">
     <string>Toolbar</string>
@@ -42,8 +41,7 @@
   <action name="actionOpen">
    <property name="icon">
     <iconset theme="document-open">
-     <normaloff/>
-    </iconset>
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>Open</string>
@@ -55,8 +53,7 @@
   <action name="actionRefresh">
    <property name="icon">
     <iconset theme="view-refresh">
-     <normaloff/>
-    </iconset>
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>Refresh</string>
@@ -68,8 +65,7 @@
   <action name="actionClose">
    <property name="icon">
     <iconset theme="document-close">
-     <normaloff/>
-    </iconset>
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>Close</string>
@@ -80,7 +76,8 @@
   </action>
   <action name="actionBack">
    <property name="icon">
-    <iconset theme="draw-arrow-back"/>
+    <iconset theme="draw-arrow-back">
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>Back</string>
@@ -88,7 +85,8 @@
   </action>
   <action name="actionForward">
    <property name="icon">
-    <iconset theme="draw-arrow-forward"/>
+    <iconset theme="draw-arrow-forward">
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>Forward</string>
@@ -97,9 +95,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QWebView</class>
+   <class>QWebEngineView</class>
    <extends>QWidget</extends>
-   <header>QtWebKit/QWebView</header>
+   <header>QtWebEngineWidgets/QWebEngineView</header>
   </customwidget>
  </customwidgets>
  <resources/>

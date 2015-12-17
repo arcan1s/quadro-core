@@ -50,11 +50,7 @@ StandaloneAppWidget::StandaloneAppWidget(QWidget *parent, const QStringList exec
     ui->setupUi(this);
 
     createObjects();
-
-    connect(m_application, SIGNAL(ready()), this, SLOT(paintWidget()));
-    connect(m_application, &StandaloneApplicationItem::close, [this]() {
-        emit(destroyWindow(m_index));
-    });
+    createActions();
     m_application->startApplication();
 }
 
@@ -96,6 +92,19 @@ void StandaloneAppWidget::subWindowDestroyed()
         qCInfo(LOG_UILIB) << "No windows remain, close tab";
         emit(destroyWindow(m_index));
     }
+}
+
+
+/**
+ * @fn createActions
+ */
+void StandaloneAppWidget::createActions()
+{
+    connect(m_application, SIGNAL(ready()), this, SLOT(paintWidget()));
+    connect(m_application, &StandaloneApplicationItem::close, [this]() {
+        if (m_index != -1)
+            emit(destroyWindow(m_index));
+    });
 }
 
 

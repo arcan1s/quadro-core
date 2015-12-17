@@ -27,8 +27,10 @@
 #include "ui_webappwidget.h"
 
 #include <QInputDialog>
-#include <QWebHistory>
-#include <QWebView>
+#include <QStandardPaths>
+#include <QWebEngineHistory>
+#include <QWebEngineProfile>
+#include <QWebEngineView>
 
 #include <quadrocore/quadro.h>
 
@@ -51,6 +53,9 @@ WebAppWidget::WebAppWidget(QWidget *parent, const int index, const bool showOpen
     // apply show open settings
     ui->actionOpen->setEnabled(showOpen);
     ui->actionOpen->setVisible(showOpen);
+    // apply show close settings
+    ui->actionClose->setEnabled(index != -1);
+    ui->actionClose->setVisible(index != -1);
 
     createActions();
 }
@@ -93,6 +98,22 @@ void WebAppWidget::loadUrl(const QUrl &_url)
     qCDebug(LOG_UILIB) << "Loading url" << _url.toDisplayString();
 
     ui->webView->load(_url);
+}
+
+
+/**
+ * @fn setCache
+ */
+void WebAppWidget::setCache(const QString _dirName)
+{
+    qCDebug(LOG_UILIB) << "Set cache directory to" << _dirName;
+
+    QString dirPath = QString("%1/quadro-%2")
+        .arg(QStandardPaths::writableLocation(QStandardPaths::GenericCacheLocation))
+        .arg(_dirName);
+    qCInfo(LOG_UILIB) << "Full cache directory path" << dirPath;
+
+    ui->webView->page()->profile()->setCachePath(dirPath);
 }
 
 
@@ -148,18 +169,6 @@ void WebAppWidget::updatePageState(const WebPageState _state)
 
 
 /**
- * @fn updateStatusBar
- */
-void WebAppWidget::updateStatusBar(const QString _text)
-{
-    qCDebug(LOG_UILIB) << "New status" << _text;
-
-    ui->statusbar->showMessage(_text);
-    emit(updateTitle(m_index, ui->webView->title()));
-}
-
-
-/**
  * @fn createActions
  */
 void WebAppWidget::createActions()
@@ -167,21 +176,18 @@ void WebAppWidget::createActions()
     // tool actions
     connect(ui->actionBack, SIGNAL(triggered()), ui->webView, SLOT(back()));
     connect(ui->actionClose, &QAction::triggered, [this](const bool) {
-        emit(destroyWindow(m_index));
+        if (m_index != -1)
+            emit(destroyWindow(m_index));
     });
     connect(ui->actionForward, SIGNAL(triggered()), ui->webView, SLOT(forward()));
     connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(getNewUrl()));
     connect(ui->actionRefresh, SIGNAL(triggered()), this, SLOT(changePageState()));
 
     // webview actions
-    connect(ui->webView, SIGNAL(statusBarMessage(const QString)), this,
-        SLOT(updateStatusBar(const QString)));
-    connect(ui->webView, SIGNAL(linkClicked(const QUrl &)), this,
-            SLOT(loadUrl(const QUrl &)));
-    connect(ui->webView, &QWebView::loadFinished, [this](const bool state) {
+    connect(ui->webView, &QWebEngineView::loadFinished, [this](const bool state) {
         updatePageState(state ? WebPageState::Loaded : WebPageState::Failed);
     });
-    connect(ui->webView, &QWebView::loadStarted, [this]() {
+    connect(ui->webView, &QWebEngineView::loadStarted, [this]() {
         updatePageState(WebPageState::Started);
     });
 }

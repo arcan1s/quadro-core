@@ -69,7 +69,8 @@ QVariantHash SettingsWindow::getSettings(QString fileName)
     config[QString("Tabs")] = settings.value(QString("Tabs"), QStringList() <<
                                              QString("favorites") <<
                                              QString("applauncher") <<
-                                             QString("filemanager"));
+                                             QString("filemanager") <<
+                                             QString("webpage"));
     settings.endGroup();
 
     for (int i=0; i<config.keys().count(); i++)

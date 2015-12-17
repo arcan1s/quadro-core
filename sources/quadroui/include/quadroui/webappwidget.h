@@ -66,9 +66,9 @@ public:
      * @brief WebAppWidget class constructor
      * @param parent         pointer to parent object
      * @param index          tab index
-     * @pamar showOpen       show open URL action
+     * @param showOpen       show open URL action
      */
-    explicit WebAppWidget(QWidget *parent, const int index,
+    explicit WebAppWidget(QWidget *parent, const int index = -1,
                           const bool showOpen = true);
     /**
      * @brief WebAppWidget class destructor
@@ -91,6 +91,11 @@ public slots:
      * @param _url           URL string
      */
     void loadUrl(const QUrl &_url);
+    /**
+     * @brief method which will be called to save cache to local drive
+     * @param _dirName       cache directory name
+     */
+    void setCache(const QString _dirName);
 
 signals:
     /**
@@ -120,11 +125,6 @@ private slots:
      * @param _state         web page state
      */
     void updatePageState(const WebPageState _state);
-    /**
-     * @brief update current status
-     * @param _text          current status text
-     */
-    void updateStatusBar(const QString _text);
 
 private:
     // ui

@@ -53,7 +53,8 @@ public:
      * @param settings       application settings
      */
     explicit StandaloneAppWidget(QWidget *parent, const QStringList exec,
-                                 const int index, const QVariantHash settings = QVariantHash());
+                                 const int index = -1,
+                                 const QVariantHash settings = QVariantHash());
     /**
      * @brief StandaloneAppWidget class destructor
      */
@@ -85,6 +86,10 @@ private:
      */
     Ui::StandaloneAppWidget *ui = nullptr;
     // backend
+    /**
+     * @brief additional method to create window actions
+     */
+    void createActions();
     /**
      * @brief additional method to create objects
      */

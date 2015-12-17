@@ -212,6 +212,7 @@ void MainWindow::initTabs()
             QVariantHash metadata;
             metadata[QString("Index")] = index;
             metadata[QString("Plugin")] = tab;
+            m_plugins.append(metadata);
         }
     }
 
