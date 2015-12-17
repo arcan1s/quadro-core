@@ -44,7 +44,7 @@ StandaloneAppWidget::StandaloneAppWidget(QWidget *parent, const QStringList exec
       m_exec(exec),
       m_index(index)
 {
-    qCDebug(LOG_UI) << __PRETTY_FUNCTION__;
+    qCDebug(LOG_UILIB) << __PRETTY_FUNCTION__;
 
     ui = new Ui::StandaloneAppWidget;
     ui->setupUi(this);
@@ -64,7 +64,7 @@ StandaloneAppWidget::StandaloneAppWidget(QWidget *parent, const QStringList exec
  */
 StandaloneAppWidget::~StandaloneAppWidget()
 {
-    qCDebug(LOG_UI) << __PRETTY_FUNCTION__;
+    qCDebug(LOG_UILIB) << __PRETTY_FUNCTION__;
 
     delete ui;
 }
@@ -93,7 +93,7 @@ void StandaloneAppWidget::paintWidget()
 void StandaloneAppWidget::subWindowDestroyed()
 {
     if (ui->mdiArea->subWindowList().isEmpty()) {
-        qCInfo(LOG_UI) << "No windows remain, close tab";
+        qCInfo(LOG_UILIB) << "No windows remain, close tab";
         emit(destroyWindow(m_index));
     }
 }

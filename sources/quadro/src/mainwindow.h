@@ -47,6 +47,7 @@ public slots:
     void updateConfiguration(const QVariantHash args = QVariantHash());
     // container settings
     void createContainer(const QStringList exec, const QString name);
+    void createWebContainer(const QString url, const bool showOpen);
     void removeContainer(const int index);
 
 signals:

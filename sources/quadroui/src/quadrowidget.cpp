@@ -48,7 +48,7 @@ QuadroWidget::QuadroWidget(QWidget *parent, const float grid,
     , m_grid(grid)
     , m_title(widgetTitle)
 {
-    qCDebug(LOG_UI) << __PRETTY_FUNCTION__;
+    qCDebug(LOG_UILIB) << __PRETTY_FUNCTION__;
 
     setHorizontalScrollBarPolicy(hPolicy);
     setVerticalScrollBarPolicy(vPolicy);
@@ -64,7 +64,7 @@ QuadroWidget::QuadroWidget(QWidget *parent, const float grid,
  */
 QuadroWidget::~QuadroWidget()
 {
-    qCDebug(LOG_UI) << __PRETTY_FUNCTION__;
+    qCDebug(LOG_UILIB) << __PRETTY_FUNCTION__;
 
     delete m_widget;
 }
@@ -135,12 +135,12 @@ void QuadroWidget::moveFocus(const int _dx, const int _dy)
     // http://stackoverflow.com/questions/20856518/navigate-between-widgets-using-arrows-in-qt
     if(qApp->focusWidget() == nullptr)
         return;
-    qCDebug(LOG_UI) << "Move to dx" << _dx << "dy" << _dy;
+    qCDebug(LOG_UILIB) << "Move to dx" << _dx << "dy" << _dy;
 
     int index = m_layout->indexOf(qApp->focusWidget());
     if(index == -1)
         return;
-    qCInfo(LOG_UI) << "Found item with index" << index;
+    qCInfo(LOG_UILIB) << "Found item with index" << index;
 
     // get difference between current and new position
     int requestedDiff = _dx * 1 + _dy * stringItemCount();

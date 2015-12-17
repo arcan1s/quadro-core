@@ -36,5 +36,6 @@
 #include "quadrowidget.h"
 #include "searchbar.h"
 #include "standaloneappwidget.h"
+#include "webappwidget.h"
 
 #endif /* QUADROUI_H */

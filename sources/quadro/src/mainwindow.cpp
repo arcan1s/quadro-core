@@ -133,6 +133,25 @@ void MainWindow::createContainer(const QStringList exec, const QString name)
 }
 
 
+void MainWindow::createWebContainer(const QString url, const bool showOpen)
+{
+    qCDebug(LOG_UI) << "Create URL" << url << "with show open button" << showOpen;
+
+    WebAppWidget *app = new WebAppWidget(this, ui->stackedWidget->count(),
+                                         showOpen);
+    connect(app, SIGNAL(destroyWindow(const int)), this, SLOT(removeContainer(const int)));
+    connect(app, &WebAppWidget::updateTitle, [this](const int index, const QString title) {
+        tabActions[index]->setText(title);
+    });
+
+    ui->stackedWidget->addWidget(app);
+    tabActions.append(ui->toolBar->addAction(QString("about:blank")));
+    app->loadUrl(QUrl::fromUserInput(url));
+
+    return ui->stackedWidget->setCurrentWidget(app);
+}
+
+
 void MainWindow::removeContainer(const int index)
 {
     qCDebug(LOG_UI) << "Remove tab" << index;

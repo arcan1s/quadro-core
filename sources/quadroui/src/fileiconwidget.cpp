@@ -36,7 +36,7 @@ FileIconWidget::FileIconWidget(const QFileInfo info, const QIcon icon,
     : IconWidget(size, parent)
     , m_info(info)
 {
-    qCDebug(LOG_UI) << __PRETTY_FUNCTION__;
+    qCDebug(LOG_UILIB) << __PRETTY_FUNCTION__;
 
     setIcon(icon);
     setText(m_info.fileName());
@@ -51,7 +51,7 @@ FileIconWidget::FileIconWidget(const QFileInfo info, const QIcon icon,
  */
 FileIconWidget::~FileIconWidget()
 {
-    qCDebug(LOG_UI) << __PRETTY_FUNCTION__;
+    qCDebug(LOG_UILIB) << __PRETTY_FUNCTION__;
 
     delete m_menu;
 }

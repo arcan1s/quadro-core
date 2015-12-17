@@ -287,7 +287,7 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../quadro/src/main.cpp" line="103"/>
+        <location filename="../../quadro/src/main.cpp" line="107"/>
         <source>Restore existing session.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -464,6 +464,79 @@
         <location filename="../../quadro/src/settingswindow.ui" line="130"/>
         <location filename="../../../build/quadro/src/ui_settingswindow.h" line="178"/>
         <source>Select a language</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>WebAppWidget</name>
+    <message>
+        <location filename="../../quadroui/src/webappwidget.ui" line="14"/>
+        <location filename="../../../build/quadroui/src/ui_webappwidget.h" line="115"/>
+        <source>MainWindow</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadroui/src/webappwidget.ui" line="26"/>
+        <location filename="../../../build/quadroui/src/ui_webappwidget.h" line="124"/>
+        <source>Toolbar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadroui/src/webappwidget.ui" line="49"/>
+        <location filename="../../../build/quadroui/src/ui_webappwidget.h" line="116"/>
+        <source>Open</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadroui/src/webappwidget.ui" line="52"/>
+        <location filename="../../../build/quadroui/src/ui_webappwidget.h" line="117"/>
+        <source>Ctrl+L</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadroui/src/webappwidget.ui" line="62"/>
+        <location filename="../../../build/quadroui/src/ui_webappwidget.h" line="118"/>
+        <source>Refresh</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadroui/src/webappwidget.ui" line="65"/>
+        <location filename="../../../build/quadroui/src/ui_webappwidget.h" line="119"/>
+        <source>Ctrl+R</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadroui/src/webappwidget.ui" line="75"/>
+        <location filename="../../../build/quadroui/src/ui_webappwidget.h" line="120"/>
+        <source>Close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadroui/src/webappwidget.ui" line="78"/>
+        <location filename="../../../build/quadroui/src/ui_webappwidget.h" line="121"/>
+        <source>Ctrl+W</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadroui/src/webappwidget.ui" line="86"/>
+        <location filename="../../../build/quadroui/src/ui_webappwidget.h" line="122"/>
+        <source>Back</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadroui/src/webappwidget.ui" line="94"/>
+        <location filename="../../../build/quadroui/src/ui_webappwidget.h" line="123"/>
+        <source>Forward</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadroui/src/webappwidget.cpp" line="118"/>
+        <source>New URL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadroui/src/webappwidget.cpp" line="118"/>
+        <source>URL</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

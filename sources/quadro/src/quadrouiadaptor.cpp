@@ -80,6 +80,14 @@ void QuadroUiAdaptor::RunContainer(const QStringList exec, const QString name) c
 }
 
 
+void QuadroUiAdaptor::RunWebContainer(const QString url, const bool showOpen) const
+{
+    qCDebug(LOG_DBUS) << "Run container with url" << url << "with show open button" << showOpen;
+
+    return m_mainWindow->createWebContainer(url, showOpen);
+}
+
+
 QStringList QuadroUiAdaptor::UIDs() const
 {
     QStringList uids;
