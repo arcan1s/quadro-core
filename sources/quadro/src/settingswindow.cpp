@@ -67,7 +67,7 @@ QVariantHash SettingsWindow::getSettings(QString fileName)
     config[QString("RecentItemsCount")] = settings.value(QString("RecentItemsCount"), 20);
     config[QString("ShowHidden")] = settings.value(QString("ShowHidden"), false);
     config[QString("Tabs")] = settings.value(QString("Tabs"), QStringList() <<
-                                             QString("favorites") <<
+                                             QString("favlauncher") <<
                                              QString("applauncher") <<
                                              QString("filemanager") <<
                                              QString("webpage"));
