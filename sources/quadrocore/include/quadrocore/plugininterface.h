@@ -59,11 +59,6 @@ public:
      */
     virtual void action() const = 0;
     /**
-     * @brief minimal size
-     * @return minimal size in application grids
-     */
-    virtual QSize minimalSize() const = 0;
-    /**
      * @brief update data
      */
     virtual void update() = 0;
@@ -71,6 +66,11 @@ public:
      * @brief current update interval in milliseconds
      */
     virtual int updateInterval() const = 0;
+    /**
+     * @brief widget size
+     * @return widget size in application grids
+     */
+    virtual QSize widgetSize() const = 0;
 };
 
 Q_DECLARE_INTERFACE(PluginInterface, PLUGIN_INTERFACE)

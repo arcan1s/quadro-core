@@ -38,6 +38,7 @@ class QFocusEvent;
 class QuadroWidget : public QScrollArea
 {
     Q_OBJECT
+    Q_PROPERTY(float grid READ grid)
     Q_PROPERTY(QString title READ title)
 
 public:
@@ -61,6 +62,11 @@ public:
      * @brief clear widget
      */
     void clearLayout();
+    /**
+     * @brief grid size
+     * @return current widget grid size
+     */
+    float grid() const;
     /**
      * @brief widget title (will not be shown by default)
      * @return title as a string

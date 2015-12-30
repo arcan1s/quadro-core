@@ -86,6 +86,15 @@ void QuadroWidget::clearLayout()
 
 
 /**
+ * @fn grid
+ */
+float QuadroWidget::grid() const
+{
+    return m_grid;
+}
+
+
+/**
  * @fn title
  */
 QString QuadroWidget::title() const

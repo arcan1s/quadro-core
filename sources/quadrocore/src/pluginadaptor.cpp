@@ -79,9 +79,9 @@ void PluginAdaptor::Action()
 /**
  * @fn MinimalSize
  */
-QDBusVariant PluginAdaptor::MinimalSize() const
+QDBusVariant PluginAdaptor::Size() const
 {
-    return QDBusVariant(QVariant(m_plugin->minimalSize()));
+    return QDBusVariant(QVariant(m_plugin->widgetSize()));
 }
 
 

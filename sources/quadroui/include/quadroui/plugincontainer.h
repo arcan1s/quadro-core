@@ -60,9 +60,8 @@ public:
     /**
      * @brief add plugin to the position
      * @param _interface     pointer to plugin interface
-     * @param _size          plugin size
      */
-    void addPlugin(PluginInterface *_interface, const QSize _size);
+    void addPlugin(PluginInterface *_interface);
 };
 
 

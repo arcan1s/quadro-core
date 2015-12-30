@@ -70,10 +70,10 @@ public slots:
      */
     Q_NOREPLY void Action();
     /**
-     * @brief get plugin minimal size
-     * @return list of minimal size in format [width, height]
+     * @brief get plugin size
+     * @return list of size in format [width, height]
      */
-    QDBusVariant MinimalSize() const;
+    QDBusVariant Size() const;
     /**
      * @brief update data. May be called to force update
      */
