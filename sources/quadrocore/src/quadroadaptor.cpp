@@ -92,6 +92,29 @@ QString QuadroAdaptor::MIME(const QString file) const
 
 
 /**
+ * @fn Plugins
+ */
+QDBusVariant QuadroAdaptor::Plugins(const QString group) const
+{
+    qCDebug(LOG_DBUS) << "Plugin group" << group;
+
+    QHash<QString, PluginRepresentation *> plugins = m_core->plugin()->knownPlugins(group);
+
+    QVariantList data;
+    for (auto plugin : plugins.values()) {
+        QVariantHash metadata;
+        metadata[QString("comment")] = plugin->comment();
+        metadata[QString("group")] = plugin->group();
+        metadata[QString("location")] = plugin->location();
+        metadata[QString("name")] = plugin->name();
+        data.append(metadata);
+    }
+
+    return QDBusVariant(QVariant(data));
+}
+
+
+/**
  * @fn Recent
  */
 QStringList QuadroAdaptor::Recent() const

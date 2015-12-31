@@ -27,6 +27,7 @@
 #define QUADROADAPTOR_H
 
 #include <QDBusAbstractAdaptor>
+#include <QDBusVariant>
 
 #include "config.h"
 
@@ -75,6 +76,12 @@ public slots:
      * @return mime name of the specified file
      */
     QString MIME(const QString file) const;
+    /**
+     * @brief get plugin list
+     * @param group          plugin group
+     * @return list of known plugins
+     */
+    QDBusVariant Plugins(const QString group) const;
     /**
      * @brief recent applications list
      * @return list of application from RecentlyCore

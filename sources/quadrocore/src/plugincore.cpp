@@ -100,9 +100,22 @@ void PluginCore::initPlugin(const int _index, const QVariantHash _configuration,
 /**
  * @fn knownPlugins
  */
-QHash<QString, PluginRepresentation *> PluginCore::knownPlugins() const
+QHash<QString, PluginRepresentation *> PluginCore::knownPlugins(const QString _group) const
 {
-    return m_allPlugins;
+    qCDebug(LOG_LIB) << "Requested type is" << _group;
+
+    QHash<QString, PluginRepresentation *> foundPlugins;
+    if (_group.isEmpty()) {
+        foundPlugins = m_allPlugins;
+    } else {
+        for (auto plugin : m_allPlugins.keys()) {
+            if (m_allPlugins[plugin]->group() != _group)
+                continue;
+            foundPlugins[plugin] = m_allPlugins[plugin];
+        }
+    }
+
+    return foundPlugins;
 }
 
 

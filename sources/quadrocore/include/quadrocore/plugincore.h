@@ -82,9 +82,10 @@ public:
                     const QString _configPath);
     /**
      * @brief get list of all known plugins in their representations
+     * @param _group         return only plugins with specified group
      * @return list of PluginRepresentation objects
      */
-    QHash<QString, PluginRepresentation *> knownPlugins() const;
+    QHash<QString, PluginRepresentation *> knownPlugins(const QString _group = QString()) const;
     /**
      * @brief load plugin by name
      * @param _plugin        plugin name
