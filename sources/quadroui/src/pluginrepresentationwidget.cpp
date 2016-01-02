@@ -15,29 +15,51 @@
  *   along with quadro. If not, see http://www.gnu.org/licenses/           *
  ***************************************************************************/
 /**
- * @file quadroui.h
- * Header of quadro library
+ * @file pluginrepresentationwidget.cpp
+ * Source code of quadro library
  * @author Evgeniy Alekseev
  * @copyright GPLv3
  * @bug https://github.com/arcan1s/quadro-core/issues
  */
 
 
-#ifndef QUADROUI_H
-#define QUADROUI_H
+#include "quadroui/quadroui.h"
+#include "ui_pluginrepresentationwidget.h"
 
-#include "appiconwidget.h"
-#include "editappwindow.h"
-#include "fileiconwidget.h"
-#include "fileinfowindow.h"
-#include "iconwidget.h"
-#include "pluginconfigwidget.h"
-#include "plugincontainer.h"
-#include "pluginrepresentationwidget.h"
-#include "pluginwidget.h"
-#include "quadrowidget.h"
-#include "searchbar.h"
-#include "standaloneappwidget.h"
-#include "webappwidget.h"
+#include <quadrocore/quadro.h>
 
-#endif /* QUADROUI_H */
+
+/**
+ * @class PluginRepresentationWidget
+ */
+/**
+ * @fn PluginRepresentationWidget
+ */
+PluginRepresentationWidget::PluginRepresentationWidget(QWidget *parent,
+                                                       PluginRepresentation *representation)
+    : QWidget(parent)
+{
+    qCDebug(LOG_UILIB) << __PRETTY_FUNCTION__;
+
+    ui = new Ui::PluginRepresentationWidget;
+    ui->setupUi(this);
+
+    ui->label_nameValue->setText(representation->name());
+    ui->label_versionValue->setText(representation->version());
+    ui->label_commentValue->setText(representation->comment());
+    ui->label_authorValue->setText(representation->author());
+    ui->label_urlValue->setText(representation->url());
+    ui->label_locationValue->setText(representation->location());
+    ui->label_groupValue->setText(representation->group());
+}
+
+
+/**
+ * @fn ~PluginRepresentationWidget
+ */
+PluginRepresentationWidget::~PluginRepresentationWidget()
+{
+    qCDebug(LOG_UILIB) << __PRETTY_FUNCTION__;
+
+    delete ui;
+}

@@ -103,10 +103,13 @@ QDBusVariant QuadroAdaptor::Plugins(const QString group) const
     QVariantList data;
     for (auto plugin : plugins.values()) {
         QVariantHash metadata;
+        metadata[QString("author")] = plugin->author();
         metadata[QString("comment")] = plugin->comment();
         metadata[QString("group")] = plugin->group();
         metadata[QString("location")] = plugin->location();
         metadata[QString("name")] = plugin->name();
+        metadata[QString("url")] = plugin->url();
+        metadata[QString("version")] = plugin->version();
         data.append(metadata);
     }
 

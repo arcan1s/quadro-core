@@ -167,7 +167,7 @@
   </widget>
  </widget>
  <resources>
-  <include location="../../resources/resources.qrc"/>
+  <include location="../../resources/quadro.qrc"/>
  </resources>
  <connections/>
 </ui>

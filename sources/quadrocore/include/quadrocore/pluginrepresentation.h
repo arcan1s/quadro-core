@@ -35,23 +35,30 @@
 class PluginRepresentation : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(QString author READ author)
     Q_PROPERTY(QString comment READ comment)
     Q_PROPERTY(QString group READ group)
     Q_PROPERTY(QString location READ location)
     Q_PROPERTY(QString name READ name)
+    Q_PROPERTY(QString url READ url)
+    Q_PROPERTY(QString version READ version)
 
 public:
     /**
      * @brief PluginRepresentation class constructor
+     * @param author         plugin author
      * @param comment        plugin comment
      * @param group          plugin group
      * @param location       plugin location
      * @param name           plugin name
+     * @param url            plugin url
+     * @param version        plugin version
      * @param parent         pointer to parent item
      */
-    explicit PluginRepresentation(const QString comment, const QString group,
-                                  const QString location, const QString name,
-                                  QObject *parent = nullptr);
+    explicit PluginRepresentation(const QString author, const QString comment,
+                                  const QString group, const QString location,
+                                  const QString name, const QString url,
+                                  const QString version, QObject *parent = nullptr);
     /**
      * @brief PluginRepresentation class destructor
      */
@@ -64,6 +71,11 @@ public:
      */
     static PluginRepresentation *fromFile(const QString _filePath,
                                           QObject *_parent = nullptr);
+    /**
+     * @brief plugin author
+     * @return plugin author
+     */
+    QString author() const;
     /**
      * @brief plugin comment
      * @return plugin comment
@@ -84,8 +96,22 @@ public:
      * @return plugin name
      */
     QString name() const;
+    /**
+     * @brief plugin url
+     * @return plugin url
+     */
+    QString url() const;
+    /**
+     * @brief plugin version
+     * @return plugin version
+     */
+    QString version() const;
 
 private:
+    /**
+     * @brief plugin author
+     */
+    QString m_author;
     /**
      * @brief plugin comment
      */
@@ -102,6 +128,14 @@ private:
      * @brief plugin name
      */
     QString m_name;
+    /**
+     * @brief plugin url
+     */
+    QString m_url;
+    /**
+     * @brief plugin version
+     */
+    QString m_version;
 };
 
 

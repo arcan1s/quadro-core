@@ -441,6 +441,74 @@
     </message>
 </context>
 <context>
+    <name>PluginConfigWidget</name>
+    <message>
+        <location filename="../../quadroui/src/pluginconfigwidget.ui" line="59"/>
+        <location filename="../../../build/quadroui/src/ui_pluginconfigwidget.h" line="243"/>
+        <source>Plugins</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadroui/src/pluginconfigwidget.ui" line="67"/>
+        <location filename="../../quadroui/src/pluginconfigwidget.ui" line="178"/>
+        <location filename="../../../build/quadroui/src/ui_pluginconfigwidget.h" line="245"/>
+        <location filename="../../../build/quadroui/src/ui_pluginconfigwidget.h" line="249"/>
+        <source>Enabled plugins</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadroui/src/pluginconfigwidget.ui" line="112"/>
+        <location filename="../../../build/quadroui/src/ui_pluginconfigwidget.h" line="248"/>
+        <source>All plugins</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PluginRepresentationWidget</name>
+    <message>
+        <location filename="../../quadroui/src/pluginrepresentationwidget.ui" line="25"/>
+        <location filename="../../../build/quadroui/src/ui_pluginrepresentationwidget.h" line="217"/>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadroui/src/pluginrepresentationwidget.ui" line="55"/>
+        <location filename="../../../build/quadroui/src/ui_pluginrepresentationwidget.h" line="218"/>
+        <source>Version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadroui/src/pluginrepresentationwidget.ui" line="85"/>
+        <location filename="../../../build/quadroui/src/ui_pluginrepresentationwidget.h" line="219"/>
+        <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadroui/src/pluginrepresentationwidget.ui" line="115"/>
+        <location filename="../../../build/quadroui/src/ui_pluginrepresentationwidget.h" line="220"/>
+        <source>Author</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadroui/src/pluginrepresentationwidget.ui" line="145"/>
+        <location filename="../../../build/quadroui/src/ui_pluginrepresentationwidget.h" line="221"/>
+        <source>URL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadroui/src/pluginrepresentationwidget.ui" line="175"/>
+        <location filename="../../../build/quadroui/src/ui_pluginrepresentationwidget.h" line="222"/>
+        <source>Location</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadroui/src/pluginrepresentationwidget.ui" line="205"/>
+        <location filename="../../../build/quadroui/src/ui_pluginrepresentationwidget.h" line="223"/>
+        <source>Group</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>SettingsWindow</name>
     <message>
         <location filename="../../quadro/src/settingswindow.ui" line="14"/>

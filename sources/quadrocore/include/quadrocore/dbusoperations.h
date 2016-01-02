@@ -26,6 +26,7 @@
 #ifndef DBUSOPERATIONS_H
 #define DBUSOPERATIONS_H
 
+#include <QDBusArgument>
 #include <QVariant>
 
 
@@ -35,6 +36,16 @@
  */
 namespace DBusOperations
 {
+    /**
+     * @brief additional method to avoid conversion from DBus type to native ones
+     * @param _data          source data
+     * @return converted value
+     */
+    template<class T> T toNative(const QVariant _data)
+    {
+        return qdbus_cast<T>(_data.value<QDBusVariant>().
+            variant().value<QDBusArgument>());
+    };
     /**
      * @brief common DBus request
      * @param _service       DBus service name

@@ -15,7 +15,7 @@
  *   along with quadro. If not, see http://www.gnu.org/licenses/           *
  ***************************************************************************/
 /**
- * @file quadroui.h
+ * @file pluginrepresentationwidget.h
  * Header of quadro library
  * @author Evgeniy Alekseev
  * @copyright GPLv3
@@ -23,21 +23,47 @@
  */
 
 
-#ifndef QUADROUI_H
-#define QUADROUI_H
+#ifndef PLUGINREPRESENTATIONWIDGET_H
+#define PLUGINREPRESENTATIONWIDGET_H
 
-#include "appiconwidget.h"
-#include "editappwindow.h"
-#include "fileiconwidget.h"
-#include "fileinfowindow.h"
-#include "iconwidget.h"
-#include "pluginconfigwidget.h"
-#include "plugincontainer.h"
-#include "pluginrepresentationwidget.h"
-#include "pluginwidget.h"
-#include "quadrowidget.h"
-#include "searchbar.h"
-#include "standaloneappwidget.h"
-#include "webappwidget.h"
+#include <QWidget>
 
-#endif /* QUADROUI_H */
+
+class PluginRepresentation;
+
+namespace Ui {
+class PluginRepresentationWidget;
+}
+
+/**
+ * @brief The PluginRepresentationWidget class provides UI for PluginRepresentation
+ * class
+ */
+class PluginRepresentationWidget : public QWidget
+{
+    Q_OBJECT
+
+public:
+    /**
+     * @brief PluginRepresentationWidget class constructor
+     * @param parent         pointer to parent object
+     * @param representation pointer to representation object
+     *
+     */
+    explicit PluginRepresentationWidget(QWidget *parent,
+                                        PluginRepresentation *representation);
+    /**
+     * @brief PluginRepresentationWidget class destructor
+     */
+    virtual ~PluginRepresentationWidget();
+
+private:
+    // ui
+    /**
+     * @brief pointer to UI object
+     */
+    Ui::PluginRepresentationWidget *ui = nullptr;
+};
+
+
+#endif /* PLUGINREPRESENTATIONWIDGET_H */

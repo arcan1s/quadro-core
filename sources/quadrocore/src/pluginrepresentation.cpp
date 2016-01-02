@@ -33,14 +33,18 @@
 /**
  * @fn PluginRepresentation
  */
-PluginRepresentation::PluginRepresentation(const QString comment, const QString group,
-                                           const QString location, const QString name,
-                                           QObject *parent)
+PluginRepresentation::PluginRepresentation(const QString author, const QString comment,
+                                           const QString group, const QString location,
+                                           const QString name, const QString url,
+                                           const QString version, QObject *parent)
     : QObject(parent)
+    , m_author(author)
     , m_comment(comment)
     , m_group(group)
     , m_location(location)
     , m_name(name)
+    , m_url(url)
+    , m_version(version)
 {
     qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
 }
@@ -82,13 +86,25 @@ PluginRepresentation *PluginRepresentation::fromFile(const QString _filePath,
     }
 
     settings.beginGroup(configGroup);
+    QString author = settings.value(QString("Author"), QString("John Smith")).toString();
     QString comment = settings.value(QString("Comment"), QString("")).toString();
     QString name = settings.value(QString("Name"), QString("none")).toString();
+    QString url = settings.value(QString("URL"), QString("http://localhost")).toString();
+    QString version = settings.value(QString("Version"), QString("0.1")).toString();
     settings.endGroup();
 
-    return new PluginRepresentation(comment, group,
+    return new PluginRepresentation(author, comment, group,
                                     QFileInfo(_filePath).absolutePath(), name,
-                                    _parent);
+                                    url, version, _parent);
+}
+
+
+/**
+ * @fn author
+ */
+QString PluginRepresentation::author() const
+{
+    return m_author;
 }
 
 
@@ -125,4 +141,22 @@ QString PluginRepresentation::location() const
 QString PluginRepresentation::name() const
 {
     return m_name;
+}
+
+
+/**
+ * @fn url
+ */
+QString PluginRepresentation::url() const
+{
+    return m_url;
+}
+
+
+/**
+ * @fn version
+ */
+QString PluginRepresentation::version() const
+{
+    return m_version;
 }
