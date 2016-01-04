@@ -48,8 +48,10 @@ IconWidget::IconWidget(const QSize size, QWidget *parent)
 {
     qCDebug(LOG_UILIB) << __PRETTY_FUNCTION__;
 
+    setContentsMargins(0, 0, 0, 0);
     setFixedSize(m_size);
     setLayout(new QVBoxLayout(this));
+    layout()->setContentsMargins(0, 0, 0, 0);
     // icon
     m_iconLabel = new QLabel(this);
     m_iconLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);

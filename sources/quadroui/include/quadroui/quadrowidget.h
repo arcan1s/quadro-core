@@ -38,7 +38,7 @@ class QFocusEvent;
 class QuadroWidget : public QScrollArea
 {
     Q_OBJECT
-    Q_PROPERTY(float grid READ grid)
+    Q_PROPERTY(int grid READ grid)
     Q_PROPERTY(QString title READ title)
 
 public:
@@ -50,7 +50,7 @@ public:
      * @param hPolicy        horizontal scroll bar policy
      * @param vPolicy        vertical scroll bar policy
      */
-    explicit QuadroWidget(QWidget *parent, const float grid,
+    explicit QuadroWidget(QWidget *parent, const int grid,
                           const QString widgetTitle = QString("none"),
                           const Qt::ScrollBarPolicy hPolicy = Qt::ScrollBarAlwaysOff,
                           const Qt::ScrollBarPolicy vPolicy = Qt::ScrollBarAsNeeded);
@@ -66,7 +66,7 @@ public:
      * @brief grid size
      * @return current widget grid size
      */
-    float grid() const;
+    int grid() const;
     /**
      * @brief widget title (will not be shown by default)
      * @return title as a string
@@ -148,7 +148,7 @@ private:
     /**
      * @brief grid size
      */
-    float m_grid = 0;
+    int m_grid = 0;
     /**
      * @brief widget title
      */

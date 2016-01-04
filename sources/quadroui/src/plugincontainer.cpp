@@ -36,7 +36,7 @@
 /**
  * @fn PluginContainer
  */
-PluginContainer::PluginContainer(QWidget *parent, const float grid,
+PluginContainer::PluginContainer(QWidget *parent, const int grid,
                                  const QString widgetTitle,
                                  const Qt::ScrollBarPolicy hPolicy,
                                  const Qt::ScrollBarPolicy vPolicy)

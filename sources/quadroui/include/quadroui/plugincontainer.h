@@ -49,7 +49,7 @@ public:
      * @param hPolicy        horizontal scroll bar policy
      * @param vPolicy        vertical scroll bar policy
      */
-    explicit PluginContainer(QWidget *parent, const float grid,
+    explicit PluginContainer(QWidget *parent, const int grid,
                              const QString widgetTitle = QString("none"),
                              const Qt::ScrollBarPolicy hPolicy = Qt::ScrollBarAlwaysOff,
                              const Qt::ScrollBarPolicy vPolicy = Qt::ScrollBarAsNeeded);

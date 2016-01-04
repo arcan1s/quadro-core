@@ -47,6 +47,7 @@ PluginWidget::PluginWidget(PluginInterface *interface, const QSize size,
 {
     qCDebug(LOG_UILIB) << __PRETTY_FUNCTION__;
 
+    setContentsMargins(0, 0, 0, 0);
     setFixedSize(m_size);
     setLayout(new QVBoxLayout(this));
     // text

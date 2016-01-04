@@ -40,7 +40,7 @@
 /**
  * @fn QuadroWidget
  */
-QuadroWidget::QuadroWidget(QWidget *parent, const float grid,
+QuadroWidget::QuadroWidget(QWidget *parent, const int grid,
                            const QString widgetTitle,
                            const Qt::ScrollBarPolicy hPolicy,
                            const Qt::ScrollBarPolicy vPolicy)
@@ -50,6 +50,7 @@ QuadroWidget::QuadroWidget(QWidget *parent, const float grid,
 {
     qCDebug(LOG_UILIB) << __PRETTY_FUNCTION__;
 
+    setContentsMargins(0, 0, 0, 0);
     setHorizontalScrollBarPolicy(hPolicy);
     setVerticalScrollBarPolicy(vPolicy);
     setWidgetResizable(true);
@@ -88,7 +89,7 @@ void QuadroWidget::clearLayout()
 /**
  * @fn grid
  */
-float QuadroWidget::grid() const
+int QuadroWidget::grid() const
 {
     return m_grid;
 }
@@ -238,7 +239,9 @@ void QuadroWidget::createActions()
 void QuadroWidget::createObjects()
 {
     m_widget = new QWidget(this);
+    m_widget->setContentsMargins(0, 0, 0, 0);
     m_layout = new FlowLayout(m_widget);
+    m_layout->setContentsMargins(0, 0, 0, 0);
     m_widget->setLayout(m_layout);
     setWidget(m_widget);
 }

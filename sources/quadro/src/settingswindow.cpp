@@ -63,7 +63,7 @@ QVariantHash SettingsWindow::getSettings(QString fileName)
     QSettings settings(fileName, QSettings::IniFormat);
 
     settings.beginGroup(QString("Global"));
-    config[QString("GridSize")] = settings.value(QString("GridSize"), 150.0);
+    config[QString("GridSize")] = settings.value(QString("GridSize"), 150);
     config[QString("RecentItemsCount")] = settings.value(QString("RecentItemsCount"), 20);
     config[QString("ShowHidden")] = settings.value(QString("ShowHidden"), false);
     config[QString("Tabs")] = settings.value(QString("Tabs"), QStringList() <<
