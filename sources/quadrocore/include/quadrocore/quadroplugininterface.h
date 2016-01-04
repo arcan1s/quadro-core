@@ -46,6 +46,10 @@ public:
      * @brief QuadroPluginInterface class destructor
      */
     virtual ~QuadroPluginInterface() {};
+    /**
+     * @brief method which generates new instance of QuadroPluginInterface class
+     */
+    virtual QuadroPluginInterface *createInstance() = 0;
     // get methods
     /**
      * @brief pointer to configuration widget. If returning pointer will not be

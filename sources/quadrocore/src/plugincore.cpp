@@ -105,14 +105,11 @@ QHash<QString, PluginRepresentation *> PluginCore::knownPlugins(const QString _g
     qCDebug(LOG_LIB) << "Requested type is" << _group;
 
     QHash<QString, PluginRepresentation *> foundPlugins;
-    if (_group.isEmpty()) {
-        foundPlugins = m_allPlugins;
-    } else {
-        for (auto plugin : m_allPlugins.keys()) {
-            if (m_allPlugins[plugin]->group() != _group)
-                continue;
-            foundPlugins[plugin] = m_allPlugins[plugin];
-        }
+    for (auto plugin : m_allPlugins.values()) {
+        if ((!_group.isEmpty())
+            && (plugin->group() != _group))
+            continue;
+        foundPlugins[plugin->name()] = plugin;
     }
 
     return foundPlugins;
@@ -162,7 +159,8 @@ bool PluginCore::unloadPlugin(const int _index, const QString _configPath)
     // send quit signal to plugin
     m_plugins[_index]->quit(_configPath);
     // remove from index
-    m_plugins.remove(_index);
+    auto plugin = m_plugins.take(_index);
+    delete plugin;
 
     return true;
 }

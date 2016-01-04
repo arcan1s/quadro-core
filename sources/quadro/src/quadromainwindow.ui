@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
+ <class>QuadroMainWindow</class>
+ <widget class="QMainWindow" name="QuadroMainWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -48,8 +48,12 @@
     </rect>
    </property>
    <widget class="QMenu" name="menuMenu">
+    <property name="title">
+     <string/>
+    </property>
     <property name="icon">
-     <iconset theme="configure"/>
+     <iconset theme="configure">
+      <normaloff>.</normaloff>.</iconset>
     </property>
     <addaction name="actionSettings"/>
     <addaction name="separator"/>
@@ -126,7 +130,7 @@
   </action>
  </widget>
  <resources>
-  <include location="../../resources/resources.qrc"/>
+  <include location="../../resources/quadro.qrc"/>
  </resources>
  <connections/>
 </ui>

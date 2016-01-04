@@ -39,6 +39,10 @@ public:
      * @brief TabPluginInterface class destructor
      */
     virtual ~TabPluginInterface() {};
+    /**
+     * @brief method which generates new instance of TabPluginInterface class
+     */
+    virtual TabPluginInterface *createInstance() = 0;
     // get methods
     /**
      * @brief plugin ui object

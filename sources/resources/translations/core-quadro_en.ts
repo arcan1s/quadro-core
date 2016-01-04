@@ -287,73 +287,61 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../quadro/src/mainwindow.ui" line="29"/>
         <location filename="../../../build/quadro/src/ui_mainwindow.h" line="155"/>
         <source>Toolbar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../quadro/src/mainwindow.ui" line="68"/>
         <location filename="../../../build/quadro/src/ui_mainwindow.h" line="138"/>
         <source>&amp;DBus API</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../quadro/src/mainwindow.ui" line="71"/>
         <location filename="../../../build/quadro/src/ui_mainwindow.h" line="140"/>
         <source>Show DBus API</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../quadro/src/mainwindow.ui" line="76"/>
         <location filename="../../../build/quadro/src/ui_mainwindow.h" line="142"/>
         <source>&amp;Library</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../quadro/src/mainwindow.ui" line="79"/>
         <location filename="../../../build/quadro/src/ui_mainwindow.h" line="144"/>
         <source>Show library docs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../quadro/src/mainwindow.ui" line="88"/>
         <location filename="../../../build/quadro/src/ui_mainwindow.h" line="146"/>
         <source>&amp;Report a bug</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../quadro/src/mainwindow.ui" line="97"/>
         <location filename="../../../build/quadro/src/ui_mainwindow.h" line="147"/>
         <source>&amp;About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../quadro/src/mainwindow.ui" line="100"/>
         <location filename="../../../build/quadro/src/ui_mainwindow.h" line="149"/>
         <source>About this application</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../quadro/src/mainwindow.ui" line="109"/>
         <location filename="../../../build/quadro/src/ui_mainwindow.h" line="151"/>
         <source>&amp;Quit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../quadro/src/mainwindow.ui" line="112"/>
         <location filename="../../../build/quadro/src/ui_mainwindow.h" line="152"/>
         <source>Ctrl+Q</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../quadro/src/mainwindow.ui" line="121"/>
         <location filename="../../../build/quadro/src/ui_mainwindow.h" line="153"/>
         <source>&amp;Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../quadro/src/mainwindow.ui" line="124"/>
         <location filename="../../../build/quadro/src/ui_mainwindow.h" line="154"/>
         <source>Ctrl+S</source>
         <translation type="unfinished"></translation>
@@ -443,68 +431,129 @@
 <context>
     <name>PluginConfigWidget</name>
     <message>
-        <location filename="../../quadroui/src/pluginconfigwidget.ui" line="59"/>
-        <location filename="../../../build/quadroui/src/ui_pluginconfigwidget.h" line="243"/>
+        <location filename="../../quadroui/src/pluginconfigwidget.ui" line="14"/>
+        <location filename="../../../build/quadroui/src/ui_pluginconfigwidget.h" line="260"/>
+        <source>Plugin configuration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadroui/src/pluginconfigwidget.ui" line="61"/>
+        <location filename="../../../build/quadroui/src/ui_pluginconfigwidget.h" line="265"/>
         <source>Plugins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../quadroui/src/pluginconfigwidget.ui" line="67"/>
-        <location filename="../../quadroui/src/pluginconfigwidget.ui" line="178"/>
-        <location filename="../../../build/quadroui/src/ui_pluginconfigwidget.h" line="245"/>
-        <location filename="../../../build/quadroui/src/ui_pluginconfigwidget.h" line="249"/>
-        <source>Enabled plugins</source>
+        <location filename="../../quadroui/src/pluginconfigwidget.ui" line="90"/>
+        <location filename="../../../build/quadroui/src/ui_pluginconfigwidget.h" line="268"/>
+        <source>All plugins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../quadroui/src/pluginconfigwidget.ui" line="112"/>
-        <location filename="../../../build/quadroui/src/ui_pluginconfigwidget.h" line="248"/>
-        <source>All plugins</source>
+        <location filename="../../quadroui/src/pluginconfigwidget.ui" line="158"/>
+        <location filename="../../../build/quadroui/src/ui_pluginconfigwidget.h" line="269"/>
+        <source>Enabled plugins</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>PluginRepresentationWidget</name>
     <message>
-        <location filename="../../quadroui/src/pluginrepresentationwidget.ui" line="25"/>
-        <location filename="../../../build/quadroui/src/ui_pluginrepresentationwidget.h" line="217"/>
-        <source>Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../quadroui/src/pluginrepresentationwidget.ui" line="55"/>
-        <location filename="../../../build/quadroui/src/ui_pluginrepresentationwidget.h" line="218"/>
+        <location filename="../../quadroui/src/pluginrepresentationwidget.ui" line="28"/>
+        <location filename="../../../build/quadroui/src/ui_pluginrepresentationwidget.h" line="206"/>
         <source>Version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../quadroui/src/pluginrepresentationwidget.ui" line="85"/>
-        <location filename="../../../build/quadroui/src/ui_pluginrepresentationwidget.h" line="219"/>
+        <location filename="../../quadroui/src/pluginrepresentationwidget.ui" line="61"/>
+        <location filename="../../../build/quadroui/src/ui_pluginrepresentationwidget.h" line="207"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../quadroui/src/pluginrepresentationwidget.ui" line="115"/>
-        <location filename="../../../build/quadroui/src/ui_pluginrepresentationwidget.h" line="220"/>
+        <location filename="../../quadroui/src/pluginrepresentationwidget.ui" line="94"/>
+        <location filename="../../../build/quadroui/src/ui_pluginrepresentationwidget.h" line="208"/>
         <source>Author</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../quadroui/src/pluginrepresentationwidget.ui" line="145"/>
-        <location filename="../../../build/quadroui/src/ui_pluginrepresentationwidget.h" line="221"/>
+        <location filename="../../quadroui/src/pluginrepresentationwidget.ui" line="127"/>
+        <location filename="../../../build/quadroui/src/ui_pluginrepresentationwidget.h" line="209"/>
         <source>URL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../quadroui/src/pluginrepresentationwidget.ui" line="175"/>
-        <location filename="../../../build/quadroui/src/ui_pluginrepresentationwidget.h" line="222"/>
+        <location filename="../../quadroui/src/pluginrepresentationwidget.ui" line="166"/>
+        <location filename="../../../build/quadroui/src/ui_pluginrepresentationwidget.h" line="210"/>
         <source>Location</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../quadroui/src/pluginrepresentationwidget.ui" line="205"/>
-        <location filename="../../../build/quadroui/src/ui_pluginrepresentationwidget.h" line="223"/>
+        <location filename="../../quadroui/src/pluginrepresentationwidget.ui" line="199"/>
+        <location filename="../../../build/quadroui/src/ui_pluginrepresentationwidget.h" line="211"/>
         <source>Group</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QuadroMainWindow</name>
+    <message>
+        <location filename="../../quadro/src/quadromainwindow.ui" line="29"/>
+        <source>Toolbar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadro/src/quadromainwindow.ui" line="72"/>
+        <source>&amp;DBus API</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadro/src/quadromainwindow.ui" line="75"/>
+        <source>Show DBus API</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadro/src/quadromainwindow.ui" line="80"/>
+        <source>&amp;Library</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadro/src/quadromainwindow.ui" line="83"/>
+        <source>Show library docs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadro/src/quadromainwindow.ui" line="92"/>
+        <source>&amp;Report a bug</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadro/src/quadromainwindow.ui" line="101"/>
+        <source>&amp;About</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadro/src/quadromainwindow.ui" line="104"/>
+        <source>About this application</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadro/src/quadromainwindow.ui" line="113"/>
+        <source>&amp;Quit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadro/src/quadromainwindow.ui" line="116"/>
+        <source>Ctrl+Q</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadro/src/quadromainwindow.ui" line="125"/>
+        <source>&amp;Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadro/src/quadromainwindow.ui" line="128"/>
+        <source>Ctrl+S</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -38,10 +38,11 @@ namespace DBusOperations
 {
     /**
      * @brief additional method to avoid conversion from DBus type to native ones
+     * @tparam T             type to which DBus data should be converted
      * @param _data          source data
      * @return converted value
      */
-    template<class T> T toNative(const QVariant _data)
+    template<class T> T toNativeType(const QVariant _data)
     {
         return qdbus_cast<T>(_data.value<QDBusVariant>().
             variant().value<QDBusArgument>());

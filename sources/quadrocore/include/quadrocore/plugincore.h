@@ -159,10 +159,9 @@ private:
         QObject *plugin = loader.instance();
         T *item = nullptr;
         if (loader.isLoaded()) {
-            item = qobject_cast<T *>(plugin);
-            if (!item) {
+            item = qobject_cast<T *>(plugin)->createInstance();
+            if (!item)
                 qCCritical(LOG_LIB) << "Could not cast plugin";
-            }
         } else {
             qCCritical(LOG_LIB) << "Could not load the library for" << _name;
             qCCritical(LOG_LIB) << "Error" << loader.errorString();

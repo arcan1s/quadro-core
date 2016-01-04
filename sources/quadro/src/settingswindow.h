@@ -23,8 +23,6 @@
 #include <QTreeWidgetItem>
 
 
-class MainWindow;
-
 namespace Ui {
 class SettingsWindow;
 }

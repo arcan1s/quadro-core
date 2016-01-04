@@ -26,9 +26,12 @@
 #ifndef PLUGINCONFIGWIDGET_H
 #define PLUGINCONFIGWIDGET_H
 
-#include <QMainWindow>
+#include <QDialog>
+#include <QListWidgetItem>
 #include <QTreeWidgetItem>
 
+
+class PluginRepresentationWidget;
 
 namespace Ui {
 class PluginConfigWidget;
@@ -37,7 +40,7 @@ class PluginConfigWidget;
 /**
  * @brief The PluginConfigWidget class provides UI for plugin configuration
  */
-class PluginConfigWidget : public QMainWindow
+class PluginConfigWidget : public QDialog
 {
     Q_OBJECT
 
@@ -62,6 +65,14 @@ public:
      */
     void addPluginConfigurationPage(const QString _name, QWidget *_configPage);
 
+signals:
+    /**
+     * @brief signal which will be emitted each time when settings save is
+     * requested
+     * @param _plugins       list of plugins which is set to enabled
+     */
+    void saveSettingsRequested(const QStringList _plugins) const;
+
 private slots:
     /**
      * @brief slot which will be called when item in the tree widget will be
@@ -69,6 +80,13 @@ private slots:
      * @param _current       pointer to current item
      */
     void changePage(QTreeWidgetItem *_current, QTreeWidgetItem *);
+    /**
+     * @brief change enabled plugin information page
+     * @param _current       pointer to current active item
+     * @param _previous      pointer to previous active item
+     */
+    void changePluginRepresentation(QListWidgetItem *_current,
+                                    QListWidgetItem *_previous);
     /**
      * @brief slot which will be called to disable plugin
      */
@@ -85,6 +103,10 @@ private slots:
      * @brief slot which will be called to move plugin up
      */
     void pluginMoveUp();
+    /**
+     * @brief method which will be called to save settings
+     */
+    void saveSettings() const;
 
 private:
     // ui
@@ -92,6 +114,7 @@ private:
      * @brief pointer to UI object
      */
     Ui::PluginConfigWidget *ui = nullptr;
+    QHash<QString, PluginRepresentationWidget *> m_representations;
     // backend
     /**
      * @brief additional method to create window actions

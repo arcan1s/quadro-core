@@ -26,8 +26,8 @@
 #include <iostream>
 #include <unistd.h>
 
-#include "mainwindow.h"
 #include "messages.h"
+#include "quadromainwindow.h"
 #include "version.h"
 
 
@@ -109,6 +109,6 @@ int main(int argc, char *argv[])
         existingSessionOperation(QString("Restore"));
         return 0;
     }
-    MainWindow w(0, args);
+    QuadroMainWindow w(nullptr, args);
     return a.exec();
 }

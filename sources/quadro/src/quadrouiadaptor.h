@@ -24,7 +24,7 @@
 #include "config.h"
 
 
-class MainWindow;
+class QuadroMainWindow;
 
 class QuadroUiAdaptor : public QDBusAbstractAdaptor
 {
@@ -32,7 +32,7 @@ class QuadroUiAdaptor : public QDBusAbstractAdaptor
     Q_CLASSINFO("D-Bus Interface", DBUS_INTERFACE)
 
 public:
-    explicit QuadroUiAdaptor(MainWindow *parent);
+    explicit QuadroUiAdaptor(QuadroMainWindow *parent);
     virtual ~QuadroUiAdaptor();
 
 public slots:
@@ -46,7 +46,7 @@ public slots:
     QStringList UIDs() const;
 
 private:
-    MainWindow *m_mainWindow = nullptr;
+    QuadroMainWindow *m_mainWindow = nullptr;
 };
 
 

@@ -24,7 +24,7 @@
 
 #include <quadrocore/quadrodebug.h>
 
-#include "mainwindow.h"
+#include "quadromainwindow.h"
 #include "version.h"
 
 
@@ -84,7 +84,7 @@ void SettingsWindow::closeWindow()
 {
     saveSettings();
     close();
-    dynamic_cast<MainWindow *>(parent())->updateConfiguration();
+    dynamic_cast<QuadroMainWindow *>(parent())->updateConfiguration();
 }
 
 

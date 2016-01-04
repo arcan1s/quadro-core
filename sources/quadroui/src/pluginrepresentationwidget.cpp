@@ -44,11 +44,12 @@ PluginRepresentationWidget::PluginRepresentationWidget(QWidget *parent,
     ui = new Ui::PluginRepresentationWidget;
     ui->setupUi(this);
 
-    ui->label_nameValue->setText(representation->name());
+    ui->groupBox->setTitle(representation->name());
     ui->label_versionValue->setText(representation->version());
     ui->label_commentValue->setText(representation->comment());
     ui->label_authorValue->setText(representation->author());
-    ui->label_urlValue->setText(representation->url());
+    ui->label_urlValue->setText(QString("<a href=\"%1\">%1</a>").arg(
+        representation->url()));
     ui->label_locationValue->setText(representation->location());
     ui->label_groupValue->setText(representation->group());
 }

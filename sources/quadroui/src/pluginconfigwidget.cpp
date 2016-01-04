@@ -27,7 +27,6 @@
 #include "ui_pluginconfigwidget.h"
 
 #include <QDBusArgument>
-#include <QListWidgetItem>
 
 #include <quadrocore/quadro.h>
 
@@ -40,7 +39,7 @@
  */
 PluginConfigWidget::PluginConfigWidget(QWidget *parent, const QString group,
                                        const QStringList enabled)
-    : QMainWindow(parent)
+    : QDialog(parent)
     , m_group(group)
     , m_enabled(enabled)
 {
@@ -97,6 +96,40 @@ void PluginConfigWidget::changePage(QTreeWidgetItem *_current, QTreeWidgetItem *
         ui->stackedWidget->setCurrentIndex(i);
         break;
     }
+}
+
+
+/**
+ * @fn changePluginRepresentation
+ */
+void PluginConfigWidget::changePluginRepresentation(QListWidgetItem *_current,
+                                                    QListWidgetItem *_previous)
+{
+    // fallback operations
+    if (_current == nullptr) {
+        qCDebug(LOG_UILIB) << "No current item found";
+        return;
+    }
+
+    // main cycle
+    qCDebug(LOG_UILIB) << "Change data to" << _current->text();
+
+    if ((_previous == nullptr)
+        || (m_representations[_previous->text()]->isHidden())) {
+        qCInfo(LOG_UILIB) << "Previous item is hidden, try to find active one";
+        for (auto wid : m_representations.values()) {
+            if (wid->isHidden())
+                continue;
+            wid->hide();
+            // since there is only one (or at least should be) active widget
+            // we may break iteration here
+            break;
+        }
+    } else {
+        m_representations[_previous->text()]->hide();
+    }
+
+    m_representations[_current->text()]->show();
 }
 
 
@@ -181,6 +214,22 @@ void PluginConfigWidget::pluginMoveUp()
 
 
 /**
+ * @fn saveSettings
+ */
+void PluginConfigWidget::saveSettings() const
+{
+    QStringList plugins;
+    auto items = ui->listWidget_enabledPlugins->findItems(
+        QString("*"), Qt::MatchWrap | Qt::MatchWildcard);
+    for (auto item : items)
+        plugins.append(item->text());
+    qCInfo(LOG_UILIB) << "Selected plugins" << plugins;
+
+    emit(saveSettingsRequested(plugins));
+}
+
+
+/**
  * @fn createActions
  */
 void PluginConfigWidget::createActions()
@@ -191,6 +240,14 @@ void PluginConfigWidget::createActions()
     connect(ui->pushButton_up, SIGNAL(clicked(const bool)), this, SLOT(pluginMoveUp()));
     connect(ui->treeWidget, SIGNAL(currentItemChanged(QTreeWidgetItem *, QTreeWidgetItem *)),
             this, SLOT(changePage(QTreeWidgetItem *, QTreeWidgetItem *)));
+    connect(ui->listWidget_allPlugins, SIGNAL(currentItemChanged(QListWidgetItem *, QListWidgetItem *)),
+            this, SLOT(changePluginRepresentation(QListWidgetItem *, QListWidgetItem *)));
+    connect(ui->listWidget_enabledPlugins, SIGNAL(currentItemChanged(QListWidgetItem *, QListWidgetItem *)),
+            this, SLOT(changePluginRepresentation(QListWidgetItem *, QListWidgetItem *)));
+
+    connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(this, SIGNAL(accepted()), this, SLOT(saveSettings()));
 }
 
 
@@ -201,21 +258,24 @@ void PluginConfigWidget::createObjects()
 {
     // create plugin list
     QStringList knownPluginNames;
-    QVariantList plugins = DBusOperations::toNative<QVariantList>(
+    QVariantList plugins = DBusOperations::toNativeType<QVariantList>(
         DBusOperations::sendRequestToLibrary(QString("Plugins"),
                                              QVariantList() << m_group).first());
     for (auto plugin : plugins) {
         QVariantHash metadata = qdbus_cast<QVariantHash>(plugin.value<QDBusArgument>());
+        QString name = metadata[QString("name")].toString();
         PluginRepresentation *repr = new PluginRepresentation(
             metadata[QString("author")].toString(), metadata[QString("comment")].toString(),
             metadata[QString("group")].toString(), metadata[QString("location")].toString(),
-            metadata[QString("name")].toString(), metadata[QString("url")].toString(),
+            name, metadata[QString("url")].toString(),
             metadata[QString("version")].toString(), this);
-        ui->scrollAreaWidgetContents_plugins->layout()->addWidget(
-            new PluginRepresentationWidget(this, repr));
+        PluginRepresentationWidget *wid = new PluginRepresentationWidget(this, repr);
+        m_representations[name] = wid;
+        ui->layout_information->addWidget(wid);
+        wid->hide();
         repr->deleteLater();
 
-        knownPluginNames.append(metadata[QString("name")].toString());
+        knownPluginNames.append(name);
     }
 
     // found enabled plugins

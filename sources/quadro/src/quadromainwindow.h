@@ -16,8 +16,8 @@
  ***************************************************************************/
 
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef QUADROMAINWINDOW_H
+#define QUADROMAINWINDOW_H
 
 #include <QAction>
 #include <QApplication>
@@ -29,16 +29,16 @@
 class SettingsWindow;
 
 namespace Ui {
-class MainWindow;
+class QuadroMainWindow;
 }
 
-class MainWindow : public QMainWindow
+class QuadroMainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent, const QVariantHash args);
-    virtual ~MainWindow();
+    explicit QuadroMainWindow(QWidget *parent, const QVariantHash args);
+    virtual ~QuadroMainWindow();
 
 public slots:
     void changeTab(const int index = -1);
@@ -65,7 +65,7 @@ private:
     // ui
     QList<QAction *> tabActions;
     SettingsWindow *settingsWindow = nullptr;
-    Ui::MainWindow *ui = nullptr;
+    Ui::QuadroMainWindow *ui = nullptr;
     // backend
     void createActions();
     void createDBusSession();
@@ -80,4 +80,4 @@ private:
 };
 
 
-#endif /* MAINWINDOW_H */
+#endif /* QUADROMAINWINDOW_H */

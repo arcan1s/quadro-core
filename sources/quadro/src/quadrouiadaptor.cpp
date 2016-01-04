@@ -22,10 +22,10 @@
 
 #include <quadrocore/quadrodebug.h>
 
-#include "mainwindow.h"
+#include "quadromainwindow.h"
 
 
-QuadroUiAdaptor::QuadroUiAdaptor(MainWindow *parent)
+QuadroUiAdaptor::QuadroUiAdaptor(QuadroMainWindow *parent)
     : QDBusAbstractAdaptor(parent),
       m_mainWindow(parent)
 {

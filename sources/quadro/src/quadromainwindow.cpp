@@ -16,8 +16,8 @@
  ***************************************************************************/
 
 
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
+#include "quadromainwindow.h"
+#include "ui_quadromainwindow.h"
 
 #include <QDBusConnection>
 #include <QDBusMessage>
@@ -34,7 +34,7 @@
 #include "version.h"
 
 
-MainWindow::MainWindow(QWidget *parent, const QVariantHash args)
+QuadroMainWindow::QuadroMainWindow(QWidget *parent, const QVariantHash args)
     : QMainWindow(parent)
 {
     qSetMessagePattern(LOG_FORMAT);
@@ -44,7 +44,7 @@ MainWindow::MainWindow(QWidget *parent, const QVariantHash args)
 
     setWindowIcon(QIcon(":icon"));
 
-    ui = new Ui::MainWindow;
+    ui = new Ui::QuadroMainWindow;
     ui->setupUi(this);
 
     // apply window properties
@@ -56,7 +56,7 @@ MainWindow::MainWindow(QWidget *parent, const QVariantHash args)
 }
 
 
-MainWindow::~MainWindow()
+QuadroMainWindow::~QuadroMainWindow()
 {
     qCDebug(LOG_UI) << __PRETTY_FUNCTION__;
 
@@ -65,7 +65,7 @@ MainWindow::~MainWindow()
 }
 
 
-void MainWindow::closeEvent(QCloseEvent *event)
+void QuadroMainWindow::closeEvent(QCloseEvent *event)
 {
 //     if ((QSystemTrayIcon::isSystemTrayAvailable()) && (configuration[QString("SYSTRAY")] == QString("true"))) {
 //         hide();
@@ -75,7 +75,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 }
 
 
-void MainWindow::changeTab(const int index)
+void QuadroMainWindow::changeTab(const int index)
 {
     qCDebug(LOG_UI) << "Index" << index;
     if ((index == -1) || (index >= ui->stackedWidget->count())) return;
@@ -84,19 +84,19 @@ void MainWindow::changeTab(const int index)
 }
 
 
-void MainWindow::closeMainWindow()
+void QuadroMainWindow::closeMainWindow()
 {
     qApp->quit();
 }
 
 
-void MainWindow::showSettingsWindow()
+void QuadroMainWindow::showSettingsWindow()
 {
     settingsWindow->showWindow();
 }
 
 
-void MainWindow::updateConfiguration(const QVariantHash args)
+void QuadroMainWindow::updateConfiguration(const QVariantHash args)
 {
     deleteObjects();
     // update configuration
@@ -117,7 +117,7 @@ void MainWindow::updateConfiguration(const QVariantHash args)
 }
 
 
-void MainWindow::createContainer(const QStringList exec, const QString name)
+void QuadroMainWindow::createContainer(const QStringList exec, const QString name)
 {
     qCDebug(LOG_UI) << "Executable" << exec;
     qCDebug(LOG_UI) << "Name" << name;
@@ -133,7 +133,7 @@ void MainWindow::createContainer(const QStringList exec, const QString name)
 }
 
 
-void MainWindow::createWebContainer(const QString url, const bool showOpen)
+void QuadroMainWindow::createWebContainer(const QString url, const bool showOpen)
 {
     qCDebug(LOG_UI) << "Create URL" << url << "with show open button" << showOpen;
 
@@ -152,7 +152,7 @@ void MainWindow::createWebContainer(const QString url, const bool showOpen)
 }
 
 
-void MainWindow::removeContainer(const int index)
+void QuadroMainWindow::removeContainer(const int index)
 {
     qCDebug(LOG_UI) << "Remove tab" << index;
 
@@ -166,13 +166,13 @@ void MainWindow::removeContainer(const int index)
 }
 
 
-void MainWindow::changeTabByAction(QAction *action)
+void QuadroMainWindow::changeTabByAction(QAction *action)
 {
     return changeTab(tabActions.indexOf(action));
 }
 
 
-void MainWindow::clearTabs()
+void QuadroMainWindow::clearTabs()
 {
     QStringList tabs = m_configuration[QString("Tabs")].toStringList();
     disconnect(ui->toolBar, SIGNAL(actionTriggered(QAction *)),
@@ -194,7 +194,7 @@ void MainWindow::clearTabs()
 }
 
 
-void MainWindow::initTabs()
+void QuadroMainWindow::initTabs()
 {
     QStringList tabs = m_configuration[QString("Tabs")].toStringList();
 
@@ -221,7 +221,7 @@ void MainWindow::initTabs()
 }
 
 
-void MainWindow::createActions()
+void QuadroMainWindow::createActions()
 {
     connect(this, SIGNAL(needToBeConfigured()), this, SLOT(showSettingsWindow()));
 
@@ -235,7 +235,7 @@ void MainWindow::createActions()
 }
 
 
-void MainWindow::createDBusSession()
+void QuadroMainWindow::createDBusSession()
 {
     QDBusConnection bus = QDBusConnection::sessionBus();
     if (!bus.registerService(DBUS_SERVICE)) {
@@ -250,7 +250,7 @@ void MainWindow::createDBusSession()
 }
 
 
-void MainWindow::createObjects()
+void QuadroMainWindow::createObjects()
 {
     // backend
     m_core = new QuadroCore(this, m_configuration);
@@ -263,7 +263,7 @@ void MainWindow::createObjects()
 }
 
 
-void MainWindow::deleteObjects()
+void QuadroMainWindow::deleteObjects()
 {
     // frontend
     delete settingsWindow;
