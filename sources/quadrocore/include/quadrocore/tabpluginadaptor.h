@@ -32,7 +32,7 @@
 class TabPluginInterface;
 
 /**
- * @brief The PluginAdaptor class provides plugin DBus adaptor
+ * @brief The TabPluginAdaptor class provides tab plugin DBus adaptor
  */
 class TabPluginAdaptor : public QuadroPluginAdaptor
 {
@@ -41,13 +41,13 @@ class TabPluginAdaptor : public QuadroPluginAdaptor
 
 public:
     /**
-     * @brief PluginAdaptor class constructor
+     * @brief TabPluginAdaptor class constructor
      * @param parent         pointer to parent object
      * @param plugin         pointer to plugin item
      */
     explicit TabPluginAdaptor(QObject *parent, TabPluginInterface *plugin);
     /**
-     * @brief PluginAdaptor class destructor
+     * @brief TabPluginAdaptor class destructor
      */
     virtual ~TabPluginAdaptor();
 

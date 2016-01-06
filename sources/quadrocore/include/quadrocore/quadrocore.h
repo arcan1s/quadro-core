@@ -30,6 +30,7 @@
 #include <QVariant>
 
 
+class ConfigManager;
 class DesktopInterface;
 class FavoritesCore;
 class FileManagerCore;
@@ -48,13 +49,17 @@ public:
     /**
      * @brief QuadroCore class constructor
      * @param parent         pointer to parent item
-     * @param configuration  setting map
      */
-    explicit QuadroCore(QObject *parent, const QVariantHash configuration);
+    explicit QuadroCore(QObject *parent);
     /**
      * @brief QuadroCore class destructor
      */
     virtual ~QuadroCore();
+    /**
+     * @brief configuration manager object
+     * @return pointer to configuration manager object
+     */
+    ConfigManager *config();
     /**
      * @brief favorites core object
      * @return pointer to favorites core object
@@ -96,6 +101,10 @@ private:
      */
     void initPlatformPlugin();
     /**
+     * @fn configuration manager object
+     */
+    ConfigManager *m_config = nullptr;
+    /**
      * @brief favorites core object
      */
     FavoritesCore *m_favorites = nullptr;
@@ -119,10 +128,6 @@ private:
      * @brief recently core object
      */
     RecentlyCore *m_recently = nullptr;
-    /**
-     * @brief configuration
-     */
-    QVariantHash m_configuration;
 };
 
 

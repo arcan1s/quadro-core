@@ -253,7 +253,7 @@ void QuadroMainWindow::createDBusSession()
 void QuadroMainWindow::createObjects()
 {
     // backend
-    m_core = new QuadroCore(this, m_configuration);
+    m_core = new QuadroCore(this);
     createDBusSession();
 
     // frontend

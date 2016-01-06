@@ -48,6 +48,11 @@
  */
 #define DBUS_PLUGIN_INTERFACE "org.quadro.plugin"
 /**
+ * @def DBUS_CONFIG_PATH
+ * DBus object path for configuration manager
+ */
+#define DBUS_CONFIG_PATH "/config"
+/**
  * @def DBUS_OBJECT_PATH
  * DBus object path for library
  */

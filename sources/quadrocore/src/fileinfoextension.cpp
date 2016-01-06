@@ -23,8 +23,9 @@
  */
 
 
-#include <QtCore/qdiriterator.h>
 #include "quadrocore/quadro.h"
+
+#include <QDirIterator>
 
 
 /**

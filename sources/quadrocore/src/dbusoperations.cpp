@@ -48,6 +48,18 @@ QVariantList DBusOperations::sendRequest(const QString _service, const QString _
 
 
 /**
+ * @fn sendRequestToConfig
+ */
+QVariantList DBusOperations::sendRequestToConfig(const QString _cmd, const QVariantList _args)
+{
+    qCDebug(LOG_DBUS) << "Command" << _cmd << "with args" << _args;
+
+    return sendRequest(QString(DBUS_SERVICE), QString(DBUS_CONFIG_PATH),
+                       QString(DBUS_INTERFACE), _cmd, _args);
+}
+
+
+/**
  * @fn sendRequestToLibrary
  */
 QVariantList DBusOperations::sendRequestToLibrary(const QString _cmd, const QVariantList _args)

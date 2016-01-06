@@ -30,6 +30,8 @@
 
 #include "abstractappaggregator.h"
 #include "applicationitem.h"
+#include "configmanager.h"
+#include "configmanageradaptor.h"
 #include "dbusoperations.h"
 #include "desktopinterface.h"
 #include "favoritescore.h"

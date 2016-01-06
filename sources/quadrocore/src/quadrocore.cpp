@@ -36,11 +36,12 @@
 /**
  * @fn QuadroCore
  */
-QuadroCore::QuadroCore(QObject *parent, const QVariantHash configuration)
+QuadroCore::QuadroCore(QObject *parent)
     : QObject(parent)
-    , m_configuration(configuration)
 {
     qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
+
+    m_config = new ConfigManager(this);
 
     m_favorites = new FavoritesCore(this);
     m_favorites->initApplications();
@@ -49,7 +50,7 @@ QuadroCore::QuadroCore(QObject *parent, const QVariantHash configuration)
     m_launcher->initApplications();
     m_plugin = new PluginCore(this);
     m_plugin->initPlugins();
-    m_recently = new RecentlyCore(this, m_configuration[QString("RecentItemsCount")].toInt());
+    m_recently = new RecentlyCore(this, m_config->property("RecentItemsCount").toInt());
     m_recently->initApplications();
 
     initPlatformPlugin();
@@ -65,6 +66,7 @@ QuadroCore::~QuadroCore()
 {
     qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
 
+    QDBusConnection::sessionBus().unregisterObject(DBUS_CONFIG_PATH);
     QDBusConnection::sessionBus().unregisterObject(DBUS_OBJECT_PATH);
     QDBusConnection::sessionBus().unregisterService(DBUS_SERVICE);
 
@@ -139,6 +141,12 @@ void QuadroCore::createDBusSession()
     QDBusConnection bus = QDBusConnection::sessionBus();
     if (!bus.registerService(DBUS_SERVICE)) {
         qCWarning(LOG_UI) << "Could not register service";
+        qCWarning(LOG_UI) << bus.lastError().message();
+    }
+    if (!bus.registerObject(DBUS_CONFIG_PATH,
+                            new ConfigManagerAdaptor(m_config),
+                            QDBusConnection::ExportAllContents)) {
+        qCWarning(LOG_UI) << "Could not register config object";
         qCWarning(LOG_UI) << bus.lastError().message();
     }
     if (!bus.registerObject(DBUS_OBJECT_PATH,

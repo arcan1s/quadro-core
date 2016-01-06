@@ -60,6 +60,14 @@ namespace DBusOperations
                              const QString _interface, const QString _cmd,
                              const QVariantList _args);
     /**
+     * @brief DBus request to configuration manager
+     * @param _cmd           command which will be sent to DBus
+     * @param _args          command arguments if any
+     * @return DBusOperations::sendRequest()
+     */
+    QVariantList sendRequestToConfig(const QString _cmd,
+                                     const QVariantList _args = QVariantList());
+    /**
      * @brief DBus request to library
      * @param _cmd           command which will be sent to DBus
      * @param _args          command arguments if any

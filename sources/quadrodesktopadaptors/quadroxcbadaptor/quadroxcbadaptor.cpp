@@ -102,7 +102,7 @@ Window *QuadroXCBAdaptor::getClientList(unsigned long *size) const
 
 
 char *QuadroXCBAdaptor::getPropery(const Window _win, const Atom _xaPropType,
-                             const char *_property, unsigned long *size) const
+                                   const char *_property, unsigned long *size) const
 {
     qCDebug(LOG_LIB) << "Property" << _property;
 
