@@ -70,12 +70,22 @@ QuadroCore::~QuadroCore()
     QDBusConnection::sessionBus().unregisterObject(DBUS_OBJECT_PATH);
     QDBusConnection::sessionBus().unregisterService(DBUS_SERVICE);
 
+    delete m_config;
     delete m_favorites;
     delete m_filemanager;
     delete m_launcher;
     delete m_platformPlugin;
     delete m_plugin;
     delete m_recently;
+}
+
+
+/**
+ * @fn config
+ */
+ConfigManager *QuadroCore::config()
+{
+    return m_config;
 }
 
 

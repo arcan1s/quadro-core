@@ -38,9 +38,8 @@
  * @fn StandaloneAppWidget
  */
 StandaloneAppWidget::StandaloneAppWidget(QWidget *parent, const QStringList exec,
-                                         const int index, const QVariantHash settings)
+                                         const int index)
     : QMainWindow(parent),
-      m_configuration(settings),
       m_exec(exec),
       m_index(index)
 {

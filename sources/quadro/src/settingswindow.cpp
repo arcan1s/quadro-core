@@ -62,10 +62,7 @@ QVariantHash SettingsWindow::getSettings(QString fileName)
     QVariantHash config;
     QSettings settings(fileName, QSettings::IniFormat);
 
-    settings.beginGroup(QString("Global"));
-    config[QString("GridSize")] = settings.value(QString("GridSize"), 150);
-    config[QString("RecentItemsCount")] = settings.value(QString("RecentItemsCount"), 20);
-    config[QString("ShowHidden")] = settings.value(QString("ShowHidden"), false);
+    settings.beginGroup(QString("UI"));
     config[QString("Tabs")] = settings.value(QString("Tabs"), QStringList() <<
                                              QString("favlauncher") <<
                                              QString("applauncher") <<
@@ -134,10 +131,7 @@ void SettingsWindow::saveSettings()
     QVariantHash config = readSettings();
     QSettings settings(m_file, QSettings::IniFormat);
 
-    settings.beginGroup(QString("Global"));
-    settings.setValue(QString("GridSize"), config[QString("GridSize")]);
-    settings.setValue(QString("RecentItemsCount"), config[QString("RecentItemsCount")]);
-    settings.setValue(QString("ShowHidden"), config[QString("ShowHidden")]);
+    settings.beginGroup(QString("UI"));
     settings.setValue(QString("Tabs"), config[QString("Tabs")]);
     settings.endGroup();
 

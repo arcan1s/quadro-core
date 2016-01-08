@@ -50,11 +50,9 @@ public:
      * @param parent         pointer to parent object
      * @param exec           application executable
      * @param index          tab index
-     * @param settings       application settings
      */
     explicit StandaloneAppWidget(QWidget *parent, const QStringList exec,
-                                 const int index = -1,
-                                 const QVariantHash settings = QVariantHash());
+                                 const int index = -1);
     /**
      * @brief StandaloneAppWidget class destructor
      */
@@ -99,10 +97,6 @@ private:
      */
     StandaloneApplicationItem *m_application = nullptr;
     // configuration
-    /**
-     * @brief application configuration
-     */
-    QVariantHash m_configuration;
     /**
      * @brief application executable
      */

@@ -85,12 +85,11 @@ QStringList PluginCore::desktopPaths()
 /**
  * @fn initPlugin
  */
-void PluginCore::initPlugin(const int _index, const QVariantHash _configuration,
-                            const QString _configPath)
+void PluginCore::initPlugin(const int _index, const QString _configPath)
 {
     qCDebug(LOG_LIB) << "Init plugin" << _index << "using file" << _configPath;
 
-    m_plugins[_index]->setArgs(static_cast<QuadroCore *>(parent()), _configuration);
+    m_plugins[_index]->setArgs(static_cast<QuadroCore *>(parent()));
     m_plugins[_index]->readSettings(configurationPath(_configPath));
 
     return m_plugins[_index]->init();

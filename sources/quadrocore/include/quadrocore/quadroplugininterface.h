@@ -95,9 +95,8 @@ public:
      * @brief additional method which will be called to pass required args
      * @remark this method will be called before QuadroPluginInterface::init()
      * @param _core          pointer to core object
-     * @param _settings      application settings
      */
-    virtual void setArgs(QuadroCore *_core, const QVariantHash _settings) = 0;
+    virtual void setArgs(QuadroCore *_core) = 0;
 };
 
 Q_DECLARE_INTERFACE(QuadroPluginInterface, GENERIC_PLUGIN_INTERFACE)

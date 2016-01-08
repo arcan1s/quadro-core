@@ -75,11 +75,9 @@ public:
     /**
      * @brief pass parameter to plugin and init it
      * @param _index         plugin index
-     * @param _configuration general configuration dictionary
      * @param _configPath    plugin specific configuration file name
      */
-    void initPlugin(const int _index, const QVariantHash _configuration,
-                    const QString _configPath);
+    void initPlugin(const int _index, const QString _configPath);
     /**
      * @brief get list of all known plugins in their representations
      * @param _group         return only plugins with specified group

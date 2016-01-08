@@ -287,66 +287,6 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../../build/quadro/src/ui_mainwindow.h" line="155"/>
-        <source>Toolbar</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../build/quadro/src/ui_mainwindow.h" line="138"/>
-        <source>&amp;DBus API</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../build/quadro/src/ui_mainwindow.h" line="140"/>
-        <source>Show DBus API</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../build/quadro/src/ui_mainwindow.h" line="142"/>
-        <source>&amp;Library</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../build/quadro/src/ui_mainwindow.h" line="144"/>
-        <source>Show library docs</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../build/quadro/src/ui_mainwindow.h" line="146"/>
-        <source>&amp;Report a bug</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../build/quadro/src/ui_mainwindow.h" line="147"/>
-        <source>&amp;About</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../build/quadro/src/ui_mainwindow.h" line="149"/>
-        <source>About this application</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../build/quadro/src/ui_mainwindow.h" line="151"/>
-        <source>&amp;Quit</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../build/quadro/src/ui_mainwindow.h" line="152"/>
-        <source>Ctrl+Q</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../build/quadro/src/ui_mainwindow.h" line="153"/>
-        <source>&amp;Settings</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../build/quadro/src/ui_mainwindow.h" line="154"/>
-        <source>Ctrl+S</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../quadro/src/main.cpp" line="107"/>
         <source>Restore existing session.</source>
         <translation type="unfinished"></translation>
@@ -498,73 +438,61 @@
     <name>QuadroMainWindow</name>
     <message>
         <location filename="../../quadro/src/quadromainwindow.ui" line="29"/>
-        <location filename="../../../build/quadro/src/ui_quadromainwindow.h" line="161"/>
         <source>Toolbar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../quadro/src/quadromainwindow.ui" line="72"/>
-        <location filename="../../../build/quadro/src/ui_quadromainwindow.h" line="144"/>
         <source>&amp;DBus API</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../quadro/src/quadromainwindow.ui" line="75"/>
-        <location filename="../../../build/quadro/src/ui_quadromainwindow.h" line="146"/>
         <source>Show DBus API</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../quadro/src/quadromainwindow.ui" line="80"/>
-        <location filename="../../../build/quadro/src/ui_quadromainwindow.h" line="148"/>
         <source>&amp;Library</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../quadro/src/quadromainwindow.ui" line="83"/>
-        <location filename="../../../build/quadro/src/ui_quadromainwindow.h" line="150"/>
         <source>Show library docs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../quadro/src/quadromainwindow.ui" line="92"/>
-        <location filename="../../../build/quadro/src/ui_quadromainwindow.h" line="152"/>
         <source>&amp;Report a bug</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../quadro/src/quadromainwindow.ui" line="101"/>
-        <location filename="../../../build/quadro/src/ui_quadromainwindow.h" line="153"/>
         <source>&amp;About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../quadro/src/quadromainwindow.ui" line="104"/>
-        <location filename="../../../build/quadro/src/ui_quadromainwindow.h" line="155"/>
         <source>About this application</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../quadro/src/quadromainwindow.ui" line="113"/>
-        <location filename="../../../build/quadro/src/ui_quadromainwindow.h" line="157"/>
         <source>&amp;Quit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../quadro/src/quadromainwindow.ui" line="116"/>
-        <location filename="../../../build/quadro/src/ui_quadromainwindow.h" line="158"/>
         <source>Ctrl+Q</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../quadro/src/quadromainwindow.ui" line="125"/>
-        <location filename="../../../build/quadro/src/ui_quadromainwindow.h" line="159"/>
         <source>&amp;Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../quadro/src/quadromainwindow.ui" line="128"/>
-        <location filename="../../../build/quadro/src/ui_quadromainwindow.h" line="160"/>
         <source>Ctrl+S</source>
         <translation type="unfinished"></translation>
     </message>
@@ -573,25 +501,21 @@
     <name>SettingsWindow</name>
     <message>
         <location filename="../../quadro/src/settingswindow.ui" line="14"/>
-        <location filename="../../../build/quadro/src/ui_settingswindow.h" line="168"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../quadro/src/settingswindow.ui" line="62"/>
-        <location filename="../../../build/quadro/src/ui_settingswindow.h" line="173"/>
         <source>General</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../quadro/src/settingswindow.ui" line="114"/>
-        <location filename="../../../build/quadro/src/ui_settingswindow.h" line="176"/>
         <source>Language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../quadro/src/settingswindow.ui" line="130"/>
-        <location filename="../../../build/quadro/src/ui_settingswindow.h" line="178"/>
         <source>Select a language</source>
         <translation type="unfinished"></translation>
     </message>

@@ -88,6 +88,12 @@ public slots:
      */
     bool Set(const QString key, const QDBusVariant value);
     /**
+     * @brief update all values
+     * @param other          other settings dictionary
+     * @return true if values were updated
+     */
+    bool Update(const QDBusVariant other);
+    /**
      * @brief verify value by key
      * @param key            configuration key
      * @param value          value associated with the key

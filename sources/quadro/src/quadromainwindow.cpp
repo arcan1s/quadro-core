@@ -122,8 +122,7 @@ void QuadroMainWindow::createContainer(const QStringList exec, const QString nam
     qCDebug(LOG_UI) << "Executable" << exec;
     qCDebug(LOG_UI) << "Name" << name;
 
-    StandaloneAppWidget *app = new StandaloneAppWidget(this, exec,
-                                           ui->stackedWidget->count(), m_configuration);
+    StandaloneAppWidget *app = new StandaloneAppWidget(this, exec, ui->stackedWidget->count());
     connect(app, SIGNAL(destroyWindow(const int)), this, SLOT(removeContainer(const int)));
 
     ui->stackedWidget->addWidget(app);
@@ -203,7 +202,7 @@ void QuadroMainWindow::initTabs()
         if (index == -1) {
             qCWarning(LOG_UI) << "Could not find tab" << tab;
         } else {
-            m_core->plugin()->initPlugin(index, m_configuration,
+            m_core->plugin()->initPlugin(index,
                                          QString("%1.tab-%2.conf").arg(tab).arg(tabs.indexOf(tab)));
             auto item = m_core->plugin()->plugin<TabPluginInterface>(index);
             ui->stackedWidget->addWidget(item->widget());

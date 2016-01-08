@@ -116,6 +116,19 @@ bool ConfigManagerAdaptor::Set(const QString key, const QDBusVariant value)
 }
 
 
+/**
+ * @fn Update
+ */
+bool ConfigManagerAdaptor::Update(const QDBusVariant other)
+{
+    qCDebug(LOG_DBUS) << "Set values" << other.variant();
+
+    QVariantHash dict = other.variant().toHash();
+
+    return m_manager->setSettings(dict);
+}
+
+
 /*
  * @fn Verify
  */
