@@ -92,6 +92,11 @@
 #define ROOT_INSTALL_DIR "@CMAKE_INSTALL_PREFIX@"
 // application specific
 /**
+ * @def DOCUMENTS_PATH
+ * path to documents items inside @ref HOME_PATH
+ */
+#define DOCUMENTS_PATH "documents"
+/**
  * @def FAVORITES_PATH
  * path to favorites inside @ref HOME_PATH
  */

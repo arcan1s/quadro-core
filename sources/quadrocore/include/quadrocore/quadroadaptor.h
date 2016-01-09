@@ -88,9 +88,18 @@ public slots:
      */
     QStringList Recent() const;
     /**
+     * @brief recent documents list
+     * @return list of documents from DocumentsCore
+     */
+    QStringList RecentDocuments() const;
+    /**
      * @brief update application list
      */
     Q_NOREPLY void UpdateApplications() const;
+    /**
+     * @brief update recently opened documents
+     */
+    Q_NOREPLY void UpdateDocuments() const;
     /**
      * @brief update favorites applications list
      */

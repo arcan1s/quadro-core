@@ -117,7 +117,7 @@ char *QuadroXCBAdaptor::getPropery(const Window _win, const Atom _xaPropType,
                            MAX_PROPERTY_VALUE_LEN / 4, false,
                            _xaPropType, &xaRetType, &retFormat,
                            &retNItems, &retBytesAfter, &retProperty) != Success) {
-        qCCritical(LOG_LIB) << ":" << "Could not get property" << _property;
+        qCCritical(LOG_LIB) << "Could not get property" << _property;
         return nullptr;
     }
 

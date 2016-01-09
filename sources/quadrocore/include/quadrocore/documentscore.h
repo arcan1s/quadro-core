@@ -15,7 +15,7 @@
  *   along with quadro. If not, see http://www.gnu.org/licenses/           *
  ***************************************************************************/
 /**
- * @file recentlycore.h
+ * @file documentscore.h
  * Header of quadro library
  * @author Evgeniy Alekseev
  * @copyright GPLv3
@@ -23,8 +23,8 @@
  */
 
 
-#ifndef RECENTLYCORE_H
-#define RECENTLYCORE_H
+#ifndef DOCUMENTSCORE_H
+#define DOCUMENTSCORE_H
 
 #include <QDateTime>
 #include <QMap>
@@ -34,31 +34,26 @@
 
 
 /**
- * @brief The RecentlyCore class provides backend for recently run items
+ * @brief The DocumentsCore class provides backend for recently documents
+ * @remark there is a draft of standard
+ * http://www.freedesktop.org/wiki/Specifications/recent-file-spec/
+ * but it is not used by GNOME now
  */
-class RecentlyCore : public AbstractAppAggregator
+class DocumentsCore : public AbstractAppAggregator
 {
     Q_OBJECT
 
 public:
     /**
-     * @brief RecentlyCore class constructor
+     * @brief DocumentsCore class constructor
      * @param parent         pointer to parent item
      * @param recentItems    count of recent items in the launcher
      */
-    explicit RecentlyCore(QObject *parent, const int recentItems);
+    explicit DocumentsCore(QObject *parent, const int recentItems);
     /**
      * @brief RecentlyCore class destructor
      */
-    virtual ~RecentlyCore();
-    /**
-     * @brief find applications by substring in name
-     * @remark override parent method to get items only if they start with
-     * substring
-     * @param _substr        substring to which application need to be found
-     * @return map of applications by substring
-     */
-    QMap<QString, ApplicationItem *> applicationsBySubstr(const QString _substr) const;
+    virtual ~DocumentsCore();
     /**
      * @brief path to desktop files
      * @return full path to desktop files
@@ -71,12 +66,6 @@ public:
     QStringList recent() const;
 
 public slots:
-    /**
-     * @brief add item to recent run
-     * @param _item          pointer to recent item run
-     * @return pointer to created ApplicationItem
-     */
-    ApplicationItem *addItem(ApplicationItem *_item);
     /**
      * @brief add item to recent run by its name
      * @param _name          recent application name
@@ -119,4 +108,4 @@ private:
 };
 
 
-#endif /* RECENTLYCORE_H */
+#endif /* DOCUMENTSCORE_H */

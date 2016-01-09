@@ -34,6 +34,7 @@
 #include "configmanageradaptor.h"
 #include "dbusoperations.h"
 #include "desktopinterface.h"
+#include "documentscore.h"
 #include "favoritescore.h"
 #include "fileinfoextension.h"
 #include "filemanagercore.h"

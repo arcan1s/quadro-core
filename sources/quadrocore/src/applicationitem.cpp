@@ -486,6 +486,9 @@ ApplicationItem *ApplicationItem::fromDesktop(const QString _desktopPath, QObjec
     ApplicationItem *item = new ApplicationItem(_parent, QString());
     settings.beginGroup(QString("Desktop Entry"));
     for (auto key : settings.childKeys()) {
+        // HACK avoid URL[$e] values in KDE
+        if (key.startsWith(QString("URL[$e]")))
+            key = QString("URL");
         // HACK avoid commas in fields
         QVariant orig = settings.value(key);
         QVariant value = orig.type() == QVariant::StringList ? orig.toStringList().join(QString(", ")) : orig;

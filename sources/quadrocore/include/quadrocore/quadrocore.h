@@ -32,6 +32,7 @@
 
 class ConfigManager;
 class DesktopInterface;
+class DocumentsCore;
 class FavoritesCore;
 class FileManagerCore;
 class LauncherCore;
@@ -60,6 +61,11 @@ public:
      * @return pointer to configuration manager object
      */
     ConfigManager *config();
+    /**
+     * @brief documents core object
+     * @return pointer to documents core object
+     */
+    DocumentsCore *documents();
     /**
      * @brief favorites core object
      * @return pointer to favorites core object
@@ -104,6 +110,10 @@ private:
      * @fn configuration manager object
      */
     ConfigManager *m_config = nullptr;
+    /**
+     * @fn documents core object
+     */
+    DocumentsCore *m_documents = nullptr;
     /**
      * @brief favorites core object
      */

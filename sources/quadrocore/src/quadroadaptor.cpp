@@ -127,11 +127,29 @@ QStringList QuadroAdaptor::Recent() const
 
 
 /**
+ * @fn RecentDocuments
+ */
+QStringList QuadroAdaptor::RecentDocuments() const
+{
+    return m_core->documents()->recent();
+}
+
+
+/**
  * @fn UpdateApplications
  */
 void QuadroAdaptor::UpdateApplications() const
 {
     m_core->launcher()->initApplications();
+}
+
+
+/**
+ * @fn UpdateDocuments
+ */
+void QuadroAdaptor::UpdateDocuments() const
+{
+    m_core->documents()->initApplications();
 }
 
 

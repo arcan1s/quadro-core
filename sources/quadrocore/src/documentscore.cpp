@@ -15,7 +15,7 @@
  *   along with quadro. If not, see http://www.gnu.org/licenses/           *
  ***************************************************************************/
 /**
- * @file recentlycore.cpp
+ * @file documentscore.cpp
  * Source code of quadro library
  * @author Evgeniy Alekseev
  * @copyright GPLv3
@@ -30,12 +30,12 @@
 
 
 /**
- * @class RecentlyCore
+ * @class DocumentsCore
  */
 /**
- * @fn RecentlyCore
+ * @fn DocumentsCore
  */
-RecentlyCore::RecentlyCore(QObject *parent, const int recentItems)
+DocumentsCore::DocumentsCore(QObject *parent, const int recentItems)
     : AbstractAppAggregator(parent),
       m_recentItems(recentItems)
 {
@@ -44,47 +44,30 @@ RecentlyCore::RecentlyCore(QObject *parent, const int recentItems)
 
 
 /**
- * @fn ~RecentlyCore
+ * @fn ~DocumentsCore
  */
-RecentlyCore::~RecentlyCore()
+DocumentsCore::~DocumentsCore()
 {
     qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
 }
 
 
 /**
- * @fn applicationsBySubstr
- */
-QMap<QString, ApplicationItem *> RecentlyCore::applicationsBySubstr(const QString _substr) const
-{
-    qCDebug(LOG_LIB) << "Substring" << _substr;
-
-    QMap<QString, ApplicationItem *> apps;
-    for (auto app : applications().keys()) {
-        if (!applications()[app]->startsWith(_substr)) continue;
-        apps[app] = applications()[app];
-    }
-
-    return apps;
-}
-
-
-/**
  * @fn desktopPath
  */
-QString RecentlyCore::desktopPath()
+QString DocumentsCore::desktopPath()
 {
     QString homePath = QString("%1/%2").arg(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation))
                                        .arg(HOME_PATH);
 
-    return QString("%1/%2").arg(homePath).arg(RECENT_PATH);
+    return QString("%1/%2").arg(homePath).arg(DOCUMENTS_PATH);
 }
 
 
 /**
  * @fn recent
  */
-QStringList RecentlyCore::recent() const
+QStringList DocumentsCore::recent() const
 {
     QStringList apps;
     for (auto item : applications())
@@ -97,45 +80,40 @@ QStringList RecentlyCore::recent() const
 /**
  * @fn addItem
  */
-ApplicationItem *RecentlyCore::addItem(ApplicationItem *_item)
+ApplicationItem *DocumentsCore::addItem(const QString _name)
 {
-    qCDebug(LOG_LIB) << "Item name" << _item->name();
+    qCDebug(LOG_LIB) << "Item name" << _name;
 
     rotate();
     QDateTime modification = QDateTime::currentDateTime();
 
-    _item->setComment(modification.toString(Qt::ISODate));
-    _item->setIcon(QString("emblem-favorites"));
+    ApplicationItem *item = new ApplicationItem(this, QFileInfo(_name).fileName());
+    item->setComment(modification.toString(Qt::ISODate));
+    item->setType(QString("Link"));
+    item->setUrl(QString("file://%1").arg(QFileInfo(_name).absoluteFilePath()));
+    // get icon
+    QVariantList res = DBusOperations::sendRequestToLibrary(
+        QString("Icon"), QVariantList() << QFileInfo(_name).absoluteFilePath());
+    if (res.isEmpty())
+        item->setIcon(QString("system-run"));
+    else
+        item->setIcon(res.at(0).toString());
 
-    if (_item->saveDesktop(desktopPath()).isEmpty()) {
-        qCCritical(LOG_LIB) << "Could not save" << _item->desktopName();
+    if (item->saveDesktop(desktopPath()).isEmpty()) {
+        qCCritical(LOG_LIB) << "Could not save" << item->desktopName();
         return nullptr;
     }
     initApplications();
 
-    _item->deleteLater();
-    return applications()[_item->name()];
-}
-
-
-/**
- * @fn addItem
- */
-ApplicationItem *RecentlyCore::addItem(const QString _name)
-{
-    qCDebug(LOG_LIB) << "Item name" << _name;
-
-    ApplicationItem *item = new ApplicationItem(this, _name);
-    item->setExec(_name);
-
-    return addItem(item);
+    item->deleteLater();
+    return applications()[QFileInfo(_name).fileName()];
 }
 
 
 /**
  * @fn initApplications
  */
-void RecentlyCore::initApplications()
+void DocumentsCore::initApplications()
 {
     // start cleanup
     dropApplications();
@@ -153,7 +131,7 @@ void RecentlyCore::initApplications()
 /**
  * @fn removeItemByName
  */
-void RecentlyCore::removeItemByName(const QString _name)
+void DocumentsCore::removeItemByName(const QString _name)
 {
     qCDebug(LOG_LIB) << "Item name" << _name;
 
@@ -175,7 +153,7 @@ void RecentlyCore::removeItemByName(const QString _name)
 /**
  * @fn touchItem
  */
-void RecentlyCore::touchItem(const QString _name)
+void DocumentsCore::touchItem(const QString _name)
 {
     qCDebug(LOG_LIB) << "Item" << _name;
 
@@ -197,7 +175,7 @@ void RecentlyCore::touchItem(const QString _name)
 /**
  * @fn getApplicationsFromDesktops
  */
-QMap<QString, ApplicationItem *> RecentlyCore::getApplicationsFromDesktops()
+QMap<QString, ApplicationItem *> DocumentsCore::getApplicationsFromDesktops()
 {
     QStringList filter("*.desktop");
     QMap<QString, ApplicationItem *> items;
@@ -218,7 +196,7 @@ QMap<QString, ApplicationItem *> RecentlyCore::getApplicationsFromDesktops()
 /**
  * @fn rotate
  */
-void RecentlyCore::rotate()
+void DocumentsCore::rotate()
 {
     if (applications().count() <= m_recentItems) {
         qCInfo(LOG_LIB) << "Nothing to do here";

@@ -43,6 +43,8 @@ QuadroCore::QuadroCore(QObject *parent)
 
     m_config = new ConfigManager(this);
 
+    m_documents = new DocumentsCore(this, m_config->property("RecentItemsCount").toInt());
+    m_documents->initApplications();
     m_favorites = new FavoritesCore(this);
     m_favorites->initApplications();
     m_filemanager = new FileManagerCore(this);
@@ -71,6 +73,7 @@ QuadroCore::~QuadroCore()
     QDBusConnection::sessionBus().unregisterService(DBUS_SERVICE);
 
     delete m_config;
+    delete m_documents;
     delete m_favorites;
     delete m_filemanager;
     delete m_launcher;
@@ -86,6 +89,15 @@ QuadroCore::~QuadroCore()
 ConfigManager *QuadroCore::config()
 {
     return m_config;
+}
+
+
+/**
+ * @fn documents
+ */
+DocumentsCore *QuadroCore::documents()
+{
+    return m_documents;
 }
 
 
