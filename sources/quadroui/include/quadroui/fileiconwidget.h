@@ -51,6 +51,15 @@ public:
     explicit FileIconWidget(const QFileInfo info, const QIcon icon,
                             const QSize size, QWidget *parent);
     /**
+     * @brief FileIconWidget class constructor
+     * @param path           associated file path
+     * @param icon           icon name
+     * @param size           item size
+     * @param parent         pointer to parent object
+     */
+    explicit FileIconWidget(const QString path, const QString icon,
+                            const QSize size, QWidget *parent);
+    /**
      * @brief FileIconWidget class destructor
      */
     virtual ~FileIconWidget();

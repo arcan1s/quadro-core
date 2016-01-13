@@ -47,6 +47,25 @@ FileIconWidget::FileIconWidget(const QFileInfo info, const QIcon icon,
 
 
 /**
+ * @fn FileIconWidget
+ */
+FileIconWidget::FileIconWidget(const QString path, const QString icon,
+                               const QSize size, QWidget *parent)
+    : IconWidget(size, parent)
+{
+    qCDebug(LOG_UILIB) << __PRETTY_FUNCTION__;
+
+    m_info = QFileInfo(QUrl::fromUserInput(path).toLocalFile());
+
+    setIcon(QIcon::fromTheme(icon));
+    setText(m_info.fileName());
+    createActions();
+
+    connect(this, SIGNAL(widgetPressed()), this, SLOT(openRequested()));
+}
+
+
+/**
  * @fn ~FileIconWidget
  */
 FileIconWidget::~FileIconWidget()

@@ -186,9 +186,8 @@ void QuadroMainWindow::clearTabs()
     for (auto plugin : m_plugins) {
         int index = plugin[QString("Index")].toInt();
         QString tab = plugin[QString("Plugin")].toString();
-        QString config = m_core->plugin()->configurationPath(
-            QString("%1.tab-%2.conf").arg(tab).arg(tabs.indexOf(tab)));
-        m_core->plugin()->unloadPlugin(index, config);
+        m_core->plugin()->unloadPlugin(
+            index, QString("%1.tab-%2.conf").arg(tab).arg(tabs.indexOf(tab)));
     }
 }
 

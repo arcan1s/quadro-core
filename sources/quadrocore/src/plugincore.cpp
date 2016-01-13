@@ -156,7 +156,7 @@ bool PluginCore::unloadPlugin(const int _index, const QString _configPath)
         return false;
     }
     // send quit signal to plugin
-    m_plugins[_index]->quit(_configPath);
+    m_plugins[_index]->quit(configurationPath(_configPath));
     // remove from index
     auto plugin = m_plugins.take(_index);
     delete plugin;
