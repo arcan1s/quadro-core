@@ -41,7 +41,6 @@ class ConfigManager : public QObject
     // configuration
     Q_PROPERTY(int GridSize READ gridSize)
     Q_PROPERTY(int RecentItemsCount READ recentItemCount)
-    Q_PROPERTY(bool ShowHidden READ showHidden)
 
 public:
     /**
@@ -88,11 +87,6 @@ public:
      * @return maximum count
      */
     int recentItemCount() const;
-    /**
-     * @brief show or not hidden files and directories by default
-     * @return true if hidden files should be shown
-     */
-    bool showHidden() const;
 
 public slots:
     /**

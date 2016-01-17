@@ -95,10 +95,6 @@ QStringList ConfigManager::verifySettings(const QVariantHash &_other, bool *_ok)
         && _other[QString("RecentItemCount")].toInt() < 0) {
         error.append(QString("RecentItemCount"));
     }
-    if ((_other.contains(QString("ShowHidden")))
-        && _other[QString("ShowHidden")].type() != QVariant::Bool) {
-        error.append(QString("ShowHidden"));
-    }
 
     if (_ok != nullptr)
         *_ok = error.isEmpty();
@@ -134,15 +130,6 @@ int ConfigManager::recentItemCount() const
 
 
 /**
- * @fn showHidden
- */
-bool ConfigManager::showHidden() const
-{
-    return m_configuration[QString("ShowHidden")].toBool();
-}
-
-
-/**
  * @fn readSettings
  */
 void ConfigManager::readSettings(const bool _defaults)
@@ -155,7 +142,6 @@ void ConfigManager::readSettings(const bool _defaults)
     settings.beginGroup(QString("Global"));
     m_configuration[QString("GridSize")] = settings.value(QString("GridSize"), 150);
     m_configuration[QString("RecentItemsCount")] = settings.value(QString("RecentItemsCount"), 20);
-    m_configuration[QString("ShowHidden")] = settings.value(QString("ShowHidden"), false);
     settings.endGroup();
 
     for (auto key : m_configuration.keys())
@@ -174,7 +160,6 @@ bool ConfigManager::saveSettings() const
     settings.beginGroup(QString("Global"));
     settings.setValue(QString("GridSize"), m_configuration[QString("GridSize")]);
     settings.setValue(QString("RecentItemsCount"), m_configuration[QString("RecentItemsCount")]);
-    settings.setValue(QString("ShowHidden"), m_configuration[QString("ShowHidden")]);
     settings.endGroup();
 
     settings.sync();

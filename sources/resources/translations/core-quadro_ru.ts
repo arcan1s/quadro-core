@@ -130,17 +130,17 @@
 <context>
     <name>FileIconWidget</name>
     <message>
-        <location filename="../../quadroui/src/fileiconwidget.cpp" line="132"/>
+        <location filename="../../quadroui/src/fileiconwidget.cpp" line="151"/>
         <source>Open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../quadroui/src/fileiconwidget.cpp" line="135"/>
+        <location filename="../../quadroui/src/fileiconwidget.cpp" line="154"/>
         <source>Open in new tab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../quadroui/src/fileiconwidget.cpp" line="139"/>
+        <location filename="../../quadroui/src/fileiconwidget.cpp" line="158"/>
         <source>Properties</source>
         <translation type="unfinished"></translation>
     </message>
