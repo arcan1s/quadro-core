@@ -17,98 +17,102 @@
 
 
 #include <QApplication>
+#include <QCommandLineParser>
 #include <QDBusConnection>
 #include <QDBusMessage>
 #include <QDir>
 #include <QLibraryInfo>
-#include <QProcessEnvironment>
 #include <QTranslator>
 #include <iostream>
 #include <unistd.h>
 
-#include "messages.h"
 #include "quadromainwindow.h"
 #include "version.h"
-
-
-using namespace std;
 
 
 bool existingSessionOperation(const QString operation)
 {
     QDBusConnection bus = QDBusConnection::sessionBus();
-    QDBusMessage request = QDBusMessage::createMethodCall(DBUS_SERVICE, DBUS_OBJECT_PATH,
-                                                          DBUS_INTERFACE, operation);
+    QDBusMessage request = QDBusMessage::createMethodCall(
+        DBUS_SERVICE, DBUS_UI_OBJECT_PATH, DBUS_INTERFACE, operation);
     QDBusMessage response = bus.call(request);
     QList<QVariant> arguments = response.arguments();
 
-    return (!arguments.isEmpty() && arguments[0].toBool());
+    return (!arguments.isEmpty() && arguments.at(0).type() == QVariant::Bool
+            && arguments[0].toBool());
+}
+
+
+void loadTranslator(QApplication &app)
+{
+    // qt specific
+    bool trStatus;
+    static QTranslator qtTranslator;
+    trStatus = qtTranslator.load(
+        QString("qt_%1").arg(QLocale::system().name()),
+        QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+    qCDebug(LOG_UI) << "Loading Qt specific translation" << trStatus;
+    trStatus = app.installTranslator(&qtTranslator);
+    qCDebug(LOG_UI) << "Install Qt translator" << trStatus;
+    // application specific
+    static QTranslator translator;
+    trStatus = translator.load(
+        QString("core-quadro_%1").arg(QLocale::system().name()),
+        QString("%1/%2/%3/%4")
+            .arg(ROOT_INSTALL_DIR)
+            .arg(DATA_INSTALL_DIR)
+            .arg(HOME_PATH)
+            .arg(TRANSLATION_PATH));
+    qCDebug(LOG_UI) << "Loading application specific translation" << trStatus;
+    trStatus = app.installTranslator(&translator);
+    qCDebug(LOG_UI) << "Install application translator" << trStatus;
 }
 
 
 int main(int argc, char *argv[])
 {
-    QVariantHash args = getArgs();
-    // reading
-    for (int i=1; i<argc; i++) {
-    }
-    QProcessEnvironment environment = QProcessEnvironment::systemEnvironment();
-    QString debugEnv = environment.value(QString("DEBUG"), QString("no"));
-    if (!args[QString("debug")].toBool()) args[QString("debug")] = (debugEnv == QString("yes"));
-    if ((args[QString("debug")].toBool()) ||
-        (args[QString("help")].toBool()) ||
-        (args[QString("info")].toBool()) ||
-        (args[QString("version")].toBool()) ||
-        (args[QString("error")].toBool()))
-        args[QString("nodaemon")] = true;
+    daemon(0, 0);
 
-    // detach from console
-    if (!args[QString("nodaemon")].toBool())
-        daemon(0, 0);
-    QApplication a(argc, argv);
+    QApplication app(argc, argv);
+    app.setApplicationName(NAME);
+    app.setApplicationVersion(VERSION);
     QApplication::setQuitOnLastWindowClosed(false);
 
-    // qt specific
-    bool trStatus;
-    static QTranslator qtTranslator;
-    trStatus = qtTranslator.load(QString("qt_%1").arg(QLocale::system().name()),
-                                 QLibraryInfo::location(QLibraryInfo::TranslationsPath));
-    qCDebug(LOG_UI) << "Loading Qt specific translation" << trStatus;
-    trStatus = a.installTranslator(&qtTranslator);
-    qCDebug(LOG_UI) << "Install Qt translator" << trStatus;
-    // application specific
-    static QTranslator translator;
-    trStatus = translator.load(QString("core-quadro_%1").arg(QLocale::system().name()),
-                               QString("%1/%2/%3/%4").arg(ROOT_INSTALL_DIR).arg(DATA_INSTALL_DIR)
-                                   .arg(HOME_PATH).arg(TRANSLATION_PATH));
-    qCDebug(LOG_UI) << "Loading application specific translation" << trStatus;
-    trStatus = a.installTranslator(&translator);
-    qCDebug(LOG_UI) << "Install application translator" << trStatus;
+    // parser
+    QCommandLineParser parser;
+    parser.setApplicationDescription(QApplication::translate(
+        "MainWindow", "Plugin based applicaiton launcher"));
+    parser.addHelpOption();
+    parser.addVersionOption();
+    // debug mode
+    QCommandLineOption debugOption(
+        QStringList() << "d"
+                      << "debug",
+        QApplication::translate("MainWindow", "Print debug information"));
+    parser.addOption(debugOption);
+    // minimized
+    QCommandLineOption minimizedOption(
+        QStringList() << "minimized",
+        QApplication::translate("MainWindow", "Start minimized to tray"));
+    parser.addOption(minimizedOption);
+    parser.process(app);
 
-    // running
-    if (args[QString("error")].toBool()) {
-        cout << errorMessage().toUtf8().data() << endl;
-        cout << helpMessage().toUtf8().data();
-        return 1;
-    } else if (args[QString("help")].toBool()) {
-        cout << helpMessage().toUtf8().data();
-        return 0;
-    } else if (args[QString("info")].toBool()) {
-        cout << versionMessage().toUtf8().data() << endl;
-        cout << infoMessage().toUtf8().data();
-        return 0;
-    } else if (args[QString("version")].toBool()) {
-        cout << versionMessage().toUtf8().data();
-        return 0;
-    }
+    // enable debug
+    if (parser.isSet(debugOption))
+        enableDebug();
+
+    loadTranslator(app);
 
     // check if exists
     if (existingSessionOperation(QString("Active"))) {
-        cout << QCoreApplication::translate("MainWindow", "Restore existing session.")
-                    .toUtf8().data() << endl;
+        std::cout << QApplication::translate("MainWindow",
+                                             "Restore existing session")
+                         .toUtf8()
+                         .data()
+                  << std::endl;
         existingSessionOperation(QString("Restore"));
         return 0;
     }
-    QuadroMainWindow w(nullptr, args);
-    return a.exec();
+    QuadroMainWindow w(nullptr, QVariantHash());
+    return app.exec();
 }
