@@ -23,7 +23,8 @@
 #include <QTreeWidgetItem>
 
 
-namespace Ui {
+namespace Ui
+{
 class SettingsWindow;
 }
 

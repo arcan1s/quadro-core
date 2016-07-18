@@ -66,11 +66,13 @@ QMap<QString, ApplicationItem *> LauncherCore::applicationsFromPaths() const
 /**
  * @fn applicationsBySubstr
  */
-QMap<QString, ApplicationItem *> LauncherCore::applicationsBySubstr(const QString _substr) const
+QMap<QString, ApplicationItem *>
+LauncherCore::applicationsBySubstr(const QString _substr) const
 {
     qCDebug(LOG_LIB) << "Substring" << _substr;
 
-    QMap<QString, ApplicationItem *> apps = AbstractAppAggregator::applicationsBySubstr(_substr);
+    QMap<QString, ApplicationItem *> apps
+        = AbstractAppAggregator::applicationsBySubstr(_substr);
     if (m_applicationsFromPaths.contains(_substr))
         apps[_substr] = m_applicationsFromPaths[_substr];
 
@@ -89,7 +91,8 @@ void LauncherCore::initApplications()
 
     QMap<QString, ApplicationItem *> desktops = getApplicationsFromDesktops();
     for (auto item : desktops.keys()) {
-        if (!desktops[item]->shouldBeShown()) continue;
+        if (!desktops[item]->shouldBeShown())
+            continue;
         addApplication(desktops[item]);
     }
     m_applicationsFromPaths = getApplicationsFromPaths();
@@ -105,21 +108,26 @@ void LauncherCore::initApplications()
 QMap<QString, ApplicationItem *> LauncherCore::getApplicationsFromDesktops()
 {
     QStringList filter("*.desktop");
-    QStringList desktopPaths = QStandardPaths::standardLocations(QStandardPaths::ApplicationsLocation);
+    QStringList desktopPaths = QStandardPaths::standardLocations(
+        QStandardPaths::ApplicationsLocation);
     // append from subdirectories
-    for (int i=desktopPaths.count()-1; i>=0; i--) {
-        QStringList entries = QDir(desktopPaths.at(i)).entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+    for (int i = desktopPaths.count() - 1; i >= 0; i--) {
+        QStringList entries = QDir(desktopPaths.at(i))
+                                  .entryList(QDir::Dirs | QDir::NoDotAndDotDot);
         for (auto entry : entries)
-            desktopPaths.append(QString("%1/%2").arg(desktopPaths.at(i)).arg(entry));
+            desktopPaths.append(
+                QString("%1/%2").arg(desktopPaths.at(i)).arg(entry));
     }
     // show
     qCInfo(LOG_LIB) << "Paths" << desktopPaths;
     QMap<QString, ApplicationItem *> items;
 
-    for (int i=desktopPaths.count()-1; i>=0; i--) {
-        QStringList entries = QDir(desktopPaths.at(i)).entryList(filter, QDir::Files);
+    for (int i = desktopPaths.count() - 1; i >= 0; i--) {
+        QStringList entries
+            = QDir(desktopPaths.at(i)).entryList(filter, QDir::Files);
         for (auto entry : entries) {
-            QString desktop = QFileInfo(QDir(desktopPaths.at(i)), entry).filePath();
+            QString desktop
+                = QFileInfo(QDir(desktopPaths.at(i)), entry).filePath();
             qCInfo(LOG_LIB) << "Desktop" << desktop;
             ApplicationItem *item = ApplicationItem::fromDesktop(desktop, this);
             items[item->name()] = item;
@@ -145,9 +153,11 @@ QMap<QString, ApplicationItem *> LauncherCore::getApplicationsFromPaths()
         QStringList entries = QDir(path).entryList(QDir::Files);
         for (auto entry : entries) {
             QString executable = QFileInfo(QDir(path), entry).filePath();
-            if (!QFileInfo(executable).isExecutable()) continue;
+            if (!QFileInfo(executable).isExecutable())
+                continue;
             qCInfo(LOG_LIB) << "Executable" << executable;
-            ApplicationItem *item = new ApplicationItem(this, QFileInfo(executable).fileName());
+            ApplicationItem *item
+                = new ApplicationItem(this, QFileInfo(executable).fileName());
             item->setExec(executable);
             items[item->name()] = item;
         }

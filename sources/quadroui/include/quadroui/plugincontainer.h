@@ -51,8 +51,10 @@ public:
      */
     explicit PluginContainer(QWidget *parent, const int grid,
                              const QString widgetTitle = QString("none"),
-                             const Qt::ScrollBarPolicy hPolicy = Qt::ScrollBarAlwaysOff,
-                             const Qt::ScrollBarPolicy vPolicy = Qt::ScrollBarAsNeeded);
+                             const Qt::ScrollBarPolicy hPolicy
+                             = Qt::ScrollBarAlwaysOff,
+                             const Qt::ScrollBarPolicy vPolicy
+                             = Qt::ScrollBarAsNeeded);
     /**
      * @brief PluginContainer class destructor
      */

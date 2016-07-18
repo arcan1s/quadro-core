@@ -62,9 +62,14 @@ QString PluginCore::configurationPath(const QString _fileName)
 {
     qCDebug(LOG_LIB) << "Looking for" << _fileName;
 
-    QString root = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
+    QString root
+        = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
 
-    return QString("%1/%2/%3/%4").arg(root).arg(HOME_PATH).arg(PLUGIN_PATH).arg(_fileName);
+    return QString("%1/%2/%3/%4")
+        .arg(root)
+        .arg(HOME_PATH)
+        .arg(PLUGIN_PATH)
+        .arg(_fileName);
 }
 
 
@@ -74,9 +79,11 @@ QString PluginCore::configurationPath(const QString _fileName)
 QStringList PluginCore::desktopPaths()
 {
     QStringList locations;
-    QStringList defaultLocations = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation);
+    QStringList defaultLocations = QStandardPaths::standardLocations(
+        QStandardPaths::GenericDataLocation);
     for (auto loc : defaultLocations)
-        locations.append(QString("%1/%2/%3").arg(loc).arg(HOME_PATH).arg(PLUGIN_PATH));
+        locations.append(
+            QString("%1/%2/%3").arg(loc).arg(HOME_PATH).arg(PLUGIN_PATH));
 
     return locations;
 }
@@ -99,14 +106,14 @@ void PluginCore::initPlugin(const int _index, const QString _configPath)
 /**
  * @fn knownPlugins
  */
-QHash<QString, PluginRepresentation *> PluginCore::knownPlugins(const QString _group) const
+QHash<QString, PluginRepresentation *>
+PluginCore::knownPlugins(const QString _group) const
 {
     qCDebug(LOG_LIB) << "Requested type is" << _group;
 
     QHash<QString, PluginRepresentation *> foundPlugins;
     for (auto plugin : m_allPlugins.values()) {
-        if ((!_group.isEmpty())
-            && (plugin->group() != _group))
+        if ((!_group.isEmpty()) && (plugin->group() != _group))
             continue;
         foundPlugins[plugin->name()] = plugin;
     }
@@ -124,18 +131,22 @@ int PluginCore::loadPlugin(const QString _plugin)
 
     int index = -1;
     if (!m_allPlugins.contains(_plugin)) {
-        qCWarning(LOG_LIB) << "Could not load" << _plugin << "because it was not found";
+        qCWarning(LOG_LIB) << "Could not load" << _plugin
+                           << "because it was not found";
         return index;
     }
 
     QString type = m_allPlugins[_plugin]->group();
     QString location = m_allPlugins[_plugin]->location();
     if (type == QString("plugin"))
-        index = registerPlugin<PluginInterface, PluginAdaptor>(_plugin, location);
+        index
+            = registerPlugin<PluginInterface, PluginAdaptor>(_plugin, location);
     else if (type == QString("tabplugin"))
-        index = registerPlugin<TabPluginInterface, TabPluginAdaptor>(_plugin, location);
+        index = registerPlugin<TabPluginInterface, TabPluginAdaptor>(_plugin,
+                                                                     location);
     else if (type == QString("genericplugin"))
-        index = registerPlugin<QuadroPluginInterface, QuadroPluginAdaptor>(_plugin, location);
+        index = registerPlugin<QuadroPluginInterface, QuadroPluginAdaptor>(
+            _plugin, location);
     else
         qCWarning(LOG_LIB) << "Invalid plugin type" << type;
 
@@ -185,8 +196,7 @@ void PluginCore::initPlugins()
             qCInfo(LOG_LIB) << "Desktop" << fileName;
             // check settings
             auto repr = PluginRepresentation::fromFile(fileName);
-            if ((repr == nullptr)
-                || (m_allPlugins.contains(repr->name())))
+            if ((repr == nullptr) || (m_allPlugins.contains(repr->name())))
                 continue;
             m_allPlugins[repr->name()] = repr;
         }

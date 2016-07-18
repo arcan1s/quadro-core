@@ -136,7 +136,8 @@ public:
     QString url() const;
     /**
      * @brief should application be run from terminal or not
-     * @return true if application should be run from terminal otherwise returns false
+     * @return true if application should be run from terminal otherwise returns
+     * false
      */
     bool terminal() const;
     /**
@@ -250,7 +251,8 @@ public:
      * @param _key           key for search
      * @return list of found values by key
      */
-    static QStringList defineList(const QString _desktopPath, const QString _key);
+    static QStringList defineList(const QString _desktopPath,
+                                  const QString _key);
     /**
      * @brief desktop name
      * @return recommended name of desktop file
@@ -268,11 +270,13 @@ public:
      * @param _parent        pointer to parent item
      * @return ApplicationItem structure
      */
-    static ApplicationItem *fromDesktop(const QString _desktopPath, QObject *_parent);
+    static ApplicationItem *fromDesktop(const QString _desktopPath,
+                                        QObject *_parent);
     /**
      * @brief does application have specified substring or not
      * @param _substr        substring for search
-     * @return true if comment or name is equal to substring otherwise returns false
+     * @return true if comment or name is equal to substring otherwise returns
+     * false
      */
     bool hasSubstring(const QString _substr) const;
     /**
@@ -281,7 +285,8 @@ public:
      */
     void setDesktopName(const QString _desktopName);
     /**
-     * @brief additional method indicates should application be shown in the menu
+     * @brief additional method indicates should application be shown in the
+     * menu
      * or not
      * @return true if application should not be shown otherwise returns false
      */

@@ -61,6 +61,11 @@ Q_DECLARE_LOGGING_CATEGORY(LOG_UI)
  */
 Q_DECLARE_LOGGING_CATEGORY(LOG_UILIB)
 
+
+/**
+ * @brief method to enable debug messages
+ */
+void enableDebug();
 /**
  * @brief additional method to get build details declared in version.h
 */

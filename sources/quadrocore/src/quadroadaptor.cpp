@@ -35,8 +35,8 @@
  * @fn QuadroAdaptor
  */
 QuadroAdaptor::QuadroAdaptor(QuadroCore *core)
-    : QDBusAbstractAdaptor(core),
-      m_core(core)
+    : QDBusAbstractAdaptor(core)
+    , m_core(core)
 {
     qCDebug(LOG_DBUS) << __PRETTY_FUNCTION__;
 }
@@ -98,7 +98,8 @@ QDBusVariant QuadroAdaptor::Plugins(const QString group) const
 {
     qCDebug(LOG_DBUS) << "Plugin group" << group;
 
-    QHash<QString, PluginRepresentation *> plugins = m_core->plugin()->knownPlugins(group);
+    QHash<QString, PluginRepresentation *> plugins
+        = m_core->plugin()->knownPlugins(group);
 
     QVariantList data;
     for (auto plugin : plugins.values()) {
@@ -181,7 +182,8 @@ QStringList QuadroAdaptor::WIdForPID(const long long pid)
     if (!IsKnownPlatform())
         return QStringList();
 
-    QList<unsigned long long> wIds = m_core->platformPlugin()->getWindowByPid(pid);
+    QList<unsigned long long> wIds
+        = m_core->platformPlugin()->getWindowByPid(pid);
     QStringList output;
     for (auto id : wIds)
         output.append(QString::number(id));

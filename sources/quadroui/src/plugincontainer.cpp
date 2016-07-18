@@ -62,9 +62,11 @@ PluginContainer::~PluginContainer()
  */
 void PluginContainer::addPlugin(PluginInterface *_interface)
 {
-    qCDebug(LOG_UILIB) << "Add plugin" << _interface->name() << "to position" << widget()->layout()->count();
+    qCDebug(LOG_UILIB) << "Add plugin" << _interface->name() << "to position"
+                       << widget()->layout()->count();
 
     QSize widgetSize = QSize(_interface->widgetSize().width() * grid(),
                              _interface->widgetSize().height() * grid());
-    widget()->layout()->addWidget(new PluginWidget(_interface, widgetSize, this));
+    widget()->layout()->addWidget(
+        new PluginWidget(_interface, widgetSize, this));
 }

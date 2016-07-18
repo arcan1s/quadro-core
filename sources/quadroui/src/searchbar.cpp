@@ -60,7 +60,8 @@ SearchBar::~SearchBar()
 /**
  * @fn keyPressed
  */
-void SearchBar::keyPressed(QKeyEvent *_event) {
+void SearchBar::keyPressed(QKeyEvent *_event)
+{
     if (_event->key() == Qt::Key_Backspace) {
         backspace();
     } else if ((_event->key() == Qt::Key_Return)
@@ -91,8 +92,7 @@ void SearchBar::keyPressEvent(QKeyEvent *_pressedKey)
 void SearchBar::updateText(const QString _text, Qt::KeyboardModifiers _mods)
 {
     qCDebug(LOG_UILIB) << "Received text" << _text;
-    if ((_mods != Qt::NoModifier)
-        && (_mods != Qt::ShiftModifier)) {
+    if ((_mods != Qt::NoModifier) && (_mods != Qt::ShiftModifier)) {
         qCInfo(LOG_UILIB) << "Skip due to modifiers enabled";
         return;
     }

@@ -136,12 +136,15 @@ void ConfigManager::readSettings(const bool _defaults)
 {
     qCDebug(LOG_LIB) << "Read default settings" << _defaults;
 
-    QSettings settings(_defaults ? QString("/dev/null") : m_path, QSettings::IniFormat);
+    QSettings settings(_defaults ? QString("/dev/null") : m_path,
+                       QSettings::IniFormat);
     settings.setIniCodec("UTF-8");
 
     settings.beginGroup(QString("Global"));
-    m_configuration[QString("GridSize")] = settings.value(QString("GridSize"), 150);
-    m_configuration[QString("RecentItemsCount")] = settings.value(QString("RecentItemsCount"), 20);
+    m_configuration[QString("GridSize")]
+        = settings.value(QString("GridSize"), 150);
+    m_configuration[QString("RecentItemsCount")]
+        = settings.value(QString("RecentItemsCount"), 20);
     settings.endGroup();
 
     for (auto key : m_configuration.keys())
@@ -158,8 +161,10 @@ bool ConfigManager::saveSettings() const
     settings.setIniCodec("UTF-8");
 
     settings.beginGroup(QString("Global"));
-    settings.setValue(QString("GridSize"), m_configuration[QString("GridSize")]);
-    settings.setValue(QString("RecentItemsCount"), m_configuration[QString("RecentItemsCount")]);
+    settings.setValue(QString("GridSize"),
+                      m_configuration[QString("GridSize")]);
+    settings.setValue(QString("RecentItemsCount"),
+                      m_configuration[QString("RecentItemsCount")]);
     settings.endGroup();
 
     settings.sync();

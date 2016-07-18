@@ -143,12 +143,12 @@ void QuadroWidget::moveFocus(const int _dx, const int _dy)
 {
     // the idea of the method copied from here
     // http://stackoverflow.com/questions/20856518/navigate-between-widgets-using-arrows-in-qt
-    if(qApp->focusWidget() == nullptr)
+    if (qApp->focusWidget() == nullptr)
         return;
     qCDebug(LOG_UILIB) << "Move to dx" << _dx << "dy" << _dy;
 
     int index = m_layout->indexOf(qApp->focusWidget());
-    if(index == -1)
+    if (index == -1)
         return;
     qCInfo(LOG_UILIB) << "Found item with index" << index;
 
@@ -256,7 +256,8 @@ int QuadroWidget::stringItemCount() const
     int left, top, right, bottom;
     getContentsMargins(&left, &top, &right, &bottom);
     // calculate effective available space
-    QRect effectiveRect =  m_layout->geometry().adjusted(+left, +top, -right, -bottom);
+    QRect effectiveRect
+        = m_layout->geometry().adjusted(+left, +top, -right, -bottom);
     int width = effectiveRect.width();
 
     return static_cast<int>(width / m_grid);

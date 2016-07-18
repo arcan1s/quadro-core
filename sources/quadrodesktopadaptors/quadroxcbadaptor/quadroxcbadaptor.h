@@ -38,7 +38,8 @@ typedef unsigned long Atom;
 
 /**
  * @brief The QuadroXCBAdaptor class provides adaptor to the common X11 calls
- * @remark this class is adapted from wmctrl https://sites.google.com/site/tstyblo/wmctrl
+ * @remark this class is adapted from wmctrl
+ * https://sites.google.com/site/tstyblo/wmctrl
  */
 class QuadroXCBAdaptor : public QObject, DesktopInterface
 {

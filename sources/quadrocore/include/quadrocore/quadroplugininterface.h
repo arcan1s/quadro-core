@@ -45,7 +45,7 @@ public:
     /**
      * @brief QuadroPluginInterface class destructor
      */
-    virtual ~QuadroPluginInterface() {};
+    virtual ~QuadroPluginInterface(){};
     /**
      * @brief method which generates new instance of QuadroPluginInterface class
      */

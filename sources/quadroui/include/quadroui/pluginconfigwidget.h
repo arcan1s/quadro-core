@@ -33,7 +33,8 @@
 
 class PluginRepresentationWidget;
 
-namespace Ui {
+namespace Ui
+{
 class PluginConfigWidget;
 }
 
@@ -60,7 +61,8 @@ public:
     /**
      * @brief creates plugin configuration page
      * @param _name          plugin name
-     * @param _configPage    pointer to configuration interface. It may be nullptr
+     * @param _configPage    pointer to configuration interface. It may be
+     * nullptr
      *                       that means that no page will be created
      */
     void addPluginConfigurationPage(const QString _name, QWidget *_configPage);

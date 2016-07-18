@@ -146,12 +146,14 @@ void FileIconWidget::createActions()
 {
     m_menu = new QMenu(this);
 
-    m_menu->addAction(QIcon::fromTheme(m_info.isDir() ? QString("document-open-folder")
-                                                      : QString("document-open")),
+    m_menu->addAction(QIcon::fromTheme(m_info.isDir()
+                                           ? QString("document-open-folder")
+                                           : QString("document-open")),
                       tr("Open"), this, SLOT(openRequested()));
     if (m_info.isDir())
         m_menu->addAction(QIcon::fromTheme(QString("document-open-folder")),
-                          tr("Open in new tab"), this, SLOT(openInNewTabRequested()));
+                          tr("Open in new tab"), this,
+                          SLOT(openInNewTabRequested()));
     m_menu->addSeparator();
 
     m_menu->addAction(QIcon::fromTheme(QString("document-properties")),

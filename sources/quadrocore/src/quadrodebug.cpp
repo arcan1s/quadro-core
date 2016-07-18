@@ -36,6 +36,19 @@ Q_LOGGING_CATEGORY(LOG_UILIB, "core.quadro.uilibrary", QtMsgType::QtWarningMsg)
 
 
 /**
+ * @fn enableDebug
+ */
+void enableDebug()
+{
+    QLoggingCategory::setFilterRules(QString("core.quadro.dbus.*=true"));
+    QLoggingCategory::setFilterRules(QString("core.quadro.library.*=true"));
+    QLoggingCategory::setFilterRules(QString("core.quadro.plugin.*=true"));
+    QLoggingCategory::setFilterRules(QString("core.quadro.ui.*=true"));
+    QLoggingCategory::setFilterRules(QString("core.quadro.uilibrary.*=true"));
+}
+
+
+/**
  * @fn getBuildData
  */
 const QStringList getBuildData()

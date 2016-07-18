@@ -59,10 +59,12 @@ FileManagerCore::~FileManagerCore()
 /**
  * @fn directoryEntries
  */
-QFileInfoList FileManagerCore::directoryEntries(const QString _directory, const bool _hidden,
+QFileInfoList FileManagerCore::directoryEntries(const QString _directory,
+                                                const bool _hidden,
                                                 const QStringList _filter) const
 {
-    qCDebug(LOG_LIB) << "Directory" << _directory << "and show hidden" << _hidden;
+    qCDebug(LOG_LIB) << "Directory" << _directory << "and show hidden"
+                     << _hidden;
     qCDebug(LOG_LIB) << "Filter" << _filter;
 
     QDir dir = QDir(_directory);
@@ -72,7 +74,8 @@ QFileInfoList FileManagerCore::directoryEntries(const QString _directory, const 
     }
 
     if (_hidden)
-        return dir.entryInfoList(_filter, QDir::AllEntries | QDir::Hidden | QDir::NoDot);
+        return dir.entryInfoList(_filter,
+                                 QDir::AllEntries | QDir::Hidden | QDir::NoDot);
     else
         return dir.entryInfoList(_filter, QDir::AllEntries | QDir::NoDot);
 }
@@ -85,11 +88,13 @@ QFileInfoList FileManagerCore::entriesBySubstr(const QString _directory,
                                                const QString _substr,
                                                const bool _hidden) const
 {
-    qCDebug(LOG_LIB) << "Directory" << _directory << "and show hidden" << _hidden;
+    qCDebug(LOG_LIB) << "Directory" << _directory << "and show hidden"
+                     << _hidden;
     qCDebug(LOG_LIB) << "Substring" << _substr;
 
-    QDir::Filters filters = _hidden ? QDir::AllEntries | QDir::NoDotAndDotDot | QDir::Hidden
-                                    : QDir::AllEntries | QDir::NoDotAndDotDot;
+    QDir::Filters filters
+        = _hidden ? QDir::AllEntries | QDir::NoDotAndDotDot | QDir::Hidden
+                  : QDir::AllEntries | QDir::NoDotAndDotDot;
     QFileInfoList foundEntries;
 
     QDirIterator it(_directory, QStringList() << QString("*%1*").arg(_substr),

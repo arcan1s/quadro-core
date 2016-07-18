@@ -33,10 +33,10 @@
 /**
  * @fn PluginRepresentation
  */
-PluginRepresentation::PluginRepresentation(const QString author, const QString comment,
-                                           const QString group, const QString location,
-                                           const QString name, const QString url,
-                                           const QString version, QObject *parent)
+PluginRepresentation::PluginRepresentation(
+    const QString author, const QString comment, const QString group,
+    const QString location, const QString name, const QString url,
+    const QString version, QObject *parent)
     : QObject(parent)
     , m_author(author)
     , m_comment(comment)
@@ -77,7 +77,8 @@ PluginRepresentation *PluginRepresentation::fromFile(const QString _filePath,
     } else if (settings.childGroups().contains(QString("Quadro tabplugin"))) {
         group = QString("tabplugin");
         configGroup = QString("Quadro tabplugin");
-    } else if (settings.childGroups().contains(QString("Quadro genericplugin"))) {
+    } else if (settings.childGroups().contains(
+                   QString("Quadro genericplugin"))) {
         group = QString("genericplugin");
         configGroup = QString("Quadro genericplugin");
     } else {
@@ -86,11 +87,15 @@ PluginRepresentation *PluginRepresentation::fromFile(const QString _filePath,
     }
 
     settings.beginGroup(configGroup);
-    QString author = settings.value(QString("Author"), QString("John Smith")).toString();
-    QString comment = settings.value(QString("Comment"), QString("")).toString();
+    QString author
+        = settings.value(QString("Author"), QString("John Smith")).toString();
+    QString comment
+        = settings.value(QString("Comment"), QString("")).toString();
     QString name = settings.value(QString("Name"), QString("none")).toString();
-    QString url = settings.value(QString("URL"), QString("http://localhost")).toString();
-    QString version = settings.value(QString("Version"), QString("0.1")).toString();
+    QString url = settings.value(QString("URL"), QString("http://localhost"))
+                      .toString();
+    QString version
+        = settings.value(QString("Version"), QString("0.1")).toString();
     settings.endGroup();
 
     return new PluginRepresentation(author, comment, group,

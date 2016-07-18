@@ -41,9 +41,10 @@
 /**
  * @fn WebAppWidget
  */
-WebAppWidget::WebAppWidget(QWidget *parent, const int index, const bool showOpen)
-    : QMainWindow(parent),
-      m_index(index)
+WebAppWidget::WebAppWidget(QWidget *parent, const int index,
+                           const bool showOpen)
+    : QMainWindow(parent)
+    , m_index(index)
 {
     qCDebug(LOG_UILIB) << __PRETTY_FUNCTION__;
 
@@ -109,8 +110,9 @@ void WebAppWidget::setCache(const QString _dirName)
     qCDebug(LOG_UILIB) << "Set cache directory to" << _dirName;
 
     QString dirPath = QString("%1/quadro-%2")
-        .arg(QStandardPaths::writableLocation(QStandardPaths::GenericCacheLocation))
-        .arg(_dirName);
+                          .arg(QStandardPaths::writableLocation(
+                              QStandardPaths::GenericCacheLocation))
+                          .arg(_dirName);
     qCInfo(LOG_UILIB) << "Full cache directory path" << dirPath;
 
     ui->webView->page()->profile()->setCachePath(dirPath);
@@ -179,15 +181,17 @@ void WebAppWidget::createActions()
         if (m_index != -1)
             emit(destroyWindow(m_index));
     });
-    connect(ui->actionForward, SIGNAL(triggered()), ui->webView, SLOT(forward()));
+    connect(ui->actionForward, SIGNAL(triggered()), ui->webView,
+            SLOT(forward()));
     connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(getNewUrl()));
-    connect(ui->actionRefresh, SIGNAL(triggered()), this, SLOT(changePageState()));
+    connect(ui->actionRefresh, SIGNAL(triggered()), this,
+            SLOT(changePageState()));
 
     // webview actions
-    connect(ui->webView, &QWebEngineView::loadFinished, [this](const bool state) {
+    connect(ui->webView, &QWebEngineView::loadFinished, [this](
+                                                            const bool state) {
         updatePageState(state ? WebPageState::Loaded : WebPageState::Failed);
     });
-    connect(ui->webView, &QWebEngineView::loadStarted, [this]() {
-        updatePageState(WebPageState::Started);
-    });
+    connect(ui->webView, &QWebEngineView::loadStarted,
+            [this]() { updatePageState(WebPageState::Started); });
 }

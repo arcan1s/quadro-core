@@ -30,7 +30,8 @@
 
 
 /**
- * @brief The TabPluginInterface class provides core part of plugin run in own tab
+ * @brief The TabPluginInterface class provides core part of plugin run in own
+ * tab
  */
 class TabPluginInterface : public QuadroPluginInterface
 {
@@ -38,7 +39,7 @@ public:
     /**
      * @brief TabPluginInterface class destructor
      */
-    virtual ~TabPluginInterface() {};
+    virtual ~TabPluginInterface(){};
     /**
      * @brief method which generates new instance of TabPluginInterface class
      */

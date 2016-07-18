@@ -47,7 +47,8 @@ public:
      * @param size           item size
      * @param parent         pointer to parent object
      */
-    explicit PluginWidget(PluginInterface *interface, const QSize size, QWidget *parent);
+    explicit PluginWidget(PluginInterface *interface, const QSize size,
+                          QWidget *parent);
     /**
      * @brief PluginWidget class destructor
      */

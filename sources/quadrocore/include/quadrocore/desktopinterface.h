@@ -41,7 +41,7 @@ public:
     /**
      * @brief DesktopInterface class destructor
      */
-    virtual ~DesktopInterface() {};
+    virtual ~DesktopInterface(){};
     /**
      * @brief get WIds by given PID
      * @param _pid           PID

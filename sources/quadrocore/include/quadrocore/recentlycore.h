@@ -58,7 +58,8 @@ public:
      * @param _substr        substring to which application need to be found
      * @return map of applications by substring
      */
-    QMap<QString, ApplicationItem *> applicationsBySubstr(const QString _substr) const;
+    QMap<QString, ApplicationItem *>
+    applicationsBySubstr(const QString _substr) const;
     /**
      * @brief path to desktop files
      * @return full path to desktop files

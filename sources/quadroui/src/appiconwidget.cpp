@@ -43,8 +43,8 @@
  */
 AppIconWidget::AppIconWidget(ApplicationItem *appItem, const QSize size,
                              QWidget *parent)
-    : IconWidget(size, parent),
-      m_item(appItem)
+    : IconWidget(size, parent)
+    , m_item(appItem)
 {
     qCDebug(LOG_UILIB) << __PRETTY_FUNCTION__;
 
@@ -131,7 +131,8 @@ void AppIconWidget::editApplication()
 void AppIconWidget::hideApplication()
 {
     m_item->setNoDisplay(true);
-    m_item->saveDesktop(QStandardPaths::writableLocation(QStandardPaths::ApplicationsLocation));
+    m_item->saveDesktop(
+        QStandardPaths::writableLocation(QStandardPaths::ApplicationsLocation));
     DBusOperations::sendRequestToLibrary(QString("UpdateApplications"));
 }
 
@@ -144,8 +145,9 @@ void AppIconWidget::run()
     if (m_item->launch(m_args))
         emit(applicationIsRunning());
     else
-        QMessageBox::critical(this, tr("Error"), tr("Error"),
-                              tr("Could not run application %1").arg(m_item->exec()));
+        QMessageBox::critical(
+            this, tr("Error"), tr("Error"),
+            tr("Could not run application %1").arg(m_item->exec()));
 }
 
 
@@ -154,7 +156,8 @@ void AppIconWidget::run()
  */
 void AppIconWidget::runInNewTab()
 {
-    emit(standaloneApplicaitonRequested(m_item->generateExec(m_args), m_item->name()));
+    emit(standaloneApplicaitonRequested(m_item->generateExec(m_args),
+                                        m_item->name()));
 }
 
 
@@ -177,8 +180,8 @@ void AppIconWidget::setFiles()
         m_args[QString("%u")] = QString("file://%1").arg(file);
         argsUrls.append(QString("file://%1").arg(file));
     }
-    m_args[QString("%F")]= argsFiles;
-    m_args[QString("%U")]= argsUrls;
+    m_args[QString("%F")] = argsFiles;
+    m_args[QString("%U")] = argsUrls;
 }
 
 
@@ -187,7 +190,9 @@ void AppIconWidget::setFiles()
  */
 void AppIconWidget::setUrls()
 {
-    QStringList urls = QInputDialog::getMultiLineText(this, tr("Select URLs"), tr("URLs")).split(QChar('\n'));
+    QStringList urls
+        = QInputDialog::getMultiLineText(this, tr("Select URLs"), tr("URLs"))
+              .split(QChar('\n'));
     if (urls.isEmpty())
         return;
 
@@ -198,7 +203,7 @@ void AppIconWidget::setUrls()
         m_args[QString("%u")] = url;
         argsUrls.append(url);
     }
-    m_args[QString("%U")]= argsUrls;
+    m_args[QString("%U")] = argsUrls;
 }
 
 
@@ -207,20 +212,21 @@ void AppIconWidget::setUrls()
  */
 void AppIconWidget::createActions()
 {
-    bool isFavorites = DBusOperations::sendRequestToLibrary(
-        QString("Favorites")).at(0).toStringList().contains(m_item->name());
+    bool isFavorites
+        = DBusOperations::sendRequestToLibrary(QString("Favorites"))
+              .at(0)
+              .toStringList()
+              .contains(m_item->name());
     m_menu = new QMenu(this);
 
     m_menu->addAction(QIcon::fromTheme(QString("system-run")),
-                      tr("Run application"),
-                      this, SLOT(run()));
+                      tr("Run application"), this, SLOT(run()));
     m_menu->addAction(QIcon::fromTheme(QString("system-run")),
-                      tr("Run application in new tab"),
-                      this, SLOT(runInNewTab()));
+                      tr("Run application in new tab"), this,
+                      SLOT(runInNewTab()));
     m_menu->addAction(QIcon::fromTheme(QString("emblem-favorites")),
-                      isFavorites ?
-                      tr("Remove from favorites") :
-                      tr("Add to favorites"),
+                      isFavorites ? tr("Remove from favorites")
+                                  : tr("Add to favorites"),
                       this, SLOT(addItemToFavorites()));
     m_menu->addSeparator();
 

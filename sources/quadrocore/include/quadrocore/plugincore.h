@@ -35,8 +35,8 @@
 #include <typeinfo>
 
 #include "config.h"
-#include "quadrodebug.h"
 #include "pluginrepresentation.h"
+#include "quadrodebug.h"
 
 
 class PluginRepresentation;
@@ -83,7 +83,8 @@ public:
      * @param _group         return only plugins with specified group
      * @return list of PluginRepresentation objects
      */
-    QHash<QString, PluginRepresentation *> knownPlugins(const QString _group = QString()) const;
+    QHash<QString, PluginRepresentation *> knownPlugins(const QString _group
+                                                        = QString()) const;
     /**
      * @brief load plugin by name
      * @param _plugin        plugin name
@@ -91,7 +92,8 @@ public:
      */
     int loadPlugin(const QString _plugin);
     /**
-     * @brief unload plugin. This method calls Interface::quit() method and remove
+     * @brief unload plugin. This method calls Interface::quit() method and
+     * remove
      * the plugin from loaded list
      * @param _index         plugin index
      * @param _configPath    full path to configuration file
@@ -105,7 +107,7 @@ public:
      * @param _index         plugin index
      * @return pointer to plugin or nullptr in case if cast is not possible
      */
-    template<class T> T *plugin(const int _index)
+    template <class T> T *plugin(const int _index)
     {
         qCDebug(LOG_LIB) << "Plugin index" << _index;
 
@@ -117,8 +119,8 @@ public:
         try {
             item = dynamic_cast<T *>(m_plugins[_index]);
         } catch (std::bad_cast &bc) {
-            qCWarning(LOG_LIB) << "Could not cast index" << _index <<
-                               "to requested interface" << bc.what();
+            qCWarning(LOG_LIB) << "Could not cast index" << _index
+                               << "to requested interface" << bc.what();
         }
 
         return item;
@@ -146,7 +148,8 @@ private:
      * @param _location      plugin location
      * @return plugin objects
      */
-    template<class T> T *createPlugin(const QString _name, const QString _location)
+    template <class T>
+    T *createPlugin(const QString _name, const QString _location)
     {
         qCDebug(LOG_LIB) << "Create plugin" << _name << "from" << _location;
 
@@ -174,7 +177,8 @@ private:
      * @param _index         plugin index
      * @param _plugin        pointer to plugin object
      */
-    template<class T, class Adaptor> void createPluginDBusSession(const int _index, T *_plugin)
+    template <class T, class Adaptor>
+    void createPluginDBusSession(const int _index, T *_plugin)
     {
         qCDebug(LOG_LIB) << "Plugin name for DBus session" << _index;
 
@@ -204,7 +208,8 @@ private:
      * @param _location      plugin location
      * @return plugin registered index
      */
-    template<class T, class Adaptor> int registerPlugin(const QString _name, const QString _location)
+    template <class T, class Adaptor>
+    int registerPlugin(const QString _name, const QString _location)
     {
         qCDebug(LOG_LIB) << "Register plugin" << _name << "from" << _location;
 
@@ -219,12 +224,16 @@ private:
         // load plugin
         bool trStatus;
         static QTranslator pluginTranslator;
-        trStatus = pluginTranslator.load(QString("core-quadro-%1_%2").arg(_name)
+        trStatus = pluginTranslator.load(QString("core-quadro-%1_%2")
+                                             .arg(_name)
                                              .arg(QLocale::system().name()),
-                                         QString("%1/%2/%3/%4").arg(ROOT_INSTALL_DIR)
-                                             .arg(DATA_INSTALL_DIR).arg(HOME_PATH)
+                                         QString("%1/%2/%3/%4")
+                                             .arg(ROOT_INSTALL_DIR)
+                                             .arg(DATA_INSTALL_DIR)
+                                             .arg(HOME_PATH)
                                              .arg(TRANSLATION_PATH));
-        qCDebug(LOG_LIB) << "Loading plugin" << _name << "specific translation" << trStatus;
+        qCDebug(LOG_LIB) << "Loading plugin" << _name << "specific translation"
+                         << trStatus;
         trStatus = qApp->installTranslator(&pluginTranslator);
         qCDebug(LOG_LIB) << "Install translator for" << _name << trStatus;
 

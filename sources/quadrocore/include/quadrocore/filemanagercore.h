@@ -57,16 +57,17 @@ public:
      * @param _filter        name filter
      * @return list of files
      */
-    QFileInfoList directoryEntries(const QString _directory,
-                                   const bool _hidden = false,
-                                   const QStringList _filter = QStringList()) const;
+    QFileInfoList
+    directoryEntries(const QString _directory, const bool _hidden = false,
+                     const QStringList _filter = QStringList()) const;
     /**
      * @brief find entries by substring
      * @param _directory     parent directory
      * @param _substr        substring for name
      * @param _hidden        show hidden files or not
      */
-    QFileInfoList entriesBySubstr(const QString _directory, const QString _substr,
+    QFileInfoList entriesBySubstr(const QString _directory,
+                                  const QString _substr,
                                   const bool _hidden = false) const;
     /**
      * @brief get icon by file name

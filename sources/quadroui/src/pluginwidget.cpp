@@ -108,7 +108,8 @@ void PluginWidget::updateRequired()
     // update background if any
     QString background = m_interface->background();
     if (!background.isEmpty())
-        m_textLabel->setStyleSheet(QString("QLabel { background: %1; }").arg(background));
+        m_textLabel->setStyleSheet(
+            QString("QLabel { background: %1; }").arg(background));
 }
 
 
@@ -119,7 +120,8 @@ void PluginWidget::initPluginActions()
 {
     m_timer = new QTimer(this);
     m_timer->setInterval(m_interface->updateInterval() >= MINIMAL_TIMER
-                         ? m_interface->updateInterval() : MINIMAL_TIMER);
+                             ? m_interface->updateInterval()
+                             : MINIMAL_TIMER);
     m_timer->setSingleShot(false);
     if (m_interface->updateInterval() != 0)
         m_timer->start();

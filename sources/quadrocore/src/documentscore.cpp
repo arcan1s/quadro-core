@@ -36,8 +36,8 @@
  * @fn DocumentsCore
  */
 DocumentsCore::DocumentsCore(QObject *parent, const int recentItems)
-    : AbstractAppAggregator(parent),
-      m_recentItems(recentItems)
+    : AbstractAppAggregator(parent)
+    , m_recentItems(recentItems)
 {
     qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
 }
@@ -57,8 +57,10 @@ DocumentsCore::~DocumentsCore()
  */
 QString DocumentsCore::desktopPath()
 {
-    QString homePath = QString("%1/%2").arg(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation))
-                                       .arg(HOME_PATH);
+    QString homePath = QString("%1/%2")
+                           .arg(QStandardPaths::writableLocation(
+                               QStandardPaths::GenericDataLocation))
+                           .arg(HOME_PATH);
 
     return QString("%1/%2").arg(homePath).arg(DOCUMENTS_PATH);
 }
@@ -87,7 +89,8 @@ ApplicationItem *DocumentsCore::addItem(const QString _name)
     rotate();
     QDateTime modification = QDateTime::currentDateTime();
 
-    ApplicationItem *item = new ApplicationItem(this, QFileInfo(_name).fileName());
+    ApplicationItem *item
+        = new ApplicationItem(this, QFileInfo(_name).fileName());
     item->setComment(modification.toString(Qt::ISODate));
     item->setType(QString("Link"));
     item->setUrl(QString("file://%1").arg(QFileInfo(_name).absoluteFilePath()));
@@ -140,7 +143,9 @@ void DocumentsCore::removeItemByName(const QString _name)
         return;
     }
 
-    QFile desktop(QString("%1/%2").arg(desktopPath()).arg(applications()[_name]->desktopName()));
+    QFile desktop(QString("%1/%2")
+                      .arg(desktopPath())
+                      .arg(applications()[_name]->desktopName()));
     if (!desktop.remove()) {
         qCCritical(LOG_LIB) << "Could not remove" << desktop.fileName();
         return;
@@ -180,7 +185,8 @@ QMap<QString, ApplicationItem *> DocumentsCore::getApplicationsFromDesktops()
     QStringList filter("*.desktop");
     QMap<QString, ApplicationItem *> items;
 
-    QStringList entries = QDir(desktopPath()).entryList(filter, QDir::Files, QDir::Time);
+    QStringList entries
+        = QDir(desktopPath()).entryList(filter, QDir::Files, QDir::Time);
     for (auto entry : entries) {
         QString desktop = QFileInfo(QDir(desktopPath()), entry).filePath();
         qCInfo(LOG_LIB) << "Desktop" << desktop;

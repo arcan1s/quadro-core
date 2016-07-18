@@ -48,7 +48,8 @@ public:
      * @param parent         pointer to parent object
      * @param plugin         pointer to plugin item
      */
-    explicit QuadroPluginAdaptor(QObject *parent, QuadroPluginInterface *plugin);
+    explicit QuadroPluginAdaptor(QObject *parent,
+                                 QuadroPluginInterface *plugin);
     /**
      * @brief QuadroPluginAdaptor class destructor
      */

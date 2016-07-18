@@ -41,7 +41,7 @@ public:
     /**
      * @brief PluginInterface class destructor
      */
-    virtual ~PluginInterface() {};
+    virtual ~PluginInterface(){};
     /**
      * @brief method which generates new instance of PluginInterface class
      */

@@ -91,7 +91,8 @@ void FileInfoExtension::initMetadata()
     }
 
     // if it is a directory
-    QDirIterator it(absoluteFilePath(), QDir::AllEntries | QDir::NoDotAndDotDot | QDir::Hidden,
+    QDirIterator it(absoluteFilePath(),
+                    QDir::AllEntries | QDir::NoDotAndDotDot | QDir::Hidden,
                     QDirIterator::Subdirectories);
     while (it.hasNext()) {
         it.next();

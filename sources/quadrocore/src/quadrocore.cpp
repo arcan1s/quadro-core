@@ -25,9 +25,9 @@
 
 #include "quadrocore/quadro.h"
 
-#include <QGuiApplication>
 #include <QDBusConnection>
 #include <QDBusMessage>
+#include <QGuiApplication>
 
 
 /**
@@ -43,7 +43,8 @@ QuadroCore::QuadroCore(QObject *parent)
 
     m_config = new ConfigManager(this);
 
-    m_documents = new DocumentsCore(this, m_config->property("RecentItemsCount").toInt());
+    m_documents = new DocumentsCore(
+        this, m_config->property("RecentItemsCount").toInt());
     m_documents->initApplications();
     m_favorites = new FavoritesCore(this);
     m_favorites->initApplications();
@@ -52,7 +53,8 @@ QuadroCore::QuadroCore(QObject *parent)
     m_launcher->initApplications();
     m_plugin = new PluginCore(this);
     m_plugin->initPlugins();
-    m_recently = new RecentlyCore(this, m_config->property("RecentItemsCount").toInt());
+    m_recently = new RecentlyCore(
+        this, m_config->property("RecentItemsCount").toInt());
     m_recently->initApplications();
 
     initPlatformPlugin();
@@ -171,8 +173,7 @@ void QuadroCore::createDBusSession()
         qCWarning(LOG_UI) << "Could not register config object";
         qCWarning(LOG_UI) << bus.lastError().message();
     }
-    if (!bus.registerObject(DBUS_OBJECT_PATH,
-                            new QuadroAdaptor(this),
+    if (!bus.registerObject(DBUS_OBJECT_PATH, new QuadroAdaptor(this),
                             QDBusConnection::ExportAllContents)) {
         qCWarning(LOG_UI) << "Could not register library object";
         qCWarning(LOG_UI) << bus.lastError().message();
@@ -194,7 +195,9 @@ void QuadroCore::initPlatformPlugin()
     qCInfo(LOG_LIB) << "Found platform" << platform;
 
     QString libraryName = QString("%1/%2/libquadro%3adaptor.so")
-        .arg(ROOT_INSTALL_DIR).arg(LIB_INSTALL_DIR).arg(platform);
+                              .arg(ROOT_INSTALL_DIR)
+                              .arg(LIB_INSTALL_DIR)
+                              .arg(platform);
     QPluginLoader loader(libraryName);
     qCInfo(LOG_LIB) << "Loading" << libraryName;
     // load plugin
@@ -204,7 +207,8 @@ void QuadroCore::initPlatformPlugin()
         if (!m_platformPlugin)
             qCCritical(LOG_LIB) << "Could not cast plugin";
     } else {
-        qCCritical(LOG_LIB) << "Could not load the library for platform" << platform;
+        qCCritical(LOG_LIB) << "Could not load the library for platform"
+                            << platform;
         qCCritical(LOG_LIB) << "Error" << loader.errorString();
     }
 }

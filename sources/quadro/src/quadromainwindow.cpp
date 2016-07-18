@@ -22,15 +22,15 @@
 #include <QDBusConnection>
 #include <QDBusMessage>
 #include <QLibraryInfo>
-#include <QTranslator>
 #include <QStandardPaths>
+#include <QTranslator>
 #include <QUrl>
 #include <QWindow>
 
 #include <quadroui/quadroui.h>
 
-#include "settingswindow.h"
 #include "quadrouiadaptor.h"
+#include "settingswindow.h"
 #include "version.h"
 
 
@@ -39,8 +39,8 @@ QuadroMainWindow::QuadroMainWindow(QWidget *parent, const QVariantHash args)
 {
     qSetMessagePattern(LOG_FORMAT);
     qCDebug(LOG_UI) << __PRETTY_FUNCTION__;
-        for (auto metadata : getBuildData())
-            qCDebug(LOG_UI) << metadata;
+    for (auto metadata : getBuildData())
+        qCDebug(LOG_UI) << metadata;
 
     setWindowIcon(QIcon(":icon"));
 
@@ -67,18 +67,20 @@ QuadroMainWindow::~QuadroMainWindow()
 
 void QuadroMainWindow::closeEvent(QCloseEvent *event)
 {
-//     if ((QSystemTrayIcon::isSystemTrayAvailable()) && (configuration[QString("SYSTRAY")] == QString("true"))) {
-//         hide();
-//         event->ignore();
-//     } else
-//         closeMainWindow();
+    //     if ((QSystemTrayIcon::isSystemTrayAvailable()) &&
+    //     (configuration[QString("SYSTRAY")] == QString("true"))) {
+    //         hide();
+    //         event->ignore();
+    //     } else
+    //         closeMainWindow();
 }
 
 
 void QuadroMainWindow::changeTab(const int index)
 {
     qCDebug(LOG_UI) << "Index" << index;
-    if ((index == -1) || (index >= ui->stackedWidget->count())) return;
+    if ((index == -1) || (index >= ui->stackedWidget->count()))
+        return;
 
     return ui->stackedWidget->setCurrentIndex(index);
 }
@@ -117,13 +119,16 @@ void QuadroMainWindow::updateConfiguration(const QVariantHash args)
 }
 
 
-void QuadroMainWindow::createContainer(const QStringList exec, const QString name)
+void QuadroMainWindow::createContainer(const QStringList exec,
+                                       const QString name)
 {
     qCDebug(LOG_UI) << "Executable" << exec;
     qCDebug(LOG_UI) << "Name" << name;
 
-    StandaloneAppWidget *app = new StandaloneAppWidget(this, exec, ui->stackedWidget->count());
-    connect(app, SIGNAL(destroyWindow(const int)), this, SLOT(removeContainer(const int)));
+    StandaloneAppWidget *app
+        = new StandaloneAppWidget(this, exec, ui->stackedWidget->count());
+    connect(app, SIGNAL(destroyWindow(const int)), this,
+            SLOT(removeContainer(const int)));
 
     ui->stackedWidget->addWidget(app);
     tabActions.append(ui->toolBar->addAction(name));
@@ -132,16 +137,20 @@ void QuadroMainWindow::createContainer(const QStringList exec, const QString nam
 }
 
 
-void QuadroMainWindow::createWebContainer(const QString url, const bool showOpen)
+void QuadroMainWindow::createWebContainer(const QString url,
+                                          const bool showOpen)
 {
-    qCDebug(LOG_UI) << "Create URL" << url << "with show open button" << showOpen;
+    qCDebug(LOG_UI) << "Create URL" << url << "with show open button"
+                    << showOpen;
 
-    WebAppWidget *app = new WebAppWidget(this, ui->stackedWidget->count(),
-                                         showOpen);
-    connect(app, SIGNAL(destroyWindow(const int)), this, SLOT(removeContainer(const int)));
-    connect(app, &WebAppWidget::updateTitle, [this](const int index, const QString title) {
-        tabActions[index]->setText(title);
-    });
+    WebAppWidget *app
+        = new WebAppWidget(this, ui->stackedWidget->count(), showOpen);
+    connect(app, SIGNAL(destroyWindow(const int)), this,
+            SLOT(removeContainer(const int)));
+    connect(app, &WebAppWidget::updateTitle,
+            [this](const int index, const QString title) {
+                tabActions[index]->setText(title);
+            });
 
     ui->stackedWidget->addWidget(app);
     tabActions.append(ui->toolBar->addAction(QString("about:blank")));
@@ -174,8 +183,8 @@ void QuadroMainWindow::changeTabByAction(QAction *action)
 void QuadroMainWindow::clearTabs()
 {
     QStringList tabs = m_configuration[QString("Tabs")].toStringList();
-    disconnect(ui->toolBar, SIGNAL(actionTriggered(QAction *)),
-               this, SLOT(changeTabByAction(QAction *)));
+    disconnect(ui->toolBar, SIGNAL(actionTriggered(QAction *)), this,
+               SLOT(changeTabByAction(QAction *)));
 
     tabActions.clear();
     ui->toolBar->clear();
@@ -201,8 +210,9 @@ void QuadroMainWindow::initTabs()
         if (index == -1) {
             qCWarning(LOG_UI) << "Could not find tab" << tab;
         } else {
-            m_core->plugin()->initPlugin(index,
-                                         QString("%1.tab-%2.conf").arg(tab).arg(tabs.indexOf(tab)));
+            m_core->plugin()->initPlugin(
+                index,
+                QString("%1.tab-%2.conf").arg(tab).arg(tabs.indexOf(tab)));
             auto item = m_core->plugin()->plugin<TabPluginInterface>(index);
             ui->stackedWidget->addWidget(item->widget());
             tabActions.append(ui->toolBar->addAction(item->name()));
@@ -214,21 +224,27 @@ void QuadroMainWindow::initTabs()
         }
     }
 
-    connect(ui->toolBar, SIGNAL(actionTriggered(QAction *)),
-            this, SLOT(changeTabByAction(QAction *)));
+    connect(ui->toolBar, SIGNAL(actionTriggered(QAction *)), this,
+            SLOT(changeTabByAction(QAction *)));
 }
 
 
 void QuadroMainWindow::createActions()
 {
-    connect(this, SIGNAL(needToBeConfigured()), this, SLOT(showSettingsWindow()));
+    connect(this, SIGNAL(needToBeConfigured()), this,
+            SLOT(showSettingsWindow()));
 
     // menu
-    connect(ui->actionSettings, SIGNAL(triggered()), this, SLOT(showSettingsWindow()));
-//     connect(ui->actionDBus_API, SIGNAL(triggered()), this, SLOT(showApi()));
-//     connect(ui->actionLibrary, SIGNAL(triggered()), this, SLOT(showLibrary()));
-//     connect(ui->actionReport_a_bug, SIGNAL(triggered()), this, SLOT(reportABug()));
-//     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(showAboutWindow()));
+    connect(ui->actionSettings, SIGNAL(triggered()), this,
+            SLOT(showSettingsWindow()));
+    //     connect(ui->actionDBus_API, SIGNAL(triggered()), this,
+    //     SLOT(showApi()));
+    //     connect(ui->actionLibrary, SIGNAL(triggered()), this,
+    //     SLOT(showLibrary()));
+    //     connect(ui->actionReport_a_bug, SIGNAL(triggered()), this,
+    //     SLOT(reportABug()));
+    //     connect(ui->actionAbout, SIGNAL(triggered()), this,
+    //     SLOT(showAboutWindow()));
     connect(ui->actionQuit, SIGNAL(triggered()), this, SLOT(closeMainWindow()));
 }
 

@@ -36,17 +36,18 @@
 /**
  * @fn StandaloneApplicationItem
  */
-StandaloneApplicationItem::StandaloneApplicationItem(QWidget *parent, const QStringList cmd)
-    : QObject(parent),
-      m_command(cmd),
-      m_parent(parent)
+StandaloneApplicationItem::StandaloneApplicationItem(QWidget *parent,
+                                                     const QStringList cmd)
+    : QObject(parent)
+    , m_command(cmd)
+    , m_parent(parent)
 {
     qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
 
     m_process = new QProcess(nullptr);
     connect(m_process, SIGNAL(started()), this, SLOT(updateWidgets()));
-    connect(m_process, SIGNAL(finished(int, QProcess::ExitStatus)),
-            this, SLOT(finished(int, QProcess::ExitStatus)));
+    connect(m_process, SIGNAL(finished(int, QProcess::ExitStatus)), this,
+            SLOT(finished(int, QProcess::ExitStatus)));
 }
 
 
@@ -77,7 +78,8 @@ QStringList StandaloneApplicationItem::command() const
  */
 Q_PID StandaloneApplicationItem::processId() const
 {
-    if (m_process == nullptr) return 0;
+    if (m_process == nullptr)
+        return 0;
 
     return m_process->processId();
 }
@@ -88,7 +90,8 @@ Q_PID StandaloneApplicationItem::processId() const
  */
 QProcess::ProcessState StandaloneApplicationItem::processState() const
 {
-    if (m_process == nullptr) return QProcess::NotRunning;
+    if (m_process == nullptr)
+        return QProcess::NotRunning;
 
     return m_process->state();
 }
@@ -108,7 +111,8 @@ QList<QWidget *> StandaloneApplicationItem::widgets()
  */
 void StandaloneApplicationItem::startApplication()
 {
-    if (m_process == nullptr) return;
+    if (m_process == nullptr)
+        return;
 
     QStringList cmdArgs = m_command;
     QString cmd = cmdArgs.takeFirst();
@@ -122,7 +126,8 @@ void StandaloneApplicationItem::startApplication()
  */
 void StandaloneApplicationItem::stopApplication()
 {
-    if (m_process == nullptr) return;
+    if (m_process == nullptr)
+        return;
 
     m_process->terminate();
 }
@@ -139,9 +144,9 @@ void StandaloneApplicationItem::updateWidgets()
     }
 
     // check if there is a known plugin
-    QVariantList check = DBusOperations::sendRequestToLibrary(QString("IsKnownPlatform"));
-    if ((check.isEmpty())
-        || (!check.at(0).toBool())) {
+    QVariantList check
+        = DBusOperations::sendRequestToLibrary(QString("IsKnownPlatform"));
+    if ((check.isEmpty()) || (!check.at(0).toBool())) {
         qCCritical(LOG_LIB) << "No known platform found";
         return;
     }
@@ -166,7 +171,8 @@ void StandaloneApplicationItem::updateWidgets()
     // init widget
     m_widgets.clear();
     for (auto wid : windows)
-        m_widgets.append(QWidget::createWindowContainer(QWindow::fromWinId(wid), m_parent));
+        m_widgets.append(
+            QWidget::createWindowContainer(QWindow::fromWinId(wid), m_parent));
 
     return emit(ready());
 }
@@ -176,7 +182,7 @@ void StandaloneApplicationItem::updateWidgets()
  * @fn finished
  */
 void StandaloneApplicationItem::finished(const int exitCode,
-                                       const QProcess::ExitStatus exitStatus)
+                                         const QProcess::ExitStatus exitStatus)
 {
     qCDebug(LOG_LIB) << "Exit code" << exitCode;
     qCDebug(LOG_LIB) << "Exit status" << exitStatus;

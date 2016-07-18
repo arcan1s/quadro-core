@@ -33,12 +33,14 @@
 
 class StandaloneApplicationItem;
 
-namespace Ui {
+namespace Ui
+{
 class StandaloneAppWidget;
 }
 
 /**
- * @brief The StandaloneAppWidget class provides standalone application UI representation
+ * @brief The StandaloneAppWidget class provides standalone application UI
+ * representation
  */
 class StandaloneAppWidget : public QMainWindow
 {

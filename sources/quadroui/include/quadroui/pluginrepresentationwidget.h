@@ -31,12 +31,14 @@
 
 class PluginRepresentation;
 
-namespace Ui {
+namespace Ui
+{
 class PluginRepresentationWidget;
 }
 
 /**
- * @brief The PluginRepresentationWidget class provides UI for PluginRepresentation
+ * @brief The PluginRepresentationWidget class provides UI for
+ * PluginRepresentation
  * class
  */
 class PluginRepresentationWidget : public QWidget

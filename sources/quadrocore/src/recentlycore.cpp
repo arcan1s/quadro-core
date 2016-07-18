@@ -36,8 +36,8 @@
  * @fn RecentlyCore
  */
 RecentlyCore::RecentlyCore(QObject *parent, const int recentItems)
-    : AbstractAppAggregator(parent),
-      m_recentItems(recentItems)
+    : AbstractAppAggregator(parent)
+    , m_recentItems(recentItems)
 {
     qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
 }
@@ -55,13 +55,15 @@ RecentlyCore::~RecentlyCore()
 /**
  * @fn applicationsBySubstr
  */
-QMap<QString, ApplicationItem *> RecentlyCore::applicationsBySubstr(const QString _substr) const
+QMap<QString, ApplicationItem *>
+RecentlyCore::applicationsBySubstr(const QString _substr) const
 {
     qCDebug(LOG_LIB) << "Substring" << _substr;
 
     QMap<QString, ApplicationItem *> apps;
     for (auto app : applications().keys()) {
-        if (!applications()[app]->startsWith(_substr)) continue;
+        if (!applications()[app]->startsWith(_substr))
+            continue;
         apps[app] = applications()[app];
     }
 
@@ -74,8 +76,10 @@ QMap<QString, ApplicationItem *> RecentlyCore::applicationsBySubstr(const QStrin
  */
 QString RecentlyCore::desktopPath()
 {
-    QString homePath = QString("%1/%2").arg(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation))
-                                       .arg(HOME_PATH);
+    QString homePath = QString("%1/%2")
+                           .arg(QStandardPaths::writableLocation(
+                               QStandardPaths::GenericDataLocation))
+                           .arg(HOME_PATH);
 
     return QString("%1/%2").arg(homePath).arg(RECENT_PATH);
 }
@@ -162,7 +166,9 @@ void RecentlyCore::removeItemByName(const QString _name)
         return;
     }
 
-    QFile desktop(QString("%1/%2").arg(desktopPath()).arg(applications()[_name]->desktopName()));
+    QFile desktop(QString("%1/%2")
+                      .arg(desktopPath())
+                      .arg(applications()[_name]->desktopName()));
     if (!desktop.remove()) {
         qCCritical(LOG_LIB) << "Could not remove" << desktop.fileName();
         return;
@@ -202,7 +208,8 @@ QMap<QString, ApplicationItem *> RecentlyCore::getApplicationsFromDesktops()
     QStringList filter("*.desktop");
     QMap<QString, ApplicationItem *> items;
 
-    QStringList entries = QDir(desktopPath()).entryList(filter, QDir::Files, QDir::Time);
+    QStringList entries
+        = QDir(desktopPath()).entryList(filter, QDir::Files, QDir::Time);
     for (auto entry : entries) {
         QString desktop = QFileInfo(QDir(desktopPath()), entry).filePath();
         qCInfo(LOG_LIB) << "Desktop" << desktop;

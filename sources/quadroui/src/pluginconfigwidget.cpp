@@ -85,11 +85,12 @@ void PluginConfigWidget::addPluginConfigurationPage(const QString _name,
 /**
  * @fn changePage
  */
-void PluginConfigWidget::changePage(QTreeWidgetItem *_current, QTreeWidgetItem *)
+void PluginConfigWidget::changePage(QTreeWidgetItem *_current,
+                                    QTreeWidgetItem *)
 {
     qCDebug(LOG_UILIB) << "Current page" << _current->text(0);
 
-    for (int i=0; i<ui->treeWidget->topLevelItemCount(); i++) {
+    for (int i = 0; i < ui->treeWidget->topLevelItemCount(); i++) {
         if (_current != ui->treeWidget->topLevelItem(i))
             continue;
         qCInfo(LOG_UILIB) << "Change tab to" << i;
@@ -181,10 +182,12 @@ void PluginConfigWidget::pluginMoveDown()
 
     int currentIndex = ui->listWidget_enabledPlugins->currentRow();
     if (currentIndex == ui->listWidget_enabledPlugins->count() - 1) {
-        qCInfo(LOG_UILIB) << "No need to move item from" << currentIndex << "down";
+        qCInfo(LOG_UILIB) << "No need to move item from" << currentIndex
+                          << "down";
         return;
     }
-    QListWidgetItem *item = ui->listWidget_enabledPlugins->takeItem(currentIndex);
+    QListWidgetItem *item
+        = ui->listWidget_enabledPlugins->takeItem(currentIndex);
     qCInfo(LOG_UILIB) << "Move plugin down" << item->text();
     ui->listWidget_enabledPlugins->insertItem(currentIndex + 1, item);
     ui->listWidget_enabledPlugins->setCurrentItem(item);
@@ -203,10 +206,12 @@ void PluginConfigWidget::pluginMoveUp()
 
     int currentIndex = ui->listWidget_enabledPlugins->currentRow();
     if (currentIndex == 0) {
-        qCInfo(LOG_UILIB) << "No need to move item from" << currentIndex << "up";
+        qCInfo(LOG_UILIB) << "No need to move item from" << currentIndex
+                          << "up";
         return;
     }
-    QListWidgetItem *item = ui->listWidget_enabledPlugins->takeItem(currentIndex);
+    QListWidgetItem *item
+        = ui->listWidget_enabledPlugins->takeItem(currentIndex);
     qCInfo(LOG_UILIB) << "Move plugin up" << item->text();
     ui->listWidget_enabledPlugins->insertItem(currentIndex - 1, item);
     ui->listWidget_enabledPlugins->setCurrentItem(item);
@@ -234,16 +239,25 @@ void PluginConfigWidget::saveSettings() const
  */
 void PluginConfigWidget::createActions()
 {
-    connect(ui->pushButton_down, SIGNAL(clicked(const bool)), this, SLOT(pluginMoveDown()));
-    connect(ui->pushButton_left, SIGNAL(clicked(const bool)), this, SLOT(pluginEnable()));
-    connect(ui->pushButton_right, SIGNAL(clicked(const bool)), this, SLOT(pluginDisable()));
-    connect(ui->pushButton_up, SIGNAL(clicked(const bool)), this, SLOT(pluginMoveUp()));
-    connect(ui->treeWidget, SIGNAL(currentItemChanged(QTreeWidgetItem *, QTreeWidgetItem *)),
+    connect(ui->pushButton_down, SIGNAL(clicked(const bool)), this,
+            SLOT(pluginMoveDown()));
+    connect(ui->pushButton_left, SIGNAL(clicked(const bool)), this,
+            SLOT(pluginEnable()));
+    connect(ui->pushButton_right, SIGNAL(clicked(const bool)), this,
+            SLOT(pluginDisable()));
+    connect(ui->pushButton_up, SIGNAL(clicked(const bool)), this,
+            SLOT(pluginMoveUp()));
+    connect(ui->treeWidget,
+            SIGNAL(currentItemChanged(QTreeWidgetItem *, QTreeWidgetItem *)),
             this, SLOT(changePage(QTreeWidgetItem *, QTreeWidgetItem *)));
-    connect(ui->listWidget_allPlugins, SIGNAL(currentItemChanged(QListWidgetItem *, QListWidgetItem *)),
-            this, SLOT(changePluginRepresentation(QListWidgetItem *, QListWidgetItem *)));
-    connect(ui->listWidget_enabledPlugins, SIGNAL(currentItemChanged(QListWidgetItem *, QListWidgetItem *)),
-            this, SLOT(changePluginRepresentation(QListWidgetItem *, QListWidgetItem *)));
+    connect(
+        ui->listWidget_allPlugins,
+        SIGNAL(currentItemChanged(QListWidgetItem *, QListWidgetItem *)), this,
+        SLOT(changePluginRepresentation(QListWidgetItem *, QListWidgetItem *)));
+    connect(
+        ui->listWidget_enabledPlugins,
+        SIGNAL(currentItemChanged(QListWidgetItem *, QListWidgetItem *)), this,
+        SLOT(changePluginRepresentation(QListWidgetItem *, QListWidgetItem *)));
 
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
@@ -259,17 +273,22 @@ void PluginConfigWidget::createObjects()
     // create plugin list
     QStringList knownPluginNames;
     QVariantList plugins = DBusOperations::toNativeType<QVariantList>(
-        DBusOperations::sendRequestToLibrary(QString("Plugins"),
-                                             QVariantList() << m_group).first());
+        DBusOperations::sendRequestToLibrary(QString("Plugins"), QVariantList()
+                                                                     << m_group)
+            .first());
     for (auto plugin : plugins) {
-        QVariantHash metadata = qdbus_cast<QVariantHash>(plugin.value<QDBusArgument>());
+        QVariantHash metadata
+            = qdbus_cast<QVariantHash>(plugin.value<QDBusArgument>());
         QString name = metadata[QString("name")].toString();
         PluginRepresentation *repr = new PluginRepresentation(
-            metadata[QString("author")].toString(), metadata[QString("comment")].toString(),
-            metadata[QString("group")].toString(), metadata[QString("location")].toString(),
-            name, metadata[QString("url")].toString(),
+            metadata[QString("author")].toString(),
+            metadata[QString("comment")].toString(),
+            metadata[QString("group")].toString(),
+            metadata[QString("location")].toString(), name,
+            metadata[QString("url")].toString(),
             metadata[QString("version")].toString(), this);
-        PluginRepresentationWidget *wid = new PluginRepresentationWidget(this, repr);
+        PluginRepresentationWidget *wid
+            = new PluginRepresentationWidget(this, repr);
         m_representations[name] = wid;
         ui->layout_information->addWidget(wid);
         wid->hide();

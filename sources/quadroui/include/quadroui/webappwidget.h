@@ -41,14 +41,10 @@
  * @var WebPageState::Failed
  * web page loading failed
  */
-enum WebPageState {
-    None = 0,
-    Loaded,
-    Started,
-    Failed
-};
+enum WebPageState { None = 0, Loaded, Started, Failed };
 
-namespace Ui {
+namespace Ui
+{
 class WebAppWidget;
 }
 
@@ -104,7 +100,8 @@ signals:
      */
     void destroyWindow(const int _index);
     /**
-     * @brief signal which will be emitted when update tab title will be requested
+     * @brief signal which will be emitted when update tab title will be
+     * requested
      * @param _index         tab index
      * @param _title         new tab title
      */
@@ -112,7 +109,8 @@ signals:
 
 private slots:
     /**
-     * @brief method which automatically select should be page updated or stopped
+     * @brief method which automatically select should be page updated or
+     * stopped
      * and call related method
      */
     void changePageState();

@@ -35,8 +35,8 @@
 /**
  * @fn PluginRepresentationWidget
  */
-PluginRepresentationWidget::PluginRepresentationWidget(QWidget *parent,
-                                                       PluginRepresentation *representation)
+PluginRepresentationWidget::PluginRepresentationWidget(
+    QWidget *parent, PluginRepresentation *representation)
     : QWidget(parent)
 {
     qCDebug(LOG_UILIB) << __PRETTY_FUNCTION__;
@@ -48,8 +48,8 @@ PluginRepresentationWidget::PluginRepresentationWidget(QWidget *parent,
     ui->label_versionValue->setText(representation->version());
     ui->label_commentValue->setText(representation->comment());
     ui->label_authorValue->setText(representation->author());
-    ui->label_urlValue->setText(QString("<a href=\"%1\">%1</a>").arg(
-        representation->url()));
+    ui->label_urlValue->setText(
+        QString("<a href=\"%1\">%1</a>").arg(representation->url()));
     ui->label_locationValue->setText(representation->location());
     ui->label_groupValue->setText(representation->group());
 }

@@ -35,8 +35,8 @@
  * @fn ConfigManagerAdaptor
  */
 ConfigManagerAdaptor::ConfigManagerAdaptor(ConfigManager *manager)
-    : QDBusAbstractAdaptor(manager),
-      m_manager(manager)
+    : QDBusAbstractAdaptor(manager)
+    , m_manager(manager)
 {
     qCDebug(LOG_DBUS) << __PRETTY_FUNCTION__;
 }
@@ -77,8 +77,9 @@ QDBusVariant ConfigManagerAdaptor::Get(const QString key) const
 QStringList ConfigManagerAdaptor::KnownKeys() const
 {
     QStringList keys;
-    for (int i=0; i<m_manager->metaObject()->propertyCount(); i++)
-        keys.append(QString::fromUtf8(m_manager->metaObject()->property(i).name()));
+    for (int i = 0; i < m_manager->metaObject()->propertyCount(); i++)
+        keys.append(
+            QString::fromUtf8(m_manager->metaObject()->property(i).name()));
 
     return keys;
 }

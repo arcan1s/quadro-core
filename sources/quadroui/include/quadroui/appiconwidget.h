@@ -76,7 +76,8 @@ signals:
      * @param _exec          executable name
      * @param _name          applicaiton name
      */
-    void standaloneApplicaitonRequested(const QStringList _exec, const QString _name);
+    void standaloneApplicaitonRequested(const QStringList _exec,
+                                        const QString _name);
 
 protected:
     /**

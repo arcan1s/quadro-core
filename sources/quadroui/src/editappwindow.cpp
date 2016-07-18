@@ -40,8 +40,8 @@
  * @fn EditAppWindow
  */
 EditAppWindow::EditAppWindow(QWidget *parent, ApplicationItem *item)
-    : QDialog(parent),
-      m_item(item)
+    : QDialog(parent)
+    , m_item(item)
 {
     qCDebug(LOG_UILIB) << __PRETTY_FUNCTION__;
 
@@ -89,7 +89,8 @@ void EditAppWindow::saveDesktop()
     m_item->setNoDisplay(ui->checkBox_noDisplay->isChecked());
     m_item->setTerminal(ui->checkBox_terminal->isChecked());
 
-    m_item->saveDesktop(QStandardPaths::writableLocation(QStandardPaths::ApplicationsLocation));
+    m_item->saveDesktop(
+        QStandardPaths::writableLocation(QStandardPaths::ApplicationsLocation));
 }
 
 
@@ -137,7 +138,8 @@ void EditAppWindow::addCategory()
     QDialog *categoryDialog = new QDialog(this);
     categoryDialog->setWindowTitle(tr("Categories"));
     QListWidget *listWidget = new QListWidget(categoryDialog);
-    QDialogButtonBox *dialogButtons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, categoryDialog);
+    QDialogButtonBox *dialogButtons = new QDialogButtonBox(
+        QDialogButtonBox::Ok | QDialogButtonBox::Cancel, categoryDialog);
     QVBoxLayout *layout = new QVBoxLayout(categoryDialog);
     layout->addWidget(listWidget);
     layout->addWidget(dialogButtons);
@@ -169,7 +171,8 @@ void EditAppWindow::addCategory()
  */
 void EditAppWindow::selectPath()
 {
-    QString selection = QFileDialog::getExistingDirectory(this, tr("Working directory"));
+    QString selection
+        = QFileDialog::getExistingDirectory(this, tr("Working directory"));
     qCInfo(LOG_UILIB) << "Select file" << selection;
 
     if (!selection.isEmpty())

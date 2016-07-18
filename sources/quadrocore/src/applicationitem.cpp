@@ -42,8 +42,8 @@
  * @fn ApplicationItem
  */
 ApplicationItem::ApplicationItem(QObject *parent, const QString name)
-    : QObject(parent),
-      m_name(name)
+    : QObject(parent)
+    , m_name(name)
 {
     qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
 }
@@ -362,8 +362,7 @@ void ApplicationItem::setTryExec(const QString _tryExec)
 void ApplicationItem::setType(QString _type)
 {
     qCDebug(LOG_LIB) << "Type" << _type;
-    if ((_type != QString("Application"))
-        && (_type != QString("Link"))
+    if ((_type != QString("Application")) && (_type != QString("Link"))
         && (_type != QString("Directory"))) {
         qCWarning(LOG_LIB) << "Invalid desktop entry type" << _type;
         _type = QString("Application");
@@ -396,7 +395,8 @@ QIcon ApplicationItem::appIcon() const
 /**
  * @fn defineList
  */
-QStringList ApplicationItem::defineList(const QString _desktopPath, const QString _key)
+QStringList ApplicationItem::defineList(const QString _desktopPath,
+                                        const QString _key)
 {
     qCDebug(LOG_LIB) << "Desktop path" << _desktopPath;
     qCDebug(LOG_LIB) << "Options key" << _key;
@@ -432,7 +432,8 @@ QStringList ApplicationItem::defineList(const QString _desktopPath, const QStrin
  */
 QString ApplicationItem::desktopName() const
 {
-    return m_desktopName.isEmpty() ? QString("%1.desktop").arg(m_name) : m_desktopName;
+    return m_desktopName.isEmpty() ? QString("%1.desktop").arg(m_name)
+                                   : m_desktopName;
 }
 
 
@@ -446,16 +447,18 @@ QStringList ApplicationItem::generateExec(const QVariantHash _args) const
     QStringList cmdArgs = m_exec.split(QChar(' '), QString::SkipEmptyParts);
     // replace keys according to
     // http://standards.freedesktop.org/desktop-entry-spec/latest/ar01s06.html
-    QStringList keys(QStringList() << QString("%f") << QString("%F")
-                     << QString("%u") << QString("%U") << QString("%d")
-                     << QString("%D") << QString("%n") << QString("%N")
-                     << QString("%i") << QString("%c") << QString("%k")
-                     << QString("%V") << QString("%m"));
-    for (int i=0; i<cmdArgs.count(); i++) {
+    QStringList keys(QStringList()
+                     << QString("%f") << QString("%F") << QString("%u")
+                     << QString("%U") << QString("%d") << QString("%D")
+                     << QString("%n") << QString("%N") << QString("%i")
+                     << QString("%c") << QString("%k") << QString("%V")
+                     << QString("%m"));
+    for (int i = 0; i < cmdArgs.count(); i++) {
         for (auto key : keys)
-            cmdArgs[i].replace(key, _args[key].type() == QVariant::StringList
-                                    ? _args[key].toStringList().join(QChar(' '))
-                                    : _args[key].toString());
+            cmdArgs[i].replace(key,
+                               _args[key].type() == QVariant::StringList
+                                   ? _args[key].toStringList().join(QChar(' '))
+                                   : _args[key].toString());
         // end
         cmdArgs[i].replace(QString("%%"), QString("%"));
     }
@@ -477,7 +480,8 @@ QStringList ApplicationItem::generateExec(const QVariantHash _args) const
 /**
  * @fn fromDesktop
  */
-ApplicationItem *ApplicationItem::fromDesktop(const QString _desktopPath, QObject *_parent)
+ApplicationItem *ApplicationItem::fromDesktop(const QString _desktopPath,
+                                              QObject *_parent)
 {
     qCDebug(LOG_LIB) << "Desktop path" << _desktopPath;
     QSettings settings(_desktopPath, QSettings::IniFormat);
@@ -491,17 +495,19 @@ ApplicationItem *ApplicationItem::fromDesktop(const QString _desktopPath, QObjec
             key = QString("URL");
         // HACK avoid commas in fields
         QVariant orig = settings.value(key);
-        QVariant value = orig.type() == QVariant::StringList ? orig.toStringList().join(QString(", ")) : orig;
+        QVariant value = orig.type() == QVariant::StringList
+                             ? orig.toStringList().join(QString(", "))
+                             : orig;
         item->setProperty(key.toUtf8().constData(), value);
     }
 
     // update localized fields
     // locale keys, modifier (@mod) is ignored
     QStringList locales(QStringList() << QLocale::system().bcp47Name()
-                            << QLocale::system().name());
+                                      << QLocale::system().name());
     // properties which may be localised
     QStringList props(QStringList() << QString("Name") << QString("GenericName")
-                          << QString("Icon") << QString("Comment"));
+                                    << QString("Icon") << QString("Comment"));
     for (auto prop : props) {
         for (auto loc : locales) {
             QString propName = QString("%1[%2]").arg(prop).arg(loc);
@@ -509,7 +515,9 @@ ApplicationItem *ApplicationItem::fromDesktop(const QString _desktopPath, QObjec
                 continue;
             // HACK avoid commas in fields
             QVariant orig = settings.value(propName);
-            QVariant value = orig.type() == QVariant::StringList ? orig.toStringList().join(QString(", ")) : orig;
+            QVariant value = orig.type() == QVariant::StringList
+                                 ? orig.toStringList().join(QString(", "))
+                                 : orig;
             item->setProperty(prop.toUtf8().constData(), value);
             break;
         }
@@ -517,7 +525,7 @@ ApplicationItem *ApplicationItem::fromDesktop(const QString _desktopPath, QObjec
 
     // workaround for lists
     props = QStringList() << QString("Categories") << QString("Keywords")
-        << QString("MimeType");
+                          << QString("MimeType");
     for (auto prop : props) {
         QStringList values;
         /// try localized keys
@@ -548,9 +556,9 @@ ApplicationItem *ApplicationItem::fromDesktop(const QString _desktopPath, QObjec
 bool ApplicationItem::hasSubstring(const QString _substr) const
 {
     return ((m_name.contains(_substr, Qt::CaseInsensitive))
-        || (m_genericName.contains(_substr, Qt::CaseInsensitive))
-        || (m_comment.contains(_substr, Qt::CaseInsensitive))
-        || (m_keywords.contains(_substr, Qt::CaseInsensitive)));
+            || (m_genericName.contains(_substr, Qt::CaseInsensitive))
+            || (m_comment.contains(_substr, Qt::CaseInsensitive))
+            || (m_keywords.contains(_substr, Qt::CaseInsensitive)));
 }
 
 
@@ -600,7 +608,8 @@ bool ApplicationItem::launch(const QVariantHash _args) const
     } else if (m_type == QString("Link")) {
         return QDesktopServices::openUrl(QUrl(m_url));
     } else if (m_type == QString("Directory")) {
-        return QDesktopServices::openUrl(QUrl(QString("file://%1").arg(m_path)));
+        return QDesktopServices::openUrl(
+            QUrl(QString("file://%1").arg(m_path)));
     }
 
     return false;
@@ -620,15 +629,17 @@ QString ApplicationItem::saveDesktop(const QString _desktopPath) const
     qCInfo(LOG_LIB) << "Configuration file" << settings.fileName();
 
     // generate list of known properties
-    QStringList knownProperties(QStringList() << QString("Type") << QString("Version")
-                                    << QString("Name") << QString("GenericName")
-                                    << QString("NoDisplay") << QString("Comment")
-                                    << QString("Icon") << QString("Hidden")
-                                    << QString("TryExec") << QString("Exec")
-                                    << QString("Path") << QString("Terminal")
-                                    << QString("URL"));
+    QStringList knownProperties(QStringList()
+                                << QString("Type") << QString("Version")
+                                << QString("Name") << QString("GenericName")
+                                << QString("NoDisplay") << QString("Comment")
+                                << QString("Icon") << QString("Hidden")
+                                << QString("TryExec") << QString("Exec")
+                                << QString("Path") << QString("Terminal")
+                                << QString("URL"));
     QStringList knownListProperties(QStringList() << QString("Categories")
-                                        << QString("Keywords") << QString("MimeType"));
+                                                  << QString("Keywords")
+                                                  << QString("MimeType"));
 
     settings.beginGroup(QString("Desktop Entry"));
     for (auto prop : knownProperties) {
@@ -673,5 +684,6 @@ bool ApplicationItem::run(const QVariantHash _args) const
     QStringList cmdArgs = generateExec(_args);
     QString cmd = cmdArgs.takeFirst();
 
-    return QProcess::startDetached(cmd, cmdArgs, m_path.isEmpty() ? QString("/") : m_path);
+    return QProcess::startDetached(cmd, cmdArgs,
+                                   m_path.isEmpty() ? QString("/") : m_path);
 }

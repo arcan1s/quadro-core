@@ -31,7 +31,8 @@
 
 
 /**
- * @brief The StandaloneApplicationItem class provides methods to control internal
+ * @brief The StandaloneApplicationItem class provides methods to control
+ * internal
  * applications
  */
 class StandaloneApplicationItem : public QObject

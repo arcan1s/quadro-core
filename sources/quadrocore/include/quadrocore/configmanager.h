@@ -69,7 +69,8 @@ public:
      * @returns keys in which there are invalid values. If no errors were found
      * it will be empty list
      */
-    static QStringList verifySettings(const QVariantHash &_other, bool *_ok = nullptr);
+    static QStringList verifySettings(const QVariantHash &_other,
+                                      bool *_ok = nullptr);
     // core properties
     /**
      * @brief get path to configuration file

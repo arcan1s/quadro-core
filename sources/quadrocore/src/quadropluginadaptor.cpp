@@ -32,9 +32,10 @@
 /**
  * @fn QuadroPluginAdaptor
  */
-QuadroPluginAdaptor::QuadroPluginAdaptor(QObject *parent, QuadroPluginInterface *plugin)
-    : QDBusAbstractAdaptor(parent),
-      m_plugin(plugin)
+QuadroPluginAdaptor::QuadroPluginAdaptor(QObject *parent,
+                                         QuadroPluginInterface *plugin)
+    : QDBusAbstractAdaptor(parent)
+    , m_plugin(plugin)
 {
     qCDebug(LOG_DBUS) << __PRETTY_FUNCTION__;
 }

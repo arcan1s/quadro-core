@@ -31,7 +31,8 @@
 
 class ApplicationItem;
 
-namespace Ui {
+namespace Ui
+{
 class EditAppWindow;
 }
 

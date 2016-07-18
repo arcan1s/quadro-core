@@ -36,8 +36,8 @@
  * @fn FileInfoWindow
  */
 FileInfoWindow::FileInfoWindow(QWidget *parent, QFileInfo item)
-    : QDialog(parent),
-      m_item(item)
+    : QDialog(parent)
+    , m_item(item)
 {
     qCDebug(LOG_UILIB) << __PRETTY_FUNCTION__;
 
@@ -75,9 +75,11 @@ void FileInfoWindow::showWindow()
     // size
     QString sizeStr;
     if (m_item.totalSize() > 1024 * 1014 * 1024)
-        sizeStr = tr("%1 GiB").arg(m_item.totalSize() / (1024.0 * 1014.0 * 1024.0), 0, 'f', 2);
+        sizeStr = tr("%1 GiB").arg(
+            m_item.totalSize() / (1024.0 * 1014.0 * 1024.0), 0, 'f', 2);
     else if (m_item.totalSize() > 1024 * 1014)
-        sizeStr = tr("%1 MiB").arg(m_item.totalSize() / (1024.0 * 1024.0), 0, 'f', 2);
+        sizeStr = tr("%1 MiB").arg(m_item.totalSize() / (1024.0 * 1024.0), 0,
+                                   'f', 2);
     else if (m_item.totalSize() > 1024)
         sizeStr = tr("%1 KiB").arg(m_item.totalSize() / (1024.0), 0, 'f', 2);
     else
@@ -86,7 +88,9 @@ void FileInfoWindow::showWindow()
         ui->label_sizeData->setText(sizeStr);
     else
         ui->label_sizeData->setText(tr("%1 (files %2, directories %3)")
-                                        .arg(sizeStr).arg(m_item.childFiles()).arg(m_item.childDirectories()));
+                                        .arg(sizeStr)
+                                        .arg(m_item.childFiles())
+                                        .arg(m_item.childDirectories()));
 
     // times
     ui->label_createdData->setText(m_item.created().toString());
@@ -133,8 +137,8 @@ void FileInfoWindow::showWindow()
  */
 QIcon FileInfoWindow::getIcon() const
 {
-    QVariantList res = DBusOperations::sendRequestToLibrary(QString("Icon"),
-                                                            QVariantList() << m_item.absoluteFilePath());
+    QVariantList res = DBusOperations::sendRequestToLibrary(
+        QString("Icon"), QVariantList() << m_item.absoluteFilePath());
     if (res.isEmpty())
         return QIcon::fromTheme(QString("system-run"));
     else
@@ -147,8 +151,8 @@ QIcon FileInfoWindow::getIcon() const
  */
 QString FileInfoWindow::getMime() const
 {
-    QVariantList res = DBusOperations::sendRequestToLibrary(QString("MIME"),
-                                                            QVariantList() << m_item.absoluteFilePath());
+    QVariantList res = DBusOperations::sendRequestToLibrary(
+        QString("MIME"), QVariantList() << m_item.absoluteFilePath());
 
     if (res.isEmpty())
         return QString("other");

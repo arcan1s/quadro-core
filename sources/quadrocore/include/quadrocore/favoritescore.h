@@ -73,9 +73,9 @@ public:
      * @param _iconName      icon name in the theme
      * @return application item
      */
-    static ApplicationItem *addToFavorites(const QString _executable,
-                                           const QString _name = QString(),
-                                           const QString _iconName = QString("system-run"));
+    static ApplicationItem *
+    addToFavorites(const QString _executable, const QString _name = QString(),
+                   const QString _iconName = QString("system-run"));
     /**
      * @brief check whether the application in favorites
      * @param _item          pointer to application item object

@@ -34,7 +34,8 @@
 class ApplicationItem;
 
 /**
- * @brief The AbstractAppAggregator class provides application aggregator backend
+ * @brief The AbstractAppAggregator class provides application aggregator
+ * backend
  */
 class AbstractAppAggregator : public QObject
 {
@@ -60,13 +61,15 @@ public:
      * @param _category      category
      * @return map of applications by category
      */
-    QMap<QString, ApplicationItem *> applicationsByCategory(const QString _category) const;
+    QMap<QString, ApplicationItem *>
+    applicationsByCategory(const QString _category) const;
     /**
      * @brief find applications by substring in name
      * @param _substr        substring to which application need to be found
      * @return map of applications by substring
      */
-    QMap<QString, ApplicationItem *> applicationsBySubstr(const QString _substr) const;
+    QMap<QString, ApplicationItem *>
+    applicationsBySubstr(const QString _substr) const;
     /**
      * @brief available application categories
      * @return list of available categories

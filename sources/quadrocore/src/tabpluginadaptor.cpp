@@ -33,8 +33,8 @@
  * @fn TabPluginAdaptor
  */
 TabPluginAdaptor::TabPluginAdaptor(QObject *parent, TabPluginInterface *plugin)
-    : QuadroPluginAdaptor(parent, plugin),
-      m_plugin(plugin)
+    : QuadroPluginAdaptor(parent, plugin)
+    , m_plugin(plugin)
 {
     qCDebug(LOG_DBUS) << __PRETTY_FUNCTION__;
 }

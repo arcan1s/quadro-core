@@ -128,8 +128,10 @@ bool FavoritesCore::check(ApplicationItem *_item)
  */
 QString FavoritesCore::desktopPath()
 {
-    QString homePath = QString("%1/%2").arg(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation))
-                                       .arg(HOME_PATH);
+    QString homePath = QString("%1/%2")
+                           .arg(QStandardPaths::writableLocation(
+                               QStandardPaths::GenericDataLocation))
+                           .arg(HOME_PATH);
 
     return QString("%1/%2").arg(homePath).arg(FAVORITES_PATH);
 }
@@ -162,10 +164,12 @@ QStringList FavoritesCore::order() const
 void FavoritesCore::changeApplicationState(const QString _name, const bool _up)
 {
     int current = m_order.indexOf(_name);
-    if (current == -1) return;
+    if (current == -1)
+        return;
 
     int next = _up ? current - 1 : current + 1;
-    if ((next == -1) || (next == m_order.count())) return;
+    if ((next == -1) || (next == m_order.count()))
+        return;
 
     m_order.swap(current, next);
 }
@@ -190,7 +194,8 @@ void FavoritesCore::initApplications()
  */
 void FavoritesCore::saveApplicationsOrder() const
 {
-    QString fileName = QFileInfo(QDir(desktopPath()), QString("index.conf")).filePath();
+    QString fileName
+        = QFileInfo(QDir(desktopPath()), QString("index.conf")).filePath();
     qCInfo(LOG_LIB) << "Configuration file" << fileName;
     QSettings settings(fileName, QSettings::IniFormat);
     settings.setIniCodec("UTF-8");
@@ -212,7 +217,8 @@ void FavoritesCore::addAppToFavorites(ApplicationItem *_item)
         m_order.append(_item->name());
         saveApplicationsOrder();
     } else {
-        qCWarning(LOG_LIB) << "Could not save item" << _item->name() << "to" << desktopPath();
+        qCWarning(LOG_LIB) << "Could not save item" << _item->name() << "to"
+                           << desktopPath();
     }
 }
 
@@ -242,7 +248,8 @@ QMap<QString, ApplicationItem *> FavoritesCore::getApplicationsFromDesktops()
  */
 QStringList FavoritesCore::getApplicationsOrder() const
 {
-    QString fileName = QFileInfo(QDir(desktopPath()), QString("index.conf")).filePath();
+    QString fileName
+        = QFileInfo(QDir(desktopPath()), QString("index.conf")).filePath();
     qCInfo(LOG_LIB) << "Configuration file" << fileName;
     QSettings settings(fileName, QSettings::IniFormat);
     settings.setIniCodec("UTF-8");
@@ -261,6 +268,7 @@ void FavoritesCore::removeAppFromFavorites(ApplicationItem *_item)
         m_order.removeAll(_item->name());
         saveApplicationsOrder();
     } else {
-        qCWarning(LOG_LIB) << "Could not remove item" << _item->name() << "to" << desktopPath();
+        qCWarning(LOG_LIB) << "Could not remove item" << _item->name() << "to"
+                           << desktopPath();
     }
 }

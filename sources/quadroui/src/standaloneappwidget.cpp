@@ -37,11 +37,12 @@
 /**
  * @fn StandaloneAppWidget
  */
-StandaloneAppWidget::StandaloneAppWidget(QWidget *parent, const QStringList exec,
+StandaloneAppWidget::StandaloneAppWidget(QWidget *parent,
+                                         const QStringList exec,
                                          const int index)
-    : QMainWindow(parent),
-      m_exec(exec),
-      m_index(index)
+    : QMainWindow(parent)
+    , m_exec(exec)
+    , m_index(index)
 {
     qCDebug(LOG_UILIB) << __PRETTY_FUNCTION__;
 
@@ -74,7 +75,8 @@ void StandaloneAppWidget::paintWidget()
     for (auto widget : widgets) {
         QMdiSubWindow *subWindow = ui->mdiArea->addSubWindow(widget);
         subWindow->setAttribute(Qt::WA_DeleteOnClose);
-        connect(subWindow, SIGNAL(destroyed(QObject *)), this, SLOT(subWindowDestroyed()));
+        connect(subWindow, SIGNAL(destroyed(QObject *)), this,
+                SLOT(subWindowDestroyed()));
         subWindow->show();
     }
 

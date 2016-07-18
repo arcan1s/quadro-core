@@ -28,7 +28,8 @@
 
 class SettingsWindow;
 
-namespace Ui {
+namespace Ui
+{
 class QuadroMainWindow;
 }
 

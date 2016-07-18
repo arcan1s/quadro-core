@@ -58,7 +58,8 @@ public:
     explicit PluginRepresentation(const QString author, const QString comment,
                                   const QString group, const QString location,
                                   const QString name, const QString url,
-                                  const QString version, QObject *parent = nullptr);
+                                  const QString version,
+                                  QObject *parent = nullptr);
     /**
      * @brief PluginRepresentation class destructor
      */

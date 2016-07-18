@@ -31,7 +31,8 @@
 #include <quadrocore/fileinfoextension.h>
 
 
-namespace Ui {
+namespace Ui
+{
 class FileInfoWindow;
 }
 

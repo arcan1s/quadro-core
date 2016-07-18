@@ -29,9 +29,9 @@
 
 
 SettingsWindow::SettingsWindow(QWidget *parent, const QString configFile)
-    : QMainWindow(parent),
-      m_file(configFile),
-      ui(new Ui::SettingsWindow)
+    : QMainWindow(parent)
+    , m_file(configFile)
+    , ui(new Ui::SettingsWindow)
 {
     qCDebug(LOG_UI) << __PRETTY_FUNCTION__;
 
@@ -63,14 +63,13 @@ QVariantHash SettingsWindow::getSettings(QString fileName)
     QSettings settings(fileName, QSettings::IniFormat);
 
     settings.beginGroup(QString("UI"));
-    config[QString("Tabs")] = settings.value(QString("Tabs"), QStringList() <<
-                                             QString("favlauncher") <<
-                                             QString("applauncher") <<
-                                             QString("filemanager") <<
-                                             QString("webpage"));
+    config[QString("Tabs")] = settings.value(
+        QString("Tabs"), QStringList()
+                             << QString("favlauncher") << QString("applauncher")
+                             << QString("filemanager") << QString("webpage"));
     settings.endGroup();
 
-    for (int i=0; i<config.keys().count(); i++)
+    for (int i = 0; i < config.keys().count(); i++)
         qCInfo(LOG_UI) << config.keys()[i] << config[config.keys()[i]];
 
     return config;
@@ -114,12 +113,14 @@ void SettingsWindow::keyPressEvent(QKeyEvent *pressedKey)
 }
 
 
-void SettingsWindow::changePage(QTreeWidgetItem *current, QTreeWidgetItem *previous)
+void SettingsWindow::changePage(QTreeWidgetItem *current,
+                                QTreeWidgetItem *previous)
 {
     Q_UNUSED(previous);
 
-    for (int i=0; i<ui->treeWidget->topLevelItemCount(); i++) {
-        if (current != ui->treeWidget->topLevelItem(i)) continue;
+    for (int i = 0; i < ui->treeWidget->topLevelItemCount(); i++) {
+        if (current != ui->treeWidget->topLevelItem(i))
+            continue;
         ui->stackedWidget->setCurrentIndex(i);
         break;
     }
@@ -141,11 +142,16 @@ void SettingsWindow::saveSettings()
 
 void SettingsWindow::createActions()
 {
-    connect(ui->buttonBox->button(QDialogButtonBox::Cancel), SIGNAL(clicked(bool)), this, SLOT(close()));
-    connect(ui->buttonBox->button(QDialogButtonBox::Ok), SIGNAL(clicked(bool)), this, SLOT(closeWindow()));
-    connect(ui->buttonBox->button(QDialogButtonBox::Reset), SIGNAL(clicked(bool)), this, SLOT(restoreSettings()));
-    connect(ui->buttonBox->button(QDialogButtonBox::RestoreDefaults), SIGNAL(clicked(bool)), this, SLOT(setDefault()));
-    connect(ui->treeWidget, SIGNAL(currentItemChanged(QTreeWidgetItem *, QTreeWidgetItem *)),
+    connect(ui->buttonBox->button(QDialogButtonBox::Cancel),
+            SIGNAL(clicked(bool)), this, SLOT(close()));
+    connect(ui->buttonBox->button(QDialogButtonBox::Ok), SIGNAL(clicked(bool)),
+            this, SLOT(closeWindow()));
+    connect(ui->buttonBox->button(QDialogButtonBox::Reset),
+            SIGNAL(clicked(bool)), this, SLOT(restoreSettings()));
+    connect(ui->buttonBox->button(QDialogButtonBox::RestoreDefaults),
+            SIGNAL(clicked(bool)), this, SLOT(setDefault()));
+    connect(ui->treeWidget,
+            SIGNAL(currentItemChanged(QTreeWidgetItem *, QTreeWidgetItem *)),
             this, SLOT(changePage(QTreeWidgetItem *, QTreeWidgetItem *)));
 }
 
@@ -169,7 +175,7 @@ QVariantHash SettingsWindow::readSettings()
 void SettingsWindow::setSettings(const QVariantHash config)
 {
     // main tab
-    for (int i=0; i<config[QString("Tabs")].toStringList().count(); i++) {
+    for (int i = 0; i < config[QString("Tabs")].toStringList().count(); i++) {
         // TODO tab settings
     }
 

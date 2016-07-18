@@ -62,7 +62,8 @@ QMap<QString, ApplicationItem *> AbstractAppAggregator::applications() const
 /**
  * @fn applicationsByCategory
  */
-QMap<QString, ApplicationItem *> AbstractAppAggregator::applicationsByCategory(const QString _category) const
+QMap<QString, ApplicationItem *>
+AbstractAppAggregator::applicationsByCategory(const QString _category) const
 {
     qCDebug(LOG_LIB) << "Category" << _category;
 
@@ -74,7 +75,8 @@ QMap<QString, ApplicationItem *> AbstractAppAggregator::applicationsByCategory(c
 
     for (auto app : m_applications.keys()) {
         QStringList categories = m_applications[app]->categories();
-        if (!categories.contains(_category)) continue;
+        if (!categories.contains(_category))
+            continue;
         apps[app] = m_applications[app];
     }
 
@@ -85,13 +87,15 @@ QMap<QString, ApplicationItem *> AbstractAppAggregator::applicationsByCategory(c
 /**
  * @fn applicationsBySubstr
  */
-QMap<QString, ApplicationItem *> AbstractAppAggregator::applicationsBySubstr(const QString _substr) const
+QMap<QString, ApplicationItem *>
+AbstractAppAggregator::applicationsBySubstr(const QString _substr) const
 {
     qCDebug(LOG_LIB) << "Substring" << _substr;
 
     QMap<QString, ApplicationItem *> apps;
     for (auto app : m_applications.keys()) {
-        if (!m_applications[app]->hasSubstring(_substr)) continue;
+        if (!m_applications[app]->hasSubstring(_substr))
+            continue;
         apps[app] = m_applications[app];
     }
 
@@ -107,7 +111,7 @@ QStringList AbstractAppAggregator::availableCategories()
     // refer to http://standards.freedesktop.org/menu-spec/latest/apa.html
 
     QStringList categories;
-    categories.append(QString("AudioVideo"));       // usually named as Multimedia
+    categories.append(QString("AudioVideo")); // usually named as Multimedia
     categories.append(QString("Audio"));
     categories.append(QString("Video"));
     categories.append(QString("Development"));
