@@ -28,20 +28,17 @@
 ##
 
 ##
-# @def QUADRO_DEFINITIONS
-# optional cmake definitions
+# @brief optional cmake definitions
 ##
 set(QUADRO_DEFINITIONS "")
 ##
-# @def QUADRO_INCLUDE_DIRS
-# path to root include directory
+# @brief path to root include directory
 ##
 find_path(QUADROCORE_INCLUDE_DIR "quadrocore/quadro.h" PATH_SUFFIXES "quadro")
 find_path(QUADROUI_INCLUDE_DIR "quadroui/quadroui.h" PATH_SUFFIXES "quadro")
 set(QUADRO_INCLUDE_DIRS "${QUADROCORE_INCLUDE_DIR}" "${QUADROUI_INCLUDE_DIR}")
 ##
-# @def QUADRO_LIBRARIES
-# quadro library name
+# @brief quadro library name
 ##
 find_library(QUADROCORE_LIBRARY NAMES "quadrocore" "libquadrocore"
         PATH_SUFFIXES "quadro")
@@ -49,8 +46,7 @@ find_library(QUADROUI_LIBRARY NAMES "quadroui" "libquadroui"
         PATH_SUFFIXES "quadro")
 set(QUADRO_LIBRARIES "${QUADROCORE_LIBRARY}" "${QUADROUI_LIBRARY}")
 ##
-# @def QUADRO_FOUND
-# boolean, true if library has been found
+# @brief boolean, true if library has been found
 ##
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(Quadro DEFAULT_MSG

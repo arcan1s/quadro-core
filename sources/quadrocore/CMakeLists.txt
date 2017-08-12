@@ -2,7 +2,7 @@
 set (SUBPROJECT "quadrocore")
 message (STATUS "Subproject ${SUBPROJECT}")
 
-configure_file ("config.h.in" "${CMAKE_BINARY_DIR}/config.h")
+configure_file ("Config.h.in" "${CMAKE_BINARY_DIR}/Config.h")
 
 include("adds.cmake")
 add_subdirectory ("src")

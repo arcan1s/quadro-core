@@ -15,7 +15,7 @@
  *   along with quadro. If not, see http://www.gnu.org/licenses/           *
  ***************************************************************************/
 /**
- * @file launchercore.cpp
+ * @file launhercore.cpp
  * Source code of quadro library
  * @author Evgeniy Alekseev
  * @copyright GPLv3
@@ -23,11 +23,13 @@
  */
 
 
-#include "quadrocore/quadro.h"
+#include "quadrocore/Quadro.h"
 
 #include <QDir>
 #include <QProcessEnvironment>
 #include <QStandardPaths>
+
+using namespace Quadro;
 
 
 /**

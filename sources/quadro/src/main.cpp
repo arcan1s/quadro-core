@@ -26,8 +26,12 @@
 #include <iostream>
 #include <unistd.h>
 
-#include "quadromainwindow.h"
+#include <quadrocore/Quadro.h>
+
+#include "QuadroMainWindow.h"
 #include "version.h"
+
+using namespace Quadro;
 
 
 bool existingSessionOperation(const QString _operation)
@@ -98,7 +102,7 @@ int main(int argc, char *argv[])
 
     // enable debug
     if (parser.isSet(debugOption))
-        enableDebug();
+        QuadroDebug::enableDebug();
 
     loadTranslator(app);
 

@@ -28,42 +28,34 @@
 ##
 
 ##
-# @def BIN_INSTALL_DIR
-# installation directory for executables
+# @brief installation directory for executables
 ##
 set(BIN_INSTALL_DIR "@BIN_INSTALL_DIR@")
 ##
-# @def DATA_INSTALL_DIR
-# installation directory for data
+# @brief installation directory for data
 ##
 set(DATA_INSTALL_DIR "@DATA_INSTALL_DIR@")
 ##
-# @def INCLUDE_INSTALL_DIR
-# installation directory for headers
+# @brief installation directory for headers
 ##
 set(INCLUDE_INSTALL_DIR "@INCLUDE_INSTALL_DIR@")
 ##
-# @def LIB_INSTALL_DIR
-# installation directory for libraries
+# @brief installation directory for libraries
 ##
 set(LIB_INSTALL_DIR "@LIB_INSTALL_DIR@")
 ##
-# @def QUADRO_ROOT
-# quadro root directory
+# @brief quadro root directory
 ##
 set(QUADRO_ROOT "${DATA_INSTALL_DIR}/quadro")
 ##
-# @def QUADRO_FAVORITES_ROOT
-# quadro favorites root directory
+# @brief quadro favorites root directory
 ##
 set(QUADRO_FAVORITES_ROOT "${QUADRO_ROOT}/favorites")
 ##
-# @def QUADRO_PLUGIN_ROOT
-# quadro plugins root directory
+# @brief quadro plugins root directory
 ##
 set(QUADRO_PLUGIN_ROOT "${QUADRO_ROOT}/plugins")
 ##
-# @def QUADRO_RECENT_ROOT
-# quadro recent root directory
+# @brief quadro recent root directory
 ##
 set(QUADRO_RECENT_ROOT "${QUADRO_ROOT}/recent")

@@ -1,0 +1,141 @@
+/***************************************************************************
+ *   This file is part of quadro                                           *
+ *                                                                         *
+ *   quadro is free software: you can redistribute it and/or               *
+ *   modify it under the terms of the GNU General Public License as        *
+ *   published by the Free Software Foundation, either version 3 of the    *
+ *   License, or (at your option) any later version.                       *
+ *                                                                         *
+ *   quadro is distributed in the hope that it will be useful,             *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with quadro. If not, see http://www.gnu.org/licenses/           *
+ ***************************************************************************/
+/**
+ * @file Config.h
+ * Header of quadro library
+ * @author Evgeniy Alekseev
+ * @copyright GPLv3
+ * @bug https://github.com/arcan1s/quadro-core/issues
+ */
+
+
+#ifndef CONFIG_H
+#define CONFIG_H
+
+// dbus configuration
+/**
+ * @brief DBus service name for library and ui
+ */
+const char DBUS_SERVICE[] = "org.quadro.core";
+/**
+ * @brief DBus service name for plugins
+ */
+const char DBUS_PLUGIN_SERVICE[] = "org.quadro.plugin";
+/**
+ * @brief DBus interface name for library and ui
+ * @remark required by Qt macro
+ */
+#define DBUS_INTERFACE_NAME "org.quadro.core"
+/**
+ * @brief DBus interface name for library and ui
+ */
+const char DBUS_INTERFACE[] = DBUS_INTERFACE_NAME;
+/**
+ * @brief DBus interface name for plugins
+ * @remark required by Qt macro
+ */
+#define DBUS_PLUGIN_INTERFACE_NAME "org.quadro.plugin"
+/**
+ * @brief DBus service name for plugins
+ */
+const char DBUS_PLUGIN_INTERFACE[] = DBUS_PLUGIN_INTERFACE_NAME;
+/**
+ * @brief DBus object path for configuration manager
+ */
+const char DBUS_CONFIG_PATH[] = "/config";
+/**
+ * @brief DBus object path for library
+ */
+const char DBUS_OBJECT_PATH[] = "/quadro";
+/**
+ * @brief DBus object path for ui
+ */
+const char DBUS_UI_OBJECT_PATH[] = "/ui";
+
+// path configuration
+// common paths
+/**
+ * @brief installation directory for executables
+ */
+const char BIN_INSTALL_DIR[] = "@BIN_INSTALL_DIR@";
+/**
+ * @brief installation directory for data
+ */
+const char DATA_INSTALL_DIR[] = "@DATA_INSTALL_DIR@";
+/**
+ * @brief installation directory for headers
+ */
+const char INCLUDE_INSTALL_DIR[] = "@INCLUDE_INSTALL_DIR@";
+/**
+ * @brief installation directory for libraries
+ */
+const char LIB_INSTALL_DIR[] = "@LIB_INSTALL_DIR@";
+/**
+ * @brief the same as CMAKE_INSTALL_PREFIX
+ */
+const char ROOT_INSTALL_DIR[] = "@CMAKE_INSTALL_PREFIX@";
+// application specific
+/**
+ * @brief path to documents items inside @ref HOME_PATH
+ */
+const char DOCUMENTS_PATH[] = "documents";
+/**
+ * @brief path to favorites inside @ref HOME_PATH
+ */
+const char FAVORITES_PATH[] = "favorites";
+/**
+ * @brief path to quadro home directory
+ */
+const char HOME_PATH[] = "quadro";
+/**
+ * @brief path to plugins inside @ref HOME_PATH
+ */
+const char PLUGIN_PATH[] = "plugins";
+/**
+ * @brief path to recent items inside @ref HOME_PATH
+ */
+const char RECENT_PATH[] = "recent";
+/**
+ * @brief path to translation (qm) files
+ */
+const char TRANSLATION_PATH[] = "translations";
+
+// plugin configuration
+/**
+ * @brief minimal available time for plugin update
+ */
+const int MINIMAL_TIMER = 333;
+
+// plugin interfaces
+/**
+ * @brief desktop plugin interface name
+ */
+const char DESKTOP_INTERFACE[] = "core.quadro.desktopplugin/@PROJECT_VERSION_MAJOR@.@PROJECT_VERSION_MINOR@";
+/**
+ * @brief generic plugin interface name
+ */
+const char GENERIC_PLUGIN_INTERFACE[] = "core.quadro.genericplugin/@PROJECT_VERSION_MAJOR@.@PROJECT_VERSION_MINOR@";
+/**
+ * @brief plugin interface name
+ */
+const char PLUGIN_INTERFACE[] = "core.quadro.plugin/@PROJECT_VERSION_MAJOR@.@PROJECT_VERSION_MINOR@";
+/**
+ * @brief tab plugin interface name
+ */
+const char TAB_PLUGIN_INTERFACE[] = "core.quadro.tabplugin/@PROJECT_VERSION_MAJOR@.@PROJECT_VERSION_MINOR@";
+
+#endif /* CONFIG_H */

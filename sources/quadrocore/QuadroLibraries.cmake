@@ -36,15 +36,13 @@ add_definitions(
         ${Qt5Widgets_DEFINITIONS}
 )
 ##
-# @def Qt_INCLUDE
-# Qt include paths
+# @brief Qt include paths
 ##
 set(Qt_INCLUDE
         "${Qt5Core_INCLUDE_DIRS}" "${Qt5DBus_INCLUDE_DIRS}" "${Qt5Widgets_INCLUDE_DIRS}"
 )
 ##
-# @def Qt_LIBRARIES
-# Qt libraries
+# @brief Qt libraries
 ##
 set(Qt_LIBRARIES
         "${Qt5Core_LIBRARIES}" "${Qt5DBus_LIBRARIES}" "${Qt5Widgets_LIBRARIES}"
