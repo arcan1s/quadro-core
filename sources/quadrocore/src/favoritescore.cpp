@@ -36,8 +36,8 @@
 /**
  * @fn FavoritesCore
  */
-FavoritesCore::FavoritesCore(QObject *parent)
-    : QObject(parent)
+FavoritesCore::FavoritesCore(QObject *_parent)
+    : QObject(_parent)
 {
     qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
 }
@@ -84,7 +84,7 @@ ApplicationItem *FavoritesCore::addToFavorites(ApplicationItem *_item)
     instance->initApplications();
 
     instance->add(_item);
-    delete instance;
+    instance->deleteLater();
 
     return _item;
 }
@@ -93,22 +93,16 @@ ApplicationItem *FavoritesCore::addToFavorites(ApplicationItem *_item)
 /**
  * @fn addToFavorites
  */
-ApplicationItem *FavoritesCore::addToFavorites(const QString _executable,
-                                               const QString _name,
-                                               const QString _iconName)
+ApplicationItem *FavoritesCore::addToFavorites(const QString &_executable,
+                                               const QString &_name,
+                                               const QString &_iconName)
 {
-    qCDebug(LOG_LIB) << "Executable" << _executable;
-    qCDebug(LOG_LIB) << "Name" << _name;
-    qCDebug(LOG_LIB) << "Icon" << _iconName;
+    qCDebug(LOG_LIB) << "Executable" << _executable << "Name" << _name << "Icon"
+                     << _iconName;
 
     ApplicationItem *item = new ApplicationItem(nullptr, _name);
     item->setExec(_name);
     item->setIcon(_iconName);
-    FavoritesCore *instance = new FavoritesCore(nullptr);
-    instance->initApplications();
-
-    instance->add(item);
-    delete instance;
 
     return addToFavorites(item);
 }
@@ -138,6 +132,26 @@ QString FavoritesCore::desktopPath()
 
 
 /**
+ * @fn getApplicationsFromDesktops
+ */
+QMap<QString, ApplicationItem *> FavoritesCore::getApplicationsFromDesktops()
+{
+    QStringList filter("*.desktop");
+    QMap<QString, ApplicationItem *> items;
+
+    QStringList entries = QDir(desktopPath()).entryList(filter, QDir::Files);
+    for (auto &entry : entries) {
+        QString desktop = QFileInfo(QDir(desktopPath()), entry).filePath();
+        qCInfo(LOG_LIB) << "Desktop" << desktop;
+        ApplicationItem *item = ApplicationItem::fromDesktop(desktop, this);
+        items[item->name()] = item;
+    }
+
+    return items;
+}
+
+
+/**
  * @fn hasApplication
  */
 bool FavoritesCore::hasApplication(ApplicationItem *_item)
@@ -146,6 +160,18 @@ bool FavoritesCore::hasApplication(ApplicationItem *_item)
     instance->initApplications();
 
     return instance->check(_item);
+}
+
+
+/**
+ * @fn indexPath
+ */
+QString FavoritesCore::indexPath()
+{
+    QString fileName = QFileInfo(QDir(desktopPath()), "index.conf").filePath();
+    qCInfo(LOG_LIB) << "Configuration file" << fileName;
+
+    return fileName;
 }
 
 
@@ -161,7 +187,7 @@ QStringList FavoritesCore::order() const
 /**
  * @fn changeApplicationState
  */
-void FavoritesCore::changeApplicationState(const QString _name, const bool _up)
+void FavoritesCore::changeApplicationState(const QString &_name, const bool _up)
 {
     int current = m_order.indexOf(_name);
     if (current == -1)
@@ -194,13 +220,10 @@ void FavoritesCore::initApplications()
  */
 void FavoritesCore::saveApplicationsOrder() const
 {
-    QString fileName
-        = QFileInfo(QDir(desktopPath()), QString("index.conf")).filePath();
-    qCInfo(LOG_LIB) << "Configuration file" << fileName;
-    QSettings settings(fileName, QSettings::IniFormat);
+    QSettings settings(indexPath(), QSettings::IniFormat);
     settings.setIniCodec("UTF-8");
 
-    settings.setValue(QString("Order"), m_order);
+    settings.setValue("Order", m_order);
 
     settings.sync();
 }
@@ -224,37 +247,14 @@ void FavoritesCore::addAppToFavorites(ApplicationItem *_item)
 
 
 /**
- * @fn getApplicationsFromDesktops
- */
-QMap<QString, ApplicationItem *> FavoritesCore::getApplicationsFromDesktops()
-{
-    QStringList filter("*.desktop");
-    QMap<QString, ApplicationItem *> items;
-
-    QStringList entries = QDir(desktopPath()).entryList(filter, QDir::Files);
-    for (auto entry : entries) {
-        QString desktop = QFileInfo(QDir(desktopPath()), entry).filePath();
-        qCInfo(LOG_LIB) << "Desktop" << desktop;
-        ApplicationItem *item = ApplicationItem::fromDesktop(desktop, this);
-        items[item->name()] = item;
-    }
-
-    return items;
-}
-
-
-/**
  * @fn getApplicationsOrder
  */
 QStringList FavoritesCore::getApplicationsOrder() const
 {
-    QString fileName
-        = QFileInfo(QDir(desktopPath()), QString("index.conf")).filePath();
-    qCInfo(LOG_LIB) << "Configuration file" << fileName;
-    QSettings settings(fileName, QSettings::IniFormat);
+    QSettings settings(indexPath(), QSettings::IniFormat);
     settings.setIniCodec("UTF-8");
 
-    return settings.value(QString("Order")).toStringList();
+    return settings.value("Order").toStringList();
 }
 
 

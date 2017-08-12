@@ -2,49 +2,57 @@
 #define VERSION_H
 
 // information
-#define NAME "Quadro"
-#define VERSION "@PROJECT_VERSION@"
-#define COMMIT_SHA "@PROJECT_COMMIT_SHA@"
-#define AUTHOR "@PROJECT_AUTHOR@"
-#define TRANSLATORS ""
-#define EMAIL "@PROJECT_CONTACT@"
-#define LICENSE "@PROJECT_LICENSE@"
-#define TRDPARTY_LICENSE "tasks,BSD,https://github.com/mhogomchungu/tasks;wmctrl,GPLv2,https://sites.google.com/site/tstyblo/wmctrl"
+const char NAME[] = "Quadro";
+const char VERSION[] = "@PROJECT_VERSION@";
+const char COMMIT_SHA[] = "@PROJECT_COMMIT_SHA@";
+const char AUTHOR[] = "@PROJECT_AUTHOR@";
+const char TRANSLATORS[] = "";
+const char EMAIL[] = "@PROJECT_CONTACT@";
+const char LICENSE[] = "@PROJECT_LICENSE@";
+const char TRDPARTY_LICENSE[] = "tasks,BSD,https://github.com/mhogomchungu/tasks;wmctrl,GPLv2,https://sites.google.com/site/tstyblo/wmctrl";
 
 // configuration
-#define DOCS_PATH "@CMAKE_INSTALL_PREFIX@/share/doc/quadro/"
+const char DOCS_PATH[] = "@CMAKE_INSTALL_PREFIX@/share/doc/quadro/";
 #cmakedefine BUILD_TESTING
 
 // links
-#define HOMEPAGE "https://arcanis.name/projects/quadro/"
-#define REPOSITORY "https://github.com/arcan1s/quadro-core"
-#define BUGTRACKER "https://github.com/arcan1s/quadro-core/issues"
-#define TRANSLATION "https://github.com/arcan1s/quadro-core/issues/1"
-#define AUR_PACKAGES "https://aur.archlinux.org/pkgbase/quadro-core/"
+const char HOMEPAGE[] = "https://arcanis.name/projects/quadro/";
+const char REPOSITORY[] = "https://github.com/arcan1s/quadro-core";
+const char BUGTRACKER[] = "https://github.com/arcan1s/quadro-core/issues";
+const char TRANSLATION[] = "https://github.com/arcan1s/quadro-core/issues/1";
+const char AUR_PACKAGES[] = "https://aur.archlinux.org/pkgbase/quadro-core/";
 
 // build information
-#define BUILD_DATE "@CURRENT_DATE@"
-#define DATE "2015-@CURRENT_YEAR@"
+const char BUILD_DATE[] = "@CURRENT_DATE@";
+const char DATE[] = "2015-@CURRENT_YEAR@";
 
 // cmake properties
-#define CMAKE_BUILD_TYPE "@CMAKE_BUILD_TYPE@"
-#define CMAKE_CXX_COMPILER "@CMAKE_CXX_COMPILER@"
-#define CMAKE_CXX_FLAGS "@CMAKE_CXX_FLAGS@"
-#define CMAKE_CXX_FLAGS_DEBUG "@CMAKE_CXX_FLAGS_DEBUG@"
-#define CMAKE_CXX_FLAGS_RELEASE "@CMAKE_CXX_FLAGS_RELEASE@"
-#define CMAKE_CXX_FLAGS_OPTIMIZATION "@CMAKE_CXX_FLAGS_OPTIMIZATION@"
-#define CMAKE_DEFINITIONS "@CMAKE_DEFINITIONS@"
-#define CMAKE_INSTALL_PREFIX "@CMAKE_INSTALL_PREFIX@"
-#define CMAKE_SHARED_LINKER_FLAGS "@CMAKE_SHARED_LINKER_FLAGS@"
+const char CMAKE_BUILD_TYPE[] = "@CMAKE_BUILD_TYPE@";
+const char CMAKE_CXX_COMPILER[] = "@CMAKE_CXX_COMPILER@";
+const char CMAKE_CXX_FLAGS[] = "@CMAKE_CXX_FLAGS@";
+const char CMAKE_CXX_FLAGS_DEBUG[] = "@CMAKE_CXX_FLAGS_DEBUG@";
+const char CMAKE_CXX_FLAGS_RELEASE[] = "@CMAKE_CXX_FLAGS_RELEASE@";
+const char CMAKE_CXX_FLAGS_OPTIMIZATION[] = "@CMAKE_CXX_FLAGS_OPTIMIZATION@";
+const char CMAKE_DEFINITIONS[] = "@CMAKE_DEFINITIONS@";
+const char CMAKE_INSTALL_PREFIX[] = "@CMAKE_INSTALL_PREFIX@";
+const char CMAKE_MODULE_LINKER_FLAGS[] = "@CMAKE_MODULE_LINKER_FLAGS@";
+const char CMAKE_SHARED_LINKER_FLAGS[] = "@CMAKE_SHARED_LINKER_FLAGS@";
 // components
-#define BUILD_DEB_PACKAGE "@BUILD_DEB_PACKAGE@"
-#define BUILD_RPM_PACKAGE "@BUILD_RPM_PACKAGE@"
-#define ENABLE_WAYLAND_SUPPORT "@ENABLE_WAYLAND_SUPPORT@"
-#define ENABLE_XCB_SUPPORT "@ENABLE_XCB_SUPPORT@"
-#define CLANGFORMAT_EXECUTABLE "@CLANGFORMAT_EXECUTABLE@"
-#define CPPCHECK_EXECUTABLE "@CPPCHECK_EXECUTABLE@"
+const char BUILD_DEB_PACKAGE[] = "@BUILD_DEB_PACKAGE@";
+const char BUILD_RPM_PACKAGE[] = "@BUILD_RPM_PACKAGE@";
+const char ENABLE_WAYLAND_SUPPORT[] = "@ENABLE_WAYLAND_SUPPORT@";
+const char ENABLE_XCB_SUPPORT[] = "@ENABLE_XCB_SUPPORT@";
+const char CLANGFORMAT_EXECUTABLE[] = "@CLANGFORMAT_EXECUTABLE@";
+const char COVERITY_COMMENT[] = "@COVERITY_COMMENT@";
+const char COVERITY_DIRECTORY[] = "@COVERITY_DIRECTORY@";
+const char COVERITY_EMAIL[] = "@COVERITY_EMAIL@";
+const char COVERITY_EXECUTABLE[] = "@COVERITY_EXECUTABLE@";
+const char COVERITY_URL[] = "@COVERITY_URL@";
+const char CPPCHECK_EXECUTABLE[] = "@CPPCHECK_EXECUTABLE@";
 // additional functions
-#define PROP_DOCS "@BUILD_DOCS@"
-#define PROP_TEST "@BUILD_TESTING@"
+const char PROP_DOCS[] = "@BUILD_DOCS@";
+const char PROP_FUTURE[] = "@BUILD_FUTURE@";
+const char PROP_LOAD[] = "@BUILD_LOAD@";
+const char PROP_TEST[] = "@BUILD_TESTING@";
 
 #endif /* VERSION_H */

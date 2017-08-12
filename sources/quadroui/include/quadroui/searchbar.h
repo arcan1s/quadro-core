@@ -39,7 +39,7 @@ class SearchBar : public QLineEdit
 public:
     /**
      * @brief SearchBar class constructor
-     * @param parent         pointer to parent object
+     * @param _parent pointer to parent object
      */
     explicit SearchBar(QWidget *parent);
     /**
@@ -48,14 +48,14 @@ public:
     virtual ~SearchBar();
     /**
      * @brief method which should be called to pass key press event
-     * @param _event         pointer to event object
+     * @param _event pointer to event object
      */
     void keyPressed(QKeyEvent *_event);
 
 protected:
     /**
      * @brief method which will be called on key press event
-     * @param _pressedKey    pointer to pressed key
+     * @param _pressedKey pointer to pressed key
      */
     void keyPressEvent(QKeyEvent *_pressedKey);
 
@@ -63,10 +63,10 @@ private:
     /**
      * @brief pass text to line
      * @remark this method should not get any modifiers as input
-     * @param _text          generated text
-     * @param _mods          pressed key modifiers
+     * @param _text generated text
+     * @param _mods pressed key modifiers
      */
-    void updateText(const QString _text, Qt::KeyboardModifiers _mods);
+    void updateText(const QString &_text, Qt::KeyboardModifiers _mods);
 };
 
 

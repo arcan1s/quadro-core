@@ -49,9 +49,9 @@ class QuadroCore : public QObject
 public:
     /**
      * @brief QuadroCore class constructor
-     * @param parent         pointer to parent item
+     * @param _parent pointer to parent item
      */
-    explicit QuadroCore(QObject *parent);
+    explicit QuadroCore(QObject *_parent);
     /**
      * @brief QuadroCore class destructor
      */

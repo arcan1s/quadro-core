@@ -38,9 +38,9 @@ class FileInfoExtension : public QFileInfo
 public:
     /**
      * @brief FileInfoExtension class constructor
-     * @param base           original QFileInfo item
+     * @param _base original QFileInfo item
      */
-    FileInfoExtension(QFileInfo base);
+    FileInfoExtension(QFileInfo _base);
     /**
      * @brief FileManager class destructor
      */

@@ -41,10 +41,10 @@
 /**
  * @fn AppIconWidget
  */
-AppIconWidget::AppIconWidget(ApplicationItem *appItem, const QSize size,
-                             QWidget *parent)
-    : IconWidget(size, parent)
-    , m_item(appItem)
+AppIconWidget::AppIconWidget(ApplicationItem *_appItem, const int _size,
+                             QWidget *_parent)
+    : IconWidget(_size, _parent)
+    , m_item(_appItem)
 {
     qCDebug(LOG_UILIB) << __PRETTY_FUNCTION__;
 
@@ -55,7 +55,7 @@ AppIconWidget::AppIconWidget(ApplicationItem *appItem, const QSize size,
         tooltip.append(m_item->genericName());
     if (!m_item->comment().isEmpty())
         tooltip.append(m_item->comment());
-    setToolTip(tooltip.join(QChar('\n')));
+    setToolTip(tooltip.join('\n'));
     createActions();
 
     connect(this, SIGNAL(widgetPressed()), this, SLOT(run()));
@@ -110,7 +110,7 @@ void AppIconWidget::mousePressEvent(QMouseEvent *_event)
 void AppIconWidget::addItemToFavorites()
 {
     FavoritesCore::addToFavorites(m_item);
-    DBusOperations::sendRequestToLibrary(QString("UpdateFavorites"));
+    DBusOperations::sendRequestToLibrary("UpdateFavorites");
 }
 
 
@@ -133,7 +133,7 @@ void AppIconWidget::hideApplication()
     m_item->setNoDisplay(true);
     m_item->saveDesktop(
         QStandardPaths::writableLocation(QStandardPaths::ApplicationsLocation));
-    DBusOperations::sendRequestToLibrary(QString("UpdateApplications"));
+    DBusOperations::sendRequestToLibrary("UpdateApplications");
 }
 
 
@@ -156,7 +156,7 @@ void AppIconWidget::run()
  */
 void AppIconWidget::runInNewTab()
 {
-    emit(standaloneApplicaitonRequested(m_item->generateExec(m_args),
+    emit(standaloneApplicationRequested(m_item->generateExec(m_args),
                                         m_item->name()));
 }
 
@@ -174,14 +174,14 @@ void AppIconWidget::setFiles()
     QStringList argsFiles;
     QStringList argsUrls;
 
-    for (auto file : files) {
-        m_args[QString("%f")] = file;
+    for (auto &file : files) {
+        m_args["%f"] = file;
         argsFiles.append(file);
-        m_args[QString("%u")] = QString("file://%1").arg(file);
+        m_args["%u"] = QString("file://%1").arg(file);
         argsUrls.append(QString("file://%1").arg(file));
     }
-    m_args[QString("%F")] = argsFiles;
-    m_args[QString("%U")] = argsUrls;
+    m_args["%F"] = argsFiles;
+    m_args["%U"] = argsUrls;
 }
 
 
@@ -192,18 +192,18 @@ void AppIconWidget::setUrls()
 {
     QStringList urls
         = QInputDialog::getMultiLineText(this, tr("Select URLs"), tr("URLs"))
-              .split(QChar('\n'));
+              .split('\n');
     if (urls.isEmpty())
         return;
 
     m_args.clear();
     QStringList argsUrls;
 
-    for (auto url : urls) {
-        m_args[QString("%u")] = url;
+    for (auto &url : urls) {
+        m_args["%u"] = url;
         argsUrls.append(url);
     }
-    m_args[QString("%U")] = argsUrls;
+    m_args["%U"] = argsUrls;
 }
 
 
@@ -212,19 +212,18 @@ void AppIconWidget::setUrls()
  */
 void AppIconWidget::createActions()
 {
-    bool isFavorites
-        = DBusOperations::sendRequestToLibrary(QString("Favorites"))
-              .at(0)
-              .toStringList()
-              .contains(m_item->name());
+    bool isFavorites = DBusOperations::sendRequestToLibrary("Favorites")
+                           .at(0)
+                           .toStringList()
+                           .contains(m_item->name());
     m_menu = new QMenu(this);
 
-    m_menu->addAction(QIcon::fromTheme(QString("system-run")),
-                      tr("Run application"), this, SLOT(run()));
-    m_menu->addAction(QIcon::fromTheme(QString("system-run")),
+    m_menu->addAction(QIcon::fromTheme("system-run"), tr("Run application"),
+                      this, SLOT(run()));
+    m_menu->addAction(QIcon::fromTheme("system-run"),
                       tr("Run application in new tab"), this,
                       SLOT(runInNewTab()));
-    m_menu->addAction(QIcon::fromTheme(QString("emblem-favorites")),
+    m_menu->addAction(QIcon::fromTheme("emblem-favorites"),
                       isFavorites ? tr("Remove from favorites")
                                   : tr("Add to favorites"),
                       this, SLOT(addItemToFavorites()));

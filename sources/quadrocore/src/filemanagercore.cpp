@@ -40,8 +40,8 @@
 /**
  * @fn FileManagerCore
  */
-FileManagerCore::FileManagerCore(QObject *parent)
-    : QObject(parent)
+FileManagerCore::FileManagerCore(QObject *_parent)
+    : QObject(_parent)
 {
     qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
 }
@@ -59,13 +59,12 @@ FileManagerCore::~FileManagerCore()
 /**
  * @fn directoryEntries
  */
-QFileInfoList FileManagerCore::directoryEntries(const QString _directory,
-                                                const bool _hidden,
-                                                const QStringList _filter) const
+QFileInfoList
+FileManagerCore::directoryEntries(const QString &_directory, const bool _hidden,
+                                  const QStringList &_filter) const
 {
     qCDebug(LOG_LIB) << "Directory" << _directory << "and show hidden"
-                     << _hidden;
-    qCDebug(LOG_LIB) << "Filter" << _filter;
+                     << _hidden << "filter" << _filter;
 
     QDir dir = QDir(_directory);
     if (!dir.exists()) {
@@ -84,20 +83,19 @@ QFileInfoList FileManagerCore::directoryEntries(const QString _directory,
 /**
  * @fn entriesBySubstr
  */
-QFileInfoList FileManagerCore::entriesBySubstr(const QString _directory,
-                                               const QString _substr,
+QFileInfoList FileManagerCore::entriesBySubstr(const QString &_directory,
+                                               const QString &_substr,
                                                const bool _hidden) const
 {
     qCDebug(LOG_LIB) << "Directory" << _directory << "and show hidden"
-                     << _hidden;
-    qCDebug(LOG_LIB) << "Substring" << _substr;
+                     << _hidden << "substring" << _substr;
 
     QDir::Filters filters
         = _hidden ? QDir::AllEntries | QDir::NoDotAndDotDot | QDir::Hidden
                   : QDir::AllEntries | QDir::NoDotAndDotDot;
     QFileInfoList foundEntries;
 
-    QDirIterator it(_directory, QStringList() << QString("*%1*").arg(_substr),
+    QDirIterator it(_directory, QStringList({QString("*%1*").arg(_substr)}),
                     filters, QDirIterator::Subdirectories);
     while (it.hasNext()) {
         it.next();
@@ -111,7 +109,7 @@ QFileInfoList FileManagerCore::entriesBySubstr(const QString _directory,
 /**
  * @fn iconByFileName
  */
-QIcon FileManagerCore::iconByFileName(const QString _file) const
+QIcon FileManagerCore::iconByFileName(const QString &_file) const
 {
     qCDebug(LOG_LIB) << "File" << _file;
 
@@ -122,7 +120,7 @@ QIcon FileManagerCore::iconByFileName(const QString _file) const
 /**
  * @fn iconNameByFileName
  */
-QString FileManagerCore::iconNameByFileName(const QString _file) const
+QString FileManagerCore::iconNameByFileName(const QString &_file) const
 {
     qCDebug(LOG_LIB) << "File" << _file;
 
@@ -133,7 +131,7 @@ QString FileManagerCore::iconNameByFileName(const QString _file) const
 /**
  * @fn mimeTypeForFile
  */
-QMimeType FileManagerCore::mimeByFileName(const QString _file) const
+QMimeType FileManagerCore::mimeByFileName(const QString &_file) const
 {
     qCDebug(LOG_LIB) << "File" << _file;
 
@@ -148,7 +146,7 @@ QMimeType FileManagerCore::mimeByFileName(const QString _file) const
 /**
  * @fn openFile
  */
-bool FileManagerCore::openFile(const QFileInfo _file) const
+bool FileManagerCore::openFile(const QFileInfo &_file) const
 {
     qCDebug(LOG_LIB) << "File" << _file.absoluteFilePath();
 

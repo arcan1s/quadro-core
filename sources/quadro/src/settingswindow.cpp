@@ -28,9 +28,9 @@
 #include "version.h"
 
 
-SettingsWindow::SettingsWindow(QWidget *parent, const QString configFile)
-    : QMainWindow(parent)
-    , m_file(configFile)
+SettingsWindow::SettingsWindow(QWidget *_parent, const QString _configFile)
+    : QMainWindow(_parent)
+    , m_file(_configFile)
     , ui(new Ui::SettingsWindow)
 {
     qCDebug(LOG_UI) << __PRETTY_FUNCTION__;
@@ -50,27 +50,26 @@ SettingsWindow::~SettingsWindow()
 
 QVariantHash SettingsWindow::getDefault()
 {
-    return getSettings(QString("/dev/null"));
+    return getSettings("/dev/null");
 }
 
 
-QVariantHash SettingsWindow::getSettings(QString fileName)
+QVariantHash SettingsWindow::getSettings(QString _fileName)
 {
-    if (fileName.isEmpty())
-        fileName = m_file;
+    if (_fileName.isEmpty())
+        _fileName = m_file;
 
     QVariantHash config;
-    QSettings settings(fileName, QSettings::IniFormat);
+    QSettings settings(_fileName, QSettings::IniFormat);
 
-    settings.beginGroup(QString("UI"));
-    config[QString("Tabs")] = settings.value(
-        QString("Tabs"), QStringList()
-                             << QString("favlauncher") << QString("applauncher")
-                             << QString("filemanager") << QString("webpage"));
+    settings.beginGroup("UI");
+    config["Tabs"] = settings.value(
+        "Tabs",
+        QStringList({"favlauncher", "applauncher", "filemanager", "webpage"}));
     settings.endGroup();
 
-    for (int i = 0; i < config.keys().count(); i++)
-        qCInfo(LOG_UI) << config.keys()[i] << config[config.keys()[i]];
+    for (auto &key : config.keys())
+        qCInfo(LOG_UI) << key << config[key];
 
     return config;
 }
@@ -80,7 +79,12 @@ void SettingsWindow::closeWindow()
 {
     saveSettings();
     close();
-    dynamic_cast<QuadroMainWindow *>(parent())->updateConfiguration();
+    try {
+        dynamic_cast<QuadroMainWindow *>(parent())->updateConfiguration(
+            QVariantHash());
+    } catch (std::bad_cast) {
+        qCWarning(LOG_UI) << "Could not cast parent object to main window";
+    }
 }
 
 
@@ -106,24 +110,18 @@ void SettingsWindow::showWindow()
 }
 
 
-void SettingsWindow::keyPressEvent(QKeyEvent *pressedKey)
+void SettingsWindow::keyPressEvent(QKeyEvent *_pressedKey)
 {
-    if (pressedKey->key() == Qt::Key_Escape)
+    if (_pressedKey->key() == Qt::Key_Escape)
         close();
 }
 
 
-void SettingsWindow::changePage(QTreeWidgetItem *current,
-                                QTreeWidgetItem *previous)
+void SettingsWindow::changePage(QTreeWidgetItem *_current, QTreeWidgetItem *)
 {
-    Q_UNUSED(previous);
 
-    for (int i = 0; i < ui->treeWidget->topLevelItemCount(); i++) {
-        if (current != ui->treeWidget->topLevelItem(i))
-            continue;
-        ui->stackedWidget->setCurrentIndex(i);
-        break;
-    }
+    auto index = ui->treeWidget->indexOfTopLevelItem(_current);
+    ui->stackedWidget->setCurrentIndex(index);
 }
 
 
@@ -132,8 +130,8 @@ void SettingsWindow::saveSettings()
     QVariantHash config = readSettings();
     QSettings settings(m_file, QSettings::IniFormat);
 
-    settings.beginGroup(QString("UI"));
-    settings.setValue(QString("Tabs"), config[QString("Tabs")]);
+    settings.beginGroup("UI");
+    settings.setValue("Tabs", config["Tabs"]);
     settings.endGroup();
 
     settings.sync();
@@ -163,22 +161,22 @@ QVariantHash SettingsWindow::readSettings()
     // main tab
     QStringList tabs;
     // TODO tab settings
-    config[QString("Tabs")] = tabs;
+    config["Tabs"] = tabs;
 
-    for (auto key : config.keys())
+    for (auto &key : config.keys())
         qCInfo(LOG_UI) << key << config[key];
 
     return config;
 }
 
 
-void SettingsWindow::setSettings(const QVariantHash config)
+void SettingsWindow::setSettings(const QVariantHash &_config)
 {
     // main tab
-    for (int i = 0; i < config[QString("Tabs")].toStringList().count(); i++) {
+    for (auto &tab : _config["Tabs"].toStringList()) {
         // TODO tab settings
     }
 
-    for (auto key : config.keys())
-        qCInfo(LOG_UI) << key << config[key];
+    for (auto &key : _config.keys())
+        qCInfo(LOG_UI) << key << _config[key];
 }

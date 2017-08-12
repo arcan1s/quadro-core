@@ -43,22 +43,22 @@ class FileIconWidget : public IconWidget
 public:
     /**
      * @brief FileIconWidget class constructor
-     * @param info           associated QFileInfo object
-     * @param icon           icon from icon provider
-     * @param size           item size
-     * @param parent         pointer to parent object
+     * @param _info associated QFileInfo object
+     * @param _icon icon from icon provider
+     * @param _size item size
+     * @param _parent pointer to parent object
      */
-    explicit FileIconWidget(const QFileInfo info, const QIcon icon,
-                            const QSize size, QWidget *parent);
+    explicit FileIconWidget(const QFileInfo _info, const QIcon _icon,
+                            const int _size, QWidget *_parent);
     /**
      * @brief FileIconWidget class constructor
-     * @param path           associated file path
-     * @param icon           icon name
-     * @param size           item size
-     * @param parent         pointer to parent object
+     * @param _path associated file path
+     * @param _icon icon name
+     * @param _size item size
+     * @param _parent pointer to parent object
      */
-    explicit FileIconWidget(const QString path, const QString icon,
-                            const QSize size, QWidget *parent);
+    explicit FileIconWidget(const QString _path, const QString _icon,
+                            const int _size, QWidget *_parent);
     /**
      * @brief FileIconWidget class destructor
      */
@@ -67,32 +67,32 @@ public:
 public slots:
     /**
      * @brief method which will be called on context menu request
-     * @param _pos           current mouse position
+     * @param _pos current mouse position
      */
     void showContextMenu(const QPoint &_pos);
 
 signals:
     /**
      * @brief signal which will be emitted when item will be activated
-     * @param _info          associated QFileInfo object
+     * @param _info associated QFileInfo object
      */
-    void openFile(const QFileInfo _info) const;
+    void openFile(const QFileInfo &_info) const;
     /**
      * @brief signal which will be emitted when opening directory in the new
      * tab will be requested
-     * @param _info          associated QFileInfo object
+     * @param _info associated QFileInfo object
      */
-    void openDirInNewTab(const QFileInfo _info) const;
+    void openDirInNewTab(const QFileInfo &_info) const;
 
 protected:
     /**
      * @brief method which will be called on key press event
-     * @param _pressedKey    pointer to pressed key
+     * @param _pressedKey pointer to pressed key
      */
     void keyPressEvent(QKeyEvent *_pressedKey);
     /**
      * @brief method which will be called on mouse event
-     * @param _event         pointer to mouse event
+     * @param _event pointer to mouse event
      */
     void mousePressEvent(QMouseEvent *_event);
 

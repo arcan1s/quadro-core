@@ -39,9 +39,9 @@
 /**
  * @fn EditAppWindow
  */
-EditAppWindow::EditAppWindow(QWidget *parent, ApplicationItem *item)
-    : QDialog(parent)
-    , m_item(item)
+EditAppWindow::EditAppWindow(QWidget *_parent, ApplicationItem *_item)
+    : QDialog(_parent)
+    , m_item(_item)
 {
     qCDebug(LOG_UILIB) << __PRETTY_FUNCTION__;
 
@@ -84,7 +84,7 @@ void EditAppWindow::saveDesktop()
     m_item->setComment(ui->lineEdit_comment->text());
     m_item->setIcon(ui->lineEdit_icon->text());
     m_item->setExec(ui->lineEdit_exec->text());
-    m_item->setCategories(ui->lineEdit_categories->text().split(QChar(';')));
+    m_item->setCategories(ui->lineEdit_categories->text().split(';'));
     m_item->setPath(ui->lineEdit_path->text());
     m_item->setNoDisplay(ui->checkBox_noDisplay->isChecked());
     m_item->setTerminal(ui->checkBox_terminal->isChecked());
@@ -107,7 +107,7 @@ void EditAppWindow::showWindow()
     // 25 is a magic number comes from label size
     ui->label_iconPreview->setPixmap(m_item->appIcon().pixmap(25, 25));
     ui->lineEdit_exec->setText(m_item->exec());
-    ui->lineEdit_categories->setText(m_item->categories().join(QChar(';')));
+    ui->lineEdit_categories->setText(m_item->categories().join(';'));
     ui->lineEdit_path->setText(m_item->path());
     ui->checkBox_noDisplay->setChecked(m_item->noDisplay());
     ui->checkBox_terminal->setChecked(m_item->terminal());
@@ -151,11 +151,11 @@ void EditAppWindow::addCategory()
     connect(dialogButtons, SIGNAL(rejected()), categoryDialog, SLOT(reject()));
 
     // exec
-    QStringList categories = ui->lineEdit_categories->text().split(QChar(';'));
+    QStringList categories = ui->lineEdit_categories->text().split(';');
     switch (categoryDialog->exec()) {
     case QDialog::Accepted:
         categories.append(listWidget->currentItem()->text());
-        ui->lineEdit_categories->setText(categories.join(QChar(';')));
+        ui->lineEdit_categories->setText(categories.join(';'));
         break;
     case QDialog::Rejected:
     default:
@@ -183,7 +183,7 @@ void EditAppWindow::selectPath()
 /**
  * @fn updateIcon
  */
-void EditAppWindow::updateIcon(const QString _text)
+void EditAppWindow::updateIcon(const QString &_text)
 {
     qCDebug(LOG_UILIB) << "Current icon name" << _text;
 

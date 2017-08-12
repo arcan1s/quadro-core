@@ -35,13 +35,13 @@
 /**
  * @fn ConfigManager
  */
-ConfigManager::ConfigManager(QObject *parent)
-    : QObject(parent)
+ConfigManager::ConfigManager(QObject *_parent)
+    : QObject(_parent)
 {
     qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
 
-    m_path = QStandardPaths::locate(QStandardPaths::ConfigLocation,
-                                    QString("quadro.conf"));
+    m_path
+        = QStandardPaths::locate(QStandardPaths::ConfigLocation, "quadro.conf");
     qCInfo(LOG_LIB) << "Use file path" << m_path;
 
     readSettings();
@@ -71,7 +71,7 @@ bool ConfigManager::setSettings(const QVariantHash &_other)
         return false;
     }
 
-    for (auto key : _other.keys())
+    for (auto &key : _other.keys())
         m_configuration[key] = _other[key];
 
     return true;
@@ -87,13 +87,12 @@ QStringList ConfigManager::verifySettings(const QVariantHash &_other, bool *_ok)
 
     QStringList error;
 
-    if ((_other.contains(QString("GridSize")))
-        && _other[QString("GridSize")].toInt() <= 0) {
-        error.append(QString("GridSize"));
+    if ((_other.contains("GridSize")) && _other["GridSize"].toInt() <= 0) {
+        error.append("GridSize");
     }
-    if ((_other.contains(QString("RecentItemCount")))
-        && _other[QString("RecentItemCount")].toInt() < 0) {
-        error.append(QString("RecentItemCount"));
+    if ((_other.contains("RecentItemCount"))
+        && _other["RecentItemCount"].toInt() < 0) {
+        error.append("RecentItemCount");
     }
 
     if (_ok != nullptr)
@@ -116,7 +115,7 @@ QString ConfigManager::path() const
  */
 int ConfigManager::gridSize() const
 {
-    return m_configuration[QString("GridSize")].toInt();
+    return m_configuration["GridSize"].toInt();
 }
 
 
@@ -125,7 +124,7 @@ int ConfigManager::gridSize() const
  */
 int ConfigManager::recentItemCount() const
 {
-    return m_configuration[QString("RecentItemCount")].toInt();
+    return m_configuration["RecentItemCount"].toInt();
 }
 
 
@@ -136,18 +135,16 @@ void ConfigManager::readSettings(const bool _defaults)
 {
     qCDebug(LOG_LIB) << "Read default settings" << _defaults;
 
-    QSettings settings(_defaults ? QString("/dev/null") : m_path,
-                       QSettings::IniFormat);
+    QSettings settings(_defaults ? "/dev/null" : m_path, QSettings::IniFormat);
     settings.setIniCodec("UTF-8");
 
-    settings.beginGroup(QString("Global"));
-    m_configuration[QString("GridSize")]
-        = settings.value(QString("GridSize"), 150);
-    m_configuration[QString("RecentItemsCount")]
-        = settings.value(QString("RecentItemsCount"), 20);
+    settings.beginGroup("Global");
+    m_configuration["GridSize"] = settings.value("GridSize", 150);
+    m_configuration["RecentItemsCount"]
+        = settings.value("RecentItemsCount", 20);
     settings.endGroup();
 
-    for (auto key : m_configuration.keys())
+    for (auto &key : m_configuration.keys())
         qCInfo(LOG_PL) << key << "=" << m_configuration[key];
 }
 
@@ -160,11 +157,9 @@ bool ConfigManager::saveSettings() const
     QSettings settings(m_path, QSettings::IniFormat);
     settings.setIniCodec("UTF-8");
 
-    settings.beginGroup(QString("Global"));
-    settings.setValue(QString("GridSize"),
-                      m_configuration[QString("GridSize")]);
-    settings.setValue(QString("RecentItemsCount"),
-                      m_configuration[QString("RecentItemsCount")]);
+    settings.beginGroup("Global");
+    for (auto &key : m_configuration.keys())
+        settings.setValue(key, m_configuration[key]);
     settings.endGroup();
 
     settings.sync();

@@ -32,8 +32,8 @@
 /**
  * @fn AbstractAppAggregator
  */
-AbstractAppAggregator::AbstractAppAggregator(QObject *parent)
-    : QObject(parent)
+AbstractAppAggregator::AbstractAppAggregator(QObject *_parent)
+    : QObject(_parent)
 {
     qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
 }
@@ -63,7 +63,7 @@ QMap<QString, ApplicationItem *> AbstractAppAggregator::applications() const
  * @fn applicationsByCategory
  */
 QMap<QString, ApplicationItem *>
-AbstractAppAggregator::applicationsByCategory(const QString _category) const
+AbstractAppAggregator::applicationsByCategory(const QString &_category) const
 {
     qCDebug(LOG_LIB) << "Category" << _category;
 
@@ -73,7 +73,7 @@ AbstractAppAggregator::applicationsByCategory(const QString _category) const
         return apps;
     }
 
-    for (auto app : m_applications.keys()) {
+    for (auto &app : m_applications.keys()) {
         QStringList categories = m_applications[app]->categories();
         if (!categories.contains(_category))
             continue;
@@ -88,12 +88,12 @@ AbstractAppAggregator::applicationsByCategory(const QString _category) const
  * @fn applicationsBySubstr
  */
 QMap<QString, ApplicationItem *>
-AbstractAppAggregator::applicationsBySubstr(const QString _substr) const
+AbstractAppAggregator::applicationsBySubstr(const QString &_substr) const
 {
     qCDebug(LOG_LIB) << "Substring" << _substr;
 
     QMap<QString, ApplicationItem *> apps;
-    for (auto app : m_applications.keys()) {
+    for (auto &app : m_applications.keys()) {
         if (!m_applications[app]->hasSubstring(_substr))
             continue;
         apps[app] = m_applications[app];
@@ -111,19 +111,19 @@ QStringList AbstractAppAggregator::availableCategories()
     // refer to http://standards.freedesktop.org/menu-spec/latest/apa.html
 
     QStringList categories;
-    categories.append(QString("AudioVideo")); // usually named as Multimedia
-    categories.append(QString("Audio"));
-    categories.append(QString("Video"));
-    categories.append(QString("Development"));
-    categories.append(QString("Education"));
-    categories.append(QString("Game"));
-    categories.append(QString("Graphics"));
-    categories.append(QString("Network"));
-    categories.append(QString("Office"));
-    categories.append(QString("Science"));
-    categories.append(QString("Settings"));
-    categories.append(QString("System"));
-    categories.append(QString("Utility"));
+    categories.append("AudioVideo"); // usually named as Multimedia
+    categories.append("Audio");
+    categories.append("Video");
+    categories.append("Development");
+    categories.append("Education");
+    categories.append("Game");
+    categories.append("Graphics");
+    categories.append("Network");
+    categories.append("Office");
+    categories.append("Science");
+    categories.append("Settings");
+    categories.append("System");
+    categories.append("Utility");
 
     qCInfo(LOG_LIB) << "Found categories" << categories;
     return categories;
@@ -133,7 +133,7 @@ QStringList AbstractAppAggregator::availableCategories()
 /**
  * @fn hasApplication
  */
-bool AbstractAppAggregator::hasApplication(const QString _name) const
+bool AbstractAppAggregator::hasApplication(const QString &_name) const
 {
     qCDebug(LOG_LIB) << "Application name" << _name;
 
@@ -166,6 +166,6 @@ void AbstractAppAggregator::removeApplication(ApplicationItem *_item)
 {
     QStringList keys = m_applications.keys(_item);
 
-    for (auto app : keys)
+    for (auto &app : keys)
         m_applications.remove(app);
 }

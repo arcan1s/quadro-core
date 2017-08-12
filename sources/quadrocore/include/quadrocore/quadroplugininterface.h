@@ -69,14 +69,14 @@ public:
     virtual void init() = 0;
     /**
      * @brief quit from plugin
-     * @param _configPath    full path to settings file
+     * @param _configPath full path to settings file
      */
-    virtual void quit(const QString _configPath) = 0;
+    virtual void quit(const QString &_configPath) = 0;
     /**
      * @brief read plugin settings from configuration file
-     * @param _configPath    full path to settings file
+     * @param _configPath full path to settings file
      */
-    virtual void readSettings(const QString _configPath) = 0;
+    virtual void readSettings(const QString &_configPath) = 0;
     /**
      * @brief save plugin settings to configuration file from UI. This method
      * will be called each time when settings will be saved from UI
@@ -86,15 +86,15 @@ public:
      * @brief write settings to configuration file. Unlike of
      * QuadroPluginInterface::saveSettings() this method will be called to pass
      * applied settings to specified file
-     * @param _configPath    full path to settings file
+     * @param _configPath full path to settings file
      * @return true if settings has been saved successfully
      * @return false if there was an error while settings sync
      */
-    virtual bool writeSettings(const QString _configPath) const = 0;
+    virtual bool writeSettings(const QString &_configPath) const = 0;
     /**
      * @brief additional method which will be called to pass required args
      * @remark this method will be called before QuadroPluginInterface::init()
-     * @param _core          pointer to core object
+     * @param _core pointer to core object
      */
     virtual void setArgs(QuadroCore *_core) = 0;
 };

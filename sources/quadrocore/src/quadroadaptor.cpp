@@ -34,9 +34,9 @@
 /**
  * @fn QuadroAdaptor
  */
-QuadroAdaptor::QuadroAdaptor(QuadroCore *core)
-    : QDBusAbstractAdaptor(core)
-    , m_core(core)
+QuadroAdaptor::QuadroAdaptor(QuadroCore *_core)
+    : QDBusAbstractAdaptor(_core)
+    , m_core(_core)
 {
     qCDebug(LOG_DBUS) << __PRETTY_FUNCTION__;
 }
@@ -63,7 +63,7 @@ QStringList QuadroAdaptor::Favorites() const
 /**
  * @fn Icon
  */
-QString QuadroAdaptor::Icon(const QString file) const
+QString QuadroAdaptor::Icon(const QString &file) const
 {
     qCDebug(LOG_DBUS) << "File name" << file;
 
@@ -83,7 +83,7 @@ bool QuadroAdaptor::IsKnownPlatform() const
 /**
  * @fn MIME
  */
-QString QuadroAdaptor::MIME(const QString file) const
+QString QuadroAdaptor::MIME(const QString &file) const
 {
     qCDebug(LOG_DBUS) << "File name" << file;
 
@@ -94,7 +94,7 @@ QString QuadroAdaptor::MIME(const QString file) const
 /**
  * @fn Plugins
  */
-QDBusVariant QuadroAdaptor::Plugins(const QString group) const
+QDBusVariant QuadroAdaptor::Plugins(const QString &group) const
 {
     qCDebug(LOG_DBUS) << "Plugin group" << group;
 
@@ -104,13 +104,13 @@ QDBusVariant QuadroAdaptor::Plugins(const QString group) const
     QVariantList data;
     for (auto plugin : plugins.values()) {
         QVariantHash metadata;
-        metadata[QString("author")] = plugin->author();
-        metadata[QString("comment")] = plugin->comment();
-        metadata[QString("group")] = plugin->group();
-        metadata[QString("location")] = plugin->location();
-        metadata[QString("name")] = plugin->name();
-        metadata[QString("url")] = plugin->url();
-        metadata[QString("version")] = plugin->version();
+        metadata["author"] = plugin->author();
+        metadata["comment"] = plugin->comment();
+        metadata["group"] = plugin->group();
+        metadata["location"] = plugin->location();
+        metadata["name"] = plugin->name();
+        metadata["url"] = plugin->url();
+        metadata["version"] = plugin->version();
         data.append(metadata);
     }
 

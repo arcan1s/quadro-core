@@ -36,8 +36,8 @@
 /**
  * @fn SearchBar
  */
-SearchBar::SearchBar(QWidget *parent)
-    : QLineEdit(parent)
+SearchBar::SearchBar(QWidget *_parent)
+    : QLineEdit(_parent)
 {
     qCDebug(LOG_UILIB) << __PRETTY_FUNCTION__;
 
@@ -89,7 +89,7 @@ void SearchBar::keyPressEvent(QKeyEvent *_pressedKey)
 /**
  * @fn updateText
  */
-void SearchBar::updateText(const QString _text, Qt::KeyboardModifiers _mods)
+void SearchBar::updateText(const QString &_text, Qt::KeyboardModifiers _mods)
 {
     qCDebug(LOG_UILIB) << "Received text" << _text;
     if ((_mods != Qt::NoModifier) && (_mods != Qt::ShiftModifier)) {

@@ -45,11 +45,11 @@ class QuadroPluginAdaptor : public QDBusAbstractAdaptor
 public:
     /**
      * @brief QuadroPluginAdaptor class constructor
-     * @param parent         pointer to parent object
-     * @param plugin         pointer to plugin item
+     * @param _parent pointer to parent object
+     * @param _plugin pointer to plugin item
      */
-    explicit QuadroPluginAdaptor(QObject *parent,
-                                 QuadroPluginInterface *plugin);
+    explicit QuadroPluginAdaptor(QObject *_parent,
+                                 QuadroPluginInterface *_plugin);
     /**
      * @brief QuadroPluginAdaptor class destructor
      */
@@ -73,25 +73,25 @@ public slots:
     Q_NOREPLY void Init();
     /**
      * @brief close the plugin
-     * @param configPath     full path to settings file
+     * @param configPath full path to settings file
      */
-    Q_NOREPLY void Quit(const QString configPath);
+    Q_NOREPLY void Quit(const QString &configPath);
     /**
      * @brief read plugin settings from configuration file
-     * @param configPath     full path to settings file
+     * @param configPath full path to settings file
      */
-    void ReadSettings(const QString configPath);
+    void ReadSettings(const QString &configPath);
     /**
      * @brief save settings from configuration UI
      */
     void SaveSettings();
     /**
      * @brief save plugin settings to configuration file
-     * @param configPath     full path to settings file
+     * @param configPath full path to settings file
      * @return true if settings has been saved successfully
      * @return false if there was an error while settings sync
      */
-    bool WriteSettings(const QString configPath) const;
+    bool WriteSettings(const QString &configPath) const;
 
 private:
     // properties

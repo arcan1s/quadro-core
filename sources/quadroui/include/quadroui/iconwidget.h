@@ -45,35 +45,35 @@ class IconWidget : public QWidget
 public:
     /**
      * @brief IconWidget class constructor
-     * @param size           item size
-     * @param parent         pointer to parent object
+     * @param _size item size
+     * @param _parent pointer to parent object
      */
-    explicit IconWidget(const QSize size, QWidget *parent);
+    explicit IconWidget(const int _size, QWidget *_parent);
     /**
      * @brief IconWidget class destructor
      */
     virtual ~IconWidget();
     /**
      * @brief method to generate icon size
-     * @param _size          source size
+     * @param _size source size
      * @return converted QSize object
      */
-    inline QSize convertSize(const QSize _size) const;
+    inline QSize convertSize(const QSize &_size) const;
     /**
      * @brief set icon to UI
-     * @param _icon          new icon object
+     * @param _icon new icon object
      */
-    void setIcon(const QIcon _icon);
+    void setIcon(const QIcon &_icon);
     /**
      * @brief set text to UI
-     * @param _text          new text
+     * @param _text new text
      */
-    void setText(const QString _text);
+    void setText(const QString &_text);
 
 public slots:
     /**
      * @brief method which will be called on context menu request
-     * @param _pos           current mouse position
+     * @param _pos current mouse position
      */
     virtual void showContextMenu(const QPoint &_pos) = 0;
 
@@ -86,18 +86,18 @@ signals:
 protected:
     /**
      * @brief method which will be called on key press event
-     * @param _pressedKey    pointer to pressed key
+     * @param _pressedKey pointer to pressed key
      */
     void keyPressEvent(QKeyEvent *_pressedKey);
     /**
      * @brief method which will be called on mouse event
-     * @param _event         pointer to mouse event
+     * @param _event pointer to mouse event
      */
     void mousePressEvent(QMouseEvent *_event);
     /**
      * @brief method which will be called to paint UI
      * @remark this method is required to apply custom CSS styles
-     * @param _event         pointer to paint event
+     * @param _event pointer to paint event
      */
     void paintEvent(QPaintEvent *_event);
 

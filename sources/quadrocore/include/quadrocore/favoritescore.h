@@ -43,16 +43,16 @@ class FavoritesCore : public QObject
 public:
     /**
      * @brief FavoritesCore class constructor
-     * @param parent         pointer to parent item
+     * @param _parent pointer to parent item
      */
-    explicit FavoritesCore(QObject *parent);
+    explicit FavoritesCore(QObject *_parent);
     /**
      * @brief FavoritesCore class destructor
      */
     virtual ~FavoritesCore();
     /**
      * @brief add or remove application to the favorites items
-     * @param _item          pointer to application item object
+     * @param _item pointer to application item object
      */
     void add(ApplicationItem *_item);
     /**
@@ -62,23 +62,23 @@ public:
     QMap<QString, ApplicationItem *> applications() const;
     /**
      * @brief add or remove application to the favorites items
-     * @param _item          pointer to application item object
+     * @param _item pointer to application item object
      * @return application item
      */
     static ApplicationItem *addToFavorites(ApplicationItem *_item);
     /**
      * @brief add or remove application to the favorites items
-     * @param _executable    path to executable
-     * @param _name          desktop name
-     * @param _iconName      icon name in the theme
+     * @param _executable path to executable
+     * @param _name desktop name
+     * @param _iconName icon name in the theme
      * @return application item
      */
     static ApplicationItem *
-    addToFavorites(const QString _executable, const QString _name = QString(),
-                   const QString _iconName = QString("system-run"));
+    addToFavorites(const QString &_executable, const QString &_name = "",
+                   const QString &_iconName = "system-run");
     /**
      * @brief check whether the application in favorites
-     * @param _item          pointer to application item object
+     * @param _item pointer to application item object
      * @return true if application is in favorites otherwise returns false
      */
     bool check(ApplicationItem *_item);
@@ -88,11 +88,21 @@ public:
      */
     static QString desktopPath();
     /**
+     * @brief return applications which has desktop files
+     * @return map of generated ApplicationItem
+     */
+    QMap<QString, ApplicationItem *> getApplicationsFromDesktops();
+    /**
      * @brief check whether the application in favorites
-     * @param _item          pointer to application item object
+     * @param _item pointer to application item object
      * @return true if application is in favorites otherwise returns false
      */
     static bool hasApplication(ApplicationItem *_item);
+    /**
+     * @brief path to index file
+     * @return full path to index file
+     */
+    static QString indexPath();
     /**
      * @brief application order
      * @return list of applications by name
@@ -102,10 +112,10 @@ public:
 public slots:
     /**
      * @brief move given application up or down
-     * @param _name          desktop name
-     * @param _up            move application up, default is true
+     * @param _name desktop name
+     * @param _up move application up, default is true
      */
-    void changeApplicationState(const QString _name, const bool _up = true);
+    void changeApplicationState(const QString &_name, const bool _up = true);
     /**
      * @brief init application from default paths
      */
@@ -126,14 +136,9 @@ private:
     QStringList m_order;
     /**
      * @brief add application to favorites
-     * @param _item          pointer to application item
+     * @param _item pointer to application item
      */
     void addAppToFavorites(ApplicationItem *_item);
-    /**
-     * @brief return applications which has desktop files
-     * @return map of generated ApplicationItem
-     */
-    QMap<QString, ApplicationItem *> getApplicationsFromDesktops();
     /**
      * @brief return correct applications order
      * @return list of applications in the correct order
@@ -141,7 +146,7 @@ private:
     QStringList getApplicationsOrder() const;
     /**
      * @brief remove application from favorites
-     * @param _item          pointer to application item
+     * @param _item pointer to application item
      */
     void removeAppFromFavorites(ApplicationItem *_item);
 };

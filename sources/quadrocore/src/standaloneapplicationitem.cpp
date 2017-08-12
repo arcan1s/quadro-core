@@ -36,11 +36,11 @@
 /**
  * @fn StandaloneApplicationItem
  */
-StandaloneApplicationItem::StandaloneApplicationItem(QWidget *parent,
-                                                     const QStringList cmd)
-    : QObject(parent)
-    , m_command(cmd)
-    , m_parent(parent)
+StandaloneApplicationItem::StandaloneApplicationItem(QWidget *_parent,
+                                                     const QStringList &_cmd)
+    : QObject(_parent)
+    , m_command(_cmd)
+    , m_parent(_parent)
 {
     qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
 
@@ -145,7 +145,7 @@ void StandaloneApplicationItem::updateWidgets()
 
     // check if there is a known plugin
     QVariantList check
-        = DBusOperations::sendRequestToLibrary(QString("IsKnownPlatform"));
+        = DBusOperations::sendRequestToLibrary("IsKnownPlatform");
     if ((check.isEmpty()) || (!check.at(0).toBool())) {
         qCCritical(LOG_LIB) << "No known platform found";
         return;
@@ -153,14 +153,14 @@ void StandaloneApplicationItem::updateWidgets()
 
     // get window list
     QVariantList resp = DBusOperations::sendRequestToLibrary(
-        QString("WIdForPID"), QVariantList() << processId());
+        "WIdForPID", QVariantList() << processId());
     if (resp.isEmpty()) {
         qCCritical(LOG_LIB) << "Received empty response object";
         return;
     }
 
     QList<WId> windows;
-    for (auto strId : resp.at(0).toStringList())
+    for (auto &strId : resp.at(0).toStringList())
         windows.append(strId.toInt());
     if (windows.isEmpty()) {
         qCWarning(LOG_LIB) << "Could not find window for PID" << processId();
@@ -181,11 +181,11 @@ void StandaloneApplicationItem::updateWidgets()
 /**
  * @fn finished
  */
-void StandaloneApplicationItem::finished(const int exitCode,
-                                         const QProcess::ExitStatus exitStatus)
+void StandaloneApplicationItem::finished(const int _exitCode,
+                                         const QProcess::ExitStatus _exitStatus)
 {
-    qCDebug(LOG_LIB) << "Exit code" << exitCode;
-    qCDebug(LOG_LIB) << "Exit status" << exitStatus;
+    qCDebug(LOG_LIB) << "Exit code" << _exitCode << "Exit status"
+                     << _exitStatus;
 
     m_widgets.clear();
     return emit(close());

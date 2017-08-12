@@ -30,10 +30,9 @@
 ##
 # @fn quadro_install_plugin root [name] [libraries]
 # @brief build and install plugin
-# @param PLUGIN_ROOT         plugin root directory
-# @param PLUGIN              plugin name (optional). Will be assigned from path
-#                            if empty
-# @param ADDS_LIBRARIES      additional libraries (optional)
+# @param PLUGIN_ROOT plugin root directory
+# @param PLUGIN plugin name (optional). Will be assigned from path if empty
+# @param ADDS_LIBRARIES additional libraries (optional)
 #
 ##
 macro(quadro_install_plugin PLUGIN_ROOT)

@@ -44,10 +44,10 @@ class PluginAdaptor : public QuadroPluginAdaptor
 public:
     /**
      * @brief PluginAdaptor class constructor
-     * @param parent         pointer to parent object
-     * @param plugin         pointer to plugin item
+     * @param _parent pointer to parent object
+     * @param _plugin pointer to plugin item
      */
-    explicit PluginAdaptor(QObject *parent, PluginInterface *plugin);
+    explicit PluginAdaptor(QObject *_parent, PluginInterface *_plugin);
     /**
      * @brief PluginAdaptor class destructor
      */

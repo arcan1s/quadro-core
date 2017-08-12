@@ -38,29 +38,29 @@ class QuadroMainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit QuadroMainWindow(QWidget *parent, const QVariantHash args);
+    explicit QuadroMainWindow(QWidget *_parent, const QVariantHash _args);
     virtual ~QuadroMainWindow();
 
 public slots:
-    void changeTab(const int index = -1);
+    void changeTab(const int _index = -1);
     void closeMainWindow();
     void showSettingsWindow();
-    void updateConfiguration(const QVariantHash args = QVariantHash());
+    void updateConfiguration(const QVariantHash &_args);
     // container settings
-    void createContainer(const QStringList exec, const QString name);
-    void createWebContainer(const QString url, const bool showOpen);
-    void removeContainer(const int index);
+    void createContainer(const QStringList &_exec, const QString &_name);
+    void createWebContainer(const QString &_url, const bool _showOpen);
+    void removeContainer(const int _index);
 
 signals:
     void needToBeConfigured();
 
 private slots:
-    void changeTabByAction(QAction *action);
+    void changeTabByAction(QAction *_action);
     void clearTabs();
     void initTabs();
 
 protected:
-    void closeEvent(QCloseEvent *event);
+    void closeEvent(QCloseEvent *_event);
 
 private:
     // ui

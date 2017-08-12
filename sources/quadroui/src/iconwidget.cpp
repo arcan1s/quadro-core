@@ -42,9 +42,9 @@
 /**
  * @fn IconWidget
  */
-IconWidget::IconWidget(const QSize size, QWidget *parent)
-    : QWidget(parent)
-    , m_size(size)
+IconWidget::IconWidget(const int _size, QWidget *_parent)
+    : QWidget(_parent)
+    , m_size(QSize(_size, _size))
 {
     qCDebug(LOG_UILIB) << __PRETTY_FUNCTION__;
 
@@ -89,7 +89,7 @@ IconWidget::~IconWidget()
 /**
  * @fn convertSize
  */
-QSize IconWidget::convertSize(const QSize _size) const
+QSize IconWidget::convertSize(const QSize &_size) const
 {
     return QSize(_size.width() * 0.75, _size.height() * 0.75);
 }
@@ -98,7 +98,7 @@ QSize IconWidget::convertSize(const QSize _size) const
 /**
  * @fn setIcon
  */
-void IconWidget::setIcon(const QIcon _icon)
+void IconWidget::setIcon(const QIcon &_icon)
 {
     qCDebug(LOG_UILIB) << "New icon" << _icon.name();
 
@@ -109,7 +109,7 @@ void IconWidget::setIcon(const QIcon _icon)
 /**
  * @fn setText
  */
-void IconWidget::setText(const QString _text)
+void IconWidget::setText(const QString &_text)
 {
     qCDebug(LOG_UILIB) << "New text" << _text;
 

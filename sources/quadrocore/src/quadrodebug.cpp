@@ -40,11 +40,11 @@ Q_LOGGING_CATEGORY(LOG_UILIB, "core.quadro.uilibrary", QtMsgType::QtWarningMsg)
  */
 void enableDebug()
 {
-    QLoggingCategory::setFilterRules(QString("core.quadro.dbus.*=true"));
-    QLoggingCategory::setFilterRules(QString("core.quadro.library.*=true"));
-    QLoggingCategory::setFilterRules(QString("core.quadro.plugin.*=true"));
-    QLoggingCategory::setFilterRules(QString("core.quadro.ui.*=true"));
-    QLoggingCategory::setFilterRules(QString("core.quadro.uilibrary.*=true"));
+    QLoggingCategory::setFilterRules("core.quadro.dbus.*=true");
+    QLoggingCategory::setFilterRules("core.quadro.library.*=true");
+    QLoggingCategory::setFilterRules("core.quadro.plugin.*=true");
+    QLoggingCategory::setFilterRules("core.quadro.ui.*=true");
+    QLoggingCategory::setFilterRules("core.quadro.uilibrary.*=true");
 }
 
 
@@ -54,14 +54,14 @@ void enableDebug()
 const QStringList getBuildData()
 {
     QStringList metadata;
-    metadata.append(QString("=== Quadro configuration details ==="));
+    metadata.append("=== Quadro configuration details ===");
     // build information
-    metadata.append(QString("Build details:"));
+    metadata.append("Build details:");
     metadata.append(QString("    VERSION: %1").arg(VERSION));
     metadata.append(QString("    COMMIT_SHA: %1").arg(COMMIT_SHA));
     metadata.append(QString("    BUILD_DATE: %1").arg(BUILD_DATE));
     // cmake properties
-    metadata.append(QString("cmake properties:"));
+    metadata.append("cmake properties:");
     metadata.append(QString("    CMAKE_BUILD_TYPE: %1").arg(CMAKE_BUILD_TYPE));
     metadata.append(
         QString("    CMAKE_CXX_COMPILER: %1").arg(CMAKE_CXX_COMPILER));
@@ -79,7 +79,7 @@ const QStringList getBuildData()
     metadata.append(QString("    CMAKE_SHARED_LINKER_FLAGS: %1")
                         .arg(CMAKE_SHARED_LINKER_FLAGS));
     // components
-    metadata.append(QString("Components data:"));
+    metadata.append("Components data:");
     metadata.append(
         QString("    BUILD_DEB_PACKAGE: %1").arg(BUILD_DEB_PACKAGE));
     metadata.append(

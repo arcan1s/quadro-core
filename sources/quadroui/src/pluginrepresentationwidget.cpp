@@ -36,22 +36,22 @@
  * @fn PluginRepresentationWidget
  */
 PluginRepresentationWidget::PluginRepresentationWidget(
-    QWidget *parent, PluginRepresentation *representation)
-    : QWidget(parent)
+    QWidget *_parent, PluginRepresentation *_representation)
+    : QWidget(_parent)
 {
     qCDebug(LOG_UILIB) << __PRETTY_FUNCTION__;
 
     ui = new Ui::PluginRepresentationWidget;
     ui->setupUi(this);
 
-    ui->groupBox->setTitle(representation->name());
-    ui->label_versionValue->setText(representation->version());
-    ui->label_commentValue->setText(representation->comment());
-    ui->label_authorValue->setText(representation->author());
+    ui->groupBox->setTitle(_representation->name());
+    ui->label_versionValue->setText(_representation->version());
+    ui->label_commentValue->setText(_representation->comment());
+    ui->label_authorValue->setText(_representation->author());
     ui->label_urlValue->setText(
-        QString("<a href=\"%1\">%1</a>").arg(representation->url()));
-    ui->label_locationValue->setText(representation->location());
-    ui->label_groupValue->setText(representation->group());
+        QString("<a href=\"%1\">%1</a>").arg(_representation->url()));
+    ui->label_locationValue->setText(_representation->location());
+    ui->label_groupValue->setText(_representation->group());
 }
 
 

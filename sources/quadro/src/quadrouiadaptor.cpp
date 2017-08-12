@@ -25,9 +25,9 @@
 #include "quadromainwindow.h"
 
 
-QuadroUiAdaptor::QuadroUiAdaptor(QuadroMainWindow *parent)
-    : QDBusAbstractAdaptor(parent)
-    , m_mainWindow(parent)
+QuadroUiAdaptor::QuadroUiAdaptor(QuadroMainWindow *_parent)
+    : QDBusAbstractAdaptor(_parent)
+    , m_mainWindow(_parent)
 {
     qCDebug(LOG_DBUS) << __PRETTY_FUNCTION__;
 }
@@ -72,22 +72,22 @@ void QuadroUiAdaptor::Restore() const
 }
 
 
-void QuadroUiAdaptor::RunContainer(const QStringList exec,
-                                   const QString name) const
+void QuadroUiAdaptor::RunContainer(const QStringList &_exec,
+                                   const QString &_name) const
 {
-    qCDebug(LOG_DBUS) << "Run container with" << exec << name;
+    qCDebug(LOG_DBUS) << "Run container with" << _exec << _name;
 
-    return m_mainWindow->createContainer(exec, name);
+    return m_mainWindow->createContainer(_exec, _name);
 }
 
 
-void QuadroUiAdaptor::RunWebContainer(const QString url,
-                                      const bool showOpen) const
+void QuadroUiAdaptor::RunWebContainer(const QString &_url,
+                                      const bool _showOpen) const
 {
-    qCDebug(LOG_DBUS) << "Run container with url" << url
-                      << "with show open button" << showOpen;
+    qCDebug(LOG_DBUS) << "Run container with url" << _url
+                      << "with show open button" << _showOpen;
 
-    return m_mainWindow->createWebContainer(url, showOpen);
+    return m_mainWindow->createWebContainer(_url, _showOpen);
 }
 
 

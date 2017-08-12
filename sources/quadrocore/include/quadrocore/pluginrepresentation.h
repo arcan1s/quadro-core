@@ -46,31 +46,30 @@ class PluginRepresentation : public QObject
 public:
     /**
      * @brief PluginRepresentation class constructor
-     * @param author         plugin author
-     * @param comment        plugin comment
-     * @param group          plugin group
-     * @param location       plugin location
-     * @param name           plugin name
-     * @param url            plugin url
-     * @param version        plugin version
-     * @param parent         pointer to parent item
+     * @param _author plugin author
+     * @param _comment plugin comment
+     * @param _group plugin group
+     * @param _location plugin location
+     * @param _name plugin name
+     * @param _url plugin url
+     * @param _version plugin version
+     * @param _parent pointer to parent item
      */
-    explicit PluginRepresentation(const QString author, const QString comment,
-                                  const QString group, const QString location,
-                                  const QString name, const QString url,
-                                  const QString version,
-                                  QObject *parent = nullptr);
+    explicit PluginRepresentation(
+        const QString &_author, const QString &_comment, const QString &_group,
+        const QString &_location, const QString &_name, const QString &_url,
+        const QString &_version, QObject *_parent = nullptr);
     /**
      * @brief PluginRepresentation class destructor
      */
     virtual ~PluginRepresentation();
     /**
      * @brief init object from metadata file
-     * @param _filePath      path to configuration file
-     * @param _parent        pointer to parent object
+     * @param _filePath path to configuration file
+     * @param _parent pointer to parent object
      * @return initialized object
      */
-    static PluginRepresentation *fromFile(const QString _filePath,
+    static PluginRepresentation *fromFile(const QString &_filePath,
                                           QObject *_parent = nullptr);
     /**
      * @brief plugin author

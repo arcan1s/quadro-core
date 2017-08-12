@@ -41,7 +41,7 @@
  * @var WebPageState::Failed
  * web page loading failed
  */
-enum WebPageState { None = 0, Loaded, Started, Failed };
+enum class WebPageState { None = 0, Loaded, Started, Failed };
 
 namespace Ui
 {
@@ -60,12 +60,12 @@ class WebAppWidget : public QMainWindow
 public:
     /**
      * @brief WebAppWidget class constructor
-     * @param parent         pointer to parent object
-     * @param index          tab index
-     * @param showOpen       show open URL action
+     * @param _parent pointer to parent object
+     * @param _index tab index
+     * @param _showOpen show open URL action
      */
-    explicit WebAppWidget(QWidget *parent, const int index = -1,
-                          const bool showOpen = true);
+    explicit WebAppWidget(QWidget *_parent, const int _index = -1,
+                          const bool _showOpen = true);
     /**
      * @brief WebAppWidget class destructor
      */
@@ -84,34 +84,33 @@ public:
 public slots:
     /**
      * @brief method which will be called to load URL
-     * @param _url           URL string
+     * @param _url URL string
      */
     void loadUrl(const QUrl &_url);
     /**
      * @brief method which will be called to save cache to local drive
-     * @param _dirName       cache directory name
+     * @param _dirName cache directory name
      */
-    void setCache(const QString _dirName);
+    void setCache(const QString &_dirName);
 
 signals:
     /**
      * @brief signal which will be emitted when all windows will be closed
-     * @param _index         tab index
+     * @param _index tab index
      */
     void destroyWindow(const int _index);
     /**
      * @brief signal which will be emitted when update tab title will be
      * requested
-     * @param _index         tab index
-     * @param _title         new tab title
+     * @param _index tab index
+     * @param _title new tab title
      */
-    void updateTitle(const int _index, const QString _title);
+    void updateTitle(const int _index, const QString &_title);
 
 private slots:
     /**
      * @brief method which automatically select should be page updated or
-     * stopped
-     * and call related method
+     * stopped and call related method
      */
     void changePageState();
     /**
@@ -120,7 +119,7 @@ private slots:
     void getNewUrl();
     /**
      * @brief method which connects to QWebView signals
-     * @param _state         web page state
+     * @param _state web page state
      */
     void updatePageState(const WebPageState _state);
 

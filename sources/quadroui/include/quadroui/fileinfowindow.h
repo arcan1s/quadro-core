@@ -46,10 +46,10 @@ class FileInfoWindow : public QDialog
 public:
     /**
      * @brief FileInfoWindow class constructor
-     * @param parent         pointer to parent object
-     * @param item           object information
+     * @param _parent pointer to parent object
+     * @param _item object information
      */
-    explicit FileInfoWindow(QWidget *parent, QFileInfo item);
+    explicit FileInfoWindow(QWidget *_parent, const QFileInfo _item);
     /**
      * @brief FileInfoWindow class destructor
      */

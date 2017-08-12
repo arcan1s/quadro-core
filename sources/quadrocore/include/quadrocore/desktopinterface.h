@@ -44,7 +44,7 @@ public:
     virtual ~DesktopInterface(){};
     /**
      * @brief get WIds by given PID
-     * @param _pid           PID
+     * @param _pid PID
      * @return list of WIds
      */
     virtual QList<unsigned long long> getWindowByPid(const long long _pid) = 0;

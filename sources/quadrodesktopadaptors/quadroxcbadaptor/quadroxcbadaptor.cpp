@@ -83,16 +83,16 @@ QHash<long long, unsigned long long> QuadroXCBAdaptor::getWindowsList()
 }
 
 
-Window *QuadroXCBAdaptor::getClientList(unsigned long *size) const
+Window *QuadroXCBAdaptor::getClientList(unsigned long *_size) const
 {
-    qCDebug(LOG_LIB) << "Size" << size;
+    qCDebug(LOG_LIB) << "Size" << _size;
 
     char *clientList = nullptr;
     if ((clientList = getPropery(DefaultRootWindow(QX11Info::display()),
-                                 XA_WINDOW, "_NET_CLIENT_LIST", size))
+                                 XA_WINDOW, "_NET_CLIENT_LIST", _size))
         == nullptr) {
         if ((clientList = getPropery(DefaultRootWindow(QX11Info::display()),
-                                     XA_CARDINAL, "_WIN_CLIENT_LIST", size))
+                                     XA_CARDINAL, "_WIN_CLIENT_LIST", _size))
             == nullptr) {
             qCCritical(LOG_LIB) << "Could not get properties _NET_CLIENT_LIST "
                                    "or _WIN_CLIENT_LIST";
@@ -106,7 +106,7 @@ Window *QuadroXCBAdaptor::getClientList(unsigned long *size) const
 
 char *QuadroXCBAdaptor::getPropery(const Window _win, const Atom _xaPropType,
                                    const char *_property,
-                                   unsigned long *size) const
+                                   unsigned long *_size) const
 {
     qCDebug(LOG_LIB) << "Property" << _property;
 
@@ -132,7 +132,7 @@ char *QuadroXCBAdaptor::getPropery(const Window _win, const Atom _xaPropType,
         return nullptr;
     }
 
-    if (size != nullptr)
-        *size = (retFormat / 4) * retNItems;
+    if (_size != nullptr)
+        *_size = (retFormat / 4) * retNItems;
     return reinterpret_cast<char *>(retProperty);
 }

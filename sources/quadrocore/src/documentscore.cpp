@@ -35,9 +35,9 @@
 /**
  * @fn DocumentsCore
  */
-DocumentsCore::DocumentsCore(QObject *parent, const int recentItems)
-    : AbstractAppAggregator(parent)
-    , m_recentItems(recentItems)
+DocumentsCore::DocumentsCore(QObject *_parent, const int _recentItems)
+    : AbstractAppAggregator(_parent)
+    , m_recentItems(_recentItems)
 {
     qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
 }
@@ -67,6 +67,28 @@ QString DocumentsCore::desktopPath()
 
 
 /**
+ * @fn getApplicationsFromDesktops
+ */
+QMap<QString, ApplicationItem *> DocumentsCore::getApplicationsFromDesktops()
+{
+    QStringList filter("*.desktop");
+    QMap<QString, ApplicationItem *> items;
+
+    QStringList entries
+        = QDir(desktopPath()).entryList(filter, QDir::Files, QDir::Time);
+    for (auto &entry : entries) {
+        QString desktop = QFileInfo(QDir(desktopPath()), entry).filePath();
+        qCInfo(LOG_LIB) << "Desktop" << desktop;
+        ApplicationItem *item = ApplicationItem::fromDesktop(desktop, this);
+        items[item->name()] = item;
+        m_modifications.append(item->name());
+    }
+
+    return items;
+}
+
+
+/**
  * @fn recent
  */
 QStringList DocumentsCore::recent() const
@@ -82,7 +104,7 @@ QStringList DocumentsCore::recent() const
 /**
  * @fn addItem
  */
-ApplicationItem *DocumentsCore::addItem(const QString _name)
+ApplicationItem *DocumentsCore::addItem(const QString &_name)
 {
     qCDebug(LOG_LIB) << "Item name" << _name;
 
@@ -92,13 +114,13 @@ ApplicationItem *DocumentsCore::addItem(const QString _name)
     ApplicationItem *item
         = new ApplicationItem(this, QFileInfo(_name).fileName());
     item->setComment(modification.toString(Qt::ISODate));
-    item->setType(QString("Link"));
+    item->setType("Link");
     item->setUrl(QString("file://%1").arg(QFileInfo(_name).absoluteFilePath()));
     // get icon
     QVariantList res = DBusOperations::sendRequestToLibrary(
-        QString("Icon"), QVariantList() << QFileInfo(_name).absoluteFilePath());
+        "Icon", QVariantList() << QFileInfo(_name).absoluteFilePath());
     if (res.isEmpty())
-        item->setIcon(QString("system-run"));
+        item->setIcon("system-run");
     else
         item->setIcon(res.at(0).toString());
 
@@ -134,7 +156,7 @@ void DocumentsCore::initApplications()
 /**
  * @fn removeItemByName
  */
-void DocumentsCore::removeItemByName(const QString _name)
+void DocumentsCore::removeItemByName(const QString &_name)
 {
     qCDebug(LOG_LIB) << "Item name" << _name;
 
@@ -158,7 +180,7 @@ void DocumentsCore::removeItemByName(const QString _name)
 /**
  * @fn touchItem
  */
-void DocumentsCore::touchItem(const QString _name)
+void DocumentsCore::touchItem(const QString &_name)
 {
     qCDebug(LOG_LIB) << "Item" << _name;
 
@@ -174,28 +196,6 @@ void DocumentsCore::touchItem(const QString _name)
     // update order
     int index = m_modifications.indexOf(_name);
     m_modifications.move(index, m_modifications.count() - 1);
-}
-
-
-/**
- * @fn getApplicationsFromDesktops
- */
-QMap<QString, ApplicationItem *> DocumentsCore::getApplicationsFromDesktops()
-{
-    QStringList filter("*.desktop");
-    QMap<QString, ApplicationItem *> items;
-
-    QStringList entries
-        = QDir(desktopPath()).entryList(filter, QDir::Files, QDir::Time);
-    for (auto entry : entries) {
-        QString desktop = QFileInfo(QDir(desktopPath()), entry).filePath();
-        qCInfo(LOG_LIB) << "Desktop" << desktop;
-        ApplicationItem *item = ApplicationItem::fromDesktop(desktop, this);
-        items[item->name()] = item;
-        m_modifications.append(item->name());
-    }
-
-    return items;
 }
 
 

@@ -34,17 +34,17 @@
  * @fn PluginRepresentation
  */
 PluginRepresentation::PluginRepresentation(
-    const QString author, const QString comment, const QString group,
-    const QString location, const QString name, const QString url,
-    const QString version, QObject *parent)
-    : QObject(parent)
-    , m_author(author)
-    , m_comment(comment)
-    , m_group(group)
-    , m_location(location)
-    , m_name(name)
-    , m_url(url)
-    , m_version(version)
+    const QString &_author, const QString &_comment, const QString &_group,
+    const QString &_location, const QString &_name, const QString &_url,
+    const QString &_version, QObject *_parent)
+    : QObject(_parent)
+    , m_author(_author)
+    , m_comment(_comment)
+    , m_group(_group)
+    , m_location(_location)
+    , m_name(_name)
+    , m_url(_url)
+    , m_version(_version)
 {
     qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
 }
@@ -62,7 +62,7 @@ PluginRepresentation::~PluginRepresentation()
 /**
  * @fn fromFile
  */
-PluginRepresentation *PluginRepresentation::fromFile(const QString _filePath,
+PluginRepresentation *PluginRepresentation::fromFile(const QString &_filePath,
                                                      QObject *_parent)
 {
     qCDebug(LOG_LIB) << "Load metadata from file" << _filePath;
@@ -71,31 +71,26 @@ PluginRepresentation *PluginRepresentation::fromFile(const QString _filePath,
     settings.setIniCodec("UTF-8");
     QString group;
     QString configGroup;
-    if (settings.childGroups().contains(QString("Quadro plugin"))) {
-        group = QString("plugin");
-        configGroup = QString("Quadro plugin");
-    } else if (settings.childGroups().contains(QString("Quadro tabplugin"))) {
-        group = QString("tabplugin");
-        configGroup = QString("Quadro tabplugin");
-    } else if (settings.childGroups().contains(
-                   QString("Quadro genericplugin"))) {
-        group = QString("genericplugin");
-        configGroup = QString("Quadro genericplugin");
+    if (settings.childGroups().contains("Quadro plugin")) {
+        group = "plugin";
+        configGroup = "Quadro plugin";
+    } else if (settings.childGroups().contains("Quadro tabplugin")) {
+        group = "tabplugin";
+        configGroup = "Quadro tabplugin";
+    } else if (settings.childGroups().contains("Quadro genericplugin")) {
+        group = "genericplugin";
+        configGroup = "Quadro genericplugin";
     } else {
         qCWarning(LOG_LIB) << "No known group found";
         return nullptr;
     }
 
     settings.beginGroup(configGroup);
-    QString author
-        = settings.value(QString("Author"), QString("John Smith")).toString();
-    QString comment
-        = settings.value(QString("Comment"), QString("")).toString();
-    QString name = settings.value(QString("Name"), QString("none")).toString();
-    QString url = settings.value(QString("URL"), QString("http://localhost"))
-                      .toString();
-    QString version
-        = settings.value(QString("Version"), QString("0.1")).toString();
+    QString author = settings.value("Author", "John Smith").toString();
+    QString comment = settings.value("Comment", "").toString();
+    QString name = settings.value("Name", "none").toString();
+    QString url = settings.value("URL", "http://localhost").toString();
+    QString version = settings.value("Version", "0.1").toString();
     settings.endGroup();
 
     return new PluginRepresentation(author, comment, group,

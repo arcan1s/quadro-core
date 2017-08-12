@@ -46,10 +46,10 @@ class EditAppWindow : public QDialog
 public:
     /**
      * @brief EditAppWindow class constructor
-     * @param parent         pointer to parent object
-     * @param item           pointer to ApplicationItem object
+     * @param _parent pointer to parent object
+     * @param _item pointer to ApplicationItem object
      */
-    explicit EditAppWindow(QWidget *parent, ApplicationItem *item);
+    explicit EditAppWindow(QWidget *_parent, ApplicationItem *_item);
     /**
      * @brief EditAppWindow class destructor
      */
@@ -80,9 +80,9 @@ private slots:
     void selectPath();
     /**
      * @brief repaint icon
-     * @param _text          current icon name
+     * @param _text current icon name
      */
-    void updateIcon(const QString _text);
+    void updateIcon(const QString &_text);
 
 private:
     // ui

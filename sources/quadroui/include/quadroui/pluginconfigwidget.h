@@ -48,44 +48,43 @@ class PluginConfigWidget : public QDialog
 public:
     /**
      * @brief PluginConfigWidget class constructor
-     * @param parent         pointer to parent object
-     * @param group          plugin group
-     * @param enabled        names of enabled plugins
+     * @param _parent pointer to parent object
+     * @param _group plugin group
+     * @param _enabled names of enabled plugins
      */
-    explicit PluginConfigWidget(QWidget *parent, const QString group,
-                                const QStringList enabled);
+    explicit PluginConfigWidget(QWidget *parent, const QString _group,
+                                const QStringList _enabled);
     /**
      * @brief PluginConfigWidget class destructor
      */
     virtual ~PluginConfigWidget();
     /**
      * @brief creates plugin configuration page
-     * @param _name          plugin name
-     * @param _configPage    pointer to configuration interface. It may be
-     * nullptr
-     *                       that means that no page will be created
+     * @param _name plugin name
+     * @param _configPage pointer to configuration interface. It may be nullptr
+     * that means that no page will be created
      */
-    void addPluginConfigurationPage(const QString _name, QWidget *_configPage);
+    void addPluginConfigurationPage(const QString &_name, QWidget *_configPage);
 
 signals:
     /**
      * @brief signal which will be emitted each time when settings save is
      * requested
-     * @param _plugins       list of plugins which is set to enabled
+     * @param _plugins list of plugins which is set to enabled
      */
-    void saveSettingsRequested(const QStringList _plugins) const;
+    void saveSettingsRequested(const QStringList &_plugins) const;
 
 private slots:
     /**
      * @brief slot which will be called when item in the tree widget will be
      * activated
-     * @param _current       pointer to current item
+     * @param _current pointer to current item
      */
     void changePage(QTreeWidgetItem *_current, QTreeWidgetItem *);
     /**
      * @brief change enabled plugin information page
-     * @param _current       pointer to current active item
-     * @param _previous      pointer to previous active item
+     * @param _current pointer to current active item
+     * @param _previous pointer to previous active item
      */
     void changePluginRepresentation(QListWidgetItem *_current,
                                     QListWidgetItem *_previous);

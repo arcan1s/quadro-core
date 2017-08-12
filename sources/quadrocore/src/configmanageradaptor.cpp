@@ -34,9 +34,9 @@
 /**
  * @fn ConfigManagerAdaptor
  */
-ConfigManagerAdaptor::ConfigManagerAdaptor(ConfigManager *manager)
-    : QDBusAbstractAdaptor(manager)
-    , m_manager(manager)
+ConfigManagerAdaptor::ConfigManagerAdaptor(ConfigManager *_manager)
+    : QDBusAbstractAdaptor(_manager)
+    , m_manager(_manager)
 {
     qCDebug(LOG_DBUS) << __PRETTY_FUNCTION__;
 }
@@ -63,7 +63,7 @@ void ConfigManagerAdaptor::Defaults()
 /**
  * @fn Get
  */
-QDBusVariant ConfigManagerAdaptor::Get(const QString key) const
+QDBusVariant ConfigManagerAdaptor::Get(const QString &key) const
 {
     qCDebug(LOG_DBUS) << "Ask for value with key" << key;
 
@@ -106,7 +106,7 @@ bool ConfigManagerAdaptor::Save() const
 /**
  * @fn Set
  */
-bool ConfigManagerAdaptor::Set(const QString key, const QDBusVariant value)
+bool ConfigManagerAdaptor::Set(const QString &key, const QDBusVariant &value)
 {
     qCDebug(LOG_DBUS) << "Set value" << value.variant() << "for key" << key;
 
@@ -120,7 +120,7 @@ bool ConfigManagerAdaptor::Set(const QString key, const QDBusVariant value)
 /**
  * @fn Update
  */
-bool ConfigManagerAdaptor::Update(const QDBusVariant other)
+bool ConfigManagerAdaptor::Update(const QDBusVariant &other)
 {
     qCDebug(LOG_DBUS) << "Set values" << other.variant();
 
@@ -133,8 +133,8 @@ bool ConfigManagerAdaptor::Update(const QDBusVariant other)
 /*
  * @fn Verify
  */
-bool ConfigManagerAdaptor::Verify(const QString key,
-                                  const QDBusVariant value) const
+bool ConfigManagerAdaptor::Verify(const QString &key,
+                                  const QDBusVariant &value) const
 {
     qCDebug(LOG_DBUS) << "Verify value" << value.variant() << "for key" << key;
 

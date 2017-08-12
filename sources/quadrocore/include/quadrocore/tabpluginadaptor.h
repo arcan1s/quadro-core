@@ -42,10 +42,10 @@ class TabPluginAdaptor : public QuadroPluginAdaptor
 public:
     /**
      * @brief TabPluginAdaptor class constructor
-     * @param parent         pointer to parent object
-     * @param plugin         pointer to plugin item
+     * @param _parent pointer to parent object
+     * @param _plugin pointer to plugin item
      */
-    explicit TabPluginAdaptor(QObject *parent, TabPluginInterface *plugin);
+    explicit TabPluginAdaptor(QObject *_parent, TabPluginInterface *_plugin);
     /**
      * @brief TabPluginAdaptor class destructor
      */

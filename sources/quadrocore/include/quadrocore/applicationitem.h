@@ -65,10 +65,10 @@ class ApplicationItem : public QObject
 public:
     /**
      * @brief ApplicationItem class constructor
-     * @param parent         pointer to parent item
-     * @param name           application name
+     * @param _parent pointer to parent item
+     * @param _name application name
      */
-    explicit ApplicationItem(QObject *parent, const QString name);
+    explicit ApplicationItem(QObject *_parent, const QString &_name);
     /**
      * @brief ApplicationItem class destructor
      */
@@ -158,85 +158,85 @@ public:
     // set methods
     /**
      * @brief set application categories
-     * @param _categories    application categories
+     * @param _categories application categories
      */
-    void setCategories(const QStringList _categories);
+    void setCategories(const QStringList &_categories);
     /**
      * @brief set application comment
-     * @param _comment       application comment
+     * @param _comment application comment
      */
-    void setComment(const QString _comment);
+    void setComment(const QString &_comment);
     /**
      * @brief set executable for application
-     * @param _exec       executable name
+     * @param _exec executable name
      */
-    void setExec(const QString _exec);
+    void setExec(const QString &_exec);
     /**
      * @brief set application generic name
-     * @param _genericName   application generic name
+     * @param _genericName application generic name
      */
-    void setGenericName(const QString _genericName);
+    void setGenericName(const QString &_genericName);
     /**
      * @brief set is application hidden or not
-     * @param _hidden        is application hidden
+     * @param _hidden is application hidden
      */
     void setHidden(const bool _hidden);
     /**
      * @brief set application icon from string
-     * @param _icon          name of icon
+     * @param _icon name of icon
      */
-    void setIcon(const QString _icon);
+    void setIcon(const QString &_icon);
     /**
      * @brief set application keywords
-     * @param _keywords      application keywords
+     * @param _keywords application keywords
      */
-    void setKeywords(const QStringList _keywords);
+    void setKeywords(const QStringList &_keywords);
     /**
      * @brief set application mime types
-     * @param _mimeTypes     application mime types
+     * @param _mimeTypes application mime types
      */
-    void setMimeType(const QStringList _mimeType);
+    void setMimeType(const QStringList &_mimeType);
     /**
      * @brief set application name
      * @remark if _name is empty it will be assigned from executable
-     * @param _name          application name
+     * @param _name application name
      */
-    void setName(const QString _name);
+    void setName(const QString &_name);
     /**
      * @brief set should application be shown or not
-     * @param _noDisplay     false if application should be shown
+     * @param _noDisplay false if application should be shown
      */
     void setNoDisplay(const bool _noDisplay);
     /**
      * @brief set application working directory
-     * @param _path          working directory
+     * @param _path working directory
      */
-    void setPath(const QString _path);
+    void setPath(const QString &_path);
     /**
      * @brief set url for link type
-     * @param _url           desktop entry url
+     * @param _url desktop entry url
      */
-    void setUrl(const QString _url);
+    void setUrl(const QString &_url);
     /**
      * @brief set should application be run from terminal or not
-     * @param _terminal      true if application should be run from terminal
+     * @param _terminal true if application should be run from terminal
      */
     void setTerminal(const bool _terminal);
     /**
      * @brief set test executable for application
-     * @param _tryExec       test executable name
+     * @param _tryExec test executable name
      */
-    void setTryExec(const QString _tryExec);
+    void setTryExec(const QString &_tryExec);
     /**
      * @brief set desktop entry type
-     * @param _type          new desktop entry type
+     * @param _type new desktop entry type
      */
-    void setType(QString _type);
+    void setType(const QString &_type);
     /**
      * @brief set desktop entry specification version
-     * @param _version       specification version
+     * @param _version specification version
      */
-    void setVersion(const QString _version);
+    void setVersion(const QString &_version);
     // desktop methods
     /**
      * @brief application icon as QIcon object
@@ -247,12 +247,12 @@ public:
      * @brief define list from desktop file
      * @remark this method is required because the standard Qt codec uses ; as
      * separator
-     * @param _desktopPath   full path to desktop file
-     * @param _key           key for search
+     * @param _desktopPath full path to desktop file
+     * @param _key key for search
      * @return list of found values by key
      */
-    static QStringList defineList(const QString _desktopPath,
-                                  const QString _key);
+    static QStringList defineList(const QString &_desktopPath,
+                                  const QString &_key);
     /**
      * @brief desktop name
      * @return recommended name of desktop file
@@ -260,69 +260,68 @@ public:
     QString desktopName() const;
     /**
      * @brief build command line from exec using arguments
-     * @param _args          command line arguments
+     * @param _args command line arguments
      * @return command line with arguments
      */
-    QStringList generateExec(const QVariantHash _args) const;
+    QStringList generateExec(const QVariantHash &_args) const;
     /**
      * @brief read application information from desktop file
-     * @param _desktopPath   full path to desktop file
-     * @param _parent        pointer to parent item
+     * @param _desktopPath full path to desktop file
+     * @param _parent pointer to parent item
      * @return ApplicationItem structure
      */
-    static ApplicationItem *fromDesktop(const QString _desktopPath,
+    static ApplicationItem *fromDesktop(const QString &_desktopPath,
                                         QObject *_parent);
     /**
      * @brief does application have specified substring or not
-     * @param _substr        substring for search
+     * @param _substr substring for search
      * @return true if comment or name is equal to substring otherwise returns
      * false
      */
-    bool hasSubstring(const QString _substr) const;
+    bool hasSubstring(const QString &_substr) const;
     /**
      * @brief set desktop name
-     * @param _desktopName   name of desktop file
+     * @param _desktopName name of desktop file
      */
-    void setDesktopName(const QString _desktopName);
+    void setDesktopName(const QString &_desktopName);
     /**
      * @brief additional method indicates should application be shown in the
-     * menu
-     * or not
+     * menu or not
      * @return true if application should not be shown otherwise returns false
      */
     bool shouldBeShown() const;
     /**
      * @brief is application start with substring
-     * @param _substr        substring for search
+     * @param _substr substring for search
      * @return true if executable starts with substring otherwise returns false
      */
-    bool startsWith(const QString _substr) const;
+    bool startsWith(const QString &_substr) const;
 
 public slots:
     /**
      * @brief launch the application
-     * @param _args          command line arguments
+     * @param _args command line arguments
      */
-    bool launch(const QVariantHash _args = QVariantHash()) const;
+    bool launch(const QVariantHash &_args = QVariantHash()) const;
     /**
      * @brief write settings to desktop file
-     * @param _desktopPath   full path to desktop file
+     * @param _desktopPath full path to desktop file
      * @return full path to created file or empty string
      */
-    QString saveDesktop(const QString _desktopPath) const;
+    QString saveDesktop(const QString &_desktopPath) const;
     /**
      * @brief remove desktop file from path
-     * @param _desktopPath   full path to desktop file
+     * @param _desktopPath full path to desktop file
      * @return true if file has been removed otherwise returns false
      */
-    bool removeDesktop(const QString _desktopPath) const;
+    bool removeDesktop(const QString &_desktopPath) const;
 
 private slots:
     /**
      * @brief run application
-     * @param _args          command line arguments
+     * @param _args command line arguments
      */
-    bool run(const QVariantHash _args) const;
+    bool run(const QVariantHash &_args) const;
 
 private:
     // main
@@ -354,7 +353,7 @@ private:
     /**
      * @brief application icon
      */
-    QString m_icon = QString("system-run");
+    QString m_icon = "system-run";
     /**
      * @brief application keywords
      */
@@ -390,11 +389,11 @@ private:
     /**
      * @brief desktop type
      */
-    QString m_type = QString("Application");
+    QString m_type = "Application";
     /**
      * @brief version of specification
      */
-    QString m_version = QString("1.0");
+    QString m_version = "1.0";
 };
 
 

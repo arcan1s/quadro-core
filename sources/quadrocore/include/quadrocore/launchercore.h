@@ -42,9 +42,9 @@ class LauncherCore : public AbstractAppAggregator
 public:
     /**
      * @brief LauncherCore class constructor
-     * @param parent         pointer to parent item
+     * @param _parent pointer to parent item
      */
-    explicit LauncherCore(QObject *parent);
+    explicit LauncherCore(QObject *_parent);
     /**
      * @brief LauncherCore class destructor
      */
@@ -56,12 +56,16 @@ public:
     QMap<QString, ApplicationItem *> applicationsFromPaths() const;
     /**
      * @brief find applications by substring in name
-     * @param _substr        substring to which application need to be found
+     * @param _substr substring to which application need to be found
      * @return map of applications by substring
      */
     QMap<QString, ApplicationItem *>
-    applicationsBySubstr(const QString _substr) const;
-
+    applicationsBySubstr(const QString &_substr) const;
+    /**
+     * @brief return applications which has desktop files
+     * @return map of generated ApplicationItem
+     */
+    QMap<QString, ApplicationItem *> getApplicationsFromDesktops();
 
 public slots:
     /**
@@ -74,11 +78,6 @@ private:
      * @brief list of applications defined by PATH variable
      */
     QMap<QString, ApplicationItem *> m_applicationsFromPaths;
-    /**
-     * @brief return applications which has desktop files
-     * @return map of generated ApplicationItem
-     */
-    QMap<QString, ApplicationItem *> getApplicationsFromDesktops();
     /**
      * @brief return applications which is placed to $PATH
      * @return map of generated ApplicationItem

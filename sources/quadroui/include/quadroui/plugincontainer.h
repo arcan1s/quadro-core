@@ -43,17 +43,17 @@ class PluginContainer : public QuadroWidget
 public:
     /**
      * @brief PluginContainer class constructor
-     * @param parent         pointer to parent object
-     * @param grid           grid size
-     * @param widgetTitle    widget title
-     * @param hPolicy        horizontal scroll bar policy
-     * @param vPolicy        vertical scroll bar policy
+     * @param _parent pointer to parent object
+     * @param _grid grid size
+     * @param _widgetTitle widget title
+     * @param _hPolicy horizontal scroll bar policy
+     * @param _vPolicy vertical scroll bar policy
      */
-    explicit PluginContainer(QWidget *parent, const int grid,
-                             const QString widgetTitle = QString("none"),
-                             const Qt::ScrollBarPolicy hPolicy
+    explicit PluginContainer(QWidget *_parent, const int _grid,
+                             const QString _widgetTitle = "none",
+                             const Qt::ScrollBarPolicy _hPolicy
                              = Qt::ScrollBarAlwaysOff,
-                             const Qt::ScrollBarPolicy vPolicy
+                             const Qt::ScrollBarPolicy _vPolicy
                              = Qt::ScrollBarAsNeeded);
     /**
      * @brief PluginContainer class destructor
@@ -61,7 +61,7 @@ public:
     virtual ~PluginContainer();
     /**
      * @brief add plugin to the position
-     * @param _interface     pointer to plugin interface
+     * @param _interface pointer to plugin interface
      */
     void addPlugin(PluginInterface *_interface);
 };

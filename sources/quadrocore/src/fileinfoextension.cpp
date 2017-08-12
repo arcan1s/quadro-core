@@ -34,8 +34,8 @@
 /**
  * @fn FileInfoExtension
  */
-FileInfoExtension::FileInfoExtension(QFileInfo base)
-    : QFileInfo(base)
+FileInfoExtension::FileInfoExtension(QFileInfo _base)
+    : QFileInfo(_base)
 {
     qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
 

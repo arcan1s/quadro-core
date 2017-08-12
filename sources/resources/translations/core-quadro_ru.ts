@@ -4,59 +4,59 @@
 <context>
     <name>AppIconWidget</name>
     <message>
-        <location filename="../../quadroui/src/appiconwidget.cpp" line="147"/>
+        <location filename="../../quadroui/src/appiconwidget.cpp" line="149"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../quadroui/src/appiconwidget.cpp" line="148"/>
+        <location filename="../../quadroui/src/appiconwidget.cpp" line="150"/>
         <source>Could not run application %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../quadroui/src/appiconwidget.cpp" line="166"/>
-        <location filename="../../quadroui/src/appiconwidget.cpp" line="227"/>
+        <location filename="../../quadroui/src/appiconwidget.cpp" line="169"/>
+        <location filename="../../quadroui/src/appiconwidget.cpp" line="232"/>
         <source>Select files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../quadroui/src/appiconwidget.cpp" line="190"/>
-        <location filename="../../quadroui/src/appiconwidget.cpp" line="228"/>
+        <location filename="../../quadroui/src/appiconwidget.cpp" line="194"/>
+        <location filename="../../quadroui/src/appiconwidget.cpp" line="233"/>
         <source>Select URLs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../quadroui/src/appiconwidget.cpp" line="190"/>
+        <location filename="../../quadroui/src/appiconwidget.cpp" line="194"/>
         <source>URLs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../quadroui/src/appiconwidget.cpp" line="215"/>
+        <location filename="../../quadroui/src/appiconwidget.cpp" line="221"/>
         <source>Run application</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../quadroui/src/appiconwidget.cpp" line="218"/>
+        <location filename="../../quadroui/src/appiconwidget.cpp" line="224"/>
         <source>Run application in new tab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../quadroui/src/appiconwidget.cpp" line="222"/>
+        <location filename="../../quadroui/src/appiconwidget.cpp" line="227"/>
         <source>Remove from favorites</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../quadroui/src/appiconwidget.cpp" line="223"/>
+        <location filename="../../quadroui/src/appiconwidget.cpp" line="228"/>
         <source>Add to favorites</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../quadroui/src/appiconwidget.cpp" line="231"/>
+        <location filename="../../quadroui/src/appiconwidget.cpp" line="236"/>
         <source>Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../quadroui/src/appiconwidget.cpp" line="232"/>
+        <location filename="../../quadroui/src/appiconwidget.cpp" line="237"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
@@ -95,21 +95,21 @@
     </message>
     <message>
         <location filename="../../quadroui/src/editappwindow.ui" line="169"/>
-        <location filename="../../quadroui/src/editappwindow.cpp" line="123"/>
+        <location filename="../../quadroui/src/editappwindow.cpp" line="124"/>
         <location filename="../../../build/quadroui/src/ui_editappwindow.h" line="294"/>
         <source>Executable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../quadroui/src/editappwindow.ui" line="217"/>
-        <location filename="../../quadroui/src/editappwindow.cpp" line="138"/>
+        <location filename="../../quadroui/src/editappwindow.cpp" line="139"/>
         <location filename="../../../build/quadroui/src/ui_editappwindow.h" line="295"/>
         <source>Categories</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../quadroui/src/editappwindow.ui" line="265"/>
-        <location filename="../../quadroui/src/editappwindow.cpp" line="172"/>
+        <location filename="../../quadroui/src/editappwindow.cpp" line="175"/>
         <location filename="../../../build/quadroui/src/ui_editappwindow.h" line="296"/>
         <source>Working directory</source>
         <translation type="unfinished"></translation>
@@ -130,17 +130,17 @@
 <context>
     <name>FileIconWidget</name>
     <message>
-        <location filename="../../quadroui/src/fileiconwidget.cpp" line="151"/>
+        <location filename="../../quadroui/src/fileiconwidget.cpp" line="144"/>
         <source>Open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../quadroui/src/fileiconwidget.cpp" line="154"/>
+        <location filename="../../quadroui/src/fileiconwidget.cpp" line="147"/>
         <source>Open in new tab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../quadroui/src/fileiconwidget.cpp" line="158"/>
+        <location filename="../../quadroui/src/fileiconwidget.cpp" line="151"/>
         <source>Properties</source>
         <translation type="unfinished"></translation>
     </message>
@@ -243,43 +243,43 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../quadroui/src/fileinfowindow.cpp" line="80"/>
+        <location filename="../../quadroui/src/fileinfowindow.cpp" line="81"/>
         <source>%1 MiB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../quadroui/src/fileinfowindow.cpp" line="82"/>
+        <location filename="../../quadroui/src/fileinfowindow.cpp" line="84"/>
         <source>%1 KiB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../quadroui/src/fileinfowindow.cpp" line="84"/>
+        <location filename="../../quadroui/src/fileinfowindow.cpp" line="86"/>
         <source>%1 B</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../quadroui/src/fileinfowindow.cpp" line="88"/>
+        <location filename="../../quadroui/src/fileinfowindow.cpp" line="90"/>
         <source>%1 (files %2, directories %3)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../quadroui/src/fileinfowindow.cpp" line="104"/>
-        <location filename="../../quadroui/src/fileinfowindow.cpp" line="111"/>
-        <location filename="../../quadroui/src/fileinfowindow.cpp" line="118"/>
-        <source>read and write</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../quadroui/src/fileinfowindow.cpp" line="106"/>
-        <location filename="../../quadroui/src/fileinfowindow.cpp" line="113"/>
-        <location filename="../../quadroui/src/fileinfowindow.cpp" line="120"/>
-        <source>read</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../quadroui/src/fileinfowindow.cpp" line="108"/>
         <location filename="../../quadroui/src/fileinfowindow.cpp" line="115"/>
         <location filename="../../quadroui/src/fileinfowindow.cpp" line="122"/>
+        <source>read and write</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadroui/src/fileinfowindow.cpp" line="110"/>
+        <location filename="../../quadroui/src/fileinfowindow.cpp" line="117"/>
+        <location filename="../../quadroui/src/fileinfowindow.cpp" line="124"/>
+        <source>read</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadroui/src/fileinfowindow.cpp" line="112"/>
+        <location filename="../../quadroui/src/fileinfowindow.cpp" line="119"/>
+        <location filename="../../quadroui/src/fileinfowindow.cpp" line="126"/>
         <source>no rights</source>
         <translation type="unfinished"></translation>
     </message>
@@ -287,84 +287,23 @@
 <context>
     <name>MainWindow</name>
     <message>
+        <location filename="../../quadro/src/main.cpp" line="83"/>
+        <source>Plugin based applicaiton launcher</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadro/src/main.cpp" line="90"/>
+        <source>Print debug information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../quadro/src/main.cpp" line="95"/>
+        <source>Start minimized to tray</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../quadro/src/main.cpp" line="107"/>
-        <source>Restore existing session.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../quadro/src/messages.cpp" line="28"/>
-        <source>Unknown flag
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../quadro/src/messages.cpp" line="53"/>
-        <source>Usage:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../quadro/src/messages.cpp" line="55"/>
-        <source>Options:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../quadro/src/messages.cpp" line="57"/>
-        <source>Open window:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../quadro/src/messages.cpp" line="58"/>
-        <source>do not detach from console</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../quadro/src/messages.cpp" line="59"/>
-        <source>start minimized to tray</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../quadro/src/messages.cpp" line="61"/>
-        <source>Additional flags:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../quadro/src/messages.cpp" line="62"/>
-        <source>print debug information</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../quadro/src/messages.cpp" line="64"/>
-        <source>Show messages:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../quadro/src/messages.cpp" line="65"/>
-        <source>show version and exit</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../quadro/src/messages.cpp" line="66"/>
-        <source>show build information and exit</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../quadro/src/messages.cpp" line="67"/>
-        <source>show this help and exit</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../quadro/src/messages.cpp" line="115"/>
-        <source>Version</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../quadro/src/messages.cpp" line="116"/>
-        <source>Author</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../quadro/src/messages.cpp" line="117"/>
-        <source>License</source>
+        <source>Restore existing session</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -438,7 +377,7 @@
     <name>QuadroMainWindow</name>
     <message>
         <location filename="../../quadro/src/quadromainwindow.ui" line="29"/>
-        <location filename="../../../build/quadro/src/ui_quadromainwindow.h" line="161"/>
+        <location filename="../../../build/quadro/src/ui_quadromainwindow.h" line="165"/>
         <source>Toolbar</source>
         <translation type="unfinished"></translation>
     </message>
@@ -492,19 +431,19 @@
     </message>
     <message>
         <location filename="../../quadro/src/quadromainwindow.ui" line="116"/>
-        <location filename="../../../build/quadro/src/ui_quadromainwindow.h" line="158"/>
+        <location filename="../../../build/quadro/src/ui_quadromainwindow.h" line="159"/>
         <source>Ctrl+Q</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../quadro/src/quadromainwindow.ui" line="125"/>
-        <location filename="../../../build/quadro/src/ui_quadromainwindow.h" line="159"/>
+        <location filename="../../../build/quadro/src/ui_quadromainwindow.h" line="161"/>
         <source>&amp;Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../quadro/src/quadromainwindow.ui" line="128"/>
-        <location filename="../../../build/quadro/src/ui_quadromainwindow.h" line="160"/>
+        <location filename="../../../build/quadro/src/ui_quadromainwindow.h" line="163"/>
         <source>Ctrl+S</source>
         <translation type="unfinished"></translation>
     </message>
@@ -546,7 +485,7 @@
     </message>
     <message>
         <location filename="../../quadroui/src/webappwidget.ui" line="25"/>
-        <location filename="../../../build/quadroui/src/ui_webappwidget.h" line="131"/>
+        <location filename="../../../build/quadroui/src/ui_webappwidget.h" line="137"/>
         <source>Toolbar</source>
         <translation type="unfinished"></translation>
     </message>
@@ -558,53 +497,53 @@
     </message>
     <message>
         <location filename="../../quadroui/src/webappwidget.ui" line="50"/>
-        <location filename="../../../build/quadroui/src/ui_webappwidget.h" line="124"/>
+        <location filename="../../../build/quadroui/src/ui_webappwidget.h" line="125"/>
         <source>Ctrl+L</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../quadroui/src/webappwidget.ui" line="59"/>
-        <location filename="../../../build/quadroui/src/ui_webappwidget.h" line="125"/>
+        <location filename="../../../build/quadroui/src/ui_webappwidget.h" line="127"/>
         <source>Refresh</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../quadroui/src/webappwidget.ui" line="62"/>
-        <location filename="../../../build/quadroui/src/ui_webappwidget.h" line="126"/>
+        <location filename="../../../build/quadroui/src/ui_webappwidget.h" line="129"/>
         <source>Ctrl+R</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../quadroui/src/webappwidget.ui" line="71"/>
-        <location filename="../../../build/quadroui/src/ui_webappwidget.h" line="127"/>
+        <location filename="../../../build/quadroui/src/ui_webappwidget.h" line="131"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../quadroui/src/webappwidget.ui" line="74"/>
-        <location filename="../../../build/quadroui/src/ui_webappwidget.h" line="128"/>
+        <location filename="../../../build/quadroui/src/ui_webappwidget.h" line="133"/>
         <source>Ctrl+W</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../quadroui/src/webappwidget.ui" line="83"/>
-        <location filename="../../../build/quadroui/src/ui_webappwidget.h" line="129"/>
+        <location filename="../../../build/quadroui/src/ui_webappwidget.h" line="135"/>
         <source>Back</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../quadroui/src/webappwidget.ui" line="92"/>
-        <location filename="../../../build/quadroui/src/ui_webappwidget.h" line="130"/>
+        <location filename="../../../build/quadroui/src/ui_webappwidget.h" line="136"/>
         <source>Forward</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../quadroui/src/webappwidget.cpp" line="139"/>
+        <location filename="../../quadroui/src/webappwidget.cpp" line="141"/>
         <source>New URL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../quadroui/src/webappwidget.cpp" line="139"/>
+        <location filename="../../quadroui/src/webappwidget.cpp" line="141"/>
         <source>URL</source>
         <translation type="unfinished"></translation>
     </message>

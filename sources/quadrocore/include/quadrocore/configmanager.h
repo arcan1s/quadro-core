@@ -45,9 +45,9 @@ class ConfigManager : public QObject
 public:
     /**
      * @brief ConfigManager class constructor
-     * @param parent         pointer to parent object
+     * @param _parent pointer to parent object
      */
-    explicit ConfigManager(QObject *parent);
+    explicit ConfigManager(QObject *_parent);
     /**
      * @brief ConfigManager class destructor
      */
@@ -56,16 +56,16 @@ public:
      * @brief set settings from other source
      * @remark to use this method please make sure that you've asked
      * ConfigManager::verifySettings are settings valid or not
-     * @param _other         other settings dictionary
+     * @param _other other settings dictionary
      * @return true if settings have been applied successfully. Otherwise
      * returns false
      */
     bool setSettings(const QVariantHash &_other);
     /**
      * @brief verify settings from other source
-     * @param _other         other settings dictionary
-     * @param _ok            if this parameter is given it will contain
-     *                       the verification status
+     * @param _other other settings dictionary
+     * @param _ok if this parameter is given it will contain the verification
+     * status
      * @returns keys in which there are invalid values. If no errors were found
      * it will be empty list
      */
@@ -92,7 +92,7 @@ public:
 public slots:
     /**
      * @brief read settings from file
-     * @param _defaults      if it is set to true default settings will be read
+     * @param _defaults if it is set to true default settings will be read
      */
     void readSettings(const bool _defaults = false);
     /**

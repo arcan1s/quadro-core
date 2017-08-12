@@ -37,11 +37,11 @@
 /**
  * @fn PluginConfigWidget
  */
-PluginConfigWidget::PluginConfigWidget(QWidget *parent, const QString group,
-                                       const QStringList enabled)
-    : QDialog(parent)
-    , m_group(group)
-    , m_enabled(enabled)
+PluginConfigWidget::PluginConfigWidget(QWidget *_parent, const QString _group,
+                                       const QStringList _enabled)
+    : QDialog(_parent)
+    , m_group(_group)
+    , m_enabled(_enabled)
 {
     qCDebug(LOG_UILIB) << __PRETTY_FUNCTION__;
 
@@ -67,11 +67,11 @@ PluginConfigWidget::~PluginConfigWidget()
 /**
  * @fn addPluginConfigurationPage
  */
-void PluginConfigWidget::addPluginConfigurationPage(const QString _name,
+void PluginConfigWidget::addPluginConfigurationPage(const QString &_name,
                                                     QWidget *_configPage)
 {
     qCDebug(LOG_UILIB) << "Requesting of adding page for" << _name;
-    if (_configPage == nullptr) {
+    if (!_configPage) {
         qCInfo(LOG_UILIB) << "No configuration interface found for" << _name;
         return;
     }
@@ -90,13 +90,8 @@ void PluginConfigWidget::changePage(QTreeWidgetItem *_current,
 {
     qCDebug(LOG_UILIB) << "Current page" << _current->text(0);
 
-    for (int i = 0; i < ui->treeWidget->topLevelItemCount(); i++) {
-        if (_current != ui->treeWidget->topLevelItem(i))
-            continue;
-        qCInfo(LOG_UILIB) << "Change tab to" << i;
-        ui->stackedWidget->setCurrentIndex(i);
-        break;
-    }
+    int index = ui->treeWidget->indexOfTopLevelItem(_current);
+    ui->stackedWidget->setCurrentIndex(index);
 }
 
 
@@ -107,7 +102,7 @@ void PluginConfigWidget::changePluginRepresentation(QListWidgetItem *_current,
                                                     QListWidgetItem *_previous)
 {
     // fallback operations
-    if (_current == nullptr) {
+    if (!_current) {
         qCDebug(LOG_UILIB) << "No current item found";
         return;
     }
@@ -115,8 +110,7 @@ void PluginConfigWidget::changePluginRepresentation(QListWidgetItem *_current,
     // main cycle
     qCDebug(LOG_UILIB) << "Change data to" << _current->text();
 
-    if ((_previous == nullptr)
-        || (m_representations[_previous->text()]->isHidden())) {
+    if ((!_previous) || (m_representations[_previous->text()]->isHidden())) {
         qCInfo(LOG_UILIB) << "Previous item is hidden, try to find active one";
         for (auto wid : m_representations.values()) {
             if (wid->isHidden())
@@ -140,7 +134,7 @@ void PluginConfigWidget::changePluginRepresentation(QListWidgetItem *_current,
 void PluginConfigWidget::pluginDisable()
 {
     QListWidgetItem *item = ui->listWidget_enabledPlugins->currentItem();
-    if (item == nullptr) {
+    if (!item) {
         qCInfo(LOG_UILIB) << "No plugin selected";
         return;
     }
@@ -157,7 +151,7 @@ void PluginConfigWidget::pluginDisable()
 void PluginConfigWidget::pluginEnable()
 {
     QListWidgetItem *item = ui->listWidget_allPlugins->currentItem();
-    if (item == nullptr) {
+    if (!item) {
         qCInfo(LOG_UILIB) << "No plugin selected";
         return;
     }
@@ -175,7 +169,7 @@ void PluginConfigWidget::pluginEnable()
  */
 void PluginConfigWidget::pluginMoveDown()
 {
-    if (ui->listWidget_enabledPlugins->currentItem() == nullptr) {
+    if (!ui->listWidget_enabledPlugins->currentItem()) {
         qCInfo(LOG_UILIB) << "No plugin selected";
         return;
     }
@@ -199,7 +193,7 @@ void PluginConfigWidget::pluginMoveDown()
  */
 void PluginConfigWidget::pluginMoveUp()
 {
-    if (ui->listWidget_enabledPlugins->currentItem() == nullptr) {
+    if (!ui->listWidget_enabledPlugins->currentItem()) {
         qCInfo(LOG_UILIB) << "No plugin selected";
         return;
     }
@@ -225,7 +219,7 @@ void PluginConfigWidget::saveSettings() const
 {
     QStringList plugins;
     auto items = ui->listWidget_enabledPlugins->findItems(
-        QString("*"), Qt::MatchWrap | Qt::MatchWildcard);
+        "*", Qt::MatchWrap | Qt::MatchWildcard);
     for (auto item : items)
         plugins.append(item->text());
     qCInfo(LOG_UILIB) << "Selected plugins" << plugins;
@@ -273,20 +267,17 @@ void PluginConfigWidget::createObjects()
     // create plugin list
     QStringList knownPluginNames;
     QVariantList plugins = DBusOperations::toNativeType<QVariantList>(
-        DBusOperations::sendRequestToLibrary(QString("Plugins"), QVariantList()
-                                                                     << m_group)
+        DBusOperations::sendRequestToLibrary("Plugins",
+                                             QVariantList() << m_group)
             .first());
-    for (auto plugin : plugins) {
+    for (auto &plugin : plugins) {
         QVariantHash metadata
             = qdbus_cast<QVariantHash>(plugin.value<QDBusArgument>());
-        QString name = metadata[QString("name")].toString();
+        QString name = metadata["name"].toString();
         PluginRepresentation *repr = new PluginRepresentation(
-            metadata[QString("author")].toString(),
-            metadata[QString("comment")].toString(),
-            metadata[QString("group")].toString(),
-            metadata[QString("location")].toString(), name,
-            metadata[QString("url")].toString(),
-            metadata[QString("version")].toString(), this);
+            metadata["author"].toString(), metadata["comment"].toString(),
+            metadata["group"].toString(), metadata["location"].toString(), name,
+            metadata["url"].toString(), metadata["version"].toString(), this);
         PluginRepresentationWidget *wid
             = new PluginRepresentationWidget(this, repr);
         m_representations[name] = wid;
@@ -299,8 +290,8 @@ void PluginConfigWidget::createObjects()
 
     // found enabled plugins
     knownPluginNames.sort();
-    for (auto plugin : knownPluginNames)
+    for (auto &plugin : knownPluginNames)
         ui->listWidget_allPlugins->addItem(plugin);
-    for (auto plugin : m_enabled)
+    for (auto &plugin : m_enabled)
         ui->listWidget_enabledPlugins->addItem(plugin);
 }

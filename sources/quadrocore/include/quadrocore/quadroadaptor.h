@@ -45,9 +45,9 @@ class QuadroAdaptor : public QDBusAbstractAdaptor
 public:
     /**
      * @brief QuadroAdaptor class constructor
-     * @param core           pointer to core part
+     * @param _core pointer to core part
      */
-    explicit QuadroAdaptor(QuadroCore *core);
+    explicit QuadroAdaptor(QuadroCore *_core);
     /**
      * @brief QuadroAdaptor class destructor
      */
@@ -61,10 +61,10 @@ public slots:
     QStringList Favorites() const;
     /**
      * @brief get icon by file path
-     * @param file           absolute file path
+     * @param file absolute file path
      * @return icon name of the specified file
      */
-    QString Icon(const QString file) const;
+    QString Icon(const QString &file) const;
     /**
      * @brief check if there is a known plugin for this platform
      * @return true if DesktopInterface has been initialized
@@ -72,16 +72,16 @@ public slots:
     bool IsKnownPlatform() const;
     /**
      * @brief get mime name by file path
-     * @param file           absolute file path
+     * @param file absolute file path
      * @return mime name of the specified file
      */
-    QString MIME(const QString file) const;
+    QString MIME(const QString &file) const;
     /**
      * @brief get plugin list
-     * @param group          plugin group
+     * @param group plugin group
      * @return list of known plugins
      */
-    QDBusVariant Plugins(const QString group) const;
+    QDBusVariant Plugins(const QString &group) const;
     /**
      * @brief recent applications list
      * @return list of application from RecentlyCore
@@ -111,7 +111,7 @@ public slots:
     /**
      * @brief get WIds by given PID
      * @remark since C++ doesn't allow static pure methods...
-     * @param pid            PID
+     * @param pid PID
      * @return list of WIds as QString reresentation
      */
     QStringList WIdForPID(const long long pid);

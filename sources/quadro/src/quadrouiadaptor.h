@@ -32,7 +32,7 @@ class QuadroUiAdaptor : public QDBusAbstractAdaptor
     Q_CLASSINFO("D-Bus Interface", DBUS_INTERFACE)
 
 public:
-    explicit QuadroUiAdaptor(QuadroMainWindow *parent);
+    explicit QuadroUiAdaptor(QuadroMainWindow *_parent);
     virtual ~QuadroUiAdaptor();
 
 public slots:
@@ -41,9 +41,9 @@ public slots:
     void Close() const;
     void Hide() const;
     void Restore() const;
-    void RunContainer(const QStringList exec,
-                      const QString name = QString()) const;
-    void RunWebContainer(const QString url, const bool showOpen) const;
+    void RunContainer(const QStringList &_exec,
+                      const QString &_name = QString()) const;
+    void RunWebContainer(const QString &_url, const bool _showOpen) const;
     QStringList UIDs() const;
 
 private:

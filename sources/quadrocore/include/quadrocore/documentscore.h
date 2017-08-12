@@ -46,10 +46,10 @@ class DocumentsCore : public AbstractAppAggregator
 public:
     /**
      * @brief DocumentsCore class constructor
-     * @param parent         pointer to parent item
-     * @param recentItems    count of recent items in the launcher
+     * @param _parent pointer to parent item
+     * @param _recentItems count of recent items in the launcher
      */
-    explicit DocumentsCore(QObject *parent, const int recentItems);
+    explicit DocumentsCore(QObject *_parent, const int _recentItems);
     /**
      * @brief RecentlyCore class destructor
      */
@@ -60,6 +60,11 @@ public:
      */
     static QString desktopPath();
     /**
+     * @brief return applications which has desktop files
+     * @return map of generated ApplicationItem
+     */
+    QMap<QString, ApplicationItem *> getApplicationsFromDesktops();
+    /**
      * @brief get recently run applications
      * @return application names
      */
@@ -68,24 +73,24 @@ public:
 public slots:
     /**
      * @brief add item to recent run by its name
-     * @param _name          recent application name
+     * @param _name recent application name
      * @return pointer to created ApplicationItem
      */
-    ApplicationItem *addItem(const QString _name);
+    ApplicationItem *addItem(const QString &_name);
     /**
      * @brief init application using given paths
      */
     void initApplications();
     /**
      * @brief remove item from recent run by its name
-     * @param _name          item name
+     * @param _name item name
      */
-    void removeItemByName(const QString _name);
+    void removeItemByName(const QString &_name);
     /**
      * @brief touch application on new run
-     * @param _name          name if application item
+     * @param _name name if application item
      */
-    void touchItem(const QString _name);
+    void touchItem(const QString &_name);
 
 private:
     /**
@@ -96,11 +101,6 @@ private:
      * @brief max recent items count
      */
     int m_recentItems;
-    /**
-     * @brief return applications which has desktop files
-     * @return map of generated ApplicationItem
-     */
-    QMap<QString, ApplicationItem *> getApplicationsFromDesktops();
     /**
      * @brief rotate application data information
      */

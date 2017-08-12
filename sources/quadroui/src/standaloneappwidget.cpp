@@ -37,12 +37,12 @@
 /**
  * @fn StandaloneAppWidget
  */
-StandaloneAppWidget::StandaloneAppWidget(QWidget *parent,
-                                         const QStringList exec,
-                                         const int index)
-    : QMainWindow(parent)
-    , m_exec(exec)
-    , m_index(index)
+StandaloneAppWidget::StandaloneAppWidget(QWidget *_parent,
+                                         const QStringList _exec,
+                                         const int _index)
+    : QMainWindow(_parent)
+    , m_exec(_exec)
+    , m_index(_index)
 {
     qCDebug(LOG_UILIB) << __PRETTY_FUNCTION__;
 

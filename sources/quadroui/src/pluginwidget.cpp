@@ -39,11 +39,11 @@
 /**
  * @fn PluginWidget
  */
-PluginWidget::PluginWidget(PluginInterface *interface, const QSize size,
-                           QWidget *parent)
-    : QWidget(parent)
-    , m_interface(interface)
-    , m_size(size)
+PluginWidget::PluginWidget(PluginInterface *_interface, const QSize _size,
+                           QWidget *_parent)
+    : QWidget(_parent)
+    , m_interface(_interface)
+    , m_size(_size)
 {
     qCDebug(LOG_UILIB) << __PRETTY_FUNCTION__;
 

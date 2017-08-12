@@ -49,12 +49,12 @@ class StandaloneAppWidget : public QMainWindow
 public:
     /**
      * @brief StandaloneAppWidget class constructor
-     * @param parent         pointer to parent object
-     * @param exec           application executable
-     * @param index          tab index
+     * @param _parent pointer to parent object
+     * @param _exec application executable
+     * @param _index tab index
      */
-    explicit StandaloneAppWidget(QWidget *parent, const QStringList exec,
-                                 const int index = -1);
+    explicit StandaloneAppWidget(QWidget *_parent, const QStringList _exec,
+                                 const int _index = -1);
     /**
      * @brief StandaloneAppWidget class destructor
      */
@@ -69,7 +69,7 @@ public slots:
 signals:
     /**
      * @brief signal which will be emitted when all windows will be closed
-     * @param _index         tab index
+     * @param _index tab index
      */
     void destroyWindow(const int _index);
 

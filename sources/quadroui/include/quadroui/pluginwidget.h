@@ -43,12 +43,12 @@ class PluginWidget : public QWidget
 public:
     /**
      * @brief PluginWidget class constructor
-     * @param interface      pointer to plugin interface
-     * @param size           item size
-     * @param parent         pointer to parent object
+     * @param _interface pointer to plugin interface
+     * @param _size item size
+     * @param _parent pointer to parent object
      */
-    explicit PluginWidget(PluginInterface *interface, const QSize size,
-                          QWidget *parent);
+    explicit PluginWidget(PluginInterface *_interface, const QSize _size,
+                          QWidget *_parent);
     /**
      * @brief PluginWidget class destructor
      */
@@ -63,7 +63,7 @@ signals:
 protected:
     /**
      * @brief method which will be called on mouse event
-     * @param _event         pointer to mouse event
+     * @param _event pointer to mouse event
      */
     void mousePressEvent(QMouseEvent *_event);
 

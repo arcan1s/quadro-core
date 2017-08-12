@@ -38,8 +38,7 @@ class PluginRepresentationWidget;
 
 /**
  * @brief The PluginRepresentationWidget class provides UI for
- * PluginRepresentation
- * class
+ * PluginRepresentation class
  */
 class PluginRepresentationWidget : public QWidget
 {
@@ -48,12 +47,12 @@ class PluginRepresentationWidget : public QWidget
 public:
     /**
      * @brief PluginRepresentationWidget class constructor
-     * @param parent         pointer to parent object
-     * @param representation pointer to representation object
+     * @param _parent pointer to parent object
+     * @param _representation pointer to representation object
      *
      */
-    explicit PluginRepresentationWidget(QWidget *parent,
-                                        PluginRepresentation *representation);
+    explicit PluginRepresentationWidget(QWidget *_parent,
+                                        PluginRepresentation *_representation);
     /**
      * @brief PluginRepresentationWidget class destructor
      */

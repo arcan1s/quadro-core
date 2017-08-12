@@ -35,9 +35,9 @@
 /**
  * @fn RecentlyCore
  */
-RecentlyCore::RecentlyCore(QObject *parent, const int recentItems)
-    : AbstractAppAggregator(parent)
-    , m_recentItems(recentItems)
+RecentlyCore::RecentlyCore(QObject *_parent, const int _recentItems)
+    : AbstractAppAggregator(_parent)
+    , m_recentItems(_recentItems)
 {
     qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
 }
@@ -56,12 +56,12 @@ RecentlyCore::~RecentlyCore()
  * @fn applicationsBySubstr
  */
 QMap<QString, ApplicationItem *>
-RecentlyCore::applicationsBySubstr(const QString _substr) const
+RecentlyCore::applicationsBySubstr(const QString &_substr) const
 {
     qCDebug(LOG_LIB) << "Substring" << _substr;
 
     QMap<QString, ApplicationItem *> apps;
-    for (auto app : applications().keys()) {
+    for (auto &app : applications().keys()) {
         if (!applications()[app]->startsWith(_substr))
             continue;
         apps[app] = applications()[app];
@@ -82,6 +82,28 @@ QString RecentlyCore::desktopPath()
                            .arg(HOME_PATH);
 
     return QString("%1/%2").arg(homePath).arg(RECENT_PATH);
+}
+
+
+/**
+ * @fn getApplicationsFromDesktops
+ */
+QMap<QString, ApplicationItem *> RecentlyCore::getApplicationsFromDesktops()
+{
+    QStringList filter("*.desktop");
+    QMap<QString, ApplicationItem *> items;
+
+    QStringList entries
+        = QDir(desktopPath()).entryList(filter, QDir::Files, QDir::Time);
+    for (auto &entry : entries) {
+        QString desktop = QFileInfo(QDir(desktopPath()), entry).filePath();
+        qCInfo(LOG_LIB) << "Desktop" << desktop;
+        ApplicationItem *item = ApplicationItem::fromDesktop(desktop, this);
+        items[item->name()] = item;
+        m_modifications.append(item->name());
+    }
+
+    return items;
 }
 
 
@@ -109,7 +131,7 @@ ApplicationItem *RecentlyCore::addItem(ApplicationItem *_item)
     QDateTime modification = QDateTime::currentDateTime();
 
     _item->setComment(modification.toString(Qt::ISODate));
-    _item->setIcon(QString("emblem-favorites"));
+    _item->setIcon("emblem-favorites");
 
     if (_item->saveDesktop(desktopPath()).isEmpty()) {
         qCCritical(LOG_LIB) << "Could not save" << _item->desktopName();
@@ -125,7 +147,7 @@ ApplicationItem *RecentlyCore::addItem(ApplicationItem *_item)
 /**
  * @fn addItem
  */
-ApplicationItem *RecentlyCore::addItem(const QString _name)
+ApplicationItem *RecentlyCore::addItem(const QString &_name)
 {
     qCDebug(LOG_LIB) << "Item name" << _name;
 
@@ -157,7 +179,7 @@ void RecentlyCore::initApplications()
 /**
  * @fn removeItemByName
  */
-void RecentlyCore::removeItemByName(const QString _name)
+void RecentlyCore::removeItemByName(const QString &_name)
 {
     qCDebug(LOG_LIB) << "Item name" << _name;
 
@@ -181,7 +203,7 @@ void RecentlyCore::removeItemByName(const QString _name)
 /**
  * @fn touchItem
  */
-void RecentlyCore::touchItem(const QString _name)
+void RecentlyCore::touchItem(const QString &_name)
 {
     qCDebug(LOG_LIB) << "Item" << _name;
 
@@ -197,28 +219,6 @@ void RecentlyCore::touchItem(const QString _name)
     // update order
     int index = m_modifications.indexOf(_name);
     m_modifications.move(index, m_modifications.count() - 1);
-}
-
-
-/**
- * @fn getApplicationsFromDesktops
- */
-QMap<QString, ApplicationItem *> RecentlyCore::getApplicationsFromDesktops()
-{
-    QStringList filter("*.desktop");
-    QMap<QString, ApplicationItem *> items;
-
-    QStringList entries
-        = QDir(desktopPath()).entryList(filter, QDir::Files, QDir::Time);
-    for (auto entry : entries) {
-        QString desktop = QFileInfo(QDir(desktopPath()), entry).filePath();
-        qCInfo(LOG_LIB) << "Desktop" << desktop;
-        ApplicationItem *item = ApplicationItem::fromDesktop(desktop, this);
-        items[item->name()] = item;
-        m_modifications.append(item->name());
-    }
-
-    return items;
 }
 
 

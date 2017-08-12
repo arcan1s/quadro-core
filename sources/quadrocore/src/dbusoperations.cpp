@@ -25,16 +25,15 @@
 /**
  * @fn sendRequest
  */
-QVariantList DBusOperations::sendRequest(const QString _service,
-                                         const QString _path,
-                                         const QString _interface,
-                                         const QString _cmd,
-                                         const QVariantList _args)
+QVariantList DBusOperations::sendRequest(const QString &_service,
+                                         const QString &_path,
+                                         const QString &_interface,
+                                         const QString &_cmd,
+                                         const QVariantList &_args)
 {
-    qCDebug(LOG_DBUS) << "Service" << _service << "with interface"
-                      << _interface;
-    qCDebug(LOG_DBUS) << "Path" << _path << "with command" << _cmd;
-    qCDebug(LOG_DBUS) << "Arguments" << _args;
+    qCDebug(LOG_DBUS) << "Service" << _service << "with interface" << _interface
+                      << "path" << _path << "with command" << _cmd
+                      << "arguments" << _args;
 
     QDBusConnection bus = QDBusConnection::sessionBus();
     QDBusMessage request
@@ -53,8 +52,8 @@ QVariantList DBusOperations::sendRequest(const QString _service,
 /**
  * @fn sendRequestToConfig
  */
-QVariantList DBusOperations::sendRequestToConfig(const QString _cmd,
-                                                 const QVariantList _args)
+QVariantList DBusOperations::sendRequestToConfig(const QString &_cmd,
+                                                 const QVariantList &_args)
 {
     qCDebug(LOG_DBUS) << "Command" << _cmd << "with args" << _args;
 
@@ -66,8 +65,8 @@ QVariantList DBusOperations::sendRequestToConfig(const QString _cmd,
 /**
  * @fn sendRequestToLibrary
  */
-QVariantList DBusOperations::sendRequestToLibrary(const QString _cmd,
-                                                  const QVariantList _args)
+QVariantList DBusOperations::sendRequestToLibrary(const QString &_cmd,
+                                                  const QVariantList &_args)
 {
     qCDebug(LOG_DBUS) << "Command" << _cmd << "with args" << _args;
 
@@ -80,11 +79,11 @@ QVariantList DBusOperations::sendRequestToLibrary(const QString _cmd,
  * @fn sendRequestToPlugin
  */
 QVariantList DBusOperations::sendRequestToPlugin(const int _index,
-                                                 const QString _cmd,
-                                                 const QVariantList _args)
+                                                 const QString &_cmd,
+                                                 const QVariantList &_args)
 {
-    qCDebug(LOG_DBUS) << "Plugin name with index" << _index;
-    qCDebug(LOG_DBUS) << "Command" << _cmd << "with args" << _args;
+    qCDebug(LOG_DBUS) << "Plugin name with index" << _index << "Command" << _cmd
+                      << "with args" << _args;
 
     return sendRequest(QString(DBUS_PLUGIN_SERVICE), QString("/%1").arg(_index),
                        QString(DBUS_PLUGIN_INTERFACE), _cmd, _args);
@@ -94,8 +93,8 @@ QVariantList DBusOperations::sendRequestToPlugin(const int _index,
 /**
  * @fn sendRequestToUi
  */
-QVariantList DBusOperations::sendRequestToUi(const QString _cmd,
-                                             const QVariantList _args)
+QVariantList DBusOperations::sendRequestToUi(const QString &_cmd,
+                                             const QVariantList &_args)
 {
     qCDebug(LOG_DBUS) << "Command" << _cmd << "with args" << _args;
 

@@ -44,9 +44,9 @@ class AbstractAppAggregator : public QObject
 public:
     /**
      * @brief AbstractAppAggregator class constructor
-     * @param parent         pointer to parent item
+     * @param _parent pointer to parent item
      */
-    explicit AbstractAppAggregator(QObject *parent);
+    explicit AbstractAppAggregator(QObject *_parent);
     /**
      * @brief AbstractAppAggregator class destructor
      */
@@ -58,35 +58,40 @@ public:
     QMap<QString, ApplicationItem *> applications() const;
     /**
      * @brief find applications by category
-     * @param _category      category
+     * @param _category category
      * @return map of applications by category
      */
     QMap<QString, ApplicationItem *>
-    applicationsByCategory(const QString _category) const;
+    applicationsByCategory(const QString &_category) const;
     /**
      * @brief find applications by substring in name
-     * @param _substr        substring to which application need to be found
+     * @param _substr substring to which application need to be found
      * @return map of applications by substring
      */
     QMap<QString, ApplicationItem *>
-    applicationsBySubstr(const QString _substr) const;
+    applicationsBySubstr(const QString &_substr) const;
     /**
      * @brief available application categories
      * @return list of available categories
      */
     static QStringList availableCategories();
     /**
+     * @brief return applications which has desktop files
+     * @return map of generated ApplicationItem
+     */
+    virtual QMap<QString, ApplicationItem *> getApplicationsFromDesktops() = 0;
+    /**
      * @brief is application has been read
-     * @param _name          application name
+     * @param _name application name
      * @return true if application has been found
      * @return false if the application has not been found
      */
-    bool hasApplication(const QString _name) const;
+    bool hasApplication(const QString &_name) const;
 
 public slots:
     /**
      * @brief add application to array
-     * @param _item          application item
+     * @param _item application item
      */
     void addApplication(ApplicationItem *_item);
     /**
@@ -99,7 +104,7 @@ public slots:
     virtual void initApplications() = 0;
     /**
      * @brief remove application from array
-     * @param _item          application item
+     * @param _item application item
      */
     void removeApplication(ApplicationItem *_item);
 
@@ -108,11 +113,6 @@ private:
      * @brief list of applications
      */
     QMap<QString, ApplicationItem *> m_applications;
-    /**
-     * @brief return applications which has desktop files
-     * @return map of generated ApplicationItem
-     */
-    virtual QMap<QString, ApplicationItem *> getApplicationsFromDesktops() = 0;
 };
 
 

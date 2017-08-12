@@ -42,12 +42,12 @@ class AppIconWidget : public IconWidget
 public:
     /**
      * @brief AppIconWidget class constructor
-     * @param appItem        pointer to ApplicationItem
-     * @param size           item size
-     * @param parent         pointer to parent object
+     * @param _appItem pointer to ApplicationItem
+     * @param _size item size
+     * @param _parent pointer to parent object
      */
-    explicit AppIconWidget(ApplicationItem *appItem, const QSize size,
-                           QWidget *parent = nullptr);
+    explicit AppIconWidget(ApplicationItem *_appItem, const int _size,
+                           QWidget *_parent = nullptr);
     /**
      * @brief AppIconWidget class destructor
      */
@@ -61,7 +61,7 @@ public:
 public slots:
     /**
      * @brief method which will be called on context menu request
-     * @param _pos           current mouse position
+     * @param _pos current mouse position
      */
     void showContextMenu(const QPoint &_pos);
 
@@ -73,16 +73,16 @@ signals:
     /**
      * @brief the signal emitted when the new applicaiton show be run as a
      * standalone
-     * @param _exec          executable name
-     * @param _name          applicaiton name
+     * @param _exec executable name
+     * @param _name applicaiton name
      */
-    void standaloneApplicaitonRequested(const QStringList _exec,
-                                        const QString _name);
+    void standaloneApplicationRequested(const QStringList &_exec,
+                                        const QString &_name);
 
 protected:
     /**
      * @brief method which will be called on mouse event
-     * @param _event         pointer to mouse event
+     * @param _event pointer to mouse event
      */
     void mousePressEvent(QMouseEvent *_event);
 

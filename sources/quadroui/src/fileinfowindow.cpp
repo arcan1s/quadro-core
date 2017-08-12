@@ -35,9 +35,9 @@
 /**
  * @fn FileInfoWindow
  */
-FileInfoWindow::FileInfoWindow(QWidget *parent, QFileInfo item)
-    : QDialog(parent)
-    , m_item(item)
+FileInfoWindow::FileInfoWindow(QWidget *_parent, const QFileInfo _item)
+    : QDialog(_parent)
+    , m_item(_item)
 {
     qCDebug(LOG_UILIB) << __PRETTY_FUNCTION__;
 
@@ -138,9 +138,9 @@ void FileInfoWindow::showWindow()
 QIcon FileInfoWindow::getIcon() const
 {
     QVariantList res = DBusOperations::sendRequestToLibrary(
-        QString("Icon"), QVariantList() << m_item.absoluteFilePath());
+        "Icon", QVariantList() << m_item.absoluteFilePath());
     if (res.isEmpty())
-        return QIcon::fromTheme(QString("system-run"));
+        return QIcon::fromTheme("system-run");
     else
         return QIcon::fromTheme(res.at(0).toString());
 }
@@ -152,10 +152,10 @@ QIcon FileInfoWindow::getIcon() const
 QString FileInfoWindow::getMime() const
 {
     QVariantList res = DBusOperations::sendRequestToLibrary(
-        QString("MIME"), QVariantList() << m_item.absoluteFilePath());
+        "MIME", QVariantList() << m_item.absoluteFilePath());
 
     if (res.isEmpty())
-        return QString("other");
+        return "other";
     else
         return res.at(0).toString();
 }

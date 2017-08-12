@@ -36,8 +36,8 @@
 /**
  * @fn QuadroCore
  */
-QuadroCore::QuadroCore(QObject *parent)
-    : QObject(parent)
+QuadroCore::QuadroCore(QObject *_parent)
+    : QObject(_parent)
 {
     qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
 
@@ -207,8 +207,8 @@ void QuadroCore::initPlatformPlugin()
         if (!m_platformPlugin)
             qCCritical(LOG_LIB) << "Could not cast plugin";
     } else {
-        qCCritical(LOG_LIB) << "Could not load the library for platform"
-                            << platform;
+        qCCritical(LOG_LIB)
+            << "Could not load the library for platform" << platform;
         qCCritical(LOG_LIB) << "Error" << loader.errorString();
     }
 }

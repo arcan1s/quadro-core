@@ -34,12 +34,12 @@
 #include "version.h"
 
 
-QuadroMainWindow::QuadroMainWindow(QWidget *parent, const QVariantHash args)
-    : QMainWindow(parent)
+QuadroMainWindow::QuadroMainWindow(QWidget *_parent, const QVariantHash _args)
+    : QMainWindow(_parent)
 {
     qSetMessagePattern(LOG_FORMAT);
     qCDebug(LOG_UI) << __PRETTY_FUNCTION__;
-    for (auto metadata : getBuildData())
+    for (auto &metadata : getBuildData())
         qCDebug(LOG_UI) << metadata;
 
     setWindowIcon(QIcon(":icon"));
@@ -52,7 +52,7 @@ QuadroMainWindow::QuadroMainWindow(QWidget *parent, const QVariantHash args)
     setWindowState(Qt::WindowFullScreen);
 
     // update configuration
-    updateConfiguration(args);
+    updateConfiguration(_args);
 }
 
 
@@ -65,10 +65,10 @@ QuadroMainWindow::~QuadroMainWindow()
 }
 
 
-void QuadroMainWindow::closeEvent(QCloseEvent *event)
+void QuadroMainWindow::closeEvent(QCloseEvent *_event)
 {
     //     if ((QSystemTrayIcon::isSystemTrayAvailable()) &&
-    //     (configuration[QString("SYSTRAY")] == QString("true"))) {
+    //     (configuration["SYSTRAY"] == "true")) {
     //         hide();
     //         event->ignore();
     //     } else
@@ -76,13 +76,13 @@ void QuadroMainWindow::closeEvent(QCloseEvent *event)
 }
 
 
-void QuadroMainWindow::changeTab(const int index)
+void QuadroMainWindow::changeTab(const int _index)
 {
-    qCDebug(LOG_UI) << "Index" << index;
-    if ((index == -1) || (index >= ui->stackedWidget->count()))
+    qCDebug(LOG_UI) << "Index" << _index;
+    if ((_index == -1) || (_index >= ui->stackedWidget->count()))
         return;
 
-    return ui->stackedWidget->setCurrentIndex(index);
+    return ui->stackedWidget->setCurrentIndex(_index);
 }
 
 
@@ -98,15 +98,15 @@ void QuadroMainWindow::showSettingsWindow()
 }
 
 
-void QuadroMainWindow::updateConfiguration(const QVariantHash args)
+void QuadroMainWindow::updateConfiguration(const QVariantHash &_args)
 {
     deleteObjects();
     // update configuration
-    m_configPath = QStandardPaths::locate(QStandardPaths::ConfigLocation,
-                                          QString("quadro.conf"));
+    m_configPath
+        = QStandardPaths::locate(QStandardPaths::ConfigLocation, "quadro.conf");
     qCInfo(LOG_UI) << "Load configuration from" << m_configPath;
     settingsWindow = new SettingsWindow(this, m_configPath);
-    if (args[QString("default")].toBool())
+    if (_args["default"].toBool())
         settingsWindow->setDefault();
     m_configuration = settingsWindow->getSettings();
     delete settingsWindow;
@@ -119,32 +119,31 @@ void QuadroMainWindow::updateConfiguration(const QVariantHash args)
 }
 
 
-void QuadroMainWindow::createContainer(const QStringList exec,
-                                       const QString name)
+void QuadroMainWindow::createContainer(const QStringList &_exec,
+                                       const QString &_name)
 {
-    qCDebug(LOG_UI) << "Executable" << exec;
-    qCDebug(LOG_UI) << "Name" << name;
+    qCDebug(LOG_UI) << "Executable" << _exec << "name" << _name;
 
     StandaloneAppWidget *app
-        = new StandaloneAppWidget(this, exec, ui->stackedWidget->count());
+        = new StandaloneAppWidget(this, _exec, ui->stackedWidget->count());
     connect(app, SIGNAL(destroyWindow(const int)), this,
             SLOT(removeContainer(const int)));
 
     ui->stackedWidget->addWidget(app);
-    tabActions.append(ui->toolBar->addAction(name));
+    tabActions.append(ui->toolBar->addAction(_name));
 
     return ui->stackedWidget->setCurrentWidget(app);
 }
 
 
-void QuadroMainWindow::createWebContainer(const QString url,
-                                          const bool showOpen)
+void QuadroMainWindow::createWebContainer(const QString &_url,
+                                          const bool _showOpen)
 {
-    qCDebug(LOG_UI) << "Create URL" << url << "with show open button"
-                    << showOpen;
+    qCDebug(LOG_UI) << "Create URL" << _url << "with show open button"
+                    << _showOpen;
 
     WebAppWidget *app
-        = new WebAppWidget(this, ui->stackedWidget->count(), showOpen);
+        = new WebAppWidget(this, ui->stackedWidget->count(), _showOpen);
     connect(app, SIGNAL(destroyWindow(const int)), this,
             SLOT(removeContainer(const int)));
     connect(app, &WebAppWidget::updateTitle,
@@ -153,36 +152,36 @@ void QuadroMainWindow::createWebContainer(const QString url,
             });
 
     ui->stackedWidget->addWidget(app);
-    tabActions.append(ui->toolBar->addAction(QString("about:blank")));
-    app->loadUrl(QUrl::fromUserInput(url));
+    tabActions.append(ui->toolBar->addAction("about:blank"));
+    app->loadUrl(QUrl::fromUserInput(_url));
 
     return ui->stackedWidget->setCurrentWidget(app);
 }
 
 
-void QuadroMainWindow::removeContainer(const int index)
+void QuadroMainWindow::removeContainer(const int _index)
 {
-    qCDebug(LOG_UI) << "Remove tab" << index;
+    qCDebug(LOG_UI) << "Remove tab" << _index;
 
     ui->stackedWidget->setCurrentIndex(0);
-    QWidget *widget = ui->stackedWidget->widget(index);
+    QWidget *widget = ui->stackedWidget->widget(_index);
     ui->stackedWidget->removeWidget(widget);
-    ui->toolBar->removeAction(tabActions[index]);
-    tabActions.removeAt(index);
+    ui->toolBar->removeAction(tabActions[_index]);
+    tabActions.removeAt(_index);
 
     widget->deleteLater();
 }
 
 
-void QuadroMainWindow::changeTabByAction(QAction *action)
+void QuadroMainWindow::changeTabByAction(QAction *_action)
 {
-    return changeTab(tabActions.indexOf(action));
+    return changeTab(tabActions.indexOf(_action));
 }
 
 
 void QuadroMainWindow::clearTabs()
 {
-    QStringList tabs = m_configuration[QString("Tabs")].toStringList();
+    QStringList tabs = m_configuration["Tabs"].toStringList();
     disconnect(ui->toolBar, SIGNAL(actionTriggered(QAction *)), this,
                SLOT(changeTabByAction(QAction *)));
 
@@ -192,9 +191,9 @@ void QuadroMainWindow::clearTabs()
         QWidget *widget = ui->stackedWidget->widget(0);
         ui->stackedWidget->removeWidget(widget);
     }
-    for (auto plugin : m_plugins) {
-        int index = plugin[QString("Index")].toInt();
-        QString tab = plugin[QString("Plugin")].toString();
+    for (auto &plugin : m_plugins) {
+        int index = plugin["Index"].toInt();
+        QString tab = plugin["Plugin"].toString();
         m_core->plugin()->unloadPlugin(
             index, QString("%1.tab-%2.conf").arg(tab).arg(tabs.indexOf(tab)));
     }
@@ -203,9 +202,9 @@ void QuadroMainWindow::clearTabs()
 
 void QuadroMainWindow::initTabs()
 {
-    QStringList tabs = m_configuration[QString("Tabs")].toStringList();
+    QStringList tabs = m_configuration["Tabs"].toStringList();
 
-    for (auto tab : tabs) {
+    for (auto &tab : tabs) {
         int index = m_core->plugin()->loadPlugin(tab);
         if (index == -1) {
             qCWarning(LOG_UI) << "Could not find tab" << tab;
@@ -218,8 +217,8 @@ void QuadroMainWindow::initTabs()
             tabActions.append(ui->toolBar->addAction(item->name()));
             // generate metadata
             QVariantHash metadata;
-            metadata[QString("Index")] = index;
-            metadata[QString("Plugin")] = tab;
+            metadata["Index"] = index;
+            metadata["Plugin"] = tab;
             m_plugins.append(metadata);
         }
     }
@@ -253,13 +252,13 @@ void QuadroMainWindow::createDBusSession()
 {
     QDBusConnection bus = QDBusConnection::sessionBus();
     if (!bus.registerService(DBUS_SERVICE)) {
-        qCWarning(LOG_UI) << "Could not register service";
-        qCWarning(LOG_UI) << bus.lastError().message();
-    }
-    if (!bus.registerObject(DBUS_UI_OBJECT_PATH, new QuadroUiAdaptor(this),
-                            QDBusConnection::ExportAllContents)) {
-        qCWarning(LOG_UI) << "Could not register GUI object";
-        qCWarning(LOG_UI) << bus.lastError().message();
+        qCWarning(LOG_UI) << "Could not register service"
+                          << bus.lastError().message();
+    } else if (!bus.registerObject(DBUS_UI_OBJECT_PATH,
+                                   new QuadroUiAdaptor(this),
+                                   QDBusConnection::ExportAllContents)) {
+        qCWarning(LOG_UI) << "Could not register GUI object"
+                          << bus.lastError().message();
     }
 }
 

@@ -44,17 +44,17 @@ class QuadroWidget : public QScrollArea
 public:
     /**
      * @brief QuadroWidget class constructor
-     * @param parent         pointer to parent object
-     * @param grid           grid size
-     * @param widgetTitle    widget title
-     * @param hPolicy        horizontal scroll bar policy
-     * @param vPolicy        vertical scroll bar policy
+     * @param _parent pointer to parent object
+     * @param _grid grid size
+     * @param _widgetTitle widget title
+     * @param _hPolicy horizontal scroll bar policy
+     * @param _vPolicy vertical scroll bar policy
      */
-    explicit QuadroWidget(QWidget *parent, const int grid,
-                          const QString widgetTitle = QString("none"),
-                          const Qt::ScrollBarPolicy hPolicy
+    explicit QuadroWidget(QWidget *_parent, const int _grid,
+                          const QString _widgetTitle = "none",
+                          const Qt::ScrollBarPolicy _hPolicy
                           = Qt::ScrollBarAlwaysOff,
-                          const Qt::ScrollBarPolicy vPolicy
+                          const Qt::ScrollBarPolicy _vPolicy
                           = Qt::ScrollBarAsNeeded);
     /**
      * @brief QuadroWidget class destructor
@@ -84,21 +84,21 @@ public:
 protected:
     /**
      * @brief method which will be called when it receives focus
-     * @param _event         pointer to focus event
+     * @param _event pointer to focus event
      */
     void focusInEvent(QFocusEvent *_event);
     /**
      * @brief method which will be called to paint UI
      * @remark this method is required to apply custom CSS styles
-     * @param _event         pointer to paint event
+     * @param _event pointer to paint event
      */
     void paintEvent(QPaintEvent *_event);
 
 public slots:
     /**
      * @brief navigate on widgets inside
-     * @param _dx            horizontal shift
-     * @param _dy            vertical shift
+     * @param _dx horizontal shift
+     * @param _dy vertical shift
      */
     void moveFocus(const int _dx, const int _dy);
     /**

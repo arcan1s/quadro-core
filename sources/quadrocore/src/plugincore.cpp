@@ -34,8 +34,8 @@
 /**
  * @fn PluginCore
  */
-PluginCore::PluginCore(QuadroCore *parent)
-    : QObject(parent)
+PluginCore::PluginCore(QuadroCore *_parent)
+    : QObject(_parent)
 {
     qCDebug(LOG_LIB) << __PRETTY_FUNCTION__;
 }
@@ -58,7 +58,7 @@ PluginCore::~PluginCore()
 /**
  * @fn configurationPath
  */
-QString PluginCore::configurationPath(const QString _fileName)
+QString PluginCore::configurationPath(const QString &_fileName)
 {
     qCDebug(LOG_LIB) << "Looking for" << _fileName;
 
@@ -81,7 +81,7 @@ QStringList PluginCore::desktopPaths()
     QStringList locations;
     QStringList defaultLocations = QStandardPaths::standardLocations(
         QStandardPaths::GenericDataLocation);
-    for (auto loc : defaultLocations)
+    for (auto &loc : defaultLocations)
         locations.append(
             QString("%1/%2/%3").arg(loc).arg(HOME_PATH).arg(PLUGIN_PATH));
 
@@ -92,7 +92,7 @@ QStringList PluginCore::desktopPaths()
 /**
  * @fn initPlugin
  */
-void PluginCore::initPlugin(const int _index, const QString _configPath)
+void PluginCore::initPlugin(const int _index, const QString &_configPath)
 {
     qCDebug(LOG_LIB) << "Init plugin" << _index << "using file" << _configPath;
 
@@ -107,7 +107,7 @@ void PluginCore::initPlugin(const int _index, const QString _configPath)
  * @fn knownPlugins
  */
 QHash<QString, PluginRepresentation *>
-PluginCore::knownPlugins(const QString _group) const
+PluginCore::knownPlugins(const QString &_group) const
 {
     qCDebug(LOG_LIB) << "Requested type is" << _group;
 
@@ -125,7 +125,7 @@ PluginCore::knownPlugins(const QString _group) const
 /**
  * @fn loadPlugin
  */
-int PluginCore::loadPlugin(const QString _plugin)
+int PluginCore::loadPlugin(const QString &_plugin)
 {
     qCDebug(LOG_LIB) << "Loading plugin" << _plugin;
 
@@ -138,13 +138,13 @@ int PluginCore::loadPlugin(const QString _plugin)
 
     QString type = m_allPlugins[_plugin]->group();
     QString location = m_allPlugins[_plugin]->location();
-    if (type == QString("plugin"))
+    if (type == "plugin")
         index
             = registerPlugin<PluginInterface, PluginAdaptor>(_plugin, location);
-    else if (type == QString("tabplugin"))
+    else if (type == "tabplugin")
         index = registerPlugin<TabPluginInterface, TabPluginAdaptor>(_plugin,
                                                                      location);
-    else if (type == QString("genericplugin"))
+    else if (type == "genericplugin")
         index = registerPlugin<QuadroPluginInterface, QuadroPluginAdaptor>(
             _plugin, location);
     else
@@ -157,7 +157,7 @@ int PluginCore::loadPlugin(const QString _plugin)
 /**
  * @fn unloadPlugin
  */
-bool PluginCore::unloadPlugin(const int _index, const QString _configPath)
+bool PluginCore::unloadPlugin(const int _index, const QString &_configPath)
 {
     qCDebug(LOG_LIB) << "Disabling plugin with index" << _index
                      << "using configuration" << _configPath;
@@ -189,9 +189,9 @@ void PluginCore::initPlugins()
     QStringList locations = desktopPaths();
     qCInfo(LOG_LIB) << "Paths" << locations;
 
-    for (auto loc : locations) {
+    for (auto &loc : locations) {
         QStringList entries = QDir(loc).entryList(filter, QDir::Files);
-        for (auto entry : entries) {
+        for (auto &entry : entries) {
             QString fileName = QFileInfo(QDir(loc), entry).absoluteFilePath();
             qCInfo(LOG_LIB) << "Desktop" << fileName;
             // check settings

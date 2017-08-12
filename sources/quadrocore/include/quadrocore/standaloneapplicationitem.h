@@ -45,11 +45,11 @@ class StandaloneApplicationItem : public QObject
 public:
     /**
      * @brief StandaloneApplicationItem class constructor
-     * @param parent         pointer to parent item (widget in which it will be
-     *                       run)
-     * @param cmd            path to command which should be run
+     * @param _parent pointer to parent item (widget in which it will be run)
+     * @param _cmd path to command which should be run
      */
-    explicit StandaloneApplicationItem(QWidget *parent, const QStringList cmd);
+    explicit StandaloneApplicationItem(QWidget *_parent,
+                                       const QStringList &_cmd);
     /**
      * @brief StandaloneApplicationItem class destructor
      */
@@ -103,10 +103,10 @@ signals:
 private slots:
     /**
      * @brief called when process has been finished
-     * @param exitCode       exit code of the application
-     * @param exitStatus     exit status of the application
+     * @param _exitCode exit code of the application
+     * @param _exitStatus exit status of the application
      */
-    void finished(const int exitCode, const QProcess::ExitStatus exitStatus);
+    void finished(const int _exitCode, const QProcess::ExitStatus _exitStatus);
 
 private:
     /**

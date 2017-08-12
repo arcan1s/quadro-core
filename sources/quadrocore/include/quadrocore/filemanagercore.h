@@ -43,59 +43,59 @@ class FileManagerCore : public QObject
 public:
     /**
      * @brief FileManager class constructor
-     * @param parent         pointer to parent item
+     * @param _parent pointer to parent item
      */
-    explicit FileManagerCore(QObject *parent);
+    explicit FileManagerCore(QObject *_parent);
     /**
      * @brief FileManager class destructor
      */
     virtual ~FileManagerCore();
     /**
      * @brief find directory entries
-     * @param _directory     path to directory on which you are looking for
-     * @param _hidden        show hidden files or not
-     * @param _filter        name filter
+     * @param _directory path to directory on which you are looking for
+     * @param _hidden show hidden files or not
+     * @param _filter name filter
      * @return list of files
      */
-    QFileInfoList
-    directoryEntries(const QString _directory, const bool _hidden = false,
-                     const QStringList _filter = QStringList()) const;
+    QFileInfoList directoryEntries(const QString &_directory,
+                                   const bool _hidden = false,
+                                   const QStringList &_filter = {}) const;
     /**
      * @brief find entries by substring
-     * @param _directory     parent directory
-     * @param _substr        substring for name
-     * @param _hidden        show hidden files or not
+     * @param _directory parent directory
+     * @param _substr substring for name
+     * @param _hidden show hidden files or not
      */
-    QFileInfoList entriesBySubstr(const QString _directory,
-                                  const QString _substr,
+    QFileInfoList entriesBySubstr(const QString &_directory,
+                                  const QString &_substr,
                                   const bool _hidden = false) const;
     /**
      * @brief get icon by file name
-     * @param _file          path to file
+     * @param _file path to file
      * @return QIcon of the file
      */
-    QIcon iconByFileName(const QString _file) const;
+    QIcon iconByFileName(const QString &_file) const;
     /**
      * @brief get icon name by file name
-     * @param _file          path to file
+     * @param _file path to file
      * @return icon name
      */
-    QString iconNameByFileName(const QString _file) const;
+    QString iconNameByFileName(const QString &_file) const;
     /**
      * @brief get mime type of given file
-     * @param _file          path to file
+     * @param _file path to file
      * @return QMimeType construction
      */
-    QMimeType mimeByFileName(const QString _file) const;
+    QMimeType mimeByFileName(const QString &_file) const;
 
 public slots:
     /**
      * @brief open file using XDG
-     * @param _file          QFileInfo of given file
+     * @param _file QFileInfo of given file
      * @return true if opening successfully
      * @return false if an error occurs
      */
-    bool openFile(const QFileInfo _file) const;
+    bool openFile(const QFileInfo &_file) const;
 
 private:
 };

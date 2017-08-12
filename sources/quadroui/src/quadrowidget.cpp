@@ -40,19 +40,19 @@
 /**
  * @fn QuadroWidget
  */
-QuadroWidget::QuadroWidget(QWidget *parent, const int grid,
-                           const QString widgetTitle,
-                           const Qt::ScrollBarPolicy hPolicy,
-                           const Qt::ScrollBarPolicy vPolicy)
-    : QScrollArea(parent)
-    , m_grid(grid)
-    , m_title(widgetTitle)
+QuadroWidget::QuadroWidget(QWidget *_parent, const int _grid,
+                           const QString _widgetTitle,
+                           const Qt::ScrollBarPolicy _hPolicy,
+                           const Qt::ScrollBarPolicy _vPolicy)
+    : QScrollArea(_parent)
+    , m_grid(_grid)
+    , m_title(_widgetTitle)
 {
     qCDebug(LOG_UILIB) << __PRETTY_FUNCTION__;
 
     setContentsMargins(0, 0, 0, 0);
-    setHorizontalScrollBarPolicy(hPolicy);
-    setVerticalScrollBarPolicy(vPolicy);
+    setHorizontalScrollBarPolicy(_hPolicy);
+    setVerticalScrollBarPolicy(_vPolicy);
     setWidgetResizable(true);
 
     createObjects();
@@ -143,7 +143,7 @@ void QuadroWidget::moveFocus(const int _dx, const int _dy)
 {
     // the idea of the method copied from here
     // http://stackoverflow.com/questions/20856518/navigate-between-widgets-using-arrows-in-qt
-    if (qApp->focusWidget() == nullptr)
+    if (!qApp->focusWidget())
         return;
     qCDebug(LOG_UILIB) << "Move to dx" << _dx << "dy" << _dy;
 
@@ -166,7 +166,7 @@ void QuadroWidget::moveFocus(const int _dx, const int _dy)
 
     // this call should never fail because already checked
     QLayoutItem *layoutItem = m_layout->itemAt(newIndex);
-    if (layoutItem == nullptr)
+    if (!layoutItem)
         return;
 
     layoutItem->widget()->setFocus();
@@ -260,5 +260,5 @@ int QuadroWidget::stringItemCount() const
         = m_layout->geometry().adjusted(+left, +top, -right, -bottom);
     int width = effectiveRect.width();
 
-    return static_cast<int>(width / m_grid);
+    return width / m_grid;
 }

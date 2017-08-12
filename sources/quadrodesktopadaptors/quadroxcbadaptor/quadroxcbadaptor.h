@@ -54,7 +54,7 @@ public:
     virtual ~QuadroXCBAdaptor();
     /**
      * @brief get WIds by given PID
-     * @param _pid           PID
+     * @param _pid PID
      * @return list of WIds
      */
     QList<unsigned long long> getWindowByPid(const long long _pid);
@@ -67,20 +67,20 @@ public:
 private:
     /**
      * @brief get client list
-     * @param size           pointer to size, will be filled in the method
+     * @param _size pointer to size, will be filled in the method
      * @return client list
      */
-    Window *getClientList(unsigned long *size) const;
+    Window *getClientList(unsigned long *_size) const;
     /**
      * @brief get property by window
-     * @param _win           window to which need to get property
-     * @param _xaPropType    required property type
-     * @param _property      property name
-     * @param size           pointer to size, will be filled in the method
+     * @param _win window to which need to get property
+     * @param _xaPropType required property type
+     * @param _property property name
+     * @param size pointer to size, will be filled in the method
      * @return property
      */
     char *getPropery(const Window _win, const Atom _xaPropType,
-                     const char *_property, unsigned long *size) const;
+                     const char *_property, unsigned long *_size) const;
 };
 
 

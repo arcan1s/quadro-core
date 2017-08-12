@@ -32,9 +32,9 @@
 /**
  * @fn PluginAdaptor
  */
-PluginAdaptor::PluginAdaptor(QObject *parent, PluginInterface *plugin)
-    : QuadroPluginAdaptor(parent, plugin)
-    , m_plugin(plugin)
+PluginAdaptor::PluginAdaptor(QObject *_parent, PluginInterface *_plugin)
+    : QuadroPluginAdaptor(_parent, _plugin)
+    , m_plugin(_plugin)
 {
     qCDebug(LOG_DBUS) << __PRETTY_FUNCTION__;
 }

@@ -33,11 +33,11 @@ class SettingsWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit SettingsWindow(QWidget *parent = nullptr,
-                            const QString configFile = QString(""));
+    explicit SettingsWindow(QWidget *_parent = nullptr,
+                            const QString _configFile = "");
     virtual ~SettingsWindow();
     QVariantHash getDefault();
-    QVariantHash getSettings(QString fileName = QString(""));
+    QVariantHash getSettings(QString _fileName = "");
 
 public slots:
     void closeWindow();
@@ -47,10 +47,10 @@ public slots:
 
 protected:
     // ESC pressed event
-    void keyPressEvent(QKeyEvent *pressedKey);
+    void keyPressEvent(QKeyEvent *_pressedKey);
 
 private slots:
-    void changePage(QTreeWidgetItem *current, QTreeWidgetItem *previous);
+    void changePage(QTreeWidgetItem *_current, QTreeWidgetItem *);
     void saveSettings();
 
 private:
@@ -58,7 +58,7 @@ private:
     Ui::SettingsWindow *ui;
     void createActions();
     QVariantHash readSettings();
-    void setSettings(const QVariantHash config);
+    void setSettings(const QVariantHash &_config);
 };
 
 

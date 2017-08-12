@@ -32,10 +32,10 @@
 /**
  * @fn QuadroPluginAdaptor
  */
-QuadroPluginAdaptor::QuadroPluginAdaptor(QObject *parent,
-                                         QuadroPluginInterface *plugin)
-    : QDBusAbstractAdaptor(parent)
-    , m_plugin(plugin)
+QuadroPluginAdaptor::QuadroPluginAdaptor(QObject *_parent,
+                                         QuadroPluginInterface *_plugin)
+    : QDBusAbstractAdaptor(_parent)
+    , m_plugin(_plugin)
 {
     qCDebug(LOG_DBUS) << __PRETTY_FUNCTION__;
 }
@@ -80,7 +80,7 @@ void QuadroPluginAdaptor::Init()
 /**
  * @fn Quit
  */
-void QuadroPluginAdaptor::Quit(const QString configPath)
+void QuadroPluginAdaptor::Quit(const QString &configPath)
 {
     qCDebug(LOG_DBUS) << "Configuration file" << configPath;
 
@@ -91,7 +91,7 @@ void QuadroPluginAdaptor::Quit(const QString configPath)
 /**
  * @fn ReadSettings
  */
-void QuadroPluginAdaptor::ReadSettings(const QString configPath)
+void QuadroPluginAdaptor::ReadSettings(const QString &configPath)
 {
     qCDebug(LOG_DBUS) << "Configuration file" << configPath;
 
@@ -111,7 +111,7 @@ void QuadroPluginAdaptor::SaveSettings()
 /**
  * @fn WriteSettings
  */
-bool QuadroPluginAdaptor::WriteSettings(const QString configPath) const
+bool QuadroPluginAdaptor::WriteSettings(const QString &configPath) const
 {
     qCDebug(LOG_DBUS) << "Configuration file" << configPath;
 

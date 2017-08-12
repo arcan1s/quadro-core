@@ -30,11 +30,11 @@
 #include "version.h"
 
 
-bool existingSessionOperation(const QString operation)
+bool existingSessionOperation(const QString _operation)
 {
     QDBusConnection bus = QDBusConnection::sessionBus();
     QDBusMessage request = QDBusMessage::createMethodCall(
-        DBUS_SERVICE, DBUS_UI_OBJECT_PATH, DBUS_INTERFACE, operation);
+        DBUS_SERVICE, DBUS_UI_OBJECT_PATH, DBUS_INTERFACE, _operation);
     QDBusMessage response = bus.call(request);
     QList<QVariant> arguments = response.arguments();
 
@@ -43,7 +43,7 @@ bool existingSessionOperation(const QString operation)
 }
 
 
-void loadTranslator(QApplication &app)
+void loadTranslator(QApplication &_app)
 {
     // qt specific
     bool trStatus;
@@ -52,7 +52,7 @@ void loadTranslator(QApplication &app)
         QString("qt_%1").arg(QLocale::system().name()),
         QLibraryInfo::location(QLibraryInfo::TranslationsPath));
     qCDebug(LOG_UI) << "Loading Qt specific translation" << trStatus;
-    trStatus = app.installTranslator(&qtTranslator);
+    trStatus = _app.installTranslator(&qtTranslator);
     qCDebug(LOG_UI) << "Install Qt translator" << trStatus;
     // application specific
     static QTranslator translator;
@@ -64,14 +64,14 @@ void loadTranslator(QApplication &app)
             .arg(HOME_PATH)
             .arg(TRANSLATION_PATH));
     qCDebug(LOG_UI) << "Loading application specific translation" << trStatus;
-    trStatus = app.installTranslator(&translator);
+    trStatus = _app.installTranslator(&translator);
     qCDebug(LOG_UI) << "Install application translator" << trStatus;
 }
 
 
 int main(int argc, char *argv[])
 {
-    daemon(0, 0);
+    // daemon(0, 0);
 
     QApplication app(argc, argv);
     app.setApplicationName(NAME);
@@ -86,13 +86,12 @@ int main(int argc, char *argv[])
     parser.addVersionOption();
     // debug mode
     QCommandLineOption debugOption(
-        QStringList() << "d"
-                      << "debug",
+        {"d", "debug"},
         QApplication::translate("MainWindow", "Print debug information"));
     parser.addOption(debugOption);
     // minimized
     QCommandLineOption minimizedOption(
-        QStringList() << "minimized",
+        "minimized",
         QApplication::translate("MainWindow", "Start minimized to tray"));
     parser.addOption(minimizedOption);
     parser.process(app);
@@ -104,13 +103,13 @@ int main(int argc, char *argv[])
     loadTranslator(app);
 
     // check if exists
-    if (existingSessionOperation(QString("Active"))) {
+    if (existingSessionOperation("Active")) {
         std::cout << QApplication::translate("MainWindow",
                                              "Restore existing session")
                          .toUtf8()
                          .data()
                   << std::endl;
-        existingSessionOperation(QString("Restore"));
+        existingSessionOperation("Restore");
         return 0;
     }
     QuadroMainWindow w(nullptr, QVariantHash());

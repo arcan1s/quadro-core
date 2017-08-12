@@ -36,11 +36,11 @@
 /**
  * @fn PluginContainer
  */
-PluginContainer::PluginContainer(QWidget *parent, const int grid,
-                                 const QString widgetTitle,
-                                 const Qt::ScrollBarPolicy hPolicy,
-                                 const Qt::ScrollBarPolicy vPolicy)
-    : QuadroWidget(parent, grid, widgetTitle, hPolicy, vPolicy)
+PluginContainer::PluginContainer(QWidget *_parent, const int _grid,
+                                 const QString _widgetTitle,
+                                 const Qt::ScrollBarPolicy _hPolicy,
+                                 const Qt::ScrollBarPolicy _vPolicy)
+    : QuadroWidget(_parent, _grid, _widgetTitle, _hPolicy, _vPolicy)
 {
     qCDebug(LOG_UILIB) << __PRETTY_FUNCTION__;
 }

@@ -41,10 +41,10 @@
 /**
  * @fn WebAppWidget
  */
-WebAppWidget::WebAppWidget(QWidget *parent, const int index,
-                           const bool showOpen)
-    : QMainWindow(parent)
-    , m_index(index)
+WebAppWidget::WebAppWidget(QWidget *_parent, const int _index,
+                           const bool _showOpen)
+    : QMainWindow(_parent)
+    , m_index(_index)
 {
     qCDebug(LOG_UILIB) << __PRETTY_FUNCTION__;
 
@@ -52,11 +52,11 @@ WebAppWidget::WebAppWidget(QWidget *parent, const int index,
     ui->setupUi(this);
 
     // apply show open settings
-    ui->actionOpen->setEnabled(showOpen);
-    ui->actionOpen->setVisible(showOpen);
+    ui->actionOpen->setEnabled(_showOpen);
+    ui->actionOpen->setVisible(_showOpen);
     // apply show close settings
-    ui->actionClose->setEnabled(index != -1);
-    ui->actionClose->setVisible(index != -1);
+    ui->actionClose->setEnabled(_index != -1);
+    ui->actionClose->setVisible(_index != -1);
 
     createActions();
 }
@@ -105,7 +105,7 @@ void WebAppWidget::loadUrl(const QUrl &_url)
 /**
  * @fn setCache
  */
-void WebAppWidget::setCache(const QString _dirName)
+void WebAppWidget::setCache(const QString &_dirName)
 {
     qCDebug(LOG_UILIB) << "Set cache directory to" << _dirName;
 
@@ -152,16 +152,16 @@ void WebAppWidget::getNewUrl()
  */
 void WebAppWidget::updatePageState(const WebPageState _state)
 {
-    qCDebug(LOG_UILIB) << "Current page state" << _state;
+    qCDebug(LOG_UILIB) << "Current page state" << static_cast<int>(_state);
 
     m_state = _state;
 
     // apply ui changes
     // refresh action
     if (_state == WebPageState::Started)
-        ui->actionRefresh->setIcon(QIcon::fromTheme(QString("process-stop")));
+        ui->actionRefresh->setIcon(QIcon::fromTheme("process-stop"));
     else
-        ui->actionRefresh->setIcon(QIcon::fromTheme(QString("view-refresh")));
+        ui->actionRefresh->setIcon(QIcon::fromTheme("view-refresh"));
     // back and forward actions
     if (_state == WebPageState::Loaded) {
         ui->actionBack->setEnabled(ui->webView->history()->canGoBack());

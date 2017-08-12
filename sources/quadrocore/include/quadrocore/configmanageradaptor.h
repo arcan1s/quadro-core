@@ -47,9 +47,9 @@ class ConfigManagerAdaptor : public QDBusAbstractAdaptor
 public:
     /**
      * @brief ConfigManagerAdaptor class constructor
-     * @param manager        pointer to configuration manager
+     * @param _manager pointer to configuration manager
      */
-    explicit ConfigManagerAdaptor(ConfigManager *manager);
+    explicit ConfigManagerAdaptor(ConfigManager *_manager);
     /**
      * @brief ConfigManagerAdaptor class destructor
      */
@@ -63,10 +63,10 @@ public slots:
     Q_NOREPLY void Defaults();
     /**
      * @brief configuration value by key
-     * @param key            key to search
+     * @param key key to search
      * @return value by specified key
      */
-    QDBusVariant Get(const QString key) const;
+    QDBusVariant Get(const QString &key) const;
     /**
      * @brief known keys
      * @return list of known keys
@@ -82,24 +82,24 @@ public slots:
     bool Save() const;
     /**
      * @brief set value
-     * @param key            key to set
-     * @param value          value to set
+     * @param key key to set
+     * @param value value to set
      * @return true if value has been set successfully
      */
-    bool Set(const QString key, const QDBusVariant value);
+    bool Set(const QString &key, const QDBusVariant &value);
     /**
      * @brief update all values
-     * @param other          other settings dictionary
+     * @param other other settings dictionary
      * @return true if values were updated
      */
-    bool Update(const QDBusVariant other);
+    bool Update(const QDBusVariant &other);
     /**
      * @brief verify value by key
-     * @param key            configuration key
-     * @param value          value associated with the key
+     * @param key configuration key
+     * @param value value associated with the key
      * @return true if no errors were found
      */
-    bool Verify(const QString key, const QDBusVariant value) const;
+    bool Verify(const QString &key, const QDBusVariant &value) const;
 
 private:
     // properties
